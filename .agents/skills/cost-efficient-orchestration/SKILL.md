@@ -51,6 +51,10 @@ Read [scientific-risk.md](scientific-risk.md) when classification is not obvious
 
 Every delegated message must state: objective, owned scope, known evidence, permitted and prohibited actions, required verification, return format, and stop conditions. Worker returns stay concise; raw logs remain in the worker thread unless unresolved diagnosis requires them.
 
+## Privacy and portability gate
+
+Chief and every worker must treat machine-local identity and layout as private by default. Repository artifacts, Markdown, task records, command text, retained logs, and worker returns must use repository-relative paths or neutral placeholders instead of machine-specific absolute paths, account names, private hostnames, or local-only environment, workspace, checkout, and mount names. Run from the current working directory when possible, redact incidental local identifiers before preserving evidence, and scan changed text before completion. Exact disclosure requires explicit human instruction.
+
 ## Completion
 
 Chief reports: outcome, files or artifacts changed, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty. Command success alone is not scientific acceptance.

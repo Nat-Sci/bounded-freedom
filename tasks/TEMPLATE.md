@@ -24,6 +24,7 @@
 ## Verification and review
 
 - Checks and comparisons:
+- Privacy and portability check:
 - Reviewer verdict when required:
 - Human acceptance when required:
 

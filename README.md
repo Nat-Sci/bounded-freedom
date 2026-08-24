@@ -95,6 +95,10 @@ run the relevant checks, and record any scientific uncertainty.
 
 The user does not choose a profile or manually assemble an agent chain. That is the Chief's job.
 
+## Privacy and portable artifacts
+
+BoundedFreedom treats machine-local identity and layout as private by default. Markdown, task records, command examples, retained logs, and worker returns use repository-relative paths or neutral placeholders instead of real absolute paths, account names, private hostnames, or local-only environment and workspace names. Diagnostic output reports semantic states such as `linked` or `conflict` instead of printing raw local link targets. Exact local identifiers are preserved only when the human explicitly requests that disclosure.
+
 ## Cost discipline
 
 - Start with no subagent.

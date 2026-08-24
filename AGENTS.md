@@ -13,5 +13,7 @@ Operational rules:
 - Permit one writing worker at a time; prohibit nested delegation and duplicated work.
 - Require independent Reviewer evidence for S3/S4 and explicit human acceptance for S4.
 - Create or update one record in `tasks/` for nontrivial changes; do not create separate brief, QA, and decision files.
+- Treat machine-local identity and layout as private by default. In Markdown, task records, commands, retained logs, and worker returns, use repository-relative paths or neutral placeholders instead of machine-specific absolute paths, account names, private hostnames, or local-only environment, workspace, checkout, and mount names. Exact disclosure requires explicit human instruction.
+- Run commands from the current working directory when possible, redact incidental local identifiers before preserving output, and scan changed text for accidental host-specific paths before completion.
 - Verify inside Codex using actual diffs, outputs, repository-native commands, and human inspection where appropriate.
 - Never treat a successful command as proof of scientific validity.

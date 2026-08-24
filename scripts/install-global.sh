@@ -71,22 +71,25 @@ case "$mode" in
     ;;
 esac
 
-for source in "$global_agents_source" "$agents_config_source"; do
-  if [ ! -f "$source" ]; then
-    echo "Missing installer source: $source" >&2
-    exit 1
-  fi
-done
+if [ ! -f "$global_agents_source" ]; then
+  echo "Missing installer source: install/global-agents.md" >&2
+  exit 1
+fi
+if [ ! -f "$agents_config_source" ]; then
+  echo "Missing installer source: install/agents-config.toml" >&2
+  exit 1
+fi
 
 ensure_dir() {
   directory=$1
+  label=$2
   if [ -d "$directory" ]; then
     return
   fi
   if [ "$apply" -eq 1 ]; then
-    echo "create directory: $directory"
+    echo "create directory: $label"
   else
-    echo "would create directory: $directory"
+    echo "would create directory: $label"
   fi
   if [ "$apply" -eq 1 ]; then
     mkdir -p "$directory"
@@ -96,23 +99,24 @@ ensure_dir() {
 link_file() {
   source=$1
   destination=$2
+  label=$3
   if [ -L "$destination" ]; then
     current_target=$(readlink "$destination")
     if [ "$current_target" = "$source" ]; then
-      echo "link ok: $destination"
+      echo "link ok: $label"
       return
     fi
-    echo "conflict: $destination links to $current_target; leaving it unchanged" >&2
+    echo "conflict: $label links elsewhere; leaving it unchanged" >&2
     return 1
   fi
   if [ -e "$destination" ]; then
-    echo "conflict: $destination exists and is not a BoundedFreedom link; leaving it unchanged" >&2
+    echo "conflict: $label exists and is not a BoundedFreedom link; leaving it unchanged" >&2
     return 1
   fi
   if [ "$apply" -eq 1 ]; then
-    echo "link: $destination -> $source"
+    echo "link: $label"
   else
-    echo "would link: $destination -> $source"
+    echo "would link: $label"
   fi
   if [ "$apply" -eq 1 ]; then
     ln -s "$source" "$destination"
@@ -152,9 +156,9 @@ refresh_managed_block() {
   label=$3
   parent_dir=$(dirname "$destination")
   if [ "$apply" -eq 1 ]; then
-    echo "refresh managed $label block: $destination"
+    echo "refresh managed $label block"
   else
-    echo "would refresh managed $label block: $destination"
+    echo "would refresh managed $label block"
   fi
   if [ "$apply" -ne 1 ]; then
     return
@@ -175,21 +179,35 @@ refresh_managed_block() {
   rm -f "$temporary"
 }
 
+show_link_status() {
+  source=$1
+  destination=$2
+  label=$3
+  if [ -L "$destination" ]; then
+    current_target=$(readlink "$destination")
+    if [ "$current_target" != "$source" ]; then
+      echo "$label: conflict (linked elsewhere)"
+    elif [ -e "$destination" ]; then
+      echo "$label: linked"
+    else
+      echo "$label: broken repository link"
+    fi
+  elif [ -e "$destination" ]; then
+    echo "$label: conflict (not a repository link)"
+  else
+    echo "$label: not linked"
+  fi
+}
+
 show_status() {
   for role in scout coder builder reviewer; do
+    source="$repo_root/.codex/agents/$role.toml"
     destination="$agents_dir/$role.toml"
-    if [ -L "$destination" ]; then
-      echo "agent $role: $(readlink "$destination")"
-    else
-      echo "agent $role: not linked"
-    fi
+    show_link_status "$source" "$destination" "agent $role"
   done
+  skill_source="$repo_root/.agents/skills/cost-efficient-orchestration"
   skill_destination="$skills_dir/cost-efficient-orchestration"
-  if [ -L "$skill_destination" ]; then
-    echo "skill: $(readlink "$skill_destination")"
-  else
-    echo "skill: not linked"
-  fi
+  show_link_status "$skill_source" "$skill_destination" "skill"
   if [ -f "$global_agents" ] && grep -Fq "$begin_marker" "$global_agents"; then
     echo "global AGENTS.md: managed block present"
   else
@@ -208,19 +226,19 @@ if [ "$mode" = "status" ]; then
 fi
 
 if has_unmanaged_agents_table "$global_config"; then
-  echo "config manual merge required: $global_config already contains a user-owned [agents] table" >&2
-  echo "source to merge: $agents_config_source" >&2
+  echo "config manual merge required: the global Codex config already contains a user-owned [agents] table" >&2
+  echo "source to merge: install/agents-config.toml" >&2
   exit 3
 fi
 
-ensure_dir "$agents_dir"
-ensure_dir "$skills_dir"
+ensure_dir "$agents_dir" "Codex agents"
+ensure_dir "$skills_dir" "personal skills"
 
-link_file "$repo_root/.codex/agents/scout.toml" "$agents_dir/scout.toml"
-link_file "$repo_root/.codex/agents/coder.toml" "$agents_dir/coder.toml"
-link_file "$repo_root/.codex/agents/builder.toml" "$agents_dir/builder.toml"
-link_file "$repo_root/.codex/agents/reviewer.toml" "$agents_dir/reviewer.toml"
-link_file "$repo_root/.agents/skills/cost-efficient-orchestration" "$skills_dir/cost-efficient-orchestration"
+link_file "$repo_root/.codex/agents/scout.toml" "$agents_dir/scout.toml" "agent scout"
+link_file "$repo_root/.codex/agents/coder.toml" "$agents_dir/coder.toml" "agent coder"
+link_file "$repo_root/.codex/agents/builder.toml" "$agents_dir/builder.toml" "agent builder"
+link_file "$repo_root/.codex/agents/reviewer.toml" "$agents_dir/reviewer.toml" "agent reviewer"
+link_file "$repo_root/.agents/skills/cost-efficient-orchestration" "$skills_dir/cost-efficient-orchestration" "orchestration skill"
 
 refresh_managed_block "$global_agents" "$global_agents_source" "AGENTS.md"
 refresh_managed_block "$global_config" "$agents_config_source" "config.toml"
