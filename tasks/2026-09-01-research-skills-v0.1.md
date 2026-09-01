@@ -40,3 +40,12 @@ Each Skill has one focused reference loaded only for advanced modes or domain ch
 - Link, privacy, and diff checks: Local Markdown links and whitespace checks passed. Public text contains no machine-local path or account identifiers, and specialized Skills contain no host model names.
 - Outcome: Accepted as research Skills V0.1. The five research methods are discoverable, portable, installed together, and remain separated from model and assurance routing.
 - Remaining uncertainty: Real routing quality, model sufficiency, and cost savings require calibrated tasks rather than document inspection alone.
+
+## V0.1.1 model-routing refinement
+
+- Decision: Keep one dispatcher. A matching research Skill now gives the starting capability for its known work units; the host adapter resolves that need to Luna, Terra, Sol, or an equivalent model. Work outside those rows falls back to the original limiting-factor policy.
+- Separation: Task type selects the Skill, work-unit difficulty selects model capability, and S0–S4 selects assurance. Risk does not automatically upgrade the executor.
+- Codex start: Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer; switch Chief to Sol only when the main judgment itself needs it.
+- Cost intent: Keep corpus-scale retrieval and frozen edits on fast workers, reserve balanced models for synthesis or coordinated builds, and reserve strong models for ambiguous judgment or independent review.
+- Limitation: Markdown can guide routing and configured subagents, but it cannot switch the active Chief model. Actual savings still need measurement on repeated task classes.
+- Verification: All six Skill validators, the installer shell check and portable dry-run, whitespace check, and private-path scan passed.

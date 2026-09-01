@@ -15,6 +15,17 @@ Trace a claim from paper text to executable behavior and report the strongest st
 
 Read [references/reproduction-contract.md](references/reproduction-contract.md) before mutation, execution, or a claim-level result.
 
+## Work-unit model guidance
+
+| Work unit | Start with |
+| --- | --- |
+| Paper and repository navigation, claim mapping, and dependency inventory | Fast / Scout |
+| Frozen environment, config, or smoke-script fixes | Fast / Coder |
+| Coordinated implementation or claim-level run construction across files | Balanced / Builder |
+| Protocol equivalence, unexplained numerical discrepancy, or claim-status judgment | Strong / Chief |
+
+Running longer or using more compute is not a reason to raise model capability. Escalate when mapping, implementation, or scientific interpretation exceeds the current lane. Use the general orchestration route for work not listed here.
+
 ## Freeze the target
 
 Record the paper version, repository and commit, target claim, expected observable, data and license boundary, environment, hardware assumptions, seeds, metric definition, and permitted deviations. If any identity is unknown, keep the result provisional.
@@ -58,7 +69,7 @@ indeterminate
 - A smoke run validates plumbing, not numerical or scientific agreement.
 - Reimplementation without author code may test a method description but cannot silently inherit the author's implementation identity.
 - A failed reproduction does not by itself refute the paper; distinguish mismatch, missing information, environment failure, and genuine contradictory evidence.
-- Chief retains model routing, S0–S4 assurance, and independent review decisions.
+- These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Influences and credits
 

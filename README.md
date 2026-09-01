@@ -30,7 +30,11 @@ Chief frames intent and identifies the task type
     ↓
 Load one matching Skill when specialized method is needed
     ↓
-Freeze scope and set the S0–S4 evidence gate
+Freeze scope and work units
+    ↓
+Use its work-step model guidance; otherwise use the general route
+    ↓
+Set the S0–S4 evidence gate separately
     ↓
 Chief works directly, or delegates one bounded unit
     ↓
@@ -68,7 +72,7 @@ These are work contracts, not permanent model identities. Concrete model names b
 | [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Data figures, architecture diagrams, method schematics, or domain visualization |
 | [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Proportionate scripts, packages, public software, or HPC pipelines |
 
-Chief sees only these descriptions until a task matches. The selected Skill supplies the method; orchestration supplies model and assurance decisions; the working project supplies local scientific constraints.
+Chief sees only these descriptions until a task matches. The selected Skill supplies the method and a capability starting point for its known work steps. Orchestration maps that need to the current host, uses the general policy for anything not covered, and applies S0–S4 assurance. The working project supplies local scientific constraints.
 
 ## Harness compatibility
 

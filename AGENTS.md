@@ -8,7 +8,7 @@ Operational rules:
 
 - Do not use task-wide model profiles.
 - Keep task type, model capability, and S0–S4 assurance as separate decisions.
-- Load only the Skill that matches the current task; do not place specialist methods in Chief's standing prompt.
+- Load only the Skill that matches the current task. Use its work-unit model guidance first and the general host routing only for work it does not cover.
 - Default to direct work or one bounded worker.
 - Select Scout, Coder, Builder, or Reviewer by the work needed, not by prestige.
 - Give every worker exact scope, ownership, output, verification, and stop conditions.

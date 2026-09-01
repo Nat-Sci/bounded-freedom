@@ -15,6 +15,16 @@ Produce a review whose conclusion is no broader than its search and evidence.
 
 Read [references/modes-and-schema.md](references/modes-and-schema.md) before systematic, novelty, or large-corpus work. It defines required artifacts, evidence fields, and stop conditions.
 
+## Work-unit model guidance
+
+| Work unit | Start with |
+| --- | --- |
+| Query expansion, metadata, deduplication, screening, and fixed-field extraction | Fast / Scout |
+| Full-text evidence tables, method comparison, and stable synthesis | Balanced / Chief |
+| Novelty judgment, causal or statistical inference, and unresolved conflicting evidence | Strong / Chief |
+
+A large corpus calls for bounded Scout work, not an automatic model upgrade. Escalate only for missed dependencies, unstable inclusion decisions, unresolved evidence conflict, or insufficient judgment. Use the general orchestration route for work not listed here.
+
 ## Freeze before searching
 
 Record:
@@ -52,7 +62,7 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - Search volume, citation count, and majority vote do not establish truth.
 - A database or paper-QA tool can retrieve from a corpus but cannot establish that the corpus is complete.
 - Novelty is always bounded by the searched sources, dates, languages, terminology, and accessible full text.
-- Keep model selection, delegation, and S0–S4 assurance in the Chief orchestration contract rather than in this Skill.
+- These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Influences and credits
 

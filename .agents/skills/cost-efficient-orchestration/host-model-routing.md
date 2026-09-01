@@ -2,6 +2,12 @@
 
 This file maps the portable role contracts to current host capabilities. It is a starting policy, not a benchmark result. Re-check model availability, price, tool reliability, and context behavior when a host changes.
 
+## Routing order
+
+Use a matching Skill's work-unit capability first, then map it to a host model here. Use the general table only when no Skill row matches, and escalate only after relevant failure, ambiguity, conflict, or consequence.
+
+The S0–S4 gate may add review; it does not upgrade the executor. A Markdown Skill cannot switch Chief: work directly, delegate to a configured role, or recommend an explicit switch.
+
 ## Route by limiting factor
 
 Choose the least costly model that clears the bounded work unit's real limit:
@@ -20,13 +26,13 @@ Snapshot: 2026-09-01. Concrete names stay here instead of in the portable Skill.
 
 | Host or provider | Fast bounded work | Coordinated work | Independent high-judgment review |
 | --- | --- | --- | --- |
-| Codex reference adapter | Luna / medium for Scout or Coder | Terra / medium for Builder | Sol / high for Reviewer |
+| Codex reference adapter | `gpt-5.6-luna` / medium for Scout or Coder | `gpt-5.6-terra` / medium for Builder | `gpt-5.6-sol` / high for Reviewer |
 | Claude Code | `haiku` for bounded Scout or Coder work | `sonnet` for Builder work | `opus` for consequential Reviewer work |
 | DeepSeek models | V4 Flash for volume and bounded execution | V4 Pro when coordination or harder reasoning warrants it | V4 Pro with high reasoning; use `max` only after an unresolved consequential conflict |
 | Gemini CLI | Current Flash-class model for bounded volume | Current Pro-class model for coordinated work | Strongest available Pro-class model with an independent prompt and evidence set |
 | Provider-neutral hosts such as OpenCode, Cursor, Roo Code, Cline, or OpenHands | Select the provider's fast capable model | Select its balanced coding/reasoning model | Select its strongest reliable reasoning model |
 
-The Chief session is not required to use the same model as a worker. Role files are defaults, not proof that a model remains the cheapest capable choice.
+For mixed Codex work, the practical starting pattern is Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer. If the main output itself needs unresolved high-ambiguity reasoning, start or switch Chief to Sol explicitly; a Skill cannot do that silently. These defaults are not proof that a model remains the cheapest capable choice.
 
 ## Harness and provider are separate
 

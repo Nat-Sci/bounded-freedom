@@ -16,6 +16,17 @@ A scientific figure is a visual argument. Freeze the argument before choosing a 
 
 Read [references/figure-contract-and-routes.md](references/figure-contract-and-routes.md) before creating a multi-panel figure, neuroimaging or electrophysiology figure, architecture diagram, or publication-ready asset.
 
+## Work-unit model guidance
+
+| Work unit | Start with |
+| --- | --- |
+| Locate data, plotting code, labels, assets, and provenance | Fast / Scout |
+| Make a narrow plotting edit after the figure contract is frozen | Fast / Coder |
+| Build a coordinated multi-panel figure, data path, or editable schematic | Balanced / Builder |
+| Resolve ambiguous scientific meaning, misleading encoding, anatomy, or statistical conflict | Strong / Chief |
+
+An image model is a drawing tool, not a stronger reasoning lane. Data, labels, topology, and scientific checks remain code- or evidence-led. Use the general orchestration route for work not listed here.
+
 ## Workflow
 
 1. Freeze the message, audience, target venue, panels, inputs, visual encodings, required labels, and prohibited implications.
@@ -41,7 +52,7 @@ Read [references/figure-contract-and-routes.md](references/figure-contract-and-r
 - Do not manually place values that should be generated from data.
 - Do not silently flip hemispheres, change coordinate space, interpolate labels, alter thresholds, or change exclusions to improve appearance.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
-- Chief retains model choice, delegation, S0–S4 assurance, and acceptance decisions.
+- These rows are starting points. Chief retains the final model, delegation, S0–S4, and acceptance decisions.
 
 ## Influences and credits
 

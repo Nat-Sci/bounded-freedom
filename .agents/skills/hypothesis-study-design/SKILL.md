@@ -13,6 +13,16 @@ Record the observation or problem, the available evidence, the target population
 
 Read [references/study-card.md](references/study-card.md) when a study, experiment, preregistration, or statistical analysis plan is required.
 
+## Work-unit model guidance
+
+| Work unit | Start with |
+| --- | --- |
+| Extract observations, assumptions, constraints, and candidate confounders | Fast / Scout |
+| Turn frozen hypotheses into feasibility, measurement, and statistical-plan structure | Balanced / Chief |
+| Generate competing mechanisms and discriminating predictions, or judge causality and conflicting evidence | Strong / Chief |
+
+Use fast execution for formatting or frozen fields, not for deciding the scientific story. Use the general orchestration route for work not listed here.
+
 ## Workflow
 
 1. Separate observations, prior evidence, assumptions, and interpretations.
@@ -41,7 +51,7 @@ Read [references/study-card.md](references/study-card.md) when a study, experime
 - Separate association, prediction, intervention, mediation, and causal identification.
 - Do not optimize the design around a desired significant result.
 - Ethics approval, clinical interpretation, primary claims, and irreversible study choices remain human decisions.
-- Model capability and S0–S4 assurance remain separate Chief decisions.
+- These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Influences and credits
 

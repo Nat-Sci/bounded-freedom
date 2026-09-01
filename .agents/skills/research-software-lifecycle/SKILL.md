@@ -16,6 +16,17 @@ Choose the software target before choosing the scaffold.
 
 Read [references/maturity-contract.md](references/maturity-contract.md) before adding packaging, CI, containers, release automation, DOI/citation metadata, or pipeline infrastructure.
 
+## Work-unit model guidance
+
+| Work unit | Start with |
+| --- | --- |
+| Inventory scripts, interfaces, documentation, tests, and environments | Fast / Scout |
+| Make a narrow frozen packaging, test, documentation, or configuration edit | Fast / Coder |
+| Coordinate package APIs, CI, containers, or HPC pipeline changes | Balanced / Builder |
+| Resolve cross-cutting API, FAIR, security, or operational reliability tradeoffs | Strong / Chief |
+
+The word “software” is not a reason to use a stronger model. Match capability to the bounded change and maturity target. Use the general orchestration route for work not listed here.
+
 ## Workflow
 
 1. Freeze intended users, lifetime, reuse boundary, compute environment, data sensitivity, and maintenance owner.
@@ -43,7 +54,7 @@ Read [references/maturity-contract.md](references/maturity-contract.md) before a
 - Containers do not replace data provenance, tests, version identities, or operational checks.
 - A passing test suite does not validate the scientific assumptions or result.
 - Do not add hosted services, registries, releases, or external publications without the required authority.
-- Chief retains model routing and S0–S4 assurance; project rules retain scientific and infrastructure constraints.
+- These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions; project rules retain scientific and infrastructure constraints.
 
 ## Influences and credits
 

@@ -29,24 +29,27 @@ Read [scientific-risk.md](scientific-risk.md) when classification is not obvious
 2. **Work capability:** Choose a model for each bounded unit from search volume, context length, ambiguity, coding depth, tool reliability, and judgment. Do not assign one model profile to the whole task.
 3. **Assurance:** Classify S0–S4 by the highest plausible consequence. Risk sets evidence, independent review, and human acceptance; it does not name the task or automatically choose the model.
 
-When a specialized Skill is loaded, that Skill owns the research method, modes, and deliverable contract. This orchestration Skill still owns model capability, delegation, and assurance. The working project's instructions own local data, cohort, split, compute, ethics, and acceptance facts. Do not copy those three layers into one another.
+When a specialized Skill is loaded, use its work-unit capability first, then resolve it through the host mapping. Use the general policy only for an unmatched unit. This is one refined dispatcher, not a task-wide model profile. The S0–S4 gate may add review; it does not automatically upgrade the executor.
+
+The Skill owns method and capability guidance; orchestration owns final model choice, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
 
 ## Selection algorithm
 
 1. Frame the user's intent and identify ambiguity that would materially alter the result.
 2. Select a matching Skill only when specialized method or output contracts are needed.
 3. Freeze scope, permitted actions, verification, stop conditions, and unresolved uncertainty.
-4. Classify S0–S4 before consequential mutation.
-5. Work directly when the task is clear and a handoff would cost at least as much as completion.
-6. Otherwise select one primary role:
+4. For each work unit, use the selected Skill's starting capability when listed; otherwise use the general limiting-factor policy.
+5. Classify S0–S4 before consequential mutation.
+6. Work directly when the task is clear and a handoff would cost at least as much as completion.
+7. Otherwise select one primary role:
    - **Scout:** read-only discovery that would otherwise flood Chief's context.
    - **Coder:** narrow, explicit, low-ambiguity edits inside frozen ownership.
    - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
-7. Choose the least costly model that can satisfy that exact contract. Start from the host mapping, then adjust for evidence.
-8. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
-9. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
-10. Add a fresh independent **Reviewer** for S3/S4. S4 also requires explicit human acceptance.
-11. Record nontrivial work in one file under `tasks/`.
+8. Map the required capability and role to the least costly capable host model, then adjust only when evidence supports it.
+9. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
+10. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
+11. Add a fresh independent **Reviewer** for S3/S4. S4 also requires explicit human acceptance.
+12. Record nontrivial work in one file under `tasks/`.
 
 ## Capability and cost gates
 
