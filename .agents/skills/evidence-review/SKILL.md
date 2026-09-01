@@ -53,3 +53,7 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - A database or paper-QA tool can retrieve from a corpus but cannot establish that the corpus is complete.
 - Novelty is always bounded by the searched sources, dates, languages, terminology, and accessible full text.
 - Keep model selection, delegation, and S0–S4 assurance in the Chief orchestration contract rather than in this Skill.
+
+## Influences and credits
+
+This Skill is an original synthesis informed especially by [scientific-research-skills](https://github.com/jxtse/scientific-research-skills) and the [systematic literature review Skill](https://github.com/yananlong/codex-skills/blob/main/research/research-systematic-literature-review/SKILL.md), together with established review guidance. It does not bundle either project. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).

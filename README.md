@@ -127,4 +127,10 @@ The user does not choose a luxury/basic/minimal profile or manually assemble an 
 
 The source landscape and adoption boundaries are recorded in [the research capability inventory](tasks/2026-09-01-research-capability-inventory.md). Its useful methods are now represented by the five on-demand Skills above without turning Chief's standing prompt into a research encyclopedia.
 
+## Ecosystem and credits
+
+BoundedFreedom builds on existing research methods, tools, benchmarks, domain libraries, and agent harnesses. The [ecosystem, influences, and credits](docs/ecosystem-and-credits.md) page explains what each related project contributes, what this repository adopts, and what remains separate. Each Skill also keeps a short provenance note close to the method it uses.
+
+Upstream projects are watched for useful changes, but never merged into a Skill automatically. Stars are a human acknowledgement; releases and scheduled reviews are the update signal.
+
 Read [CONSTITUTION.md](CONSTITUTION.md) for non-negotiable boundaries and the [orchestration Skill](.agents/skills/cost-efficient-orchestration/SKILL.md) for the live selection algorithm. Original Bootstrap materials remain under [docs/design-history](docs/design-history/).

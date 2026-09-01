@@ -44,3 +44,7 @@ Read [references/maturity-contract.md](references/maturity-contract.md) before a
 - A passing test suite does not validate the scientific assumptions or result.
 - Do not add hosted services, registries, releases, or external publications without the required authority.
 - Chief retains model routing and S0–S4 assurance; project rules retain scientific and infrastructure constraints.
+
+## Influences and credits
+
+This Skill is an original synthesis informed by the research software engineer profile in [scientific-agents](https://github.com/K-Dense-AI/scientific-agents), [The Turing Way](https://github.com/the-turing-way/the-turing-way), the [pyOpenSci Python Package Guide](https://github.com/pyOpenSci/python-package-guide), and [FAIR4RS](https://github.com/force11/FAIR4RS). These sources guide proportionate practice; none is bundled. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).

@@ -59,3 +59,7 @@ indeterminate
 - Reimplementation without author code may test a method description but cannot silently inherit the author's implementation identity.
 - A failed reproduction does not by itself refute the paper; distinguish mismatch, missing information, environment failure, and genuine contradictory evidence.
 - Chief retains model routing, S0–S4 assurance, and independent review decisions.
+
+## Influences and credits
+
+This Skill is an original synthesis informed by [research-paper-code-study](https://github.com/baizhanxu/research-paper-code-study-codex-skill) for understanding and mapping, and by [PaperBench](https://github.com/openai/frontier-evals/tree/main/project/paperbench) and [ScienceAgentBench](https://github.com/OSU-NLP-Group/ScienceAgentBench) for stronger execution and evaluation boundaries. No upstream implementation is bundled. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).

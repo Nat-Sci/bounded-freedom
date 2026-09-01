@@ -79,3 +79,7 @@ Chief and every worker treat machine-local identity and layout as private by def
 ## Completion
 
 Chief reports: outcome, files or artifacts changed, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty.
+
+## Influences and credits
+
+This Skill is an original integration informed by the open [Agent Skills specification](https://agentskills.io/specification) and the control surfaces compared in the [harness landscape](../../../docs/harness-landscape.md). Its separation of task route, work capability, and assurance is the local BoundedFreedom contract. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md) for the attribution and reuse policy.

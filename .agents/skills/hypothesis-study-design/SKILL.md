@@ -42,3 +42,7 @@ Read [references/study-card.md](references/study-card.md) when a study, experime
 - Do not optimize the design around a desired significant result.
 - Ethics approval, clinical interpretation, primary claims, and irreversible study choices remain human decisions.
 - Model capability and S0–S4 assurance remain separate Chief decisions.
+
+## Influences and credits
+
+This Skill is an original synthesis informed by competing-hypothesis, preregistration, and study-design practice, and by research systems such as [ResearchAgent](https://github.com/JinheonBaek/ResearchAgent) and [HypoGeniC/HypoRefine](https://github.com/ChicagoHAI/hypothesis-generation). Those systems remain research references rather than bundled dependencies. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).

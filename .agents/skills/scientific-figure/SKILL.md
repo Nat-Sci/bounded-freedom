@@ -42,3 +42,7 @@ Read [references/figure-contract-and-routes.md](references/figure-contract-and-r
 - Do not silently flip hemispheres, change coordinate space, interpolate labels, alter thresholds, or change exclusions to improve appearance.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
 - Chief retains model choice, delegation, S0–S4 assurance, and acceptance decisions.
+
+## Influences and credits
+
+This Skill is an original synthesis informed by figure-contract and editable-output ideas across [PaperVizAgent](https://github.com/google-research/papervizagent), [AutoFigure-Edit](https://github.com/ResearAI/AutoFigure-Edit), and related scientific figure projects, plus established domain libraries such as Nilearn and MNE-Python. Those tools are optional routes, not bundled dependencies. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
