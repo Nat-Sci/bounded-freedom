@@ -133,4 +133,6 @@ BoundedFreedom builds on existing research methods, tools, benchmarks, domain li
 
 Upstream projects are watched for useful changes, but never merged into a Skill automatically. Stars are a human acknowledgement; releases and scheduled reviews are the update signal.
 
+The public [Wiki](https://github.com/Nat-Sci/bounded-freedom/wiki) is the shorter, navigable entry point. Versioned documentation remains in this repository.
+
 Read [CONSTITUTION.md](CONSTITUTION.md) for non-negotiable boundaries and the [orchestration Skill](.agents/skills/cost-efficient-orchestration/SKILL.md) for the live selection algorithm. Original Bootstrap materials remain under [docs/design-history](docs/design-history/).

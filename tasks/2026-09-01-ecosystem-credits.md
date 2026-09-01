@@ -16,6 +16,7 @@
 ## Decision
 
 - `docs/ecosystem-and-credits.md` is the versioned source of truth. It classifies related work, states what BoundedFreedom adds, and supplies the upstream watch policy.
+- The public Wiki provides a concise Home page plus navigable mirrors for the ecosystem and harness landscape. The main repository remains canonical.
 - Each Skill states its closest influences and links to the canonical page. This keeps credit near the adapted method without repeating the full landscape.
 - Upstream changes are reviewed and selectively adopted. They never update a Skill automatically.
 - Stars remain a human choice. Release watching or a scheduled review, not starring, supplies update signals.
@@ -23,5 +24,5 @@
 ## Verification and remaining uncertainty
 
 - Verification passed: all six Skills pass the repository Skill validator; changed Markdown has valid local links and no machine-local identity; the diff has no whitespace errors.
-- Wiki status: the canonical page is ready, but the Wiki repository has not yet been initialized. Publishing its first public page remains pending explicit action-time confirmation.
+- Wiki publication passed: the public Home page was created after explicit confirmation, then the ecosystem, harness landscape, and sidebar mirrors were committed and pushed from their canonical sources.
 - Remaining uncertainty: the most useful monitoring interval should be chosen after observing upstream update frequency and the maintenance burden.
