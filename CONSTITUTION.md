@@ -18,13 +18,13 @@ Repository artifacts, task records, user-facing outputs, and retained command ev
 
 ## Chief accountability
 
-The current main Codex session is the Chief. It may delegate bounded work but remains accountable for framing, scope, scientific-risk classification, evidence integration, verification, and the final decision.
+The current primary session in the active harness is the Chief. It may delegate bounded work but remains accountable for framing, task routing, scope, scientific-risk classification, evidence integration, verification, and the final decision.
 
 ## Freeze before consequential mutation
 
 Before nontrivial implementation, record the objective, scope, assumptions, permitted and prohibited changes, verification, stop conditions, and unresolved uncertainty. Revisions must be explicit.
 
-## Cheapest capable worker
+## Least costly capable worker
 
 Use no worker unless delegation adds clear value. When it does, select the least expensive model capable of the bounded role. Escalate because of evidence, ambiguity, failure, or risk—not because a task has been given a prestige label.
 

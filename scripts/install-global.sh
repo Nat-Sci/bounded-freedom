@@ -1,26 +1,39 @@
 #!/bin/sh
-# Install BoundedFreedom as a user-level Codex layer without overwriting user files.
+# Install BoundedFreedom links and thin host adapters without overwriting user files.
 set -eu
 
 usage() {
   cat <<'EOF'
-Usage: scripts/install-global.sh [--dry-run|--install|--update|--status] [--target-root DIRECTORY]
+Usage: scripts/install-global.sh [--dry-run|--install|--update|--status]
+                                 [--host codex|claude|portable|all]
+                                 [--target-root DIRECTORY]
 
   --dry-run              Show the changes that --install would make (default).
   --install, --update    Create or refresh managed links and marked global blocks.
   --status               Report installation state without changing files.
+  --host HOST            Install the Codex adapter (default), Claude adapter,
+                         portable Skills only, or both host adapters.
   --target-root DIR      Install below DIR instead of the current user's home directory.
-                         Intended for testing or an isolated Codex profile.
+                         Intended for testing or an isolated host profile.
 EOF
 }
 
 mode="dry-run"
+host="codex"
 target_root=""
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run|--install|--update|--status)
       mode=${1#--}
+      ;;
+    --host)
+      shift
+      if [ "$#" -eq 0 ]; then
+        echo "--host requires codex, claude, portable, or all" >&2
+        exit 2
+      fi
+      host=$1
       ;;
     --target-root)
       shift
@@ -43,17 +56,46 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 
+use_codex=0
+use_claude=0
+case "$host" in
+  codex)
+    use_codex=1
+    ;;
+  claude)
+    use_claude=1
+    ;;
+  portable)
+    ;;
+  all)
+    use_codex=1
+    use_claude=1
+    ;;
+  *)
+    echo "Unsupported host: $host" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
 if [ -z "$target_root" ]; then
   target_root=$HOME
 fi
 
+portable_skills_dir="$target_root/.agents/skills"
+skills_source_dir="$repo_root/.agents/skills"
+
 codex_dir="$target_root/.codex"
-agents_dir="$codex_dir/agents"
-skills_dir="$target_root/.agents/skills"
-global_agents="$codex_dir/AGENTS.md"
-global_config="$codex_dir/config.toml"
-global_agents_source="$repo_root/install/global-agents.md"
+codex_agents_dir="$codex_dir/agents"
+codex_global_agents="$codex_dir/AGENTS.md"
+codex_global_config="$codex_dir/config.toml"
+
+claude_dir="$target_root/.claude"
+claude_skills_dir="$claude_dir/skills"
+claude_global_instructions="$claude_dir/CLAUDE.md"
+
+global_instructions_source="$repo_root/install/global-agents.md"
 agents_config_source="$repo_root/install/agents-config.toml"
 begin_marker="# >>> BoundedFreedom managed block >>>"
 end_marker="# <<< BoundedFreedom managed block <<<"
@@ -71,11 +113,30 @@ case "$mode" in
     ;;
 esac
 
-if [ ! -f "$global_agents_source" ]; then
+if [ ! -d "$skills_source_dir" ]; then
+  echo "Missing installer source: .agents/skills" >&2
+  exit 1
+fi
+skill_count=0
+for skill_source in "$skills_source_dir"/*; do
+  if [ ! -d "$skill_source" ]; then
+    continue
+  fi
+  if [ ! -f "$skill_source/SKILL.md" ]; then
+    echo "Invalid installer source: .agents/skills/${skill_source##*/} has no SKILL.md" >&2
+    exit 1
+  fi
+  skill_count=$((skill_count + 1))
+done
+if [ "$skill_count" -eq 0 ]; then
+  echo "Missing installer source: no Skills found under .agents/skills" >&2
+  exit 1
+fi
+if [ ! -f "$global_instructions_source" ]; then
   echo "Missing installer source: install/global-agents.md" >&2
   exit 1
 fi
-if [ ! -f "$agents_config_source" ]; then
+if [ "$use_codex" -eq 1 ] && [ ! -f "$agents_config_source" ]; then
   echo "Missing installer source: install/agents-config.toml" >&2
   exit 1
 fi
@@ -88,11 +149,9 @@ ensure_dir() {
   fi
   if [ "$apply" -eq 1 ]; then
     echo "create directory: $label"
+    mkdir -p "$directory"
   else
     echo "would create directory: $label"
-  fi
-  if [ "$apply" -eq 1 ]; then
-    mkdir -p "$directory"
   fi
 }
 
@@ -115,11 +174,9 @@ link_file() {
   fi
   if [ "$apply" -eq 1 ]; then
     echo "link: $label"
+    ln -s "$source" "$destination"
   else
     echo "would link: $label"
-  fi
-  if [ "$apply" -eq 1 ]; then
-    ln -s "$source" "$destination"
   fi
 }
 
@@ -199,24 +256,40 @@ show_link_status() {
   fi
 }
 
-show_status() {
-  for role in scout coder builder reviewer; do
-    source="$repo_root/.codex/agents/$role.toml"
-    destination="$agents_dir/$role.toml"
-    show_link_status "$source" "$destination" "agent $role"
-  done
-  skill_source="$repo_root/.agents/skills/cost-efficient-orchestration"
-  skill_destination="$skills_dir/cost-efficient-orchestration"
-  show_link_status "$skill_source" "$skill_destination" "skill"
-  if [ -f "$global_agents" ] && grep -Fq "$begin_marker" "$global_agents"; then
-    echo "global AGENTS.md: managed block present"
+show_block_status() {
+  destination=$1
+  label=$2
+  if [ -f "$destination" ] && grep -Fq "$begin_marker" "$destination"; then
+    echo "$label: managed block present"
   else
-    echo "global AGENTS.md: managed block absent"
+    echo "$label: managed block absent"
   fi
-  if [ -f "$global_config" ] && grep -Fq "$begin_marker" "$global_config"; then
-    echo "global config.toml: managed [agents] block present"
-  else
-    echo "global config.toml: managed [agents] block absent"
+}
+
+show_status() {
+  for skill_source in "$skills_source_dir"/*; do
+    if [ ! -d "$skill_source" ]; then
+      continue
+    fi
+    skill_name=${skill_source##*/}
+    show_link_status "$skill_source" "$portable_skills_dir/$skill_name" "portable Skill $skill_name"
+  done
+  if [ "$use_codex" -eq 1 ]; then
+    for role in scout coder builder reviewer; do
+      show_link_status "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+    done
+    show_block_status "$codex_global_agents" "Codex AGENTS.md"
+    show_block_status "$codex_global_config" "Codex config.toml"
+  fi
+  if [ "$use_claude" -eq 1 ]; then
+    for skill_source in "$skills_source_dir"/*; do
+      if [ ! -d "$skill_source" ]; then
+        continue
+      fi
+      skill_name=${skill_source##*/}
+      show_link_status "$skill_source" "$claude_skills_dir/$skill_name" "Claude Skill $skill_name"
+    done
+    show_block_status "$claude_global_instructions" "Claude CLAUDE.md"
   fi
 }
 
@@ -225,26 +298,45 @@ if [ "$mode" = "status" ]; then
   exit 0
 fi
 
-if has_unmanaged_agents_table "$global_config"; then
+if [ "$use_codex" -eq 1 ] && has_unmanaged_agents_table "$codex_global_config"; then
   echo "config manual merge required: the global Codex config already contains a user-owned [agents] table" >&2
   echo "source to merge: install/agents-config.toml" >&2
   exit 3
 fi
 
-ensure_dir "$agents_dir" "Codex agents"
-ensure_dir "$skills_dir" "personal skills"
+ensure_dir "$portable_skills_dir" "portable Skills"
+for skill_source in "$skills_source_dir"/*; do
+  if [ ! -d "$skill_source" ]; then
+    continue
+  fi
+  skill_name=${skill_source##*/}
+  link_file "$skill_source" "$portable_skills_dir/$skill_name" "portable Skill $skill_name"
+done
 
-link_file "$repo_root/.codex/agents/scout.toml" "$agents_dir/scout.toml" "agent scout"
-link_file "$repo_root/.codex/agents/coder.toml" "$agents_dir/coder.toml" "agent coder"
-link_file "$repo_root/.codex/agents/builder.toml" "$agents_dir/builder.toml" "agent builder"
-link_file "$repo_root/.codex/agents/reviewer.toml" "$agents_dir/reviewer.toml" "agent reviewer"
-link_file "$repo_root/.agents/skills/cost-efficient-orchestration" "$skills_dir/cost-efficient-orchestration" "orchestration skill"
+if [ "$use_codex" -eq 1 ]; then
+  ensure_dir "$codex_agents_dir" "Codex agents"
+  link_file "$repo_root/.codex/agents/scout.toml" "$codex_agents_dir/scout.toml" "Codex agent scout"
+  link_file "$repo_root/.codex/agents/coder.toml" "$codex_agents_dir/coder.toml" "Codex agent coder"
+  link_file "$repo_root/.codex/agents/builder.toml" "$codex_agents_dir/builder.toml" "Codex agent builder"
+  link_file "$repo_root/.codex/agents/reviewer.toml" "$codex_agents_dir/reviewer.toml" "Codex agent reviewer"
+  refresh_managed_block "$codex_global_agents" "$global_instructions_source" "Codex AGENTS.md"
+  refresh_managed_block "$codex_global_config" "$agents_config_source" "Codex config.toml"
+fi
 
-refresh_managed_block "$global_agents" "$global_agents_source" "AGENTS.md"
-refresh_managed_block "$global_config" "$agents_config_source" "config.toml"
+if [ "$use_claude" -eq 1 ]; then
+  ensure_dir "$claude_skills_dir" "Claude Skills"
+  for skill_source in "$skills_source_dir"/*; do
+    if [ ! -d "$skill_source" ]; then
+      continue
+    fi
+    skill_name=${skill_source##*/}
+    link_file "$skill_source" "$claude_skills_dir/$skill_name" "Claude Skill $skill_name"
+  done
+  refresh_managed_block "$claude_global_instructions" "$global_instructions_source" "Claude CLAUDE.md"
+fi
 
 if [ "$apply" -eq 0 ]; then
   echo "dry-run complete; no files were changed"
 else
-  echo "installation complete; restart Codex before starting a new task"
+  echo "installation complete; start a new host session before using the updated adapter"
 fi
