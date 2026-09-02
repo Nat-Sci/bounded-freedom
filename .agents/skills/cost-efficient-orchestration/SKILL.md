@@ -12,10 +12,10 @@ For nontrivial work, declare before delegation or mutation:
 ```text
 CHIEF DECISION
 
-task route: direct | <matching-skill>
-risk: S0 | S1 | S2 | S3 | S4
+task method: general | <matching-skill>
+assurance: S0 | S1 | S2 | S3 | S4
 execution: direct | scout | coder | builder | builder+reviewer
-workers: role (host model / effort), or none
+workers: execution contract (host model / effort), or none
 scope: exact files, systems, or evidence boundary
 verification: evidence required for acceptance
 rationale: why this route and delegation are cost-effective
@@ -23,32 +23,33 @@ rationale: why this route and delegation are cost-effective
 
 Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
 
-## Make three decisions separately
+## Make four decisions separately
 
-1. **Task route:** Match the request against available Skill descriptions. Load only a clearly relevant Skill; otherwise continue with general repository work. Chief needs the catalog, not every specialist method in standing context.
-2. **Work capability:** Choose a model for each bounded unit from search volume, context length, ambiguity, coding depth, tool reliability, and judgment. Do not assign one model profile to the whole task.
-3. **Assurance:** Classify S0–S4 by the highest plausible consequence. Risk sets evidence, independent review, and human acceptance; it does not name the task or automatically choose the model.
+1. **Task method:** Match the request against available Skill descriptions. Load only a clearly relevant Skill; otherwise continue with general work. Chief needs the catalog, not every specialist method in standing context.
+2. **Execution contract:** Choose direct work, Scout, Coder, Builder, or Reviewer from scope, write permission, ownership, and the need for independence. These contracts do not denote intelligence.
+3. **Model and effort:** Choose a model family and reasoning effort for each bounded unit from volume, context length, ambiguity, coding depth, tool reliability, and judgment. Do not assign one model profile to the whole task.
+4. **Assurance:** Classify S0–S4 by the highest plausible consequence. Assurance sets evidence, independent review, and human acceptance; it does not name the task, execution contract, or model.
 
-When a specialized Skill is loaded, use its work-unit capability first, then resolve it through the host mapping. Use the general policy only for an unmatched unit. This is one refined dispatcher, not a task-wide model profile. The S0–S4 gate may add review; it does not automatically upgrade the executor.
+When a specialized Skill is loaded, use its work-unit execution contract and capability lane first, then resolve both through the host mapping. Use the general policy only for an unmatched unit. This is one refined dispatcher, not a task-wide model profile. The S0–S4 gate may add review; it does not automatically upgrade the executor.
 
-The Skill owns method and capability guidance; orchestration owns final model choice, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
+The Skill owns method and work-unit guidance; orchestration owns the final execution contract, model, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
 
 ## Selection algorithm
 
 1. Frame the user's intent and identify ambiguity that would materially alter the result.
 2. Select a matching Skill only when specialized method or output contracts are needed.
 3. Freeze scope, permitted actions, verification, stop conditions, and unresolved uncertainty.
-4. For each work unit, use the selected Skill's starting capability when listed; otherwise use the general limiting-factor policy.
+4. For each work unit, use the selected Skill's starting execution contract and capability lane when listed; otherwise use the general limiting-factor policy.
 5. Classify S0–S4 before consequential mutation.
 6. Work directly when the task is clear and a handoff would cost at least as much as completion.
-7. Otherwise select one primary role:
+7. Otherwise select one primary execution contract:
    - **Scout:** read-only discovery that would otherwise flood Chief's context.
    - **Coder:** narrow, explicit, low-ambiguity edits inside frozen ownership.
    - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
-8. Map the required capability and role to the least costly capable host model, then adjust only when evidence supports it.
+8. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it.
 9. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
 10. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
-11. Add a fresh independent **Reviewer** for S3/S4. S4 also requires explicit human acceptance.
+11. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
 12. Record nontrivial work in one file under `tasks/`.
 
 ## Capability and cost gates
@@ -83,6 +84,13 @@ Chief and every worker treat machine-local identity and layout as private by def
 
 Chief reports: outcome, files or artifacts changed, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty.
 
+## Upstream adoption
+
+- **Selected:** progressive Skill loading, Chief-owned routing, bounded execution contracts, per-work-unit model choice, independent review, and thin host adapters.
+- **Not selected now:** task-wide model profiles, a standing multi-agent crew, recursive delegation, a custom runtime, automatic upstream merging, or an unmeasured dynamic router.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
+
 ## Influences and credits
 
-This Skill is an original integration informed by the open [Agent Skills specification](https://agentskills.io/specification) and the control surfaces compared in the [harness landscape](../../../docs/harness-landscape.md). Its separation of task route, work capability, and assurance is the local BoundedFreedom contract. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md) for the attribution and reuse policy.
+This Skill is an original integration informed by the open [Agent Skills specification](https://agentskills.io/specification) and the control surfaces compared in the [harness landscape](../../../docs/harness-landscape.md). Its separation of task method, execution contract, model and effort, and assurance is the local BoundedFreedom contract. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md) for the attribution and reuse policy.

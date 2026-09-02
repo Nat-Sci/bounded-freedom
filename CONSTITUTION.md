@@ -26,7 +26,9 @@ Before nontrivial implementation, record the objective, scope, assumptions, perm
 
 ## Least costly capable worker
 
-Use no worker unless delegation adds clear value. When it does, select the least expensive model capable of the bounded role. Escalate because of evidence, ambiguity, failure, or risk—not because a task has been given a prestige label.
+Use no worker unless delegation adds clear value. When it does, select the least expensive model capable of the bounded work unit. Escalate because of evidence, ambiguity, failure, or risk—not because a task has been given a prestige label.
+
+An execution contract defines scope, permissions, ownership, and independence—not intelligence. Choose model family and reasoning effort separately for each bounded work unit.
 
 ## Bounded delegation
 

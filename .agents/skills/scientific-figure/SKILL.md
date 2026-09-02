@@ -18,12 +18,12 @@ Read [references/figure-contract-and-routes.md](references/figure-contract-and-r
 
 ## Work-unit model guidance
 
-| Work unit | Start with |
-| --- | --- |
-| Locate data, plotting code, labels, assets, and provenance | Fast / Scout |
-| Make a narrow plotting edit after the figure contract is frozen | Fast / Coder |
-| Build a coordinated multi-panel figure, data path, or editable schematic | Balanced / Builder |
-| Resolve ambiguous scientific meaning, misleading encoding, anatomy, or statistical conflict | Strong / Chief |
+| Work unit | Execution contract | Capability lane |
+| --- | --- | --- |
+| Locate data, plotting code, labels, assets, and provenance | Scout | Fast and economical |
+| Make a narrow plotting edit after the figure contract is frozen | Coder | Fast and economical |
+| Build a coordinated multi-panel figure, data path, or editable schematic | Builder | Balanced |
+| Resolve ambiguous scientific meaning, misleading encoding, anatomy, or statistical conflict | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 An image model is a drawing tool, not a stronger reasoning lane. Data, labels, topology, and scientific checks remain code- or evidence-led. Use the general orchestration route for work not listed here.
 
@@ -53,6 +53,13 @@ An image model is a drawing tool, not a stronger reasoning lane. Data, labels, t
 - Do not silently flip hemispheres, change coordinate space, interpolate labels, alter thresholds, or change exclusions to improve appearance.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
 - These rows are starting points. Chief retains the final model, delegation, S0–S4, and acceptance decisions.
+
+## Upstream adoption
+
+- **Selected:** a figure contract before drawing, code-first data figures, editable source, route-specific tools, provenance, render inspection, and domain checks for anatomy, statistics, and labels.
+- **Not selected now:** bundled plotting libraries or templates, raster-first exact diagrams, automatic topology as truth, or image models inventing values, anatomy, labels, and scientific meaning.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 

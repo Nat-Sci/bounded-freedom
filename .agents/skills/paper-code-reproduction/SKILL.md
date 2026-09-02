@@ -17,12 +17,12 @@ Read [references/reproduction-contract.md](references/reproduction-contract.md) 
 
 ## Work-unit model guidance
 
-| Work unit | Start with |
-| --- | --- |
-| Paper and repository navigation, claim mapping, and dependency inventory | Fast / Scout |
-| Frozen environment, config, or smoke-script fixes | Fast / Coder |
-| Coordinated implementation or claim-level run construction across files | Balanced / Builder |
-| Protocol equivalence, unexplained numerical discrepancy, or claim-status judgment | Strong / Chief |
+| Work unit | Execution contract | Capability lane |
+| --- | --- | --- |
+| Paper and repository navigation, claim mapping, and dependency inventory | Scout | Fast and economical |
+| Frozen environment, config, or smoke-script fixes | Coder | Fast and economical |
+| Coordinated implementation or claim-level run construction across files | Builder | Balanced |
+| Protocol equivalence, unexplained numerical discrepancy, or claim-status judgment | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 Running longer or using more compute is not a reason to raise model capability. Escalate when mapping, implementation, or scientific interpretation exceeds the current lane. Use the general orchestration route for work not listed here.
 
@@ -70,6 +70,13 @@ indeterminate
 - Reimplementation without author code may test a method description but cannot silently inherit the author's implementation identity.
 - A failed reproduction does not by itself refute the paper; distinguish mismatch, missing information, environment failure, and genuine contradictory evidence.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
+
+## Upstream adoption
+
+- **Selected:** claim-to-code mapping, staged understanding/smoke/claim modes, frozen identities, a cost ladder, explicit evidence states, and independent grading for consequential claims.
+- **Not selected now:** automatic paper-to-code generation as proof, a bundled GPU or container runtime, automatic claim extraction, knowledge-graph infrastructure, or a single score that hides failure type.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 

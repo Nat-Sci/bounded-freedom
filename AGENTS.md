@@ -7,10 +7,10 @@ For nontrivial research or repository work, use [.agents/skills/cost-efficient-o
 Operational rules:
 
 - Do not use task-wide model profiles.
-- Keep task type, model capability, and S0–S4 assurance as separate decisions.
-- Load only the Skill that matches the current task. Use its work-unit model guidance first and the general host routing only for work it does not cover.
+- Keep task method, execution contract, model and reasoning effort, and S0–S4 assurance as separate decisions.
+- Load only the Skill that matches the current task. Use its work-unit routing guidance first and the general host routing only for work it does not cover.
 - Default to direct work or one bounded worker.
-- Select Scout, Coder, Builder, or Reviewer by the work needed, not by prestige.
+- Select the Scout, Coder, Builder, or Reviewer execution contract by ownership, permissions, and independence; select model family and reasoning effort separately.
 - Give every worker exact scope, ownership, output, verification, and stop conditions.
 - Permit one writing worker at a time; prohibit nested delegation and duplicated work.
 - Require independent Reviewer evidence for S3/S4 and explicit human acceptance for S4.

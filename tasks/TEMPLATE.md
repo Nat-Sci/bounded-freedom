@@ -8,7 +8,7 @@
 
 ## Chief decision
 
-- Risk: S0–S4
+- Assurance: S0–S4, classified by the highest plausible consequence
 - Execution: direct, scout, coder, builder, or builder+reviewer
 - Workers and model rationale:
 - Owned scope:

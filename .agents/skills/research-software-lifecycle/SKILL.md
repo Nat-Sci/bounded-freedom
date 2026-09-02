@@ -18,12 +18,12 @@ Read [references/maturity-contract.md](references/maturity-contract.md) before a
 
 ## Work-unit model guidance
 
-| Work unit | Start with |
-| --- | --- |
-| Inventory scripts, interfaces, documentation, tests, and environments | Fast / Scout |
-| Make a narrow frozen packaging, test, documentation, or configuration edit | Fast / Coder |
-| Coordinate package APIs, CI, containers, or HPC pipeline changes | Balanced / Builder |
-| Resolve cross-cutting API, FAIR, security, or operational reliability tradeoffs | Strong / Chief |
+| Work unit | Execution contract | Capability lane |
+| --- | --- | --- |
+| Inventory scripts, interfaces, documentation, tests, and environments | Scout | Fast and economical |
+| Make a narrow frozen packaging, test, documentation, or configuration edit | Coder | Fast and economical |
+| Coordinate package APIs, CI, containers, or HPC pipeline changes | Builder | Balanced |
+| Resolve cross-cutting API, FAIR, security, or operational reliability tradeoffs | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 The word “software” is not a reason to use a stronger model. Match capability to the bounded change and maturity target. Use the general orchestration route for work not listed here.
 
@@ -55,6 +55,13 @@ The word “software” is not a reason to use a stronger model. Match capabilit
 - A passing test suite does not validate the scientific assumptions or result.
 - Do not add hosted services, registries, releases, or external publications without the required authority.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions; project rules retain scientific and infrastructure constraints.
+
+## Upstream adoption
+
+- **Selected:** choose maturity first, then add proportionate interfaces, tests, documentation, CI, releases, citation, containers, or HPC controls with a reproducibility receipt.
+- **Not selected now:** one mandatory scaffold, packaging every script, or requiring public-release, FAIR, DOI, container, and HPC machinery for every analysis.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 

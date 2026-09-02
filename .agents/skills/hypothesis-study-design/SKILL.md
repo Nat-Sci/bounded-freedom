@@ -15,11 +15,11 @@ Read [references/study-card.md](references/study-card.md) when a study, experime
 
 ## Work-unit model guidance
 
-| Work unit | Start with |
-| --- | --- |
-| Extract observations, assumptions, constraints, and candidate confounders | Fast / Scout |
-| Turn frozen hypotheses into feasibility, measurement, and statistical-plan structure | Balanced / Chief |
-| Generate competing mechanisms and discriminating predictions, or judge causality and conflicting evidence | Strong / Chief |
+| Work unit | Execution contract | Capability lane |
+| --- | --- | --- |
+| Extract observations, assumptions, constraints, and candidate confounders | Scout | Fast and economical |
+| Turn frozen hypotheses into feasibility, measurement, and statistical-plan structure | Chief, direct | Balanced |
+| Generate competing mechanisms and discriminating predictions, or judge causality and conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 Use fast execution for formatting or frozen fields, not for deciding the scientific story. Use the general orchestration route for work not listed here.
 
@@ -52,6 +52,13 @@ Use fast execution for formatting or frozen fields, not for deciding the scienti
 - Do not optimize the design around a desired significant result.
 - Ethics approval, clinical interpretation, primary claims, and irreversible study choices remain human decisions.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
+
+## Upstream adoption
+
+- **Selected:** multiple competing hypotheses, a null or artifact explanation, falsifiable and discriminating predictions, confounder checks, an explicit estimand and statistical plan, and a human freeze point.
+- **Not selected now:** autonomous hypothesis-ranking loops, model coherence as evidence, domain-specific laboratory automation, or irreversible study and ethics decisions by an agent.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 

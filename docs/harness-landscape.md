@@ -16,11 +16,11 @@ A model does not supply the working environment by itself. DeepSeek is a model p
 
 | Harness | Useful control surfaces | BoundedFreedom fit |
 | --- | --- | --- |
-| [Codex](https://learn.chatgpt.com/docs/build-skills) | Layered `AGENTS.md`, open Agent Skills under `.agents/skills`, configurable subagents, permissions, worktrees, review, and a Responses-based provider seam | Reference adapter. `.codex/agents` holds current role defaults; the portable core does not depend on their model names |
+| [Codex](https://learn.chatgpt.com/docs/build-skills) | Layered `AGENTS.md`, open Agent Skills under `.agents/skills`, configurable subagents, permissions, worktrees, review, and a Responses-based provider seam | Reference adapter. `.codex/agents` packages execution-contract profiles with current default model bindings; the portable core does not equate those contracts with model names |
 | [Claude Code](https://code.claude.com/docs/en/skills) | `CLAUDE.md`, open Agent Skills with Claude-only extensions, custom subagents, hooks, permissions, MCP, worktree isolation, and model aliases | Compatible through `CLAUDE.md` plus a safe Skill link into `.claude/skills`; keep Claude-only frontmatter out of the canonical Skill |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | Plugin-based agent loop, scoped tools and prompts, append-only session events, subagents, SDKs, and an optional Skill registry that scans `.agents/skills` | Strong architectural match but still developer preview. Treat its plugin composition as an experimental adapter, not the default runtime |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/using-agent-skills.md) | Hierarchical `GEMINI.md`, `.agents/skills` alias, Skills consent, hooks, policies, checkpoints, and preview subagents | Portable Skill works directly; root `GEMINI.md` imports the shared contract |
-| [OpenCode](https://v2.opencode.ai/docs/skills/) | `AGENTS.md`, `.agents/skills`, multi-provider models, per-agent permissions, custom agents, references, and commands | Direct fit for the portable contract and Skill; role/model files remain an optional OpenCode adapter |
+| [OpenCode](https://v2.opencode.ai/docs/skills/) | `AGENTS.md`, `.agents/skills`, multi-provider models, per-agent permissions, custom agents, references, and commands | Direct fit for the portable contract and Skill; execution-contract/model files remain an optional OpenCode adapter |
 | [OpenHands](https://docs.openhands.dev/overview/skills) | `AGENTS.md`, Agent Skills, sandboxed software-agent runtime, SDK, event streams, and file-based agents | Direct fit for the core; use its runtime only when isolated execution or a programmatic service is required |
 | [Roo Code](https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/docs/features/custom-instructions.md) | `AGENTS.md`, Agent Skills, permission-limited modes, sticky model choices, and Orchestrator/Boomerang subtasks | Core rules can travel; do not copy Roo's many modes into Chief. Use one bounded subtask only when it saves context |
 | [Cline](https://github.com/cline/skills) | Multi-provider coding, rules, Agent Skills, tools, and SDK surfaces | Same Skill format, but native locations and team features vary by release; use a link or host installer rather than a duplicate Skill |
@@ -62,7 +62,7 @@ BoundedFreedom takes the smallest useful common set:
 1. **Progressive disclosure:** keep only Skill names and descriptions in standing context; load methods and resources on demand.
 2. **Layered instructions:** stable constitution, portable workflow, thin host adapter, and local project rules.
 3. **Chief accountability:** specialists return bounded evidence; the primary session keeps intent, integration, and the final decision.
-4. **Capability-based model routing:** choose per work unit, independent of task type and S0–S4 assurance.
+4. **Four separate routing decisions:** choose task method, execution contract, model and reasoning effort, and S0–S4 assurance independently for each relevant work unit.
 5. **Permission and scope boundaries:** read-only discovery, one writing worker, explicit ownership, stop conditions, and human gates.
 6. **Provider separation:** a host may change from OpenAI to Anthropic, DeepSeek, Gemini, or local models without rewriting scientific contracts.
 7. **Recoverable evidence:** actual diffs, tests, comparisons, task records, and explicit uncertainty; add an event store only when long-running recovery warrants it.

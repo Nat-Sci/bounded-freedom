@@ -17,11 +17,11 @@ Read [references/modes-and-schema.md](references/modes-and-schema.md) before sys
 
 ## Work-unit model guidance
 
-| Work unit | Start with |
-| --- | --- |
-| Query expansion, metadata, deduplication, screening, and fixed-field extraction | Fast / Scout |
-| Full-text evidence tables, method comparison, and stable synthesis | Balanced / Chief |
-| Novelty judgment, causal or statistical inference, and unresolved conflicting evidence | Strong / Chief |
+| Work unit | Execution contract | Capability lane |
+| --- | --- | --- |
+| Query expansion, metadata, deduplication, screening, and fixed-field extraction | Scout | Fast and economical |
+| Full-text evidence tables, method comparison, and stable synthesis | Chief, direct | Balanced |
+| Novelty judgment, causal or statistical inference, and unresolved conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 A large corpus calls for bounded Scout work, not an automatic model upgrade. Escalate only for missed dependencies, unstable inclusion decisions, unresolved evidence conflict, or insufficient judgment. Use the general orchestration route for work not listed here.
 
@@ -63,6 +63,13 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - A database or paper-QA tool can retrieve from a corpus but cannot establish that the corpus is complete.
 - Novelty is always bounded by the searched sources, dates, languages, terminology, and accessible full text.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
+
+## Upstream adoption
+
+- **Selected:** progressive skim-to-deep-read, tiered review modes, a frozen search boundary, auditable screening, evidence tables, contradiction checks, and explicit stopping conditions.
+- **Not selected now:** a default comprehensive review, a bundled database or paper-QA service, autonomous inclusion decisions, or treating retrieval from an available corpus as proof of completeness or novelty.
+
+The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 

@@ -49,3 +49,14 @@ Each Skill has one focused reference loaded only for advanced modes or domain ch
 - Cost intent: Keep corpus-scale retrieval and frozen edits on fast workers, reserve balanced models for synthesis or coordinated builds, and reserve strong models for ambiguous judgment or independent review.
 - Limitation: Markdown can guide routing and configured subagents, but it cannot switch the active Chief model. Actual savings still need measurement on repeated task classes.
 - Verification: All six Skill validators, the installer shell check and portable dry-run, whitespace check, and private-path scan passed.
+
+## V0.1.2 concept and adoption clarification
+
+- Decision: Replace the ambiguous conceptual use of *role* with **execution contract**. Scout, Coder, Builder, and Reviewer now mean scope, permissions, ownership, and independence; they do not mean low, medium, or high intelligence.
+- Four decisions: Task method selects the process; execution contract selects the work boundary; model family and reasoning effort select capability; S0–S4 selects evidence, independent review, and human acceptance.
+- Routing map: README now places general work and all five research Skills against Chief and the four execution contracts. This is a lookup table, not a standing team; direct work or one bounded worker remains the default.
+- Current adapter: The existing Codex profiles remain Luna / medium for Scout and Coder, Terra / medium for Builder, and Sol / high for Reviewer. They are simple host defaults, not conceptual identities. Dynamic decoupling is deferred until repeated behavior and cost tests justify it.
+- Upstream control: Every Skill now states its selected and non-selected ideas. The ecosystem adoption ledger records upstream examples, selected contracts, deferred adapters, deliberate exclusions, and known gaps.
+- Scope boundary: No new Skill, external tool, runtime, model binding, or untracked asset was added. Scientific data analysis, claim-linked writing, executable adapters, and cost-quality benchmarking remain explicit candidates rather than placeholder folders.
+- Verification: All six Skill validators passed; installer shell syntax and the portable dry-run passed; local Markdown links and whitespace passed. The changed public text was scanned for machine-local paths and stale three-part routing language.
+- Remaining uncertainty: The conceptual separation is now explicit, but actual token, latency, quality, and routing gains still require a small repeated-task benchmark and receipts from real projects.

@@ -10,29 +10,29 @@ BoundedFreedom treats this as an environment-design problem. The model sets what
 
 BoundedFreedom is a constraint-first, cost-aware harness layer for AI-assisted research and engineering. The current primary session acts as **Chief**: it frames the task, loads only the needed method, chooses the least costly capable worker, checks the evidence, and keeps final accountability.
 
-## Four small layers
+## Small repository layout
 
-| Layer | Purpose | Where it lives |
+| Part | Purpose | Where it lives |
 | --- | --- | --- |
 | Constitution | Stable human, scientific, privacy, and evidence boundaries | `CONSTITUTION.md` |
 | Portable Skills | Methods loaded only when a task needs them | `.agents/skills/` |
 | Host adapter | Instruction discovery, agents, tools, permissions, and model syntax | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/` |
 | Project contract | Local data, scientific, execution, and acceptance rules | The working project's own instruction files |
 
-The first two layers are intended to travel across compatible harnesses. Host files remain thin adapters. Project facts stay with the project instead of being copied into this repository.
+The first two parts are intended to travel across compatible harnesses. Host files remain thin adapters. Project facts stay with the project instead of being copied into this repository.
 
 ## How it works
 
 ```text
 User request
     ↓
-Chief frames intent and identifies the task type
+Chief frames intent and identifies the task method
     ↓
 Load one matching Skill when specialized method is needed
     ↓
 Freeze scope and work units
     ↓
-Use its work-step model guidance; otherwise use the general route
+Use its work-unit execution and model guidance; otherwise use the general route
     ↓
 Set the S0–S4 evidence gate separately
     ↓
@@ -45,34 +45,38 @@ Independent review when the consequence requires it
 Decision, record, and remaining uncertainty
 ```
 
-Three decisions stay separate:
+Four decisions stay separate:
 
-1. **Task route:** general work, evidence review, hypothesis and study design, paper-code reproduction, scientific figure, research software, or another specific method.
-2. **Model capability:** choose a model for each bounded unit from workload, context, ambiguity, coding depth, and required judgment.
-3. **Assurance:** S0–S4 controls evidence, independent review, and human acceptance. It is not a task label or a model tier.
+1. **Task method:** general work or one matching Skill. This decides *how* the work is done.
+2. **Execution contract:** direct, Scout, Coder, Builder, or Reviewer. This decides scope, write access, ownership, and independence.
+3. **Model and effort:** fast, balanced, or strong reasoning for each bounded unit. This decides how much capability the unit needs.
+4. **Assurance:** S0–S4 controls evidence, independent review, and human acceptance. It does not name the task, worker, or model.
 
-## Roles without prestige
+## Execution contract is not intelligence
 
-| Role | Normal capability need | Use only when |
-| --- | --- | --- |
-| Scout | Fast, economical reading and retrieval | Discovery would consume substantial Chief context |
-| Coder | Fast, reliable execution | A narrow, low-ambiguity edit is already frozen |
-| Builder | Balanced coding and long-context reasoning | Logic, interfaces, or related files must change together |
-| Reviewer | Strong independent judgment | The result needs a genuinely separate assessment |
+| Execution contract | Owns | Must not | Current Codex default |
+| --- | --- | --- | --- |
+| Scout | Read-only discovery and evidence collection | Write or make the final decision | Luna / medium |
+| Coder | A narrow, frozen, reversible edit | Widen scope or redesign interfaces | Luna / medium |
+| Builder | Coordinated implementation across logic or files | Grade its own work as independent evidence | Terra / medium |
+| Reviewer | Independent read-only assessment | Implement the correction it reviews | Sol / high |
 
-These are work contracts, not permanent model identities. Concrete model names belong to a host adapter and may change as models, prices, and evidence change. See the [host routing reference](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
+Chief is the accountable primary session, not a fifth worker. The table shows simple defaults currently packaged in the Codex adapter; it does not define the contracts. A Scout may need a balanced model for long-context discovery, while a narrow Coder task may remain fast. See the full [execution-contract × capability matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#execution-contract-and-capability-lane).
 
-## Research methods on demand
+## One dispatcher, specialized methods
 
-| Skill | Loaded when the task needs |
-| --- | --- |
-| [`evidence-review`](.agents/skills/evidence-review/SKILL.md) | Literature search, screening, synthesis, or novelty review |
-| [`hypothesis-study-design`](.agents/skills/hypothesis-study-design/SKILL.md) | Competing hypotheses, discriminating tests, or a study plan |
-| [`paper-code-reproduction`](.agents/skills/paper-code-reproduction/SKILL.md) | Paper-code mapping, smoke execution, or claim-level reproduction |
-| [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Data figures, architecture diagrams, method schematics, or domain visualization |
-| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Proportionate scripts, packages, public software, or HPC pipelines |
+| Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |
+| --- | --- | --- | --- | --- | --- |
+| General repository work | Frame, route, integrate, decide | Locate files and dependencies | Make a frozen narrow edit | Coordinate logic and interfaces | Audit consequential evidence |
+| [`evidence-review`](.agents/skills/evidence-review/SKILL.md) | Freeze boundary and synthesize | Search, deduplicate, screen, extract | Fixed ledger or export only | Retrieval tooling moves to software work | Audit systematic or novelty claims |
+| [`hypothesis-study-design`](.agents/skills/hypothesis-study-design/SKILL.md) | Compare hypotheses and freeze decisions | Extract evidence, assumptions, confounders | Frozen calculation scripts only | Simulations use the general build route | Audit causal and statistical logic |
+| [`paper-code-reproduction`](.agents/skills/paper-code-reproduction/SKILL.md) | Freeze protocol and assign status | Map claims, code, data, dependencies | Repair environment or smoke path | Build coordinated claim-level execution | Grade protocol and claim evidence |
+| [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Freeze the visual argument | Locate data, assets, provenance | Make a narrow plotting edit | Build panels or editable schematics | Audit scientific and visual meaning |
+| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Choose maturity and tradeoffs | Inventory interfaces and environments | Edit tests, docs, packaging, config | Build API, CI, container, or HPC flow | Audit reliability and public boundary |
 
-Chief sees only these descriptions until a task matches. The selected Skill supplies the method and a capability starting point for its known work steps. Orchestration maps that need to the current host, uses the general policy for anything not covered, and applies S0–S4 assurance. The working project supplies local scientific constraints.
+This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. A matching Skill supplies the method and starting route; unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor.
+
+Today the repository provides the control plane, five research-method contracts, thin host adapters, and an installer. Scientific databases, plotting libraries, reproduction runtimes, and benchmarks remain optional external capabilities; they are selected by a real project rather than bundled into Chief. The [adoption ledger](docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill) records exactly what each local Skill takes from earlier work and what it leaves out.
 
 ## Harness compatibility
 
@@ -83,7 +87,7 @@ The portable core uses the open [Agent Skills specification](https://agentskills
 - Roo Code, Cline, GitHub Copilot, Aider, and programmatic agent SDKs expose useful but different instruction, agent, permission, and model surfaces. They need a thin adapter; they are not separate copies of the framework.
 - DeepSeek can be either the model provider inside another harness or the model used by DeepSeek Harness. Model provider and harness are separate choices.
 
-Codex remains the reference implementation in this repository because its role definitions are already configured under `.codex/`. The core contract is no longer Codex-only. The [harness landscape](docs/harness-landscape.md) records the current compatibility boundary and the ideas adopted from each system.
+Codex remains the reference implementation in this repository because its execution-contract profiles are already configured under `.codex/`. The core contract is no longer Codex-only. The [harness landscape](docs/harness-landscape.md) records the current compatibility boundary and the ideas adopted from each system.
 
 ## Install or update
 
