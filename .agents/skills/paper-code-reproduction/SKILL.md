@@ -15,6 +15,8 @@ Trace a claim from paper text to executable behavior and report the strongest st
 
 Read [references/reproduction-contract.md](references/reproduction-contract.md) before mutation, execution, or a claim-level result.
 
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when the target comes from an evidence map or hypothesis record, or when the result will feed a finding, figure, manuscript, or software artifact. Preserve incoming claim, hypothesis, prediction, and study IDs rather than recreating them.
+
 ## Work-unit model guidance
 
 | Work unit | Execution contract | Capability lane |
@@ -32,13 +34,14 @@ Record the paper version, repository and commit, target claim, expected observab
 
 ## Workflow
 
-1. Build a claim map from paper locations to code and configuration locations.
+1. Build a claim map from paper locations to code and configuration locations, preserving any incoming lineage IDs.
 2. Separate author-provided behavior from inferred or newly generated implementation.
 3. Bind environment, data, checkpoint, preprocessing, split, metric, and evaluation identities before a run.
 4. Use the least costly mode that answers the user's question.
 5. Preserve commands, configs, diffs, logs, outputs, and failures needed to audit the status.
 6. Compare against the paper or baseline using predeclared tolerances and explain deviations.
 7. Report one or more explicit statuses without collapsing them.
+8. When the run informs later research, create an identified run and finding receipt linked to the tested claim, hypothesis, prediction, or study; do not silently update those upstream records.
 
 ## Status vocabulary
 
@@ -61,7 +64,8 @@ indeterminate
 - environment, data, config, checkpoint, and metric identities;
 - executed commands and observable outputs, or a read-only mapping receipt;
 - comparison against expected behavior;
-- status, deviations, blockers, and next smallest decisive test.
+- status, deviations, blockers, and next smallest decisive test;
+- run, finding, and artifact relationships when the result enters the project research lineage.
 
 ## Boundaries
 
@@ -69,12 +73,13 @@ indeterminate
 - A smoke run validates plumbing, not numerical or scientific agreement.
 - Reimplementation without author code may test a method description but cannot silently inherit the author's implementation identity.
 - A failed reproduction does not by itself refute the paper; distinguish mismatch, missing information, environment failure, and genuine contradictory evidence.
+- A reproduction finding may update confidence in a bounded claim, but successful execution or software tests do not create new scientific evidence by themselves.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Upstream adoption
 
-- **Selected:** claim-to-code mapping, staged understanding/smoke/claim modes, frozen identities, a cost ladder, explicit evidence states, and independent grading for consequential claims.
-- **Not selected now:** automatic paper-to-code generation as proof, a bundled GPU or container runtime, automatic claim extraction, knowledge-graph infrastructure, or a single score that hides failure type.
+- **Selected:** claim-to-code mapping, staged understanding/smoke/claim modes, frozen identities, stable upstream IDs, run and finding receipts, a cost ladder, explicit evidence states, and independent grading for consequential claims.
+- **Not selected now:** automatic paper-to-code generation as proof, a bundled GPU or container runtime, automatic claim extraction, required knowledge-graph infrastructure, or a single score that hides failure type.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 

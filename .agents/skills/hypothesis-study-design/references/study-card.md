@@ -2,21 +2,53 @@
 
 Use this schema for a consequential study design. Omit fields only when they genuinely do not apply, and state why.
 
+## Lineage header
+
+```text
+lineage_or_project_id
+evidence_boundary_id_and_cutoff
+input_claim_ids
+input_gap_ids
+input_observation_ids
+record_version
+exploratory_or_confirmatory
+human_owner
+```
+
+An optional preliminary observation record uses:
+
+```text
+observation_id
+data_snapshot_and_analysis_version
+population_sample_and_measurement
+observed_pattern_and_uncertainty
+known_confounders_or_processing_choices
+whether_target_results_were_already_seen
+status: exploratory
+```
+
 ## Hypothesis card
 
 ```text
-id
-claim
+hypothesis_id
+version_and_status: candidate | human_frozen | tested | revised | retired
+hypothesis_statement
+claim_type: descriptive | associational | predictive | causal | mechanistic
 mechanism
 scope_conditions
-prior_evidence_for
-prior_evidence_against
+derived_from_claim_ids
+derived_from_gap_ids
+derived_from_observation_ids
+prior_evidence_ids_for
+prior_evidence_ids_against
+prediction_ids
 distinctive_predictions
 shared_predictions
 falsifying_or_weakening_observations
 alternative_explanations
 key_confounders_or_biases
 measurement_requirements
+novelty_status_and_search_boundary
 ```
 
 Include at least two credible competitors when the scientific question permits it. A superficial null that no informed researcher would defend does not count as a useful competitor.
@@ -24,6 +56,9 @@ Include at least two credible competitors when the scientific question permits i
 ## Study card
 
 ```text
+study_id_and_version
+hypothesis_ids
+prediction_ids
 research_question
 exploratory_or_confirmatory
 target_population_and_sampling
@@ -46,6 +81,39 @@ decision_rule_and_indeterminate_region
 ethics_privacy_and_feasibility
 human_freeze_point
 ```
+
+## Finding update
+
+After an identified run, preserve the result without rewriting the original hypothesis:
+
+```text
+finding_id
+study_id
+run_or_analysis_id
+observed_result_and_uncertainty
+data_protocol_and_metric_identity
+supports_weakens_contradicts_or_indeterminate_for_ids
+deviations_and_limitations
+status_and_version
+human_interpretation_or_freeze
+```
+
+## Next-action handoff
+
+Emit only the route needed for the next bounded task:
+
+```text
+handoff_id
+route: evidence-review | paper-code-reproduction | project-execution
+target_claim_hypothesis_prediction_or_study_ids
+question_or_expected_observable
+mode_or_scope
+acceptance_and_indeterminate_rules
+stop_condition
+human_decision_required
+```
+
+Use the shared [research-lineage contract](../../cost-efficient-orchestration/research-lineage.md) when these records will feed later findings, manuscript claims, figures, or software artifacts.
 
 ## Discrimination matrix
 

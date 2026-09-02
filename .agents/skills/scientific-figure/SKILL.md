@@ -16,6 +16,8 @@ A scientific figure is a visual argument. Freeze the argument before choosing a 
 
 Read [references/figure-contract-and-routes.md](references/figure-contract-and-routes.md) before creating a multi-panel figure, neuroimaging or electrophysiology figure, architecture diagram, or publication-ready asset.
 
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when a figure communicates a retained claim or finding. Bind the figure and, when useful, each panel to the source, claim, study, run, analysis, or finding IDs it visualizes.
+
 ## Work-unit model guidance
 
 | Work unit | Execution contract | Capability lane |
@@ -29,19 +31,20 @@ An image model is a drawing tool, not a stronger reasoning lane. Data, labels, t
 
 ## Workflow
 
-1. Freeze the message, audience, target venue, panels, inputs, visual encodings, required labels, and prohibited implications.
+1. Freeze the message, audience, target venue, panels, inputs, visual encodings, required labels, prohibited implications, and the claim or finding IDs the figure is allowed to communicate.
 2. Choose the route and the simplest editable source that preserves scientific meaning.
 3. Bind data, analysis, coordinate systems, atlases, models, or references used by the figure.
 4. Build content before decoration. Preserve code or editable source alongside the rendered artifact.
 5. Inspect the rendered figure at full size and intended publication size.
 6. Check labels, legends, units, color scale, contrast, accessibility, panel order, anatomy, and caption agreement.
-7. Record provenance and unresolved visual or scientific uncertainty.
+7. Record provenance, figure-to-lineage relationships, and unresolved visual or scientific uncertainty.
 
 ## Required return
 
 - figure contract and selected route;
 - editable source and rendered artifact;
 - data, code, model, anatomy, and external-asset provenance;
+- figure and panel links to the claims, studies, analyses, or findings actually visualized when lineage is in scope;
 - visual inspection result and scientific checks;
 - caption or caption inputs;
 - known limitations and any human review required.
@@ -52,12 +55,13 @@ An image model is a drawing tool, not a stronger reasoning lane. Data, labels, t
 - Do not manually place values that should be generated from data.
 - Do not silently flip hemispheres, change coordinate space, interpolate labels, alter thresholds, or change exclusions to improve appearance.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
+- A figure is an artifact that visualizes evidence or a finding; it is not an additional independent item of evidence.
 - These rows are starting points. Chief retains the final model, delegation, S0–S4, and acceptance decisions.
 
 ## Upstream adoption
 
-- **Selected:** a figure contract before drawing, code-first data figures, editable source, route-specific tools, provenance, render inspection, and domain checks for anatomy, statistics, and labels.
-- **Not selected now:** bundled plotting libraries or templates, raster-first exact diagrams, automatic topology as truth, or image models inventing values, anatomy, labels, and scientific meaning.
+- **Selected:** a figure contract before drawing, code-first data figures, editable source, route-specific tools, claim- and finding-linked provenance, render inspection, and domain checks for anatomy, statistics, and labels.
+- **Not selected now:** bundled plotting libraries or templates, raster-first exact diagrams, automatic topology or graph layout as truth, or image models inventing values, anatomy, labels, and scientific meaning.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 

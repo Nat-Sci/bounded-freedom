@@ -23,11 +23,14 @@ discovered -> deduplicated -> screened -> retrieved -> included
 
 For exclusions that matter to the conclusion, retain an exclusion reason. Do not silently drop inaccessible or non-English records; record how they affect coverage.
 
-## Evidence row
+## Lineage-ready extraction
 
-Use the fields that change interpretation:
+Keep source identity, extracted evidence, and synthesis claims separate. The same source may produce several evidence records, and a claim may link to evidence from several sources.
+
+Use the evidence fields that change interpretation:
 
 ```text
+evidence_id
 source_id
 full_citation
 source_location: page, section, table, figure, or repository path
@@ -36,15 +39,39 @@ design_and_sample
 method_or_intervention
 comparator
 outcomes_and_metrics
-main_result
+reported_result_or_observation
 uncertainty
 limitations_or_bias
 relevance_to_review_question
-supports_conflicts_or_contextualizes
-reviewer_notes
 ```
 
-Never merge a paper's reported result with the reviewer's inference in the same field.
+Represent a review-level proposition separately:
+
+```text
+claim_id
+claim_origin: source_reported | reviewer_synthesis | project
+claim_type: descriptive | associational | predictive | causal | mechanistic | methodological
+claim_statement
+scope_and_boundary
+supporting_evidence_ids
+contradicting_evidence_ids
+contextualizing_evidence_ids
+reviewer_inference_and_uncertainty
+status_and_version
+```
+
+When a possible gap may motivate hypothesis work, retain:
+
+```text
+gap_id
+gap_type: retrieval | evidence | inconsistency | mechanism | population_or_context | measurement | implementation | replication
+bounded_gap_statement
+claim_or_evidence_ids
+boundary_or_cutoff
+what_evidence_would_resolve_it
+```
+
+Never merge a paper's reported result, the reviewer's inference, and a proposed hypothesis in the same field. Use the shared [research-lineage contract](../../cost-efficient-orchestration/research-lineage.md) only when these records will cross research stages.
 
 ## Novelty checks
 

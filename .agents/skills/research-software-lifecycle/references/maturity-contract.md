@@ -20,8 +20,10 @@ The table is a decision aid, not a requirement to fill every cell.
 
 ```text
 users_and_use_cases
+implemented_claim_hypothesis_prediction_or_study_ids
 supported_inputs_and_schema
 outputs_and_provenance
+produced_run_finding_or_artifact_ids
 configuration_and_precedence
 scientific_invariants
 failure_and_partial_output_semantics
@@ -31,6 +33,8 @@ security_privacy_and_license
 maintenance_owner_and_lifetime
 acceptance_tests
 ```
+
+Use the shared [research-lineage contract](../../cost-efficient-orchestration/research-lineage.md) only for the scientific objects this software actually implements or produces. Package metadata, tests, and releases establish engineering identity and behavior; they do not independently establish the linked scientific claim.
 
 ## Reproducibility receipt
 

@@ -7,8 +7,10 @@ Use only the sections relevant to the current figure.
 ```text
 figure_id_and_purpose
 one_sentence_visual_claim
+source_claim_study_run_analysis_or_finding_ids
 audience_and_venue
 panel_list_and_reading_order
+panel_to_lineage_id_map
 source_data_or_reference
 analysis_or_transformation
 visual_encoding
@@ -23,6 +25,8 @@ verification_and_human_freeze
 ```
 
 If the one-sentence visual claim cannot be written, the figure is not ready to draw.
+
+When lineage is in scope, record the rendered figure as an artifact that `visualizes` the retained IDs. A caption may state only claims supported within those records and their boundaries. See the shared [research-lineage contract](../../cost-efficient-orchestration/research-lineage.md).
 
 ## Data and statistical figures
 

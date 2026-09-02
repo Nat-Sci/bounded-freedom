@@ -76,6 +76,8 @@ Chief is the accountable primary session, not a fifth worker. The table shows si
 
 This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. A matching Skill supplies the method and starting route; unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor.
 
+When research crosses methods, the lightweight [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) connects sources, evidence, claims, gaps, hypotheses, studies, findings, and downstream artifacts with stable IDs. These links are many-to-many, and a knowledge graph is only an optional view. Chief passes the next Skill only the relevant lineage slice, preserving traceability without loading the whole research history.
+
 Today the repository provides the control plane, five research-method contracts, thin host adapters, and an installer. Scientific databases, plotting libraries, reproduction runtimes, and benchmarks remain optional external capabilities; they are selected by a real project rather than bundled into Chief. The [adoption ledger](docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill) records exactly what each local Skill takes from earlier work and what it leaves out.
 
 ## Harness compatibility

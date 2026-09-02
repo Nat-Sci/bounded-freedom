@@ -70,3 +70,16 @@ Each Skill has one focused reference loaded only for advanced modes or domain ch
 - Excluded: Seed inclusion by reputation, citation-only completeness, one fixed database list for every field, silent query expansion, changing eligibility during repair, or treating citation tools as inclusion judges.
 - Verification: Validate the Skill, check links and Markdown, inspect the focused diff, and scan changed text for machine-local identifiers.
 - Remaining uncertainty: Database coverage and citation indexes differ by field and access. Strong systematic or novelty claims still require a frozen protocol and, when omissions could change the conclusion, domain or information-specialist review.
+
+## V0.1.4 cross-Skill research lineage
+
+- Objective: Preserve a traceable research path from sources and evidence through claims, gaps, hypotheses, studies, runs, findings, figures, manuscript statements, and software artifacts.
+- Assurance and execution: S1, Chief direct, no worker. This changes portable method and handoff contracts without making a project-level scientific claim.
+- Core model: Relationships are many-to-many. Stable project-local IDs and typed links form the canonical ledger; a knowledge graph is an optional derived view rather than required infrastructure.
+- Integration: `evidence-review` emits source, evidence, claim, and bounded-gap records; `hypothesis-study-design` consumes those records plus preliminary observations and emits versioned hypotheses, predictions, study cards, and bounded next actions; reproduction, figure, and software Skills preserve only the lineage slice they consume or produce.
+- Scientific boundary: Reported evidence, reviewer synthesis, hypotheses, and findings remain separate. Hypotheses generated from viewed preliminary data remain exploratory on those data. Figures communicate retained findings, and software tests verify engineering behavior; neither becomes independent scientific evidence by presentation or packaging alone.
+- Cost boundary: No graph database, persistent agent workspace, duplicate evidence store, full-corpus handoff, or new standing Agent was added. Chief passes only the IDs and compact records needed by the next Skill.
+- Adoption: Stable IDs, dated evidence boundaries, and separate research objects were selected from Scientific Agent Skills; dual literature/data inputs from HypoRefine, staged review from ResearchAgent, and explicit stage prerequisites from CKM-HypoGen were adapted into one lighter interface. Their full runtimes, hypothesis-ranking loops, and workspace machinery were not selected.
+- Writing boundary: The lineage contract can map consequential manuscript statements and captions to claim or finding IDs, but a dedicated scientific-writing Skill remains deferred until it is reviewed as its own capability rather than added as a placeholder.
+- Verification: All six Skills passed the Skill validator; local Markdown links, shell syntax, whitespace, host-neutrality, and private-path scans passed; the portable installer dry-run discovered all six Skills without mutation.
+- Remaining uncertainty: A real project must still test identifier ergonomics, how much lineage to retain, and whether a project-level Markdown/CSV ledger is sufficient before any graph or cross-project index is justified.

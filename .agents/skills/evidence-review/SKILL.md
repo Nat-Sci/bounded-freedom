@@ -17,6 +17,8 @@ Read [references/modes-and-schema.md](references/modes-and-schema.md) before sys
 
 Read [references/search-and-citation.md](references/search-and-citation.md) when using seed papers, citation searching, a domain-specific search profile, or search repair. It defines how those methods are calibrated, logged, repaired, and stopped.
 
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when the review will feed hypothesis design, reproduction, writing, figures, software, or a durable project knowledge network. Use stable source, evidence, and claim IDs without requiring a graph database.
+
 ## Work-unit model guidance
 
 | Work unit | Execution contract | Capability lane |
@@ -50,9 +52,10 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 5. Separate records that were discovered, deduplicated, screened, retrieved, and included.
 6. Repair a search only after recording the diagnostic failure and the smallest justified change.
 7. Read to the depth needed for the mode. Do not treat titles, abstracts, snippets, or generated summaries as full-text evidence.
-8. Extract cited evidence into stable fields rather than prose memory.
+8. Extract cited evidence into stable fields rather than prose memory. When lineage is needed, keep source, evidence, reported claim, and reviewer synthesis as separate records with typed links.
 9. Compare methods, samples, assumptions, results, limitations, and contradictory evidence.
-10. State the supported conclusion, its boundary, confidence, unresolved conflicts, and remaining retrieval risk.
+10. Record bounded gaps only after checking whether they reflect missing retrieval, inaccessible evidence, inconsistent findings, weak measurement, an untested mechanism, or limited transfer to the target population or setting.
+11. State the supported conclusion, its boundary, confidence, unresolved conflicts, and remaining retrieval risk.
 
 ## Required return
 
@@ -60,6 +63,7 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - search log and corpus counts appropriate to that mode;
 - seed, citation-search, and repair ledgers when those methods affected the corpus;
 - evidence table with source locations;
+- stable source, evidence, claim, and gap IDs with typed relationships when another research stage will consume the review;
 - agreements, conflicts, and plausible reasons for disagreement;
 - conclusion with calibrated language;
 - missing evidence, likely blind spots, and next search only if it could change the decision.
@@ -72,12 +76,13 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - Search volume, citation count, and majority vote do not establish truth.
 - A database or paper-QA tool can retrieve from a corpus but cannot establish that the corpus is complete.
 - Novelty is always bounded by the searched sources, dates, languages, terminology, and accessible full text.
+- A knowledge network is a view of retained evidence relationships; network position, node count, or link density is not scientific evidence.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Upstream adoption
 
-- **Selected:** progressive skim-to-deep-read, tiered review modes, a frozen search boundary, domain profiles, labeled seed calibration, supplementary citation searching, versioned search repair, auditable screening, evidence tables, contradiction checks, and explicit stopping conditions.
-- **Not selected now:** a default comprehensive review, a bundled database or paper-QA service, citation-only completeness claims, automatic query expansion without a change log, autonomous inclusion decisions, or treating retrieval from an available corpus as proof of completeness or novelty.
+- **Selected:** progressive skim-to-deep-read, tiered review modes, a frozen search boundary, domain profiles, labeled seed calibration, supplementary citation searching, versioned search repair, auditable screening, claim-level evidence links, bounded gap records, contradiction checks, and explicit stopping conditions.
+- **Not selected now:** a default comprehensive review, a bundled database, knowledge-graph, or paper-QA service, citation-only completeness claims, automatic query expansion without a change log, autonomous inclusion decisions, or treating retrieval from an available corpus as proof of completeness or novelty.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 

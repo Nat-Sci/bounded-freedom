@@ -23,6 +23,8 @@ rationale: why this route and delegation are cost-effective
 
 Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
 
+Read [research-lineage.md](research-lineage.md) when work crosses research Skills or when sources, claims, hypotheses, findings, and downstream artifacts must remain traceable. Pass only the bounded lineage slice needed by the next Skill; do not load a whole project knowledge network by default.
+
 ## Make four decisions separately
 
 1. **Task method:** Match the request against available Skill descriptions. Load only a clearly relevant Skill; otherwise continue with general work. Chief needs the catalog, not every specialist method in standing context.
@@ -86,8 +88,8 @@ Chief reports: outcome, files or artifacts changed, verification evidence, revie
 
 ## Upstream adoption
 
-- **Selected:** progressive Skill loading, Chief-owned routing, bounded execution contracts, per-work-unit model choice, independent review, and thin host adapters.
-- **Not selected now:** task-wide model profiles, a standing multi-agent crew, recursive delegation, a custom runtime, automatic upstream merging, or an unmeasured dynamic router.
+- **Selected:** progressive Skill loading, Chief-owned routing, bounded execution contracts, per-work-unit model choice, independent review, thin host adapters, and a lightweight cross-Skill research-lineage handoff.
+- **Not selected now:** task-wide model profiles, a standing multi-agent crew, recursive delegation, a custom runtime, a required graph database, automatic upstream merging, or an unmeasured dynamic router.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 

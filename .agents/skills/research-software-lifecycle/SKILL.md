@@ -16,6 +16,8 @@ Choose the software target before choosing the scaffold.
 
 Read [references/maturity-contract.md](references/maturity-contract.md) before adding packaging, CI, containers, release automation, DOI/citation metadata, or pipeline infrastructure.
 
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when software implements a retained method or study, produces identified analyses or findings, or is released with a paper. Preserve those scientific links without making the software repository a second evidence database.
+
 ## Work-unit model guidance
 
 | Work unit | Execution contract | Capability lane |
@@ -31,11 +33,11 @@ The word “software” is not a reason to use a stronger model. Match capabilit
 
 1. Freeze intended users, lifetime, reuse boundary, compute environment, data sensitivity, and maintenance owner.
 2. Select the lowest maturity target that satisfies those needs.
-3. Define inputs, outputs, configuration, invariants, failure states, and acceptance tests before reorganizing code.
+3. Define inputs, outputs, configuration, invariants, failure states, acceptance tests, and any claim, study, analysis, or finding IDs the software implements or produces before reorganizing code.
 4. Separate domain logic from environment and orchestration only where reuse or testing benefits.
 5. Add the minimum tests, documentation, environment capture, and automation required by the target.
 6. Verify from a clean or representative environment, including a documented example or smoke path.
-7. Record version, provenance, compatibility, limitations, and ownership expectations.
+7. Record version, provenance, compatibility, limitations, ownership expectations, and bounded software-to-research lineage when applicable.
 
 ## Required return
 
@@ -44,6 +46,7 @@ The word “software” is not a reason to use a stronger model. Match capabilit
 - frozen interface, data, configuration, and failure contracts;
 - implemented engineering surface and intentionally omitted features;
 - test, reproducibility, documentation, and deployment evidence;
+- implemented method or study IDs and produced run, finding, or release relationships when scientific lineage is in scope;
 - release, citation, FAIR, HPC, or container status only when relevant;
 - remaining maintenance and scientific risks.
 
@@ -53,13 +56,14 @@ The word “software” is not a reason to use a stronger model. Match capabilit
 - Reproducible does not automatically mean maintainable, citable, FAIR, secure, or HPC-ready.
 - Containers do not replace data provenance, tests, version identities, or operational checks.
 - A passing test suite does not validate the scientific assumptions or result.
+- A software artifact may implement a study or produce a run, but it does not support a scientific claim merely because it is packaged, tested, cited, or released.
 - Do not add hosted services, registries, releases, or external publications without the required authority.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions; project rules retain scientific and infrastructure constraints.
 
 ## Upstream adoption
 
-- **Selected:** choose maturity first, then add proportionate interfaces, tests, documentation, CI, releases, citation, containers, or HPC controls with a reproducibility receipt.
-- **Not selected now:** one mandatory scaffold, packaging every script, or requiring public-release, FAIR, DOI, container, and HPC machinery for every analysis.
+- **Selected:** choose maturity first, then add proportionate interfaces, tests, documentation, CI, releases, citation, containers, or HPC controls with a reproducibility receipt and bounded links to the research objects implemented or produced.
+- **Not selected now:** one mandatory scaffold, a second evidence database inside the software repository, packaging every script, or requiring public-release, FAIR, DOI, container, and HPC machinery for every analysis.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 

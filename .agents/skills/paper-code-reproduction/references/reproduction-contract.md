@@ -2,6 +2,22 @@
 
 Read before executing code or making a reproduction claim.
 
+## Incoming lineage target
+
+When the target comes from another research stage, retain only the applicable fields:
+
+```text
+handoff_id
+source_id
+claim_id
+hypothesis_id
+prediction_id
+study_id
+expected_observable
+requested_mode
+acceptance_and_indeterminate_rules
+```
+
 ## Claim map
 
 For each target, preserve:
@@ -23,6 +39,24 @@ inference_or_gap
 ```
 
 Paper text, code behavior, and reviewer inference must remain distinguishable.
+
+## Run and finding receipt
+
+For a result that enters the research record, retain:
+
+```text
+run_id
+tested_ids
+protocol_and_environment_identity
+observable_and_result
+comparison_state
+uncertainty_and_deviations
+finding_id
+supports_weakens_contradicts_or_indeterminate_for_ids
+produced_artifact_ids
+```
+
+Link these records using the shared [research-lineage contract](../../cost-efficient-orchestration/research-lineage.md). Preserve the original frozen claim or hypothesis; a later result updates it through a versioned relationship.
 
 ## Mode requirements
 
