@@ -20,7 +20,7 @@
 | --- | --- | --- |
 | `evidence-review` | rapid scan, bounded evidence map, systematic or novelty review | Conclusion cannot exceed the frozen search boundary |
 | `hypothesis-study-design` | competing hypotheses, discrimination, study and statistical plan | Coherence is not evidence; human freezes confirmatory choices |
-| `paper-code-reproduction` | understanding map, smoke reproduction, claim-level reproduction | Code runs, method implemented, and claim reproduced remain separate |
+| `paper-code-reproduction` | implementation source × map, smoke, or claim evidence depth | Code identity, execution progress, and claim comparison remain separate |
 | `scientific-figure` | code-first results, editable architecture, method schematic, domain visualization | Visual appeal cannot replace provenance or scientific checks |
 | `research-software-lifecycle` | one-off, internal reuse, public software, HPC or pipeline | Engineering effort grows only with the chosen maturity target |
 
@@ -83,3 +83,15 @@ Each Skill has one focused reference loaded only for advanced modes or domain ch
 - Writing boundary: The lineage contract can map consequential manuscript statements and captions to claim or finding IDs, but a dedicated scientific-writing Skill remains deferred until it is reviewed as its own capability rather than added as a placeholder.
 - Verification: All six Skills passed the Skill validator; local Markdown links, shell syntax, whitespace, host-neutrality, and private-path scans passed; the portable installer dry-run discovered all six Skills without mutation.
 - Remaining uncertainty: A real project must still test identifier ergonomics, how much lineage to retain, and whether a project-level Markdown/CSV ledger is sufficient before any graph or cross-project index is justified.
+
+## V0.1.5 paper-code reproduction refinement
+
+- Objective: Distinguish an implementation's source from how deeply it has been checked, so author code, repaired code, adapted code, and independent implementation cannot silently support the same claim.
+- Assurance and execution: S1, Chief direct, no worker. This changes a future execution and evidence contract without running a paper or changing a scientific result.
+- Two-axis route: Implementation source is `author_unmodified`, `author_repaired`, `adapted`, or `independent`; evidence depth is `map`, `smoke`, or `claim`. New-data, new-population, and new-condition studies remain study-design and project-execution work.
+- Selected records: Repository source receipts, paper-derived implementation requirements, separately labeled reference evidence, unresolved assumptions, a pre-execution resource gate, and semantic change records for environment, compatibility, defect, protocol, or method changes.
+- Evidence states: Progress remains `mapped`, `environment-ready`, `code-runs`, or `method-implemented`; claim comparison is separately `matched`, `mismatched`, `blocked`, or `indeterminate`. A blocker is not a mismatch, and a mismatch under an uncertain protocol is not a paper refutation.
+- Cost boundary: Static mapping, source checks, and low-cost smoke work remain the default entry. Full runs occur only when a lower rung cannot answer the frozen question and the data, permission, compute, and time gate permits them. Protocol downscaling must change the target explicitly rather than inherit the paper's full-scale claim.
+- Upstream adoption: Paper-code mapping from `research-paper-code-study`; source discovery and fallback receipts from `paperReproductAgent`; separate implementation-requirement and reference-evidence channels from ReproAgent; executor-grader separation and resource estimation from Veritas; and distinct starting-code conditions and domain coverage from AutoExperiment and SocSci-Repro-Bench. Their runtimes, task adapters, automatic claim extraction, and aggregate scores remain unbundled.
+- Verification: Validate the revised Skill, check local links and whitespace, inspect the focused diff, scan changed text for machine-local identifiers, and confirm that no host model binding or new runtime entered the method contract.
+- Remaining uncertainty: Real paper projects must calibrate how much source evidence is sufficient, which repairs preserve implementation identity, and when a clean replay materially improves a consequential claim judgment.
