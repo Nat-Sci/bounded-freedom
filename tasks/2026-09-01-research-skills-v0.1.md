@@ -60,3 +60,13 @@ Each Skill has one focused reference loaded only for advanced modes or domain ch
 - Scope boundary: No new Skill, external tool, runtime, model binding, or untracked asset was added. Scientific data analysis, claim-linked writing, executable adapters, and cost-quality benchmarking remain explicit candidates rather than placeholder folders.
 - Verification: All six Skill validators passed; installer shell syntax and the portable dry-run passed; local Markdown links and whitespace passed. The changed public text was scanned for machine-local paths and stale three-part routing language.
 - Remaining uncertainty: The conceptual separation is now explicit, but actual token, latency, quality, and routing gains still require a small repeated-task benchmark and receipts from real projects.
+
+## V0.1.3 evidence-search refinement
+
+- Objective: Add seed papers, citation searching, domain adaptation, and controlled search repair as detailed `evidence-review` capabilities without changing the general orchestration framework.
+- Assurance and execution: S1, Chief direct, no worker. The change defines a review method but does not conduct a scientific review or make a scientific claim.
+- Scope: `evidence-review` entrypoint and one on-demand reference, plus its adoption record. Chief, execution contracts, host-model routing, and S0-S4 remain unchanged.
+- Selected: A frozen domain profile, labeled seed roles, held-out retrieval validation when feasible, source-specific query versions, supplementary backward and forward citation searching, provenance ledgers, and evidence-triggered minimal repair.
+- Excluded: Seed inclusion by reputation, citation-only completeness, one fixed database list for every field, silent query expansion, changing eligibility during repair, or treating citation tools as inclusion judges.
+- Verification: Validate the Skill, check links and Markdown, inspect the focused diff, and scan changed text for machine-local identifiers.
+- Remaining uncertainty: Database coverage and citation indexes differ by field and access. Strong systematic or novelty claims still require a frozen protocol and, when omissions could change the conclusion, domain or information-specialist review.
