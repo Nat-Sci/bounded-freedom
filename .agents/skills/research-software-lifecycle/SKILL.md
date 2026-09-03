@@ -1,72 +1,89 @@
 ---
 name: research-software-lifecycle
-description: Turn research analyses or results into software with proportionate tests, packaging, documentation, CI, releases, citation, containers, or HPC support. Use when deciding how far to engineer a script, package, public tool, or scientific pipeline; not to overbuild a one-off analysis.
+description: Grow research analyses into an evolving software container through accepted baselines, bounded capability increments, reviewed frame migrations, and proportionate tooling. Use when starting, extending, reshaping, hardening, auditing, or releasing research software; not for ordinary edits with no lifecycle decision.
 ---
 
 # Research software lifecycle
 
-Choose the software target before choosing the scaffold.
+Treat research software as a living container for validated capabilities, not as a package created only after the research is finished. Start with the smallest useful frame, extend it one accepted increment at a time, and reshape the frame only through an explicit migration.
 
-## Classify the target
+This Skill owns the software-evolution method. Chief remains the only dispatcher and retains the final execution contract, model, delegation, assurance, and acceptance decisions.
 
-- **One-off analysis:** reproducible execution and a clear receipt, without package ceremony.
-- **Internal reusable component:** stable inputs and outputs, focused tests, environment capture, and concise usage documentation.
-- **Public research software:** supported interface, tests, CI, documentation, versioning, license, citation, contribution and release practices.
-- **HPC or pipeline system:** explicit stages, restartability, provenance, resource controls, failure semantics, portability, and operational documentation.
+## Select the entry
 
-Read [references/maturity-contract.md](references/maturity-contract.md) before adding packaging, CI, containers, release automation, DOI/citation metadata, or pipeline infrastructure.
+- **init:** freeze the goal and create the smallest frame that can run and be checked.
+- **extend:** add one research-driven capability without silently widening the product.
+- **reshape:** migrate interfaces, modules, layout, execution structure, or shared infrastructure because the current frame no longer fits.
+- **harden:** improve tests, reproducibility, documentation, recovery, security, or operations around already accepted capabilities.
+- **audit/release:** assess an accepted baseline for internal reuse, public release, citation, FAIR, container, or HPC needs; external publication still requires authority.
 
-Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when software implements a retained method or study, produces identified analyses or findings, or is released with a paper. Preserve those scientific links without making the software repository a second evidence database.
+Read [references/maturity-contract.md](references/maturity-contract.md) for the persistent container fields, baseline and increment states, migration checks, proportionate maturity requirements, and optional tool routes. Load the sections needed by the selected entry rather than treating every route as required work.
 
-## Work-unit model guidance
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) only when the software implements retained methods or studies, produces identified runs or findings, or ships with a paper. Preserve the bounded links; do not make the software repository a second evidence database.
 
-| Work unit | Execution contract | Capability lane |
+## Keep four decisions separate
+
+1. **Purpose and reuse:** one analysis, internal reuse, or a maintained public product.
+2. **Execution shape:** notebook or command, callable package or CLI, workflow or pipeline, container, or HPC system.
+3. **Accepted baseline:** the capabilities, interfaces, identities, evidence, and known limits currently trusted.
+4. **Next increment:** the one proposed change and the evidence required to accept it.
+
+HPC or pipeline is an execution shape, not a higher maturity tier. Public release is a reuse and maintenance commitment, not a reason to add every possible tool.
+
+## Work-unit guidance
+
+| Work unit | Starting execution contract | Capability lane |
 | --- | --- | --- |
-| Inventory scripts, interfaces, documentation, tests, and environments | Scout | Fast and economical |
-| Make a narrow frozen packaging, test, documentation, or configuration edit | Coder | Fast and economical |
-| Coordinate package APIs, CI, containers, or HPC pipeline changes | Builder | Balanced |
-| Resolve cross-cutting API, FAIR, security, or operational reliability tradeoffs | Chief, direct; Reviewer when independence is required | Strong reasoning |
+| Inventory the current baseline, interfaces, environments, history, and possible tool fit | Scout | Fast and economical |
+| Add one frozen, local capability or hardening change | Coder | Fast and economical |
+| Establish an initial multi-file frame, coordinate a cross-module increment, or execute a reviewed migration | Builder | Balanced |
+| Decide ambiguous product boundaries, migration tradeoffs, or consequential release claims | Chief, direct; Reviewer only when independence is required | Strong reasoning |
 
-The word “software” is not a reason to use a stronger model. Match capability to the bounded change and maturity target. Use the general orchestration route for work not listed here.
+The word “software” and the age of a project do not justify a stronger model. Match capability to the bounded work unit, then apply S0–S4 assurance separately. Use the general orchestration route only for work not covered here.
 
 ## Workflow
 
-1. Freeze intended users, lifetime, reuse boundary, compute environment, data sensitivity, and maintenance owner.
-2. Select the lowest maturity target that satisfies those needs.
-3. Define inputs, outputs, configuration, invariants, failure states, acceptance tests, and any claim, study, analysis, or finding IDs the software implements or produces before reorganizing code.
-4. Separate domain logic from environment and orchestration only where reuse or testing benefits.
-5. Add the minimum tests, documentation, environment capture, and automation required by the target.
-6. Verify from a clean or representative environment, including a documented example or smoke path.
-7. Record version, provenance, compatibility, limitations, ownership expectations, and bounded software-to-research lineage when applicable.
+1. Select one entry and state the concrete pressure that justifies it.
+2. Locate the existing product or project contract. If none exists, record the minimum persistent fields in an existing project document or task record; do not create a document set merely to satisfy this Skill.
+3. Freeze purpose and reuse, execution shape, current accepted baseline, scientific and software invariants, and the next increment.
+4. For `extend` or `harden`, define one capability boundary, affected interfaces, acceptance evidence, lineage slice, compatibility expectation, and stop condition.
+5. For `reshape`, freeze the old and proposed frame, migration reason, mapping, compatibility and rollback plan, and separate any scientific change into its own increment.
+6. Choose an optional scaffold, workflow, data-version, article-build, packaging, container, or HPC tool only when a demonstrated need outweighs its adoption and maintenance cost.
+7. Implement the smallest coherent change. Preserve the previous accepted baseline until the new increment passes its checks.
+8. Verify the changed capability and relevant non-regression boundary in a clean or representative environment. A command succeeding is not scientific validation.
+9. Mark the increment `accepted` only when its frozen evidence passes; otherwise retain the prior baseline and report `failed`, `blocked`, or `unverified` honestly.
+10. Update the baseline, frame version when applicable, compatibility and provenance receipt, bounded research lineage, known limits, and next pressure.
 
 ## Required return
 
-- selected maturity target and rationale;
-- user and maintenance assumptions;
-- frozen interface, data, configuration, and failure contracts;
-- implemented engineering surface and intentionally omitted features;
-- test, reproducibility, documentation, and deployment evidence;
-- implemented method or study IDs and produced run, finding, or release relationships when scientific lineage is in scope;
-- release, citation, FAIR, HPC, or container status only when relevant;
-- remaining maintenance and scientific risks.
+- selected entry and reason;
+- purpose/reuse and execution-shape decisions;
+- previous accepted baseline and proposed capability increment;
+- increment state and acceptance or non-acceptance evidence;
+- frame migration and compatibility evidence when `reshape` is used;
+- optional tools considered, selected, deferred, or rejected, with the reason;
+- implemented surface, intentionally omitted machinery, and bounded research lineage when relevant;
+- remaining software, maintenance, operational, and scientific risks.
 
 ## Boundaries
 
-- Do not turn every experiment script into a public package.
-- Reproducible does not automatically mean maintainable, citable, FAIR, secure, or HPC-ready.
-- Containers do not replace data provenance, tests, version identities, or operational checks.
-- A passing test suite does not validate the scientific assumptions or result.
-- A software artifact may implement a study or produce a run, but it does not support a scientific claim merely because it is packaged, tested, cited, or released.
-- Do not add hosted services, registries, releases, or external publications without the required authority.
-- These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions; project rules retain scientific and infrastructure constraints.
+- The Skill completes one increment; it does not declare the software permanently complete.
+- Do not combine a frame migration with an unmarked scientific-method change.
+- Do not accept a new baseline by overwriting or deleting the last known-good state.
+- Do not turn every experiment script into a package or every repository into a platform.
+- Do not introduce a scaffold, pipeline engine, data-version system, container, registry, DOI, or release process without a present need.
+- Reproducible does not automatically mean maintainable, citable, FAIR, secure, scientifically valid, or HPC-ready.
+- Project tests establish engineering behavior; they do not by themselves support a scientific claim.
+- Do not add hosted services, publish releases, or mutate external systems without the required authority.
+- Do not create a second Chief, standing software crew, persistent agent runtime, or competing S0–S4 system.
 
 ## Upstream adoption
 
-- **Selected:** choose maturity first, then add proportionate interfaces, tests, documentation, CI, releases, citation, containers, or HPC controls with a reproducibility receipt and bounded links to the research objects implemented or produced.
-- **Not selected now:** one mandatory scaffold, a second evidence database inside the software repository, packaging every script, or requiring public-release, FAIR, DOI, container, and HPC machinery for every analysis.
+- **Selected:** the research-compendium view of a repository as a durable research container; template identity, diff, and reviewed update concepts; small persistent research state; bounded plan–implement–validate–handoff increments; proportionate maturity; and optional execution or data-lineage adapters.
+- **Not selected now:** one mandatory scaffold, automatic template merging, a large `.research/` state machine, standing agents, a duplicate evidence database, or mandatory package, public-release, FAIR, container, workflow, data-version, or HPC machinery.
 
-The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
+The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 
-This Skill is an original synthesis informed by the research software engineer profile in [scientific-agents](https://github.com/K-Dense-AI/scientific-agents), [The Turing Way](https://github.com/the-turing-way/the-turing-way), the [pyOpenSci Python Package Guide](https://github.com/pyOpenSci/python-package-guide), and [FAIR4RS](https://github.com/force11/FAIR4RS). These sources guide proportionate practice; none is bundled. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
+This Skill is an original synthesis informed by [rrtools](https://github.com/benmarwick/rrtools), [Copier](https://github.com/copier-org/copier), [Cruft](https://github.com/cruft/cruft), [research-lab-notebook](https://github.com/osteele/agent-skills), [UW-SSEC RSE plugins](https://github.com/uw-ssec/rse-plugins), [scientific-agents](https://github.com/K-Dense-AI/scientific-agents), [The Turing Way](https://github.com/the-turing-way/the-turing-way), and the optional tools listed in the reference. Their software and templates are not bundled. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).

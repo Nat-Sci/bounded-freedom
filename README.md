@@ -72,7 +72,7 @@ Chief is the accountable primary session, not a fifth worker. The table shows si
 | [`hypothesis-study-design`](.agents/skills/hypothesis-study-design/SKILL.md) | Compare hypotheses and freeze decisions | Extract evidence, assumptions, confounders | Frozen calculation scripts only | Simulations use the general build route | Audit causal and statistical logic |
 | [`paper-code-reproduction`](.agents/skills/paper-code-reproduction/SKILL.md) | Freeze protocol and assign status | Map claims, code, data, dependencies | Repair environment or smoke path | Build coordinated claim-level execution | Grade protocol and claim evidence |
 | [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Freeze the visual argument | Locate data, assets, provenance | Make a narrow plotting edit | Build panels or editable schematics | Audit scientific and visual meaning |
-| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Choose maturity and tradeoffs | Inventory interfaces and environments | Edit tests, docs, packaging, config | Build API, CI, container, or HPC flow | Audit reliability and public boundary |
+| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Grow a verified software container | Inventory baseline and tool fit | Add one frozen capability | Coordinate cross-module increments or frame migration | Audit baseline, migration, and release boundary |
 
 This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. A matching Skill supplies the method and starting route; unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor.
 
