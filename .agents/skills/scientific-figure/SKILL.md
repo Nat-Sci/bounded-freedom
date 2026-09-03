@@ -21,7 +21,7 @@ Choose one operation before changing an artifact:
 
 ### 1. Design
 
-Freeze the visual claim, evidence and lineage, panel roles, reading order, analysis and display transformations, shared semantics, prohibited implications, and acceptance checks. Use a manifest for a multi-panel figure or figure suite. A design remains `draft` until these decisions are explicit; only `frozen` designs proceed to a consequential build.
+Freeze the visual claim, evidence and lineage, panel roles, reading order, analysis and display transformations, shared semantics, layout grid, safe area, object anchors, allowed overlaps, prohibited implications, and acceptance checks. Use a manifest for a multi-panel figure or figure suite. A design remains `draft` until these decisions are explicit; only `frozen` designs proceed to a consequential build.
 
 Read [figure contract and build routes](references/figure-contract-and-routes.md) before designing a multi-panel, architecture, neuroimaging, electrophysiology, or publication-ready figure.
 
@@ -42,7 +42,8 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 3. Record the data/code authority and editable layout authority.
 4. Track scientific and visual changes separately; uncertainty is treated as scientific until resolved.
 5. Give Figure 1-N a shared semantic contract for terms, colors, groups, units, scales, anatomy, and stated exceptions.
-6. End each required QA layer with `pass`, `fail`, or `unverified`. Missing evidence is never a pass.
+6. End each required QA layer with `pass`, `fail`, or `unverified`. Visual QA must inspect the final render at full and smallest intended viewing size; missing evidence is never a pass.
+7. Bind every non-decorative label, icon, legend key, and connector to a stable semantic object ID. One label has one target by default; shared labels, multi-target connectors, and intentionally unlabeled objects require an explicit exception. Proximity, numbering, or visual similarity alone is not a binding.
 
 ## Work-unit model guidance
 
@@ -59,6 +60,7 @@ Deterministic manifest, file, format, and render checks should run as tools rath
 
 - selected entry and frozen or unresolved design contract;
 - panel manifest, selected route, editable source, and rendered artifact;
+- semantic object and label/icon/connector bindings when the figure contains diagrams, legends, callouts, or routed elements;
 - data/code and layout authorities, transformations, external assets, and lineage links;
 - scientific and visual change records when revising or rebuilding;
 - machine, visual, and scientific QA results as `pass`, `fail`, or `unverified`;
@@ -71,12 +73,13 @@ Deterministic manifest, file, format, and render checks should run as tools rath
 - Do not silently change cohorts, exclusions, aggregation, thresholds, coordinate space, hemispheres, atlases, interpolation, labels, or uncertainty to improve appearance.
 - A display transformation that changes the visible scientific comparison is a scientific change.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
+- Treat image-model-generated labels, icons, arrows, and topology as `unverified` until their declared bindings and meanings are checked against the frozen design.
 - A figure visualizes evidence or a finding; it is not additional independent evidence.
 - Chief retains final model, delegation, S0-S4, and acceptance decisions.
 
 ## Upstream adoption
 
-- **Selected:** claim-first design, two-stage design/build separation, five operation entries, panel manifests, dual authorities, reproducible rebuilds, editable vector sources, Figure 1-N semantic contracts, separated change scopes, three-state QA, and domain checks.
+- **Selected:** claim-first design, two-stage design/build separation, five operation entries, panel manifests, stable semantic object and label/icon/connector bindings, dual authorities, reproducible rebuilds, editable vector sources, Figure 1-N semantic contracts, separated change scopes, three-state QA, and domain checks.
 - **Not selected now:** a standing figure-agent crew, one mandatory authoring format, PDF as the only source, bundled plotting runtimes or templates, pixel similarity as scientific validity, or image models inventing values, anatomy, labels, and topology.
 
 The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).

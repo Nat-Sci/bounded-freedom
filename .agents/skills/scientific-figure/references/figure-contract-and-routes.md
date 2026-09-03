@@ -23,14 +23,16 @@ operation
 figure_or_suite_id
 purpose_and_one_sentence_visual_claim
 source_claim_study_run_analysis_or_finding_ids
-audience_venue_and_final_physical_size
+audience_venue_final_size_and_smallest_review_size
 panel_ids_roles_and_reading_order
 panel_to_lineage_map
+layout_grid_safe_area_object_anchors_and_allowed_overlaps
 source_data_model_method_or_reference
 analysis_transformations
 display_transformations
 visual_encoding_and_comparison_task
 required_labels_units_legends_and_uncertainty
+semantic_object_ids_and_label_icon_connector_bindings
 shared_terms_colors_scales_and_domain_conventions
 prohibited_implications_and_counter_readings
 data_code_authority
@@ -42,6 +44,34 @@ design_status: draft | frozen
 ```
 
 If the visual claim, panel roles, authorities, or forbidden readings are unresolved, keep the design `draft`. Audit operations may examine draft or legacy figures, but a new consequential build requires `frozen`.
+
+Every label, legend, connector, inset, and annotation must be anchored to a named panel, object, data mark, or layout region. Record intentional overlaps; an unplanned overlap is a defect even when every element remains technically visible. Inspect one full-size render and the smallest intended viewing size. If a crop or alternate aspect ratio is a deliverable, give it a separate layout contract rather than relying on automatic cropping.
+
+### Semantic binding contract
+
+Layout anchors answer where an element is placed; semantic bindings answer what it refers to. Freeze both before a diagram, legend, callout, or routed figure is built.
+
+Assign stable IDs to every meaning-bearing object, including panels, icons, nodes, blocks, data series, regions, legend keys, and connector endpoints. Then record only the bindings the figure actually uses:
+
+```yaml
+semantic_objects:
+  - object_id: card-05
+    meaning: research-software route
+semantic_bindings:
+  - binding_id: route-05
+    label_id: label-05
+    label_text: 科研软件
+    target_id: card-05
+    relation: names-and-routes-to
+    connector_id: connector-05
+    expected_label_count: 1
+    expected_connector_count: 1
+    meaning_authority: frozen figure design
+```
+
+The default rule is one label to one target. A shared title, grouped legend, bidirectional edge, one-to-many callout, or intentionally unlabeled object is allowed only when its scope and cardinality are declared. A connector records its source, target, and direction separately; matching colors, nearby placement, or the same visible number do not prove correspondence.
+
+An image model or icon library may supply appearance, but it does not own meaning. The frozen design, method, data/code authority, or cited external source owns the interpretation. Rebinding a label, icon, legend key, or connector to a different meaning is a scientific or semantic change; moving the same verified binding without changing its meaning may be visual.
 
 ### Analysis versus display
 
@@ -84,7 +114,7 @@ On rebuild, regenerate scientific content from the data/code authority and reapp
 
 ### AI and CV architecture
 
-Map each visual block to an implemented or explicitly proposed component. Define arrow direction and semantics, distinguish training and inference, and show tensor shapes only when verified. Useful routes include [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [NN-SVG](https://github.com/alexlenail/NN-SVG), TikZ, SVG, Draw.io, and PPTX.
+Map each visual block to an implemented or explicitly proposed component through a stable semantic object ID. Bind its visible label and every incoming or outgoing arrow to that object; define arrow direction and semantics, distinguish training and inference, and show tensor shapes only when verified. Useful routes include [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [NN-SVG](https://github.com/alexlenail/NN-SVG), TikZ, SVG, Draw.io, and PPTX.
 
 ### Method schematics
 

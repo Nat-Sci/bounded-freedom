@@ -20,6 +20,26 @@ figures:
     visual_claim: ""
     lineage_ids: []
     design_status: draft
+    layout_contract:
+      final_size: ""
+      smallest_review_size: ""
+      safe_area: {}
+      alignment_grid: {}
+      object_anchors: {}
+      allowed_overlaps: []
+    semantic_objects:
+      - object_id: ""
+        meaning: ""
+    semantic_bindings:
+      - binding_id: ""
+        label_id: ""
+        label_text: ""
+        target_id: ""
+        relation: "names | qualifies | points-to | legend-for | routes-to"
+        connector_id: ""
+        expected_label_count: 1
+        expected_connector_count: 0
+        meaning_authority: ""
     panels:
       - panel_id: fig-01a
         role: ""
@@ -56,12 +76,33 @@ Freeze shared meanings before styling the suite:
 
 Shared appearance is not the goal by itself. A shared mapping is required only when the underlying meanings are genuinely comparable.
 
+## Layout integrity contract
+
+Freeze the canvas or physical size, safe area, alignment grid, repeated spacing, object anchors, allowed overlaps, and smallest intended viewing size before a consequential build. Every label, legend, connector, inset, and decorative layer must belong to a named panel, object, data mark, or layout region; “near enough” is not an anchor.
+
+Machine checks may flag out-of-bounds objects, undeclared anchors, inconsistent margins, and bounding-box collisions. They do not decide whether an overlap hides a scientific mark, whether text and background belong together visually, or whether the reading order survives at the target size. Those questions require inspection of the rendered artifact at full size and at the smallest intended viewing size.
+
+A label or decorative layer must not obscure data marks, anatomy, units, or connector endpoints unless the frozen design explicitly permits it and the scientific meaning remains intact. Treat alternate crops and aspect ratios as separate layouts with their own safe areas and anchors.
+
+## Semantic binding integrity
+
+For diagrams, legends, callouts, and routed figures, validate meaning separately from layout:
+
+- every non-decorative label, icon, legend key, and connector resolves to an existing semantic object ID;
+- one label resolves to exactly one target by default; shared, grouped, multi-target, or intentionally absent bindings are declared rather than inferred;
+- every connector records valid source and target IDs, direction when meaningful, and its expected count;
+- visible numbering and legend order agree with the declared IDs, but numbering is a check aid rather than the source of truth;
+- an icon's declared meaning comes from the frozen design, method, data/code authority, or cited source—not from its visual appearance or an image-model prompt;
+- the final render is inspected for label proximity, leader-line ambiguity, connector crossings, duplicate routes, and legend-to-object correspondence at full and smallest intended size.
+
+Machine checks can establish ID existence, uniqueness, declared cardinality, and source/target consistency when the authoring format exposes them. Visual inspection verifies that the rendered relationship is perceptible and unambiguous. Scientific review verifies that the declared relationship is true. If any required layer cannot establish its part, report `unverified` rather than accepting the binding.
+
 ## Change tracking
 
 Each revision records the affected figure and panels, old and new authorities or hashes, reason, authoring source, requested scope, and invalidated checks.
 
-- **Scientific change:** changes data, sample, exclusions, analysis, estimates, uncertainty, threshold, coordinate or anatomical mapping, visible comparison, visual encoding meaning, claim, or caption interpretation. Rerun the affected analysis and scientific, visual, and machine QA.
-- **Visual change:** changes typography, spacing, alignment, panel placement, nonsemantic styling, or export settings without changing scientific content. Rerun affected machine and visual QA.
+- **Scientific change:** changes data, sample, exclusions, analysis, estimates, uncertainty, threshold, coordinate or anatomical mapping, visible comparison, visual encoding meaning, semantic binding, claim, or caption interpretation. Rerun the affected analysis and scientific, visual, and machine QA.
+- **Visual change:** changes typography, spacing, alignment, panel placement, or a verified binding's placement without changing its target or meaning, plus nonsemantic styling or export settings. Rerun affected machine and visual QA.
 
 If one edit contains both, record two linked changes or classify the whole edit as scientific. If the classification is uncertain, treat it as scientific until resolved. A visual edit must never overwrite data-derived geometry or values.
 
@@ -87,8 +128,8 @@ Overall QA is `pass` only when all required layers pass. Any required failure ma
 
 | Layer | Suitable checks | Boundary |
 | --- | --- | --- |
-| Machine | required fields, source existence, hashes or freshness, compile/export success, dimensions, physical size, DPI, panel IDs, labels, units, font embedding, editable text, vector/raster inventory, caption references, suite mapping drift | Detects declared structural and file failures, not scientific truth |
-| Visual | clipping, overlap, reading order, final-size legibility, grayscale and color-vision robustness, connector endpoints, transparency, rasterization, cross-panel balance | Automation can flag candidates; inspect the final render |
-| Scientific | values and geometry against analysis, denominator and sample identity, uncertainty, anatomy, coordinates, thresholds, comparison validity, caption and claim agreement, prohibited implications | Requires domain judgment; consequential claims may require an independent Reviewer or human acceptance |
+| Machine | required fields, source existence, hashes or freshness, compile/export success, dimensions, physical size, DPI, panel and semantic object IDs, binding uniqueness, target existence, declared label and connector cardinality, connector endpoints, labels, units, font embedding, editable text, vector/raster inventory, declared anchors, safe-area and repeated-spacing violations, bounding-box collision candidates, caption references, suite mapping drift | Detects declared structural and file failures, not scientific truth or acceptable composition |
+| Visual | clipping, unplanned overlap, alignment, label-to-object, icon-to-label, legend-to-object, connector, and text-to-background relationships, duplicate or crossing routes, reading order, full-size and smallest-view legibility, grayscale and color-vision robustness, connector endpoints, transparency, rasterization, cross-panel balance | Automation can flag candidates; inspect every required final render |
+| Scientific | values and geometry against analysis, denominator and sample identity, uncertainty, anatomy, coordinates, thresholds, declared icon and connector meaning, comparison validity, caption and claim agreement, prohibited implications | Requires domain judgment; consequential claims may require an independent Reviewer or human acceptance |
 
 Pixel similarity can detect rendering drift but cannot establish scientific equivalence. A successful compile or export proves only that a file was produced.
