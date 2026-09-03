@@ -36,6 +36,8 @@ When a specialized Skill is loaded, use its work-unit execution contract and cap
 
 The Skill owns method and work-unit guidance; orchestration owns the final execution contract, model, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
 
+Use one active method Skill per bounded work unit. A larger request may move through several Skills, but Chief closes or freezes the current unit, records the handoff, and passes only the needed lineage slice before loading the next method. Do not stack several full Skill bodies into standing context. The durable ownership and common handoffs are summarized in [Skill coordination](../../../docs/skill-coordination.md).
+
 ## Selection algorithm
 
 1. Frame the user's intent and identify ambiguity that would materially alter the result.

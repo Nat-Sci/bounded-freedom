@@ -8,7 +8,7 @@ Operational rules:
 
 - Do not use task-wide model profiles.
 - Keep task method, execution contract, model and reasoning effort, and S0–S4 assurance as separate decisions.
-- Load only the Skill that matches the current task. Use its work-unit routing guidance first and the general host routing only for work it does not cover.
+- Load only the Skill that matches the current bounded work unit. A larger task may chain several Skills sequentially, but Chief must close or freeze one handoff before activating the next. Use the active Skill's work-unit routing guidance first and the general host routing only for work it does not cover.
 - Default to direct work or one bounded worker.
 - Select the Scout, Coder, Builder, or Reviewer execution contract by ownership, permissions, and independence; select model family and reasoning effort separately.
 - Give every worker exact scope, ownership, output, verification, and stop conditions.

@@ -26,7 +26,7 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Query expansion, metadata, citation retrieval, deduplication, screening, and fixed-field extraction | Scout | Fast and economical |
 | Domain profile, seed calibration, and search-repair diagnosis | Chief, direct | Balanced |
 | Full-text evidence tables, method comparison, and stable synthesis | Chief, direct | Balanced |
-| Novelty judgment, causal or statistical inference, and unresolved conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
+| Novelty judgment, causal or statistical interpretation of reviewed evidence, and unresolved conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 A large corpus calls for bounded Scout work, not an automatic model upgrade. Escalate only for missed dependencies, unstable inclusion decisions, unresolved evidence conflict, or insufficient judgment. Use the general orchestration route for work not listed here.
 

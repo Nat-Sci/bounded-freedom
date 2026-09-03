@@ -1,0 +1,67 @@
+name: Update repository activity
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repository-activity
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Render rolling activity window
+        run: >-
+          node scripts/render-repository-activity.mjs
+          --repo "$GITHUB_REPOSITORY"
+          --weeks 12
+          --output "$RUNNER_TEMP/repository-activity.svg"
+
+      - name: Publish generated asset without changing main
+        shell: bash
+        env:
+          ACTIVITY_BRANCH: repository-activity
+          ACTIVITY_PATH: repository-activity.svg
+        run: |
+          set -euo pipefail
+          generated="${RUNNER_TEMP}/repository-activity.svg"
+
+          if git ls-remote --exit-code --heads origin "${ACTIVITY_BRANCH}" >/dev/null 2>&1; then
+            git fetch --depth=1 origin "${ACTIVITY_BRANCH}"
+            git switch --detach FETCH_HEAD
+          else
+            git switch --orphan "${ACTIVITY_BRANCH}"
+          fi
+
+          cp "${generated}" "${ACTIVITY_PATH}"
+          touch .nojekyll
+          git add "${ACTIVITY_PATH}" .nojekyll
+
+          if git diff --cached --quiet; then
+            echo "Repository activity is unchanged."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update repository activity"
+          git push origin "HEAD:${ACTIVITY_BRANCH}"

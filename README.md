@@ -8,7 +8,13 @@ Modern AI models can already do a great deal. The harder problem is making their
 
 BoundedFreedom treats this as an environment-design problem. The model sets what may be possible, context sets what it can see, and the harness sets what it may do, what it must protect, how it gets feedback, and how its work is checked. Clear boundaries do not only limit action; they make useful action dependable.
 
-BoundedFreedom is a constraint-first, cost-aware harness layer for AI-assisted research and engineering. The current primary session acts as **Chief**: it frames the task, loads only the needed method, chooses the least costly capable worker, checks the evidence, and keeps final accountability.
+BoundedFreedom is a small, constraint-first control layer for AI-assisted research and engineering. Its **Chief** routes each work unit to the needed method, spends model capability only where it helps, limits what may change, preserves evidence links, and raises review with consequence. It does not replace scientific tools or project-owned rules.
+
+## Repository activity
+
+[![Rolling twelve-week repository activity](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg)](.github/workflows/update-repository-activity.yml)
+
+The card is generated from first-parent Git history after `main` changes and on a light weekly schedule. It is a maintenance signal, not a quality score or evidence that the framework is scientifically valid. The generated asset lives on a separate branch, so routine updates do not add commits to `main`.
 
 ## Small repository layout
 
@@ -74,7 +80,7 @@ Chief is the accountable primary session, not a fifth worker. The table shows si
 | [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Freeze the visual argument | Locate data, assets, provenance | Make a narrow plotting edit | Build panels or editable schematics | Audit scientific and visual meaning |
 | [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Grow a verified software container | Inventory baseline and tool fit | Add one frozen capability | Coordinate cross-module increments or frame migration | Audit baseline, migration, and release boundary |
 
-This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. A matching Skill supplies the method and starting route; unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor.
+This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. One bounded work unit has one active method Skill; a larger task may chain several Skills through explicit handoffs. Unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor. See [Skill coordination](docs/skill-coordination.md) for ownership, handoffs, overlap rules, and current gaps.
 
 When research crosses methods, the lightweight [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) connects sources, evidence, claims, gaps, hypotheses, studies, findings, and downstream artifacts with stable IDs. These links are many-to-many, and a knowledge graph is only an optional view. Chief passes the next Skill only the relevant lineage slice, preserving traceability without loading the whole research history.
 
