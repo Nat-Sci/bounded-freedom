@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="280" viewBox="0 0 1000 280" role="img" aria-labelledby="title description">
+  <title id="title">Nat-Sci / bounded-freedom repository activity</title>
+  <desc id="description">15 first-parent updates across 3 active weeks in a rolling 12-week window.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .eyebrow { fill: #6b6a62; font-size: 15px; font-weight: 650; letter-spacing: 1.2px; }
+    .title { fill: #17251f; font-size: 30px; font-weight: 720; }
+    .meta { fill: #4f5d55; font-size: 16px; }
+    .count { fill: #39473f; font-size: 12px; font-weight: 650; }
+    .date { fill: #77766d; font-size: 11px; }
+    .foot { fill: #77766d; font-size: 12px; }
+  </style>
+  <rect x="1" y="1" width="998" height="278" rx="22" fill="#f7f4ec" stroke="#d9d3c5" stroke-width="2"/>
+  <text x="52" y="42" class="eyebrow">REPOSITORY ACTIVITY</text>
+  <text x="52" y="78" class="title">Nat-Sci / bounded-freedom</text>
+  <text x="948" y="45" text-anchor="end" class="meta">15 updates · 3 of 12 active weeks</text>
+  <text x="948" y="75" text-anchor="end" class="meta">Last update 2026-09-03 UTC</text>
+  <line x1="52" y1="218" x2="948" y2="218" stroke="#cec7b8" stroke-width="1"/>
+  
+        <g>
+          <title>Week of 2026-06-15: 0 updates</title>
+          <rect x="60.0" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="89.3" y="236" text-anchor="middle" class="count">0</text>
+          <text x="89.3" y="256" text-anchor="middle" class="date">06/15</text>
+        </g>
+        <g>
+          <title>Week of 2026-06-22: 0 updates</title>
+          <rect x="134.7" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="164.0" y="236" text-anchor="middle" class="count">0</text>
+          
+        </g>
+        <g>
+          <title>Week of 2026-06-29: 0 updates</title>
+          <rect x="209.3" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="238.7" y="236" text-anchor="middle" class="count">0</text>
+          <text x="238.7" y="256" text-anchor="middle" class="date">06/29</text>
+        </g>
+        <g>
+          <title>Week of 2026-07-06: 0 updates</title>
+          <rect x="284.0" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="313.3" y="236" text-anchor="middle" class="count">0</text>
+          
+        </g>
+        <g>
+          <title>Week of 2026-07-13: 0 updates</title>
+          <rect x="358.7" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="388.0" y="236" text-anchor="middle" class="count">0</text>
+          <text x="388.0" y="256" text-anchor="middle" class="date">07/13</text>
+        </g>
+        <g>
+          <title>Week of 2026-07-20: 0 updates</title>
+          <rect x="433.3" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="462.7" y="236" text-anchor="middle" class="count">0</text>
+          
+        </g>
+        <g>
+          <title>Week of 2026-07-27: 0 updates</title>
+          <rect x="508.0" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="537.3" y="236" text-anchor="middle" class="count">0</text>
+          <text x="537.3" y="256" text-anchor="middle" class="date">07/27</text>
+        </g>
+        <g>
+          <title>Week of 2026-08-03: 0 updates</title>
+          <rect x="582.7" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="612.0" y="236" text-anchor="middle" class="count">0</text>
+          
+        </g>
+        <g>
+          <title>Week of 2026-08-10: 0 updates</title>
+          <rect x="657.3" y="213" width="58.7" height="5" rx="6" fill="#d8d2c4" opacity="1"/>
+          <text x="686.7" y="236" text-anchor="middle" class="count">0</text>
+          <text x="686.7" y="256" text-anchor="middle" class="date">08/10</text>
+        </g>
+        <g>
+          <title>Week of 2026-08-17: 2 updates</title>
+          <rect x="732.0" y="204" width="58.7" height="14" rx="6" fill="#3f7964" opacity="0.57"/>
+          <text x="761.3" y="236" text-anchor="middle" class="count">2</text>
+          
+        </g>
+        <g>
+          <title>Week of 2026-08-24: 1 update</title>
+          <rect x="806.7" y="204" width="58.7" height="14" rx="6" fill="#3f7964" opacity="0.52"/>
+          <text x="836.0" y="236" text-anchor="middle" class="count">1</text>
+          <text x="836.0" y="256" text-anchor="middle" class="date">08/24</text>
+        </g>
+        <g>
+          <title>Week of 2026-08-31: 12 updates</title>
+          <rect x="881.3" y="136" width="58.7" height="82" rx="6" fill="#c66a45" opacity="1.00"/>
+          <text x="910.7" y="236" text-anchor="middle" class="count">12</text>
+          <text x="910.7" y="256" text-anchor="middle" class="date">08/31</text>
+        </g>
+  <text x="52" y="266" class="foot">Rolling first-parent Git history · activity shows maintenance, not scientific validity</text>
+</svg>
