@@ -12,9 +12,9 @@ BoundedFreedom is a small, constraint-first control layer for AI-assisted resear
 
 ## Repository activity
 
-[![Rolling twelve-week repository activity](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg)](.github/workflows/update-repository-activity.yml)
+[![Repository activity since the first commit](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg)](.github/workflows/update-repository-activity.yml)
 
-The card is generated from first-parent Git history after `main` changes and on a light weekly schedule. It is a maintenance signal, not a quality score or evidence that the framework is scientifically valid. The generated asset lives on a separate branch, so routine updates do not add commits to `main`.
+The card starts at the repository's first commit and ends on the refresh date, so its endpoints are real dates rather than calendar-week labels. It groups short histories by day and older histories into wider intervals automatically. It refreshes after `main` changes and once a day. The generated asset lives on a separate branch, so routine updates do not add commits to `main`. Activity is a maintenance signal, not a research-quality score.
 
 ## Small repository layout
 

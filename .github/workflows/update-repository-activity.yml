@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "17 2 * * 1"
+    - cron: "17 2 * * *"
   workflow_dispatch:
 
 permissions:
@@ -29,11 +29,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Render rolling activity window
+      - name: Render activity since the first commit
         run: >-
           node scripts/render-repository-activity.mjs
           --repo "$GITHUB_REPOSITORY"
-          --weeks 12
           --output "$RUNNER_TEMP/repository-activity.svg"
 
       - name: Publish generated asset without changing main

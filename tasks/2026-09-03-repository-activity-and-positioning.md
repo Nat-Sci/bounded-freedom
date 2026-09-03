@@ -19,7 +19,7 @@
 ## Frozen increment
 
 - Previous accepted baseline: One Chief-led dispatcher, a general fallback route, five on-demand research-method Skills, shared research lineage, a static README cover, and no `.github` automation.
-- Capability increment: A rolling twelve-week first-parent activity view generated from Git history and published by GitHub Actions without adding routine commits to `main`.
+- Capability increment: An adaptive first-parent activity view from the repository's first commit through the refresh date, published by GitHub Actions without adding routine commits to `main`.
 - Hardening increment: Make the one-method-per-work-unit rule and cross-Skill handoffs explicit; distinguish method ownership from shared objects, project execution, and model reasoning.
 - Public-message increment: Replace discipline-first or generic “AI capability” claims with concrete harness value: route the task, spend model capability where needed, preserve evidence, verify by consequence, and recover from failure.
 - Compatibility: Existing Skill names, triggers, model lanes, S0–S4 levels, installer commands, and README cover remain valid.
@@ -27,7 +27,7 @@
 ## Acceptance criteria
 
 - The renderer produces valid, deterministic SVG from a controlled Git fixture and handles an empty history.
-- The workflow runs on `main` pushes, manual dispatch, and a light weekly schedule; it publishes only the generated asset to a separate branch and commits only when content changes.
+- The workflow runs on `main` pushes, manual dispatch, and a once-daily schedule; it publishes only the generated asset to a separate branch and commits only when content changes.
 - README explains what activity does and does not prove.
 - Skill coordination has one accountable Chief, one active method per bounded work unit, explicit sequential handoffs, and no duplicate ownership of scientific truth.
 - The final 3:4 poster remains legible at phone size, contains no fake results or model-cost claims, and points to the correct repository.
@@ -37,7 +37,7 @@
 
 ### Implementation and evidence
 
-- Repository activity: Added a dependency-free Node renderer for a rolling twelve-week first-parent history, a POSIX Shell fixture and publication test, and a GitHub Actions workflow triggered by `main`, manual dispatch, and Monday 02:17 UTC. The workflow writes only `.nojekyll` and `repository-activity.svg` to `repository-activity` and exits without a commit when the asset is unchanged.
+- Repository activity: Added a dependency-free Node renderer for adaptive first-parent history from the first commit through the refresh date, a POSIX Shell fixture and publication test, and a GitHub Actions workflow triggered by `main`, manual dispatch, and 02:17 UTC each day. The workflow writes only `.nojekyll` and `repository-activity.svg` to `repository-activity` and exits without a commit when the asset is unchanged.
 - README: Added the activity card near the top and states explicitly that activity is maintenance evidence, not a quality score or scientific validation.
 - Skill coordination: Reviewed all six Skill entry points and their directly required contracts. There was no blocking ownership contradiction. Clarified that one bounded work unit has one active method Skill, while a larger task may chain methods sequentially through Chief-owned handoffs. Narrowed `evidence-review` from generic statistical inference to interpretation of reviewed evidence.
 - Coordination map: Added durable precedence, method ownership, common handoffs, overlap rules, and the current analysis/inference and writing gaps without creating another dispatcher or placeholder Skill.
@@ -47,7 +47,7 @@
 
 ### Verification
 
-- Activity renderer: 12 checks passed, covering deterministic output, window counts, empty history, XML escaping, invalid repository failure, SVG parsing, first publication to an orphan branch, branch contents, and unchanged-update suppression.
+- Activity renderer: 20 checks passed, covering deterministic output, truthful endpoints, daily and compressed intervals, active counts, empty history, XML escaping, invalid repository and option failures, SVG parsing, first publication to an orphan branch, branch contents, and unchanged-update suppression.
 - Installer non-regression: Existing installer suite passed 26 checks.
 - Skill contracts: Six directory/frontmatter names matched; all five specialist Skills retained work-unit guidance, evidence boundaries, adoption decisions, and credits; concrete model names remained confined to the host adapter.
 - Documentation: 54 repository-local Markdown targets across 39 files resolved.
@@ -60,3 +60,22 @@
 - Hosted verification: The first GitHub Actions run completed successfully for the published commit, created the `repository-activity` branch, and served a valid activity SVG from that branch.
 - Preserved uncertainty: Cost, token, latency, and quality benefits remain design goals until repeated real-task receipts provide a comparison. Audience response to the poster remains a human validation step.
 - Publication boundary: Repository code and documentation were pushed. The Xiaohongshu poster and reusable QR remain local drafts; no release, Wiki update, or social publication was performed.
+
+## Follow-up: truthful dates and a clearer orchestration poster
+
+### Activity correction
+
+- Observed problem: The rolling twelve-week view began before the repository existed, and the last bar was labelled with the Monday `08/31`. Although the top metadata correctly reported September 3, the bar label looked like the last update date and the unused early weeks created misleading empty space.
+- Evidence: The GitHub repository creation time and the first Git commit both fall on August 20, 2026. The activity source remains first-parent Git history so the renderer does not need a GitHub API credential.
+- Decision: Start at the first commit, end at the refresh date, and show those two endpoints explicitly. Short histories use daily bars; older histories automatically use wider intervals. Show counts only for active intervals and replace the ambiguous footer with a plain research-quality boundary.
+- Refresh: Run after `main` changes and once daily. Continue publishing only the generated SVG and `.nojekyll` to the separate activity branch.
+- Local verification: The revised renderer passed 20 fixture, validation, XML, and publication checks. A render of the current history reports 16 first-parent updates across five active days from August 20 through September 3.
+
+### Poster contract
+
+- Message: `BoundedFreedom` is a harness for assembling a personal-AGI research agent, not a claim that the repository itself is AGI. One accountable Chief owns high-value judgment; execution Agents perform bounded work; Skills are loaded only for the current method.
+- Accurate route: `request -> Chief -> general fallback or one of five research-method Skills -> Scout/Coder/Builder/Reviewer execution contract -> verification`. General does not contain the five Skills, and execution contracts are not fixed intelligence levels.
+- Visual: Preserve the warm paper, wood, forest-green, and muted-rust identity. Replace the human hand with a coherent robot arm representing Chief. Use one unmistakable six-position rotary selector, six wired destination cards (`General` plus five research methods), one highlighted active path, and a downstream four-chip execution rail.
+- Copy direction: Lead with `personal AGI research agent`; explain Chief judgment, execution-Agent division of labor, and automatic on-demand Skill loading. Replace `less loading / less upgrading / retain evidence` with concrete outcomes: upgrade the model only for hard judgment, load only the current method, and preserve traceable evidence and verification.
+- Portability: State that the method Skills are portable across compatible harnesses, with Codex as the reference adapter. Do not imply identical installation or feature support across Codex, Claude Code, Gemini CLI, and DeepSeek Harness.
+- Current status: Repeated built-in image-edit attempts failed with a network error before producing an artifact, so a non-destructive fresh-generation attempt was started with the same frozen visual contract. The existing poster and QR remain unchanged and local; no social asset was pushed.

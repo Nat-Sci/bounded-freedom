@@ -34,12 +34,13 @@ make_commit() {
         git -C "$history_repo" commit -q -m "$label"
 }
 
-make_commit "2026-06-10T12:00:00Z" "outside window"
-make_commit "2026-06-15T12:00:00Z" "window start one"
-make_commit "2026-06-17T12:00:00Z" "window start two"
-make_commit "2026-08-25T12:00:00Z" "recent week"
-make_commit "2026-09-02T09:00:00Z" "current week one"
-make_commit "2026-09-03T10:00:00Z" "current week two"
+make_commit "2026-08-20T08:00:00Z" "first day one"
+make_commit "2026-08-20T12:00:00Z" "first day two"
+make_commit "2026-08-24T12:00:00Z" "middle day"
+make_commit "2026-09-01T12:00:00Z" "recent day"
+make_commit "2026-09-02T09:00:00Z" "yesterday"
+make_commit "2026-09-03T08:00:00Z" "today one"
+make_commit "2026-09-03T10:00:00Z" "today two"
 
 first="$test_root/first.svg"
 second="$test_root/second.svg"
@@ -47,21 +48,33 @@ node "$renderer" \
     --git-dir "$history_repo" \
     --now "2026-09-03T12:00:00Z" \
     --repo "Nat-Sci/bounded-freedom" \
-    --weeks 12 \
     --output "$first"
 node "$renderer" \
     --git-dir "$history_repo" \
     --now "2026-09-03T12:00:00Z" \
     --repo "Nat-Sci/bounded-freedom" \
-    --weeks 12 \
     --output "$second"
 
 cmp -s "$first" "$second"
 checks=$((checks + 1))
-check_contains "5 updates · 3 of 12 active weeks" "$first"
-check_contains "Last update 2026-09-03 UTC" "$first"
-check_contains "Week of 2026-06-15: 2 updates" "$first"
-check_contains "activity shows maintenance, not scientific validity" "$first"
+check_contains "7 main updates · 5 active days" "$first"
+check_contains "Aug 20 → Sep 3, 2026 · UTC" "$first"
+check_contains "2026-08-20: 2 main updates" "$first"
+check_contains "2026-09-03: 2 main updates" "$first"
+check_contains "FIRST COMMIT · AUG 20" "$first"
+check_contains "AS OF · SEP 3" "$first"
+check_contains "DAY INTERVALS" "$first"
+check_contains "activity is not a measure of research quality" "$first"
+
+compressed_svg="$test_root/compressed.svg"
+node "$renderer" \
+    --git-dir "$history_repo" \
+    --now "2026-09-03T12:00:00Z" \
+    --repo "Nat-Sci/bounded-freedom" \
+    --max-bars 8 \
+    --output "$compressed_svg"
+check_contains "7 main updates · 3 active weeks" "$compressed_svg"
+check_contains "WEEK INTERVALS" "$compressed_svg"
 
 empty_repo="$test_root/empty"
 mkdir -p "$empty_repo"
@@ -72,8 +85,9 @@ node "$renderer" \
     --now "2026-09-03T12:00:00Z" \
     --repo "empty" \
     --output "$empty_svg"
-check_contains "0 updates · 0 of 12 active weeks" "$empty_svg"
-check_contains "No commits yet" "$empty_svg"
+check_contains "No main updates yet" "$empty_svg"
+check_contains "As of Sep 3, 2026 · UTC" "$empty_svg"
+check_contains "NO COMMITS YET" "$empty_svg"
 
 escaped_svg="$test_root/escaped.svg"
 node "$renderer" \
@@ -87,6 +101,12 @@ not_repo="$test_root/not-a-repository"
 mkdir -p "$not_repo"
 if node "$renderer" --git-dir "$not_repo" --output "$test_root/invalid.svg" >/dev/null 2>&1; then
     printf 'renderer accepted a non-Git directory\n' >&2
+    exit 1
+fi
+checks=$((checks + 1))
+
+if node "$renderer" --git-dir "$history_repo" --max-bars 7 --output "$test_root/invalid-bars.svg" >/dev/null 2>&1; then
+    printf 'renderer accepted too few bars\n' >&2
     exit 1
 fi
 checks=$((checks + 1))
