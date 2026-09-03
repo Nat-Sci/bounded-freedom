@@ -3,7 +3,7 @@
 ## Intent
 
 - Objective: Add a repository-specific activity window, verify that the general route and five research-method Skills compose without conflicting ownership, and replace the accumulated social-poster drafts with one clearer Xiaohongshu artifact.
-- Non-goals: Create a second scheduler, change scientific methods or S0–S4 semantics, claim measured token savings, publish or push changes, replace the approved README cover, or turn promotional artwork into scientific evidence.
+- Non-goals: Create a second scheduler, change scientific methods or S0–S4 semantics, claim measured token savings, publish the social poster, replace the approved README cover, or turn promotional artwork into scientific evidence.
 - Audience: Researchers and research engineers evaluating whether BoundedFreedom can make an existing coding harness more controlled, economical, and auditable.
 
 ## Chief decision
@@ -56,6 +56,7 @@
 
 ### Decision
 
-- Increment state: accepted locally.
-- Preserved uncertainty: The first hosted workflow run, repository write-permission setting, raw-image cache, and creation of the remote activity branch can be verified only after an authorized push. Cost, token, latency, and quality benefits remain design goals until repeated real-task receipts provide a comparison. Audience response to the poster remains a human validation step.
-- Publication boundary: No commit, push, release, Wiki update, or social publication was performed in this task.
+- Increment state: accepted and published to `main`.
+- Hosted verification: The first GitHub Actions run completed successfully for the published commit, created the `repository-activity` branch, and served a valid activity SVG from that branch.
+- Preserved uncertainty: Cost, token, latency, and quality benefits remain design goals until repeated real-task receipts provide a comparison. Audience response to the poster remains a human validation step.
+- Publication boundary: Repository code and documentation were pushed. The Xiaohongshu poster and reusable QR remain local drafts; no release, Wiki update, or social publication was performed.
