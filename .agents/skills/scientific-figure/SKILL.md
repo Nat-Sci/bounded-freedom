@@ -1,70 +1,86 @@
 ---
 name: scientific-figure
-description: Plan, create, revise, or audit scientific figures for data and statistics, AI/CV architectures, method schematics, neuroimaging, neuroscience, or psychology. Use when scientific meaning, provenance, editability, captioning, or visual verification matters; not for general promotional artwork.
+description: Design, create, revise, rebuild, or audit scientific figures and figure suites when scientific meaning, provenance, editability, captioning, or visual verification matters; not for general promotional artwork.
 ---
 
 # Scientific figure
 
-A scientific figure is a visual argument. Freeze the argument before choosing a drawing tool.
+A scientific figure is a visual argument. Freeze what the figure must communicate before choosing how to draw it.
 
-## Route the figure
+## Select the entry
 
-- **Data, statistical, or result figure:** code-first from real source data. Never ask an image model to invent values, axes, uncertainty, significance, or anatomy.
-- **AI/CV architecture:** prefer editable vector or code-native output such as SVG, LaTeX, Draw.io, Mermaid, or PowerPoint.
-- **Method schematic:** write a figure contract, then create an editable draft. Generated raster imagery may support illustration but cannot decide topology or labels.
-- **Domain visualization:** use established scientific libraries and verify domain-specific orientation, space, scales, thresholds, and uncertainty.
+Choose one operation before changing an artifact:
 
-Read [references/figure-contract-and-routes.md](references/figure-contract-and-routes.md) before creating a multi-panel figure, neuroimaging or electrophysiology figure, architecture diagram, or publication-ready asset.
+- **Create:** design and build a new figure.
+- **Revise:** change an existing figure within a declared scientific or visual scope.
+- **Rebuild:** regenerate from the retained data/code and layout authorities rather than patching a rendered output.
+- **Audit:** inspect one figure without changing it unless the user separately authorizes repair.
+- **Suite audit:** inspect Figure 1-N as one semantic and visual system.
 
-Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when a figure communicates a retained claim or finding. Bind the figure and, when useful, each panel to the source, claim, study, run, analysis, or finding IDs it visualizes.
+## Work in two stages
+
+### 1. Design
+
+Freeze the visual claim, evidence and lineage, panel roles, reading order, analysis and display transformations, shared semantics, prohibited implications, and acceptance checks. Use a manifest for a multi-panel figure or figure suite. A design remains `draft` until these decisions are explicit; only `frozen` designs proceed to a consequential build.
+
+Read [figure contract and build routes](references/figure-contract-and-routes.md) before designing a multi-panel, architecture, neuroimaging, electrophysiology, or publication-ready figure.
+
+### 2. Build and verify
+
+Route each panel from its scientific source and representation need. Prefer TikZ or PGFPlots for structured geometry, formulas, precise annotations, or suitable LaTeX-native plots. Use code-first SVG/PDF for quantitative plots, established domain tools for measured images and maps, and SVG/Draw.io or PPTX when irregular or collaborative vector editing is the limiting factor. PDF is a delivery container, not an editable authority, and neither PDF nor PPTX guarantees that every object is vector.
+
+Preserve two authorities when they differ: data and analysis code own values and data geometry; the editable layout source owns panel placement, typography, annotations, and assembly. A layout tool must not silently alter code-derived content.
+
+Read [suite manifest and QA](references/suite-manifest-and-qa.md) when tracking panels, revisions, rebuilds, shared Figure 1-N semantics, or machine checks.
+
+Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when a figure communicates a retained claim or finding. Pass only the IDs and records the figure actually uses.
+
+## Required controls
+
+1. Route and record each panel independently; do not force a whole figure through one renderer.
+2. Keep analysis transformations separate from display-only transformations.
+3. Record the data/code authority and editable layout authority.
+4. Track scientific and visual changes separately; uncertainty is treated as scientific until resolved.
+5. Give Figure 1-N a shared semantic contract for terms, colors, groups, units, scales, anatomy, and stated exceptions.
+6. End each required QA layer with `pass`, `fail`, or `unverified`. Missing evidence is never a pass.
 
 ## Work-unit model guidance
 
 | Work unit | Execution contract | Capability lane |
 | --- | --- | --- |
 | Locate data, plotting code, labels, assets, and provenance | Scout | Fast and economical |
-| Make a narrow plotting edit after the figure contract is frozen | Coder | Fast and economical |
-| Build a coordinated multi-panel figure, data path, or editable schematic | Builder | Balanced |
+| Make a narrow edit after design and ownership are frozen | Coder | Fast and economical |
+| Build or rebuild a coordinated multi-panel figure and its editable sources | Builder | Balanced |
 | Resolve ambiguous scientific meaning, misleading encoding, anatomy, or statistical conflict | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
-An image model is a drawing tool, not a stronger reasoning lane. Data, labels, topology, and scientific checks remain code- or evidence-led. Use the general orchestration route for work not listed here.
-
-## Workflow
-
-1. Freeze the message, audience, target venue, panels, inputs, visual encodings, required labels, prohibited implications, and the claim or finding IDs the figure is allowed to communicate.
-2. Choose the route and the simplest editable source that preserves scientific meaning.
-3. Bind data, analysis, coordinate systems, atlases, models, or references used by the figure.
-4. Build content before decoration. Preserve code or editable source alongside the rendered artifact.
-5. Inspect the rendered figure at full size and intended publication size.
-6. Check labels, legends, units, color scale, contrast, accessibility, panel order, anatomy, and caption agreement.
-7. Record provenance, figure-to-lineage relationships, and unresolved visual or scientific uncertainty.
+Deterministic manifest, file, format, and render checks should run as tools rather than consume strong-model judgment. An image model is a drawing tool, not a reasoning lane. Use the general orchestration route for work not listed here.
 
 ## Required return
 
-- figure contract and selected route;
-- editable source and rendered artifact;
-- data, code, model, anatomy, and external-asset provenance;
-- figure and panel links to the claims, studies, analyses, or findings actually visualized when lineage is in scope;
-- visual inspection result and scientific checks;
-- caption or caption inputs;
-- known limitations and any human review required.
+- selected entry and frozen or unresolved design contract;
+- panel manifest, selected route, editable source, and rendered artifact;
+- data/code and layout authorities, transformations, external assets, and lineage links;
+- scientific and visual change records when revising or rebuilding;
+- machine, visual, and scientific QA results as `pass`, `fail`, or `unverified`;
+- caption inputs, known limitations, and required human or independent review.
 
 ## Boundaries
 
-- Attractive output is not evidence that the visual encoding or scientific interpretation is correct.
+- Attractive output is not evidence that the visual encoding or interpretation is correct.
 - Do not manually place values that should be generated from data.
-- Do not silently flip hemispheres, change coordinate space, interpolate labels, alter thresholds, or change exclusions to improve appearance.
+- Do not silently change cohorts, exclusions, aggregation, thresholds, coordinate space, hemispheres, atlases, interpolation, labels, or uncertainty to improve appearance.
+- A display transformation that changes the visible scientific comparison is a scientific change.
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
-- A figure is an artifact that visualizes evidence or a finding; it is not an additional independent item of evidence.
-- These rows are starting points. Chief retains the final model, delegation, S0–S4, and acceptance decisions.
+- A figure visualizes evidence or a finding; it is not additional independent evidence.
+- Chief retains final model, delegation, S0-S4, and acceptance decisions.
 
 ## Upstream adoption
 
-- **Selected:** a figure contract before drawing, code-first data figures, editable source, route-specific tools, claim- and finding-linked provenance, render inspection, and domain checks for anatomy, statistics, and labels.
-- **Not selected now:** bundled plotting libraries or templates, raster-first exact diagrams, automatic topology or graph layout as truth, or image models inventing values, anatomy, labels, and scientific meaning.
+- **Selected:** claim-first design, two-stage design/build separation, five operation entries, panel manifests, dual authorities, reproducible rebuilds, editable vector sources, Figure 1-N semantic contracts, separated change scopes, three-state QA, and domain checks.
+- **Not selected now:** a standing figure-agent crew, one mandatory authoring format, PDF as the only source, bundled plotting runtimes or templates, pixel similarity as scientific validity, or image models inventing values, anatomy, labels, and topology.
 
-The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
+The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
 
 ## Influences and credits
 
-This Skill is an original synthesis informed by figure-contract and editable-output ideas across [PaperVizAgent](https://github.com/google-research/papervizagent), [AutoFigure-Edit](https://github.com/ResearAI/AutoFigure-Edit), and related scientific figure projects, plus established domain libraries such as Nilearn and MNE-Python. Those tools are optional routes, not bundled dependencies. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
+This Skill is an original synthesis informed by [Scientific Figure Design](https://github.com/qhy991/Scientific-Figure-Design), [SciPlot](https://github.com/SciToolsmith/sci-plot), [scientific-figure-skills](https://github.com/adjurtime/scientific-figure-skills), [FigRecipe](https://github.com/scitex-ai/figrecipe), [PaperVizAgent](https://github.com/google-research/papervizagent), [AutoFigure-Edit](https://github.com/ResearAI/AutoFigure-Edit), and established domain libraries. These remain references or optional routes, not bundled dependencies. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
