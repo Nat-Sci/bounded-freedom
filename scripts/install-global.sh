@@ -140,6 +140,119 @@ if [ "$use_codex" -eq 1 ] && [ ! -f "$agents_config_source" ]; then
   echo "Missing installer source: install/agents-config.toml" >&2
   exit 1
 fi
+if [ "$use_codex" -eq 1 ]; then
+  for role in scout coder builder reviewer; do
+    if [ ! -f "$repo_root/.codex/agents/$role.toml" ]; then
+      echo "Missing installer source: .codex/agents/$role.toml" >&2
+      exit 1
+    fi
+  done
+fi
+
+check_directory_path() {
+  directory=$1
+  label=$2
+  if { [ -e "$directory" ] || [ -L "$directory" ]; } && [ ! -d "$directory" ]; then
+    echo "conflict: $label path is not a directory; leaving it unchanged" >&2
+    return 1
+  fi
+}
+
+check_link_destination() {
+  source=$1
+  destination=$2
+  label=$3
+  if [ ! -e "$source" ]; then
+    echo "missing source: $label" >&2
+    return 1
+  fi
+  if [ -L "$destination" ]; then
+    current_target=$(readlink "$destination")
+    if [ "$current_target" != "$source" ]; then
+      echo "conflict: $label links elsewhere; leaving it unchanged" >&2
+      return 1
+    fi
+    return
+  fi
+  if [ -e "$destination" ]; then
+    echo "conflict: $label exists and is not a BoundedFreedom link; leaving it unchanged" >&2
+    return 1
+  fi
+}
+
+has_valid_managed_markers() {
+  destination=$1
+  awk -v begin="$begin_marker" -v end="$end_marker" '
+    $0 == begin {
+      begin_count++
+      if (inside || begin_count > 1) invalid = 1
+      inside = 1
+      next
+    }
+    $0 == end {
+      end_count++
+      if (!inside || end_count > 1) invalid = 1
+      inside = 0
+      next
+    }
+    END {
+      if (invalid || inside || begin_count != end_count || begin_count > 1) exit 1
+    }
+  ' "$destination"
+}
+
+check_managed_destination() {
+  destination=$1
+  label=$2
+  if [ -L "$destination" ]; then
+    echo "conflict: $label is a symbolic link; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "conflict: $label is not a regular file; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ -f "$destination" ] && ! has_valid_managed_markers "$destination"; then
+    echo "conflict: $label has incomplete or duplicate managed markers; leaving it unchanged" >&2
+    return 1
+  fi
+}
+
+preflight_installation() {
+  check_directory_path "$target_root" "target root"
+  check_directory_path "$target_root/.agents" "portable configuration"
+  check_directory_path "$portable_skills_dir" "portable Skills"
+  for skill_source in "$skills_source_dir"/*; do
+    if [ ! -d "$skill_source" ]; then
+      continue
+    fi
+    skill_name=${skill_source##*/}
+    check_link_destination "$skill_source" "$portable_skills_dir/$skill_name" "portable Skill $skill_name"
+  done
+
+  if [ "$use_codex" -eq 1 ]; then
+    check_directory_path "$codex_dir" "Codex configuration"
+    check_directory_path "$codex_agents_dir" "Codex agents"
+    for role in scout coder builder reviewer; do
+      check_link_destination "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+    done
+    check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
+    check_managed_destination "$codex_global_config" "Codex config.toml"
+  fi
+
+  if [ "$use_claude" -eq 1 ]; then
+    check_directory_path "$claude_dir" "Claude configuration"
+    check_directory_path "$claude_skills_dir" "Claude Skills"
+    for skill_source in "$skills_source_dir"/*; do
+      if [ ! -d "$skill_source" ]; then
+        continue
+      fi
+      skill_name=${skill_source##*/}
+      check_link_destination "$skill_source" "$claude_skills_dir/$skill_name" "Claude Skill $skill_name"
+    done
+    check_managed_destination "$claude_global_instructions" "Claude CLAUDE.md"
+  fi
+}
 
 ensure_dir() {
   directory=$1
@@ -225,10 +338,8 @@ refresh_managed_block() {
   without_managed_block "$destination" "$temporary"
   {
     cat "$temporary"
-    if [ -s "$temporary" ]; then
-      printf '\n'
-    fi
     printf '%s\n' "$begin_marker"
+    printf '\n'
     cat "$source"
     printf '%s\n' "$end_marker"
   } > "$temporary.next"
@@ -259,7 +370,13 @@ show_link_status() {
 show_block_status() {
   destination=$1
   label=$2
-  if [ -f "$destination" ] && grep -Fq "$begin_marker" "$destination"; then
+  if [ -L "$destination" ]; then
+    echo "$label: conflict (symbolic link)"
+  elif [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "$label: conflict (not a regular file)"
+  elif [ -f "$destination" ] && ! has_valid_managed_markers "$destination"; then
+    echo "$label: invalid managed markers"
+  elif [ -f "$destination" ] && grep -Fq "$begin_marker" "$destination"; then
     echo "$label: managed block present"
   else
     echo "$label: managed block absent"
@@ -297,6 +414,8 @@ if [ "$mode" = "status" ]; then
   show_status
   exit 0
 fi
+
+preflight_installation
 
 if [ "$use_codex" -eq 1 ] && has_unmanaged_agents_table "$codex_global_config"; then
   echo "config manual merge required: the global Codex config already contains a user-owned [agents] table" >&2
