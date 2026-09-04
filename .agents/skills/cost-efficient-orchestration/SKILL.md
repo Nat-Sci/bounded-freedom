@@ -16,14 +16,18 @@ task method: general | <matching-skill>
 assurance: S0 | S1 | S2 | S3 | S4
 execution: direct | scout | coder | builder | builder+reviewer
 workers: execution contract (host model / effort), or none
+worker budget: planned distinct workers / total spawn attempts / retry allowance
 scope: exact files, systems, or evidence boundary
 verification: evidence required for acceptance
+checkpoint: durable recovery record and next safe action
 rationale: why this route and delegation are cost-effective
 ```
 
 Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
 
 Read [research-lineage.md](research-lineage.md) when work crosses research Skills or when sources, claims, hypotheses, findings, and downstream artifacts must remain traceable. Pass only the bounded lineage slice needed by the next Skill; do not load a whole project knowledge network by default.
+
+Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before a task may spawn a worker, retry an operation, run long enough to compact, or mutate external state. Use [routing-evals.md](routing-evals.md) to test changes to Skill selection or execution-role routing without changing project files.
 
 ## Make four decisions separately
 
@@ -52,14 +56,19 @@ Use one active method Skill per bounded work unit. A larger request may move thr
    - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
 8. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it.
 9. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
-10. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
-11. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
-12. Record nontrivial work in one file under `tasks/`.
+10. At phase boundaries, update the task checkpoint with accepted inputs, changed artifacts or repository state, completed checks, retries, worker state, unresolved items, and the next safe action.
+11. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
+12. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
+13. Reconcile every spawned worker to a terminal lifecycle state and close completed worker threads through supported host controls.
+14. Record nontrivial work in one file under `tasks/`.
 
 ## Capability and cost gates
 
 - Default to zero workers; one is normal.
 - A second worker is justified only for independent review or clearly non-overlapping evidence collection.
+- Default task budget: at most two distinct worker threads and two initial spawn attempts. A retry is not a new plan: declare its allowance separately and record every use.
+- Concurrency and delegation depth limit simultaneous shape, not total task spend. They never replace the total worker budget.
+- Exceed the declared budget only after Chief revises the decision with new evidence, scope, verification, and a concrete reason that direct work or reuse cannot finish safely.
 - Permit only one writing worker and no nested delegation.
 - Do not spawn Scout when Chief already knows the relevant paths.
 - Do not spawn Coder or Builder before scope and verification are frozen.
@@ -76,6 +85,10 @@ Every delegated message states: objective, owned scope, known evidence, permitte
 
 Worker returns stay concise. Raw logs remain in the worker context unless unresolved diagnosis requires them. A successful command is engineering evidence, not proof of a scientific claim.
 
+Follow the lifecycle `planned -> running -> done | attention -> closed`. A stored `open` relationship is not evidence of a live process. Inspect the current runtime before acting, close only work confirmed complete through supported host controls, and never edit host state databases to simulate closure.
+
+Treat timeout as an unknown result, not an automatic failure. Check observable state before retrying. Retry a read-only or proven-idempotent operation at most once under the declared allowance; reuse the same idempotency key when the interface provides one. Never blindly retry an ambiguous mutation or spawn a replacement worker because a wait timed out.
+
 ## Host boundary
 
 Keep this Skill within the open Agent Skills fields and plain Markdown. Put model IDs, agent-file schemas, permissions, hooks, and provider credentials in host adapters. A different harness may lack subagents or enforce different tool names; in that case Chief works directly while preserving the same scope and evidence contract.
@@ -84,9 +97,11 @@ Keep this Skill within the open Agent Skills fields and plain Markdown. Put mode
 
 Chief and every worker treat machine-local identity and layout as private by default. Repository artifacts, Markdown, task records, command text, retained logs, and worker returns use repository-relative paths or neutral placeholders instead of machine-specific absolute paths, account names, private hostnames, or local-only environment, workspace, checkout, and mount names. Run from the current working directory when possible, redact incidental local identifiers before preserving evidence, and scan changed text before completion. Exact disclosure requires explicit human instruction.
 
-## Completion
+## Recovery and completion
 
-Chief reports: outcome, files or artifacts changed, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty.
+For work likely to span multiple phases or context compaction, keep the one task record current enough to recover from repository state rather than memory. After compaction, re-read governing instructions and the task checkpoint, inspect actual status and diffs, confirm worker state, and resume from the recorded next safe action. When the user has authorized commits, prefer a coherent verified milestone over a large uncheckpointed change.
+
+Chief reports: outcome, files or artifacts changed, planned and actual worker use, retries, elapsed time, evidence coverage, lifecycle leftovers, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty.
 
 ## Upstream adoption
 
