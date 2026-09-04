@@ -4,72 +4,55 @@
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
-Modern AI models can already do a great deal. The harder problem is making their work reliable, affordable, recoverable, and true to human intent over long tasks.
+Modern AI models can already do a great deal. In long research tasks, the bottleneck is often not access to a stronger model but using available capability well. Packing retrieval, paper reading, coding, and scientific judgment into one strongest-model context can increase token use while blurring ownership and verification.
 
-BoundedFreedom treats this as an environment-design problem. The model sets what may be possible, context sets what it can see, and the harness sets what it may do, what it must protect, how it gets feedback, and how its work is checked. Clear boundaries do not only limit action; they make useful action dependable.
+BoundedFreedom is a small, constraint-first control layer for AI-assisted research and engineering. Its **Chief** keeps the goal and final judgment, sends ordinary work through the General route, loads one specialized research Skill only when needed, and selects execution scope and model effort separately for each bounded unit.
 
-BoundedFreedom is a small, constraint-first control layer for AI-assisted research and engineering. Its **Chief** routes each work unit to the needed method, spends model capability only where it helps, limits what may change, preserves evidence links, and raises review with consequence. It does not replace scientific tools or project-owned rules.
+The model sets what may be possible, context sets what it can see, and the harness sets what it may do, what it must protect, how it gets feedback, and how its work is checked. Sources, evidence, claims, hypotheses, code, figures, and software remain linked so the work can be reviewed and recovered. BoundedFreedom does not replace scientific tools or project-owned rules.
 
 ## Repository activity
 
 [![Repository activity since the first commit](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg)](.github/workflows/update-repository-activity.yml)
 
-The card starts at the repository's first commit and ends on the refresh date, so its endpoints are real dates rather than calendar-week labels. It groups short histories by day and older histories into wider intervals automatically. It refreshes after `main` changes and once a day. The generated asset lives on a separate branch, so routine updates do not add commits to `main`. Activity is a maintenance signal, not a research-quality score.
+The card runs from the first commit to the refresh date and adapts its interval to repository age. It updates after `main` changes and once daily on a separate branch. Activity is a maintenance signal, not a research-quality score.
 
-## Small repository layout
+## The small portable core
 
-| Part | Purpose | Where it lives |
-| --- | --- | --- |
-| Constitution | Stable human, scientific, privacy, and evidence boundaries | `CONSTITUTION.md` |
-| Portable Skills | Methods loaded only when a task needs them | `.agents/skills/` |
-| Host adapter | Instruction discovery, agents, tools, permissions, and model syntax | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/` |
-| Project contract | Local data, scientific, execution, and acceptance rules | The working project's own instruction files |
+| Layer | Source of truth |
+| --- | --- |
+| Human, scientific, privacy, and evidence boundaries | `CONSTITUTION.md` |
+| Chief routing and five on-demand research methods | `.agents/skills/` |
+| Host discovery, roles, permissions, and model syntax | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/` |
+| Data, methods, execution, and acceptance for a real study | The working project's own instructions |
 
-The first two parts are intended to travel across compatible harnesses. Host files remain thin adapters. Project facts stay with the project instead of being copied into this repository.
+The Constitution and Skills are portable. Host files stay thin, and project facts remain with the project.
 
-## How it works
+## One dispatcher, four separate decisions
 
 ```text
-User request
-    ↓
-Chief frames intent and identifies the task method
-    ↓
-Load one matching Skill when specialized method is needed
-    ↓
-Freeze scope and work units
-    ↓
-Use its work-unit execution and model guidance; otherwise use the general route
-    ↓
-Set the S0–S4 evidence gate separately
-    ↓
-Chief works directly, or delegates one bounded unit
-    ↓
-Verify actual evidence
-    ↓
-Independent review when the consequence requires it
-    ↓
-Decision, record, and remaining uncertainty
+request -> Chief -> General or one Skill -> direct work or one execution role
+        -> model and effort -> S0-S4 evidence gate -> verification -> decision
 ```
 
-Four decisions stay separate:
+| Decision | Question |
+| --- | --- |
+| Task method | Is General enough, or does this unit need one specialist Skill? |
+| Execution contract | Who owns the unit, what may it change, and must it be independent? |
+| Model and effort | How much context, coding ability, and reasoning does this unit need? |
+| Assurance | What evidence, review, or human acceptance does the consequence require? |
 
-1. **Task method:** general work or one matching Skill. This decides *how* the work is done.
-2. **Execution contract:** direct, Scout, Coder, Builder, or Reviewer. This decides scope, write access, ownership, and independence.
-3. **Model and effort:** fast, balanced, or strong reasoning for each bounded unit. This decides how much capability the unit needs.
-4. **Assurance:** S0–S4 controls evidence, independent review, and human acceptance. It does not name the task, worker, or model.
+Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence levels. S0–S4 controls assurance, not task type or model choice.
 
-## Execution contract is not intelligence
+| Execution contract | Owns | Current Codex default |
+| --- | --- | --- |
+| Scout | Bounded read-only discovery | Luna / medium |
+| Coder | Narrow, frozen, reversible edits | Luna / medium |
+| Builder | Coordinated implementation across logic or files | Terra / medium |
+| Reviewer | Independent read-only assessment | Sol / high |
 
-| Execution contract | Owns | Must not | Current Codex default |
-| --- | --- | --- | --- |
-| Scout | Read-only discovery and evidence collection | Write or make the final decision | Luna / medium |
-| Coder | A narrow, frozen, reversible edit | Widen scope or redesign interfaces | Luna / medium |
-| Builder | Coordinated implementation across logic or files | Grade its own work as independent evidence | Terra / medium |
-| Reviewer | Independent read-only assessment | Implement the correction it reviews | Sol / high |
+These are host defaults, not fixed identities. Chief uses the least costly capable model for each unit and escalates after ambiguity, failure, conflicting evidence, or consequential judgment demonstrates the need.
 
-Chief is the accountable primary session, not a fifth worker. The table shows simple defaults currently packaged in the Codex adapter; it does not define the contracts. A Scout may need a balanced model for long-context discovery, while a narrow Coder task may remain fast. See the full [execution-contract × capability matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#execution-contract-and-capability-lane).
-
-## One dispatcher, specialized methods
+## General and five research Skills
 
 | Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |
 | --- | --- | --- | --- | --- | --- |
@@ -78,77 +61,46 @@ Chief is the accountable primary session, not a fifth worker. The table shows si
 | [`hypothesis-study-design`](.agents/skills/hypothesis-study-design/SKILL.md) | Compare hypotheses and freeze decisions | Extract evidence, assumptions, confounders | Frozen calculation scripts only | Simulations use the general build route | Audit causal and statistical logic |
 | [`paper-code-reproduction`](.agents/skills/paper-code-reproduction/SKILL.md) | Freeze protocol and assign status | Map claims, code, data, dependencies | Repair environment or smoke path | Build coordinated claim-level execution | Grade protocol and claim evidence |
 | [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Freeze the visual argument | Locate data, assets, provenance | Make a narrow plotting edit | Build panels or editable schematics | Audit scientific and visual meaning |
-| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Grow a verified software container | Inventory baseline and tool fit | Add one frozen capability | Coordinate cross-module increments or frame migration | Audit baseline, migration, and release boundary |
+| [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Grow a verified software container | Inventory baseline and tool fit | Add one frozen capability | Coordinate increments or frame migration | Audit baseline, migration, and release boundary |
 
-This is a routing map, not a team that must all run. Chief normally works alone or selects one cell. One bounded work unit has one active method Skill; a larger task may chain several Skills through explicit handoffs. Unmatched units use the general row. S0–S4 may add independent review but does not upgrade every executor. See [Skill coordination](docs/skill-coordination.md) for ownership, handoffs, overlap rules, and current gaps.
+This is a routing map, not a standing team. Chief normally works alone or selects one cell. One bounded work unit has one active method Skill; larger tasks chain methods through explicit handoffs. S3/S4 require independent review, and S4 also requires human acceptance. Detailed ownership and overlap rules live in [Skill coordination](docs/skill-coordination.md).
 
-When research crosses methods, the lightweight [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) connects sources, evidence, claims, gaps, hypotheses, studies, findings, and downstream artifacts with stable IDs. These links are many-to-many, and a knowledge graph is only an optional view. Chief passes the next Skill only the relevant lineage slice, preserving traceability without loading the whole research history.
+Research handoffs retain only the needed slice of a shared lineage:
 
-Today the repository provides the control plane, five research-method contracts, thin host adapters, and an installer. Scientific databases, plotting libraries, reproduction runtimes, and benchmarks remain optional external capabilities; they are selected by a real project rather than bundled into Chief. The [adoption ledger](docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill) records exactly what each local Skill takes from earlier work and what it leaves out.
+```text
+source -> evidence -> claim -> gap -> hypothesis -> study -> finding
+                                                     -> code / figure / software
+```
 
-## Harness compatibility
+The [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) preserves traceability without loading an entire project history into every task.
 
-The portable core uses the open [Agent Skills specification](https://agentskills.io/specification). Canonical Skills are stored once under `.agents/skills/`.
+## Install and use
 
-- Codex, Gemini CLI, OpenCode, OpenHands, Cursor, and DeepSeek Harness can discover `.agents/skills` directly, subject to each host's trust and enablement settings.
-- Claude Code follows the same Skill standard but discovers `.claude/skills`; the installer creates safe links to the canonical Skills.
-- Roo Code, Cline, GitHub Copilot, Aider, and programmatic agent SDKs expose useful but different instruction, agent, permission, and model surfaces. They need a thin adapter; they are not separate copies of the framework.
-- DeepSeek can be either the model provider inside another harness or the model used by DeepSeek Harness. Model provider and harness are separate choices.
-
-Codex remains the reference implementation in this repository because its execution-contract profiles are already configured under `.codex/`. The core contract is no longer Codex-only. The [harness landscape](docs/harness-landscape.md) records the current compatibility boundary and the ideas adopted from each system.
-
-## Install or update
-
-Preview first. The default installs the Codex reference adapter:
+Preview the default Codex installation:
 
 ```sh
 ./scripts/install-global.sh --dry-run
 ```
 
-Choose a target when needed:
+Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check.
 
-```sh
-./scripts/install-global.sh --host portable --dry-run
-./scripts/install-global.sh --host claude --dry-run
-./scripts/install-global.sh --host all --dry-run
-```
+The installer links back to this clone, updates only marked global blocks, and refuses to replace conflicting user files. It does not copy the repository into every project and does not require Python.
 
-Then replace `--dry-run` with `--install`. After pulling repository updates, run the same command with `--update`. Use `--status` to inspect without changing anything.
+A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
-The installer never copies the whole repository into every project. It creates links back to this clone, updates only marked instruction blocks, and refuses to replace conflicting user files. `portable` installs all shared Skills. `claude` also links them into Claude Code's native Skill directory. `all` installs the portable Skills plus the Codex and Claude adapters. The installer is shell-only; no Python environment is involved.
+## Compatibility and current boundary
 
-## Use in a project
+The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-A working project normally keeps only:
+Today this repository provides the control plane, five method contracts, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
 
-```text
-AGENTS.md / CLAUDE.md / GEMINI.md   Local rules for the active host
-tasks/                              One record for consequential work
-host config                         Only local overrides that are truly needed
-```
+## Documentation and credits
 
-Start a normal task. For nontrivial work, Chief emits a short `CHIEF DECISION`, loads a matching Skill if one exists, selects zero or one worker by default, and verifies returned evidence. S3/S4 work receives independent review; S4 conclusions still require explicit human acceptance.
+- [Constitution](CONSTITUTION.md): non-negotiable boundaries.
+- [Orchestration Skill](.agents/skills/cost-efficient-orchestration/SKILL.md): live selection algorithm.
+- [Skill coordination](docs/skill-coordination.md): ownership, handoffs, and known gaps.
+- [Harness landscape](docs/harness-landscape.md): host compatibility and adopted control ideas.
+- [Ecosystem and credits](docs/ecosystem-and-credits.md): related work and the selected, deferred, and excluded ledger.
+- [Public Wiki](https://github.com/Nat-Sci/bounded-freedom/wiki): shorter navigable introduction.
 
-The user does not choose a luxury/basic/minimal profile or manually assemble an agent chain. Routing is part of Chief's job.
-
-## Cost discipline
-
-- Start with no subagent.
-- Load method detail only after a task match.
-- Delegate only when the bounded result saves more context or effort than the handoff costs.
-- Use one worker at a time by default and only one writing worker.
-- Escalate capability after evidence of ambiguity, failure, conflict, or judgment need.
-- Do not use maximum reasoning by default.
-- Stronger claims require stronger evidence and review, not uniformly stronger implementation models.
-
-The source landscape and adoption boundaries are recorded in [the research capability inventory](tasks/2026-09-01-research-capability-inventory.md). Its useful methods are now represented by the five on-demand Skills above without turning Chief's standing prompt into a research encyclopedia.
-
-## Ecosystem and credits
-
-BoundedFreedom builds on existing research methods, tools, benchmarks, domain libraries, and agent harnesses. The [ecosystem, influences, and credits](docs/ecosystem-and-credits.md) page explains what each related project contributes, what this repository adopts, and what remains separate. Each Skill also keeps a short provenance note close to the method it uses.
-
-Upstream projects are watched for useful changes, but never merged into a Skill automatically. Stars are a human acknowledgement; releases and scheduled reviews are the update signal.
-
-The public [Wiki](https://github.com/Nat-Sci/bounded-freedom/wiki) is the shorter, navigable entry point. Versioned documentation remains in this repository.
-
-Read [CONSTITUTION.md](CONSTITUTION.md) for non-negotiable boundaries and the [orchestration Skill](.agents/skills/cost-efficient-orchestration/SKILL.md) for the live selection algorithm. Original Bootstrap materials remain under [docs/design-history](docs/design-history/).
+Upstream work is credited and reviewed, never merged automatically. Stars acknowledge useful work; releases and scheduled reviews are the update signal.
