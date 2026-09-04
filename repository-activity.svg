@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="270" viewBox="0 0 1000 270" role="img" aria-labelledby="title description">
   <title id="title">Nat-Sci / bounded-freedom repository activity</title>
-  <desc id="description">19 first-parent updates from 2026-08-20 through 2026-09-04, grouped by day.</desc>
+  <desc id="description">20 first-parent updates from 2026-08-20 through 2026-09-04, grouped by day.</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     .eyebrow { fill: #6b6a62; font-size: 15px; font-weight: 650; letter-spacing: 1.2px; }
@@ -14,7 +14,7 @@
   <rect x="1" y="1" width="998" height="268" rx="22" fill="#f7f4ec" stroke="#d9d3c5" stroke-width="2"/>
   <text x="52" y="42" class="eyebrow">REPOSITORY ACTIVITY</text>
   <text x="52" y="78" class="title">Nat-Sci / bounded-freedom</text>
-  <text x="948" y="45" text-anchor="end" class="meta">19 main updates · 6 active days</text>
+  <text x="948" y="45" text-anchor="end" class="meta">20 main updates · 6 active days</text>
   <text x="948" y="75" text-anchor="end" class="meta">Aug 20 → Sep 4, 2026 · UTC</text>
   <line x1="52" y1="190" x2="948" y2="190" stroke="#cec7b8" stroke-width="1"/>
   
@@ -94,9 +94,9 @@
           <text x="864.0" y="110" text-anchor="middle" class="count">7</text>
         </g>
         <g>
-          <title>2026-09-04: 1 main update</title>
-          <rect x="897.0" y="176" width="46.0" height="14" rx="6" fill="#c66a45" opacity="0.55"/>
-          <text x="920.0" y="168" text-anchor="middle" class="count">1</text>
+          <title>2026-09-04: 2 main updates</title>
+          <rect x="897.0" y="169" width="46.0" height="21" rx="6" fill="#c66a45" opacity="0.63"/>
+          <text x="920.0" y="161" text-anchor="middle" class="count">2</text>
         </g>
   <text x="52" y="215" class="axis">FIRST COMMIT · AUG 20</text>
   <text x="500" y="215" text-anchor="middle" class="axis">DAY INTERVALS</text>
