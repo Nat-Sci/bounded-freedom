@@ -52,6 +52,8 @@ Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence le
 
 These are host defaults, not fixed identities. Chief uses the least costly capable model for each unit and escalates after ambiguity, failure, conflicting evidence, or consequential judgment demonstrates the need.
 
+GPT-6 Astra is the Codex adapter's on-demand frontier lane, not a fifth execution contract. Select it explicitly for the hardest end-to-end Chief or Builder work, or after Sol leaves a material documented shortfall. The conservative Luna, Terra, and Sol role profiles remain the defaults; a new model and an S3/S4 assurance level do not by themselves justify the higher-cost lane. Start Astra at medium effort and keep its host-specific automatic-delegation mode inside the declared worker budget. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
+
 ## General and six research Skills
 
 | Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |

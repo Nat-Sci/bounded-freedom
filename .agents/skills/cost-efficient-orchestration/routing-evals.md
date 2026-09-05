@@ -10,6 +10,7 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Inventory where authentication configuration is defined; make no changes. | General | Scout / fast economical, at most one worker |
 | Rename one frozen internal function and update its known tests. | General | Coder / fast economical, at most one worker |
 | Coordinate an interface change across the parser, storage layer, and CLI. | General | Builder / balanced, at most one writing worker |
+| Lead a novel end-to-end migration across code, browser workflows, and documents after a capable strong-model attempt left material dependency conflicts unresolved. | General | Chief or Builder / frontier escalation with the prior shortfall recorded |
 | Independently audit a consequential release claim after implementation. | General | Reviewer / strong reasoning, independent |
 | Conduct a systematic review within a registered search boundary. | `evidence-review` | Chief freezes boundary; bounded retrieval units only as justified |
 | Form competing hypotheses and freeze a study design before seeing outcomes. | `hypothesis-study-design` | Chief direct for judgment; bounded support only |
@@ -27,7 +28,10 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Write the full manuscript from these results. | No current writing Skill; use General only if the scope is otherwise supported. |
 | Draw a chart from already accepted supplied values. | Select `scientific-figure`, not `scientific-data-quality`. |
 | Update a dependency pin in an ordinary service repository. | General; do not load a research-method Skill merely because the repository contains data. |
+| Extract the same fixed fields from 500 files. | Scout / fast economical; volume alone does not justify frontier capability. |
+| Independently review a clearly specified S4 claim with a complete evidence package. | Reviewer / strong reasoning plus S4 human acceptance; consequence alone does not require frontier capability. |
+| Use Astra for every step because it is the newest model. | Reject the task-wide model profile; choose the least costly capable lane for each bounded unit. |
 
 ## Acceptance
 
-Pass when every route selects the expected method boundary, separates execution role from model capability, declares a total worker budget, and adds S3/S4 review only because of consequence. Record disagreements as false-positive, false-negative, or role/model mismatch before changing the descriptions. Do not tune from one prompt alone; keep the smallest wording change that improves the set without widening ownership.
+Pass when every route selects the expected method boundary, separates execution role from model capability, declares a total worker budget, adds S3/S4 review only because of consequence, and selects frontier capability only for the hardest end-to-end work or a documented lower-lane shortfall. Record disagreements as false-positive, false-negative, role/model mismatch, or unjustified escalation before changing the descriptions. Do not tune from one prompt alone; keep the smallest wording change that improves the set without widening ownership.

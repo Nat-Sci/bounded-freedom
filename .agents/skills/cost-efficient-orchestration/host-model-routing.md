@@ -18,34 +18,44 @@ Choose the least costly model that clears the bounded work unit's real limit:
 | --- | --- |
 | Large volume, clear fields, reversible output | Fast and economical |
 | Long context, multi-file coordination, stable synthesis | Balanced general reasoning |
-| Ambiguous judgment, conflicting evidence, consequential independent review | Strongest available reasoning |
+| Ambiguous judgment, conflicting evidence, consequential independent review | Strong reasoning |
+| Hardest end-to-end work across tools or domains, or a documented strong-lane shortfall | Frontier escalation |
 
 Escalate only after a lower-cost route shows a relevant failure: missed dependencies, unstable tool use, repeated invalid edits, unresolved evidence conflict, or insufficient judgment. Lower reasoning effort again when the next unit becomes mechanical.
 
 ## Execution contract and capability lane
 
-| Execution contract | Fast and economical | Balanced | Strong reasoning |
-| --- | --- | --- | --- |
-| Scout: read-only discovery | Default for bulk search, inventory, and fixed-field extraction | Long-context mapping or evidence synthesis that remains read-only | Rare: unresolved evidence conflict; judgment still returns to Chief or Reviewer |
-| Coder: narrow frozen write | Default for mechanical, reversible edits | Tricky but bounded edits with stable interfaces | Rare: if judgment can change scope, Chief must freeze it first |
-| Builder: coordinated write | Rare: small coordination with clear logic | Default for related logic, interfaces, or files | High-ambiguity architecture only when the build boundary is already frozen |
-| Reviewer: independent read-only audit | Usually unnecessary; Chief can run routine checks | Ordinary independent implementation or evidence review | Default for consequential, conflicting, or S3/S4 review |
+| Execution contract | Fast and economical | Balanced | Strong reasoning | Frontier escalation |
+| --- | --- | --- | --- | --- |
+| Scout: read-only discovery | Default for bulk search, inventory, and fixed-field extraction | Long-context mapping or evidence synthesis that remains read-only | Rare: unresolved evidence conflict; judgment still returns to Chief or Reviewer | Do not use for volume alone; Chief must identify an exceptional cross-domain discovery limit |
+| Coder: narrow frozen write | Default for mechanical, reversible edits | Tricky but bounded edits with stable interfaces | Rare: if judgment can change scope, Chief must freeze it first | Not a normal Coder route; reframe as Chief or Builder work before escalating |
+| Builder: coordinated write | Rare: small coordination with clear logic | Default for related logic, interfaces, or files | High-ambiguity architecture only when the build boundary is already frozen | Hardest multi-system implementation when end-to-end coherence is the demonstrated limit |
+| Reviewer: independent read-only audit | Usually unnecessary; Chief can run routine checks | Ordinary independent implementation or evidence review | Default for consequential, conflicting, or S3/S4 review | Material conflict or uncertainty that remains after a capable independent strong review |
 
 This table is a constraint matrix, not a required team. Most tasks need Chief alone or one cell. Reviewer is separated by independence, not by model prestige.
 
 ## Current host mappings
 
-Snapshot: 2026-09-02. Concrete names stay here instead of in the portable Skill.
+Snapshot: 2026-09-05. Concrete names stay here instead of in the portable Skill.
 
-| Host or provider | Fast bounded work | Coordinated work | Independent high-judgment review |
-| --- | --- | --- | --- |
-| Codex reference adapter | `gpt-5.6-luna` / medium for Scout or Coder | `gpt-5.6-terra` / medium for Builder | `gpt-5.6-sol` / high for Reviewer |
-| Claude Code | `haiku` for bounded Scout or Coder work | `sonnet` for Builder work | `opus` for consequential Reviewer work |
-| DeepSeek models | V4 Flash for volume and bounded execution | V4 Pro when coordination or harder reasoning warrants it | V4 Pro with high reasoning; use `max` only after an unresolved consequential conflict |
-| Gemini CLI | Current Flash-class model for bounded volume | Current Pro-class model for coordinated work | Strongest available Pro-class model with an independent prompt and evidence set |
-| Provider-neutral hosts such as OpenCode, Cursor, Roo Code, Cline, or OpenHands | Select the provider's fast capable model | Select its balanced coding/reasoning model | Select its strongest reliable reasoning model |
+| Host or provider | Fast bounded work | Coordinated work | Strong judgment or review | Frontier escalation |
+| --- | --- | --- | --- | --- |
+| Codex reference adapter | `gpt-5.6-luna` / medium for Scout or Coder | `gpt-5.6-terra` / medium for Builder | `gpt-5.6-sol` / high for Reviewer or ambiguous Chief work | `gpt-6-astra` / medium for the hardest end-to-end Chief or Builder work, or unresolved independent review; raise effort only with evidence |
+| Claude Code | `haiku` for bounded Scout or Coder work | `sonnet` for Builder work | `opus` for consequential Reviewer work | Use a newer frontier tier only after verifying its host behavior and cost |
+| DeepSeek models | V4 Flash for volume and bounded execution | V4 Pro when coordination or harder reasoning warrants it | V4 Pro with high reasoning; use `max` only after an unresolved consequential conflict | No separate mapped tier until a distinct model and measured need exist |
+| Gemini CLI | Current Flash-class model for bounded volume | Current Pro-class model for coordinated work | Strongest reliable Pro-class model with an independent prompt and evidence set | Use a distinct frontier tier only after host verification and a documented lower-lane limit |
+| Provider-neutral hosts such as OpenCode, Cursor, Roo Code, Cline, or OpenHands | Select the provider's fast capable model | Select its balanced coding/reasoning model | Select its strong reliable reasoning model | Select a distinct frontier model only when the provider offers one and the escalation gate is met |
 
-For mixed Codex work, the practical starting pattern is Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer. If the main output itself needs unresolved high-ambiguity reasoning, start or switch Chief to Sol explicitly; a Skill cannot do that silently. These defaults are not proof that a model remains the cheapest capable choice.
+For mixed Codex work, the practical starting pattern remains Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer. Start or switch Chief to Sol when the main output needs unresolved high-ambiguity reasoning. Select Astra explicitly when the task is among the hardest end-to-end workflows across code, browsing, computer use, research, or documents, or when Sol has exposed a material shortfall. A Skill cannot switch Chief silently. These defaults are not proof that a model remains the cheapest capable choice.
+
+## GPT-6 Astra boundary
+
+Astra is a frontier capability lane, not a fifth execution contract and not a replacement for the Luna, Terra, and Sol cost ladder. Selecting it does not widen scope, authority, worker budget, assurance, or acceptance requirements.
+
+- Start at medium effort. Raise to high, xhigh, or max only when the task's ambiguity, failed evidence, or consequence justifies the additional reasoning. The Codex host may expose `ultra` as an automatic-delegation mode; do not use it unless the declared worker budget and user intent explicitly allow that behavior.
+- Keep fixed-field extraction and narrow reversible edits on Luna, coordinated implementation on Terra, and ordinary high-judgment or independent review on Sol while those lanes remain capable.
+- Do not route to Astra merely because the context is long, the task is S3/S4, or Astra is newer. An S3/S4 gate adds independent evidence and human acceptance where required; it does not select a model.
+- Astra may ask for clarification earlier, delegate less often, and test more broadly. Freeze material choices, continue authorized reversible work, state the exact delegation budget, and keep verification proportional to the accepted claim.
 
 The current Codex `.toml` profiles package each execution contract with one conservative default model to keep the reference adapter simple. That fixed packaging is an adapter choice, not the meaning of Scout, Coder, Builder, or Reviewer and not a platform requirement. Decoupling those defaults dynamically should follow measured behavior and cost tests rather than a documentation-only change.
 
@@ -62,6 +72,8 @@ Before relying on a new pair, run one bounded read task and one reversible edit 
 
 - [Codex Skills and locations](https://learn.chatgpt.com/docs/build-skills)
 - [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+- [GPT-6 Astra model](https://developers.openai.com/api/docs/models/gpt-6-astra)
+- [GPT-6 Astra migration and prompting guidance](https://developers.openai.com/api/docs/guides/latest-model)
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [Claude Code subagent model selection](https://code.claude.com/docs/en/sub-agents)
 - [DeepSeek Codex integration](https://api-docs.deepseek.com/quick_start/agent_integrations/codex/)

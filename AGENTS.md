@@ -11,6 +11,7 @@ Operational rules:
 - Load only the Skill that matches the current bounded work unit. A larger task may chain several Skills sequentially, but Chief must close or freeze one handoff before activating the next. Use the active Skill's work-unit routing guidance first and the general host routing only for work it does not cover.
 - Default to direct work or one bounded worker.
 - Select the Scout, Coder, Builder, or Reviewer execution contract by ownership, permissions, and independence; select model family and reasoning effort separately.
+- Treat frontier capability as an evidence-gated escalation, not a fifth execution contract. A stronger model does not widen scope, authority, worker budget, assurance, or acceptance requirements. Continue authorized reversible work before asking for input, delegate only when the declared route justifies it, and keep verification proportional to the accepted claim.
 - Give every worker exact scope, ownership, output, verification, and stop conditions.
 - Permit one writing worker at a time; prohibit nested delegation and duplicated work.
 - Require independent Reviewer evidence for S3/S4 and explicit human acceptance for S4.

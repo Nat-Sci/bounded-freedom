@@ -33,7 +33,7 @@ Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before a task ma
 
 1. **Task method:** Match the request against available Skill descriptions. Load only a clearly relevant Skill; otherwise continue with general work. Chief needs the catalog, not every specialist method in standing context.
 2. **Execution contract:** Choose direct work, Scout, Coder, Builder, or Reviewer from scope, write permission, ownership, and the need for independence. These contracts do not denote intelligence.
-3. **Model and effort:** Choose a model family and reasoning effort for each bounded unit from volume, context length, ambiguity, coding depth, tool reliability, and judgment. Do not assign one model profile to the whole task.
+3. **Model and effort:** Choose a model family and reasoning effort for each bounded unit from volume, context length, ambiguity, coding depth, tool reliability, and judgment. Use fast, balanced, strong, and frontier capability lanes when the host offers them. Frontier is an evidence-gated escalation, not a task-wide default.
 4. **Assurance:** Classify S0–S4 by the highest plausible consequence. Assurance sets evidence, independent review, and human acceptance; it does not name the task, execution contract, or model.
 
 When a specialized Skill is loaded, use its work-unit execution contract and capability lane first, then resolve both through the host mapping. Use the general policy only for an unmatched unit. This is one refined dispatcher, not a task-wide model profile. The S0–S4 gate may add review; it does not automatically upgrade the executor.
@@ -54,7 +54,7 @@ Use one active method Skill per bounded work unit. A larger request may move thr
    - **Scout:** read-only discovery that would otherwise flood Chief's context.
    - **Coder:** narrow, explicit, low-ambiguity edits inside frozen ownership.
    - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
-8. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it.
+8. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it. Reserve the frontier lane for the hardest end-to-end work or a documented shortfall in a lower lane.
 9. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
 10. At phase boundaries, update the task checkpoint with accepted inputs, changed artifacts or repository state, completed checks, retries, worker state, unresolved items, and the next safe action.
 11. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
@@ -75,7 +75,8 @@ Use one active method Skill per bounded work unit. A larger request may move thr
 - Do not use Reviewer for routine formatting or mechanical checks.
 - Use a fast economical model for high-volume, bounded, reversible work only when its tool use and output reliability are sufficient.
 - Use a balanced model when long context, coordinated implementation, or stable synthesis is the limiting factor.
-- Use the strongest available reasoning model for high-ambiguity judgment, conflicting evidence, or consequential independent review.
+- Use strong reasoning for high-ambiguity judgment, conflicting evidence, or consequential independent review.
+- Use frontier capability only when the work itself demands exceptional end-to-end coherence across tools or domains, or when a lower lane leaves a material documented failure, ambiguity, or conflict. Assurance level, context size, or model novelty alone does not justify it.
 - Do not make maximum reasoning the default. Escalate after ambiguity, failure, conflict, or consequence demonstrates value.
 - Stop a worker after two materially different failed attempts.
 
