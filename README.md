@@ -2,6 +2,8 @@
 
 > **Boundaries turn capability into reliable action.**
 
+Current package: **v0.2.0 — Astra Edition**.
+
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
 Modern AI models can already do a great deal. In long research tasks, the bottleneck is often not access to a stronger model but using available capability well. Packing retrieval, paper reading, coding, and scientific judgment into one strongest-model context can increase token use while blurring ownership and verification.
@@ -30,8 +32,9 @@ The Constitution and Skills are portable. Host files stay thin, and project fact
 ## One dispatcher, four separate decisions
 
 ```text
-request -> Chief -> General or one Skill -> direct work or one execution role
-        -> model and effort -> S0-S4 evidence gate -> verification -> decision
+request -> admission and phase boundary -> Chief -> General or one Skill
+        -> execution contract and capability -> verification -> compact checkpoint
+        -> lower-cost next phase, evidence-gated escalation, or decision
 ```
 
 | Decision | Question |
@@ -52,7 +55,31 @@ Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence le
 
 These are host defaults, not fixed identities. Chief uses the least costly capable model for each unit and escalates after ambiguity, failure, conflicting evidence, or consequential judgment demonstrates the need.
 
-GPT-6 Astra is the Codex adapter's on-demand frontier lane, not a fifth execution contract. Select it explicitly for the hardest end-to-end Chief or Builder work, or after Sol leaves a material documented shortfall. The conservative Luna, Terra, and Sol role profiles remain the defaults; a new model and an S3/S4 assurance level do not by themselves justify the higher-cost lane. Start Astra at medium effort and keep its host-specific automatic-delegation mode inside the declared worker budget. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
+GPT-6 Astra is the Codex adapter's on-demand frontier lane, not a fifth execution contract. Select it explicitly for the hardest end-to-end Chief or Builder phase, or after Sol leaves a material documented shortfall. The conservative Luna, Terra, and Sol role profiles remain the defaults; a new model and an S3/S4 assurance level do not by themselves justify the higher-cost lane. Start Astra at medium effort and keep its host-specific automatic-delegation mode inside the declared worker budget. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
+
+## Astra Edition: a thin frontier and a strong middle
+
+The Astra Edition routes phases rather than assigning one model to a whole task:
+
+```text
+deterministic preparation
+        ↓
+Chief control phase
+        ├── Luna: bounded discovery and mechanical edits
+        ├── Terra: coordinated, reversible, objectively verifiable work
+        ├── Sol: ambiguous judgment and independent review
+        └── Astra: exceptional cross-tool coherence or documented shortfall
+                          ↓
+                 compact accepted checkpoint
+                          ↓
+                 return to Terra or Luna
+```
+
+Before non-review work starts on Sol or Astra, the dispatcher checks whether stable scope and objective verification make Terra sufficient. This increases Terra use by moving eligible work down from stronger lanes; it does not make inexpensive Luna work more costly. A default calibration window uses 30 eligible balanced work units, with at least 20 starting on Terra unless the route records why they are excluded.
+
+Astra receives the smallest phase packet that preserves intent, accepted evidence, unresolved dependencies, verification, and the stop condition. Bulk discovery, completed logs, inactive Skills, predictable implementation, and routine testing stay outside its standing context. Cost evaluation uses accepted outcomes, rework, escalation, elapsed time, evidence coverage, and authoritative billing or quota data when available; stored model counts and incomplete token fields are not treated as savings.
+
+The full portable protocol is in [hierarchical routing and cost evaluation](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md). Current model IDs and the Terra calibration boundary remain in the [host mapping](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
 
 ## General and six research Skills
 
@@ -86,7 +113,7 @@ Preview the default Codex installation:
 ./scripts/install-global.sh --dry-run
 ```
 
-Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check.
+Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check. Installer output reports the package version and edition so linked Skills and managed host instructions can be checked against the repository revision.
 
 The installer links back to this clone, updates only marked global blocks, and refuses to replace conflicting user files. It does not copy the repository into every project and does not require Python.
 
@@ -96,7 +123,7 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Today this repository provides the control plane, six method contracts, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
+Version 0.2.0 provides the Astra-aware hierarchical control plane, six method contracts, compact phase handoffs, a Terra opportunity gate, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
 
 ## Documentation and credits
 

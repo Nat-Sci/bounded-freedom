@@ -2,7 +2,21 @@
 
 Use this protocol when a task may spawn workers, retry operations, mutate external state, or outlive one context window. It supplements the Chief decision; it does not create a second task record.
 
-## 1. Freeze a total worker budget
+## 1. Freeze the phase and context budget
+
+Before a substantial phase, state its objective, accepted inputs, active Skill and project rules, files or evidence in scope, expected verification, and next safe action. Include only the smallest context slice that can support the work. Prefer deterministic inventory or aggregation over placing raw logs, whole corpora, or repository-wide content into a model prompt.
+
+Create a compact checkpoint and retire the completed context when:
+
+- the active method or capability lane changes;
+- a design, interface, evidence boundary, or other material decision is frozen;
+- a worker return has been accepted or rejected;
+- a large evidence slice or diagnostic log is no longer needed;
+- the task is likely to compact or move to another session.
+
+The next phase starts from the checkpoint plus observable repository or external state. Do not replay the full conversation merely for continuity. When frontier capability was used, record its exit decision and reconsider a balanced or fast lane before continuing.
+
+## 2. Freeze a total worker budget
 
 Record three numbers before the first spawn:
 
@@ -14,7 +28,7 @@ A host concurrency limit answers “how many at once?” The worker budget answe
 
 Use a second worker only for independent review or clearly non-overlapping evidence. Permit one writing owner and prohibit nested delegation. When the budget no longer fits, stop, update the Chief decision with the new evidence and scope, and justify the smallest increase before spawning again.
 
-## 2. Track the lifecycle
+## 3. Track the lifecycle
 
 Each worker moves through:
 
@@ -32,7 +46,7 @@ At task completion:
 4. leave running or ambiguous work untouched and report it;
 5. never edit a host database, archive an unrelated task, or infer a live process from a stored `open` edge.
 
-## 3. Handle timeouts without duplicating effects
+## 4. Handle timeouts without duplicating effects
 
 A timeout means the caller lacks a result. It does not prove failure.
 
@@ -45,16 +59,18 @@ A timeout means the caller lacks a result. It does not prove failure.
 
 Record operation class, state check, retry count, and final disposition in the task record. Redact machine-local identifiers from retained output.
 
-## 4. Checkpoint long tasks
+## 5. Checkpoint long tasks
 
 Update the existing task record after scope freeze and after each meaningful phase. A recoverable checkpoint includes:
 
 - governing intent, non-goals, assurance, and permitted actions;
 - selected method and current execution/model lane;
+- current phase, active context slice, and retired context boundary;
 - planned and actual workers, attempts, retries, and lifecycle states;
 - accepted input versions, source identifiers, or bounded evidence slice;
 - changed artifacts and current repository or artifact identity;
 - completed checks with pass/fail/unknown status;
+- route outcome and the evidence for any escalation or return to a lower lane;
 - unresolved uncertainty and the next safe action.
 
 Do not paste raw logs or private local paths into the checkpoint. Preserve only the smallest evidence needed to resume and verify.

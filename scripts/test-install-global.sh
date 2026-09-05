@@ -73,6 +73,7 @@ pass "installer has valid POSIX shell syntax"
 dry_root="$test_root/dry-run"
 "$installer" --host all --target-root "$dry_root" --dry-run > "$test_root/dry-run.out"
 assert_path_absent "$dry_root" "dry-run makes no changes"
+assert_contains "BoundedFreedom package: v0.2.0 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
 assert_contains "dry-run complete; no files were changed" "$test_root/dry-run.out" "dry-run reports completion"
 
 all_root="$test_root/all-hosts"
@@ -99,8 +100,17 @@ done
 pass "all Codex agent profiles link to repository sources"
 "$installer" --host all --target-root "$all_root" --status > "$test_root/all-status.out"
 assert_contains "portable Skill evidence-review: linked" "$test_root/all-status.out" "status reports portable Skills"
+assert_contains "BoundedFreedom package: v0.2.0 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
+
+if ! cmp -s "$repo_root/.codex/config.toml" "$repo_root/install/agents-config.toml"; then
+  fail "project and install Codex agent defaults diverged"
+fi
+pass "project and install Codex agent defaults match"
+assert_contains 'model = "gpt-5.6-terra"' "$repo_root/.codex/agents/builder.toml" "Builder keeps the balanced Terra route"
+assert_contains 'model = "gpt-5.6-sol"' "$repo_root/.codex/agents/reviewer.toml" "Reviewer keeps the strong Sol route"
+assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
 
 idempotent_root="$test_root/idempotent"
 mkdir -p "$idempotent_root/.codex"

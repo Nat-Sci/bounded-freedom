@@ -48,14 +48,25 @@ Snapshot: 2026-09-05. Concrete names stay here instead of in the portable Skill.
 
 For mixed Codex work, the practical starting pattern remains Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer. Start or switch Chief to Sol when the main output needs unresolved high-ambiguity reasoning. Select Astra explicitly when the task is among the hardest end-to-end workflows across code, browsing, computer use, research, or documents, or when Sol has exposed a material shortfall. A Skill cannot switch Chief silently. These defaults are not proof that a model remains the cheapest capable choice.
 
+## Terra opportunity gate
+
+The Codex adapter keeps the untyped subagent fallback on Luna / low, maps bounded coordinated Builder work to Terra / medium, and reserves Sol / high for independent review or unresolved judgment. Increasing Terra use means moving eligible work down from Sol or Astra, not moving mechanical work up from Luna.
+
+Before selecting Sol or Astra for non-review execution, start with Terra / medium when the unit is reversible, its interfaces or evidence boundary are stable, acceptance is objectively checkable, and a failure will be visible before consequential use. Examples include a coordinated change across related files, stable synthesis from a frozen evidence set, implementation of a frozen architecture, and the first bounded repair of a verifiable workflow.
+
+Do not select Terra merely to satisfy a global model-share target. For a new or materially changed adapter, use a declared calibration window instead: the default pilot is 30 eligible balanced units, with at least 20 starting on Terra unless route evidence excludes them. Record exclusions, first-pass acceptance, rework, escalation, elapsed time, evidence coverage, and authoritative quota or billing data when available. Promote the route only from accepted outcomes; never estimate cost from incomplete token fields.
+
 ## GPT-6 Astra boundary
 
-Astra is a frontier capability lane, not a fifth execution contract and not a replacement for the Luna, Terra, and Sol cost ladder. Selecting it does not widen scope, authority, worker budget, assurance, or acceptance requirements.
+Astra is a frontier capability lane, not a fifth execution contract and not a replacement for the Luna, Terra, and Sol cost ladder. Selecting it does not widen scope, authority, worker budget, assurance, or acceptance requirements. When Astra is selected, use it as a thin control phase for the hard dependency or judgment boundary, then route stable downstream work back to the least costly capable lane.
 
 - Start at medium effort. Raise to high, xhigh, or max only when the task's ambiguity, failed evidence, or consequence justifies the additional reasoning. The Codex host may expose `ultra` as an automatic-delegation mode; do not use it unless the declared worker budget and user intent explicitly allow that behavior.
 - Keep fixed-field extraction and narrow reversible edits on Luna, coordinated implementation on Terra, and ordinary high-judgment or independent review on Sol while those lanes remain capable.
 - Do not route to Astra merely because the context is long, the task is S3/S4, or Astra is newer. An S3/S4 gate adds independent evidence and human acceptance where required; it does not select a model.
-- Astra may ask for clarification earlier, delegate less often, and test more broadly. Freeze material choices, continue authorized reversible work, state the exact delegation budget, and keep verification proportional to the accepted claim.
+- Give Astra a compact phase packet: intent and non-goals, accepted evidence, unresolved dependencies, the active project and Skill rules, expected output, and stop condition. Keep raw discovery, completed logs, and inactive Skill bodies outside the standing context.
+- Require an exit decision. Once Astra freezes an architecture, evidence boundary, or cross-tool plan, send predictable implementation to Terra and mechanical follow-up to Luna; retain Sol for independent review when assurance requires it.
+- Astra may ask for clarification earlier, delegate less often, and test more broadly. Continue authorized reversible work, state the exact delegation budget, and keep verification proportional to the accepted claim.
+- Where the host supports changing reasoning without rebuilding the prompt prefix, lower effort after the difficult phase. Otherwise create a compact checkpoint and continue the next work unit through the appropriate lower lane.
 
 The current Codex `.toml` profiles package each execution contract with one conservative default model to keep the reference adapter simple. That fixed packaging is an adapter choice, not the meaning of Scout, Coder, Builder, or Reviewer and not a platform requirement. Decoupling those defaults dynamically should follow measured behavior and cost tests rather than a documentation-only change.
 

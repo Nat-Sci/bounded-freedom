@@ -2,7 +2,7 @@
 
 BoundedFreedom did not begin from a blank page. Research methods, agent Skills, scientific tools, benchmarks, and coding harnesses already solve important parts of the problem. This page explains what those projects do, what BoundedFreedom learns from them, and where the boundary remains.
 
-A link here means **influence or interoperability**, not bundled code, endorsement, or automatic trust. The current V0.1 Skills are an original synthesis. Third-party repositories are not vendored or installed by default.
+A link here means **influence or interoperability**, not bundled code, endorsement, or automatic trust. The v0.2.0 Astra Edition Skills are an original synthesis. Third-party repositories are not vendored or installed by default.
 
 ## What the repository owns
 
@@ -11,7 +11,7 @@ A link here means **influence or interoperability**, not bundled code, endorseme
 | Control plane | Who may do what, with which model, evidence, and human gate? | Owned here: Constitution, Chief, execution contracts, model routing, S0–S4, task records, and installer |
 | Method plane | What disciplined process should this task follow? | Owned here: six small research Skills loaded on demand |
 | Capability plane | Which database, library, runtime, or external service performs the work? | Selected per project; not bundled into Chief or installed by default |
-| Evaluation plane | How are quality, cost, reproduction, and failure types measured? | External benchmarks are references; local calibration is still needed |
+| Evaluation plane | How are quality, cost, reproduction, and failure types measured? | Route receipts define accepted outcomes, rework, escalation, time, and evidence coverage; authoritative cost calibration is still needed |
 | Project plane | Which data, cohort, split, atlas, compute, ethics, and acceptance rules apply? | Owned by the working project's instruction and task files |
 
 This repository is deliberately strongest in the first two layers. It should route good external capabilities and project rules, not compete with broad Skill catalogs or rebuild every scientific tool.
@@ -81,7 +81,7 @@ This is the control surface for upstream influence. **Selected** means the idea 
 
 | Local Skill | Upstream examples | Selected now | Deferred or excluded |
 | --- | --- | --- | --- |
-| `cost-efficient-orchestration` | [Agent Skills](https://agentskills.io/specification), [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents), [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), [SciAgent](https://github.com/smestern/sciagent), [open-coscientist](https://github.com/jataware/open-coscientist) | Chief accountability, progressive Skill loading, bounded execution contracts, per-unit model choice, independent review, a portable host boundary, and bounded research-lineage handoffs | **Deferred:** measured router, cost telemetry, durable event state, and cross-project lineage synchronization. **Excluded:** task-wide luxury/basic profiles, standing crews, recursive delegation, required graph infrastructure, and automatic merging of upstream changes |
+| `cost-efficient-orchestration` | [Agent Skills](https://agentskills.io/specification), [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents), [OpenAI Astra model guidance](https://developers.openai.com/api/docs/guides/latest-model?model=gpt-6-astra), [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), [SciAgent](https://github.com/smestern/sciagent), [open-coscientist](https://github.com/jataware/open-coscientist) | Chief accountability, progressive Skill loading, bounded execution contracts, compact phase handoffs, a balanced opportunity gate, evidence-gated frontier control, lane exit decisions, route receipts, per-unit model choice, independent review, a portable host boundary, and bounded research-lineage handoffs | **Deferred:** measured routing thresholds, authoritative cost telemetry, durable event state, and cross-project lineage synchronization. **Excluded:** task-wide luxury/basic profiles, forced model-share quotas, standing crews, recursive delegation, required graph infrastructure, and automatic merging of upstream changes |
 | `evidence-review` | [scientific-research-skills](https://github.com/jxtse/scientific-research-skills), [systematic review Skill](https://github.com/yananlong/codex-skills/blob/main/research/research-systematic-literature-review/SKILL.md), [TARCiS](https://www.bmj.com/content/385/bmj-2023-078384), [citationchaser](https://github.com/nealhaddaway/citationchaser), [PaperQA2](https://github.com/Future-House/paper-qa), [ASReview](https://github.com/asreview/asreview), [STORM](https://github.com/stanford-oval/storm), [SciAtlas](https://github.com/zjunlp/SciAtlas) | Progressive reading, rapid/bounded/systematic modes, domain profiles, labeled seed calibration, versioned queries and repair, supplementary citation searching, source-evidence-claim IDs, bounded gaps, contradiction checks, conclusion bounds, and stopping rules | **Deferred:** database, citationchaser, PaperQA2, ASReview, SciAtlas, and graph-view adapters. **Excluded:** comprehensive mode as the daily default, citation-only or corpus-QA completeness claims, unlogged query expansion, and graph structure or generated reports as scientific evidence |
 | `hypothesis-study-design` | [ResearchAgent](https://github.com/JinheonBaek/ResearchAgent), [HypoGeniC/HypoRefine](https://github.com/ChicagoHAI/hypothesis-generation), [CKM-HypoGen](https://github.com/TaoJinkai/ckm-hypogen), [BioSkills](https://github.com/nggsam/bioskills), [Scientific Agent Skills](https://github.com/K-Dense-AI/scientific-agent-skills) | Competing hypotheses, null or artifact alternatives, falsifiable and discriminating predictions, confounders, estimand and statistical-plan fields, stable evidence and observation links, versioned findings, bounded downstream handoffs, and a human freeze point | **Deferred:** measured scoring or refinement loops and domain-specific study adapters. **Excluded:** one attractive story, coherence or graph position as evidence, required persistent workspaces, and autonomous ethics or irreversible study decisions |
 | `scientific-data-quality` | [Frictionless Table Schema](https://specs.frictionlessdata.io/table-schema/), [scikit-learn data-leakage guidance](https://scikit-learn.org/stable/common_pitfalls.html), [W3C PROV-O](https://www.w3.org/TR/prov-o/), and [Kapoor and Narayanan](https://doi.org/10.1016/j.patter.2023.100804) | Explicit field, key, and missing-value contracts; aggregate QC states; reversible exclusion accounting; split-before-fit discipline; group, entity, and temporal leakage questions; ordered source-to-transform lineage; and honest remaining uncertainty | **Deferred:** adapters for validation frameworks, catalogs, and project pipelines. **Excluded:** one quality score, automatic cleaning, statistical inference, result interpretation, and ownership of an end-to-end pipeline |
@@ -96,7 +96,7 @@ An item moves from **deferred** to **selected** only after a real task shows val
 - Statistical analysis and post-result inference do not yet have one cross-domain Skill; project rules and the hypothesis/study contract currently carry that boundary.
 - Literature databases, plotting libraries, reproduction runtimes, and software scaffolds do not yet have tested adapters.
 - Scientific writing and claim-to-evidence tracing are represented only by upstream references, not a local Skill.
-- Cost, token, latency, and quality savings are design goals, not measured claims; a small repeated-task benchmark and routing receipts are still needed.
+- Cost, token, latency, and quality savings remain unmeasured claims; route receipts now define the forward data contract, but repeated accepted-work calibration and an authoritative cost source are still needed.
 
 These are candidates for evidence-driven additions. They should not become folders until repeated use shows a stable method that is not already owned by a project or external tool.
 
@@ -107,8 +107,9 @@ The projects above are often strongest at one part of the lifecycle. BoundedFree
 1. **Separate four decisions.** Task method chooses the process; execution contract sets ownership and permissions; model and effort supply capability; S0-S4 sets evidence, independent review, and human acceptance.
 2. **Keep Chief accountable.** A specialist Skill or worker may return evidence, but the primary session keeps intent, integration, verification, and the final decision.
 3. **Load methods only when needed.** Six focused research Skills replace a giant standing prompt or a permanent team of agents.
-4. **Name the evidence state honestly.** Search coverage is bounded; code running is not method implementation; method implementation is not claim reproduction; visual polish is not scientific validity.
-5. **Let software grow in accepted increments.** Keep purpose and reuse, execution shape, the accepted baseline, and the next increment separate; add machinery only when a present need earns it.
+4. **Route phases through a cost ladder.** Keep frontier capability on the hard control boundary, prefer balanced capability for stable coordinated work, and return mechanical follow-up to the fast lane through a compact checkpoint.
+5. **Name the evidence state honestly.** Search coverage is bounded; code running is not method implementation; method implementation is not claim reproduction; visual polish is not scientific validity.
+6. **Let software grow in accepted increments.** Keep purpose and reuse, execution shape, the accepted baseline, and the next increment separate; add machinery only when a present need earns it.
 
 These are design choices and working contracts. Their real cost and quality benefits still need evidence from repeated use, not only repository documentation.
 
@@ -134,4 +135,4 @@ For each relevant update, check:
 
 Upstream changes should create a review item, not an automatic merge. Chief records the reviewed version, the local effect, verification, and the decision. **GitHub Star** is useful for acknowledgement and discovery; **Watch releases** or a scheduled review is the update signal.
 
-Snapshot reviewed: 2026-09-02. Links and project status may change.
+Snapshot reviewed: 2026-09-05. Links and project status may change.

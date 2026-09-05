@@ -10,7 +10,10 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Inventory where authentication configuration is defined; make no changes. | General | Scout / fast economical, at most one worker |
 | Rename one frozen internal function and update its known tests. | General | Coder / fast economical, at most one worker |
 | Coordinate an interface change across the parser, storage layer, and CLI. | General | Builder / balanced, at most one writing worker |
+| Implement a reversible change across several related modules after the interface and acceptance tests have been frozen. | General | Builder / balanced; count as a balanced opportunity rather than starting strong |
+| Synthesize a fixed, already-retrieved evidence set whose concepts and output fields are stable. | Matching method or General | Balanced; no upgrade merely because the context is long |
 | Lead a novel end-to-end migration across code, browser workflows, and documents after a capable strong-model attempt left material dependency conflicts unresolved. | General | Chief or Builder / frontier escalation with the prior shortfall recorded |
+| Use frontier capability to resolve that migration's cross-tool architecture, then implement its now-frozen modules and update repetitive configuration. | General | Frontier control phase, then Builder / balanced and Coder / fast; compact checkpoint between phases |
 | Independently audit a consequential release claim after implementation. | General | Reviewer / strong reasoning, independent |
 | Conduct a systematic review within a registered search boundary. | `evidence-review` | Chief freezes boundary; bounded retrieval units only as justified |
 | Form competing hypotheses and freeze a study design before seeing outcomes. | `hypothesis-study-design` | Chief direct for judgment; bounded support only |
@@ -31,7 +34,11 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Extract the same fixed fields from 500 files. | Scout / fast economical; volume alone does not justify frontier capability. |
 | Independently review a clearly specified S4 claim with a complete evidence package. | Reviewer / strong reasoning plus S4 human acceptance; consequence alone does not require frontier capability. |
 | Use Astra for every step because it is the newest model. | Reject the task-wide model profile; choose the least costly capable lane for each bounded unit. |
+| Increase Terra usage by routing every Scout and Coder to Terra. | Reject the global quota; keep mechanical work fast and move eligible coordinated work down from strong or frontier capability. |
+| Keep the complete transcript, all logs, and every loaded Skill in Astra for continuity across a long task. | Freeze a compact checkpoint and pass only the active phase slice; continuity does not justify standing context. |
+| A balanced worker timed out during an idempotent check, so spawn a strong replacement immediately. | Check observable state and reuse or retry the same route within the declared allowance; a timeout is not capability evidence. |
+| Astra froze the difficult architecture, so it should also perform every predictable edit and routine test. | Return stable implementation to balanced capability and mechanical follow-up to fast capability unless new evidence requires escalation. |
 
 ## Acceptance
 
-Pass when every route selects the expected method boundary, separates execution role from model capability, declares a total worker budget, adds S3/S4 review only because of consequence, and selects frontier capability only for the hardest end-to-end work or a documented lower-lane shortfall. Record disagreements as false-positive, false-negative, role/model mismatch, or unjustified escalation before changing the descriptions. Do not tune from one prompt alone; keep the smallest wording change that improves the set without widening ownership.
+Pass when every route selects the expected method boundary, separates execution role from model capability, declares a phase context and total worker budget, applies the balanced opportunity gate before non-review strong or frontier work, adds S3/S4 review only because of consequence, and selects frontier capability only for the hardest end-to-end work or a documented lower-lane shortfall. A multi-phase route must record its compact handoff and return to a lower lane after the hard boundary is frozen. Record disagreements as false-positive, false-negative, role/model mismatch, unjustified escalation, missed balanced opportunity, or missing lane exit before changing the descriptions. Do not tune from one prompt alone; keep the smallest wording change that improves the set without widening ownership.

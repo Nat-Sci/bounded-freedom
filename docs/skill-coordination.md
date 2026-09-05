@@ -14,6 +14,23 @@ BoundedFreedom has one dispatcher and six research-method Skills. They are not a
 
 When instructions disagree, follow the Constitution first, then the project-owned scientific facts and human decisions. Chief resolves routing and assurance; the active Skill controls method inside that frozen boundary.
 
+## Phase hierarchy and compact handoffs
+
+The Astra Edition keeps one Chief while allowing a long request to move through lower-cost phases:
+
+```text
+admit and bound
+    -> activate one method
+    -> choose one execution contract and capability lane
+    -> verify the observable
+    -> retain a compact checkpoint
+    -> lower, escalate, change method, or stop
+```
+
+Each phase carries the frozen objective, accepted evidence, active project rules, relevant files or source slice, verification, and stop condition. Completed logs, inactive Skill bodies, superseded plans, and unrelated history stay outside the next phase's context. If a frontier phase resolves a hard architecture or evidence conflict, its stable implementation returns to balanced capability and mechanical follow-up returns to fast capability.
+
+A handoff records the planned and actual route, whether balanced capability was eligible, the outcome, any escalation evidence, and the next safe action. This receipt supports cost evaluation without retaining prompts, private paths, or raw message and command bodies. Method lineage remains separate from execution telemetry.
+
 ## Method ownership
 
 | Decision being made | Active method | Output handed forward | Boundary |
@@ -58,7 +75,7 @@ This is a route map, not a mandatory linear pipeline. A task may enter at any no
 - **Analysis versus figure:** analysis code owns values and scientific geometry; the figure Skill owns visual argument, assembly, and QA. Visual polish cannot change the analysis.
 - **Project code versus software lifecycle:** general project work executes the current contract. The lifecycle Skill is activated only when accepting a durable capability, changing the frame, hardening, or releasing it.
 - **Skill versus tool:** a Skill defines method and evidence. Databases, RAG systems, plotting libraries, runtimes, and scaffolds remain optional capabilities selected for a frozen need.
-- **Execution contract versus intelligence:** Scout, Coder, Builder, and Reviewer describe ownership and independence. Model family and reasoning effort are selected separately for the work unit.
+- **Execution contract versus intelligence:** Scout, Coder, Builder, and Reviewer describe ownership and independence. Model family and reasoning effort are selected separately for the work unit; eligible coordinated work starts balanced before non-review strong or frontier execution.
 - **Method versus assurance:** S0–S4 controls the evidence and review gate. It neither names the task nor automatically upgrades every executor.
 
 ## Known gaps

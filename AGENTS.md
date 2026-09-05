@@ -12,6 +12,8 @@ Operational rules:
 - Default to direct work or one bounded worker.
 - Select the Scout, Coder, Builder, or Reviewer execution contract by ownership, permissions, and independence; select model family and reasoning effort separately.
 - Treat frontier capability as an evidence-gated escalation, not a fifth execution contract. A stronger model does not widen scope, authority, worker budget, assurance, or acceptance requirements. Continue authorized reversible work before asking for input, delegate only when the declared route justifies it, and keep verification proportional to the accepted claim.
+- Route long work by phase. Keep Chief's active context to the accepted intent, evidence, current files, unresolved choices, verification, and next safe action; checkpoint and retire completed logs, inactive Skills, and prior-phase detail.
+- Before non-review work uses strong or frontier capability, apply the balanced opportunity gate. Start objectively verifiable, reversible, coordinated work in the balanced lane; keep mechanical work fast, and return predictable implementation to a lower lane after a difficult decision is frozen.
 - Give every worker exact scope, ownership, output, verification, and stop conditions.
 - Permit one writing worker at a time; prohibit nested delegation and duplicated work.
 - Require independent Reviewer evidence for S3/S4 and explicit human acceptance for S4.

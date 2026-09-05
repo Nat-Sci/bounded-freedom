@@ -83,6 +83,19 @@ if [ -z "$target_root" ]; then
   target_root=$HOME
 fi
 
+version_source="$repo_root/VERSION"
+edition_name="Astra Edition"
+if [ ! -f "$version_source" ]; then
+  echo "Missing installer source: VERSION" >&2
+  exit 1
+fi
+package_version=$(sed -n '1p' "$version_source")
+if ! printf '%s\n' "$package_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+  echo "Invalid installer source: VERSION must contain one semantic version" >&2
+  exit 1
+fi
+echo "BoundedFreedom package: v$package_version ($edition_name)"
+
 portable_skills_dir="$target_root/.agents/skills"
 skills_source_dir="$repo_root/.agents/skills"
 

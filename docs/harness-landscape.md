@@ -1,6 +1,6 @@
 # Harness landscape and integration boundary
 
-Snapshot: 2026-09-01. This is a bounded catalog of the current mainstream and research-relevant systems, not a claim that every agent wrapper should become a BoundedFreedom dependency.
+Snapshot: 2026-09-05. This is a bounded catalog of the current mainstream and research-relevant systems, not a claim that every agent wrapper should become a BoundedFreedom dependency.
 
 ## Keep three objects separate
 
@@ -16,7 +16,7 @@ A model does not supply the working environment by itself. DeepSeek is a model p
 
 | Harness | Useful control surfaces | BoundedFreedom fit |
 | --- | --- | --- |
-| [Codex](https://learn.chatgpt.com/docs/build-skills) | Layered `AGENTS.md`, open Agent Skills under `.agents/skills`, configurable subagents, permissions, worktrees, review, and a Responses-based provider seam | Reference adapter. `.codex/agents` packages execution-contract profiles with current default model bindings; the portable core does not equate those contracts with model names |
+| [Codex](https://learn.chatgpt.com/docs/build-skills) | Layered `AGENTS.md`, open Agent Skills under `.agents/skills`, configurable subagents, permissions, worktrees, review, and a Responses-based provider seam | Reference adapter. Luna, Terra, and Sol cover fast, balanced, and strong lanes; Astra is an evidence-gated frontier control phase. `.codex/agents` packages execution-contract defaults without equating contracts with model names |
 | [Claude Code](https://code.claude.com/docs/en/skills) | `CLAUDE.md`, open Agent Skills with Claude-only extensions, custom subagents, hooks, permissions, MCP, worktree isolation, and model aliases | Compatible through `CLAUDE.md` plus a safe Skill link into `.claude/skills`; keep Claude-only frontmatter out of the canonical Skill |
 | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | Plugin-based agent loop, scoped tools and prompts, append-only session events, subagents, SDKs, and an optional Skill registry that scans `.agents/skills` | Strong architectural match but still developer preview. Treat its plugin composition as an experimental adapter, not the default runtime |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/using-agent-skills.md) | Hierarchical `GEMINI.md`, `.agents/skills` alias, Skills consent, hooks, policies, checkpoints, and preview subagents | Portable Skill works directly; root `GEMINI.md` imports the shared contract |
@@ -63,10 +63,11 @@ BoundedFreedom takes the smallest useful common set:
 2. **Layered instructions:** stable constitution, portable workflow, thin host adapter, and local project rules.
 3. **Chief accountability:** specialists return bounded evidence; the primary session keeps intent, integration, and the final decision.
 4. **Four separate routing decisions:** choose task method, execution contract, model and reasoning effort, and S0–S4 assurance independently for each relevant work unit.
-5. **Permission and scope boundaries:** read-only discovery, one writing worker, explicit ownership, stop conditions, and human gates.
-6. **Provider separation:** a host may change from OpenAI to Anthropic, DeepSeek, Gemini, or local models without rewriting scientific contracts.
-7. **Recoverable evidence:** actual diffs, tests, comparisons, task records, and explicit uncertainty; add an event store only when long-running recovery warrants it.
-8. **Independent evaluation:** review evidence separately from the implementer's narrative, especially for scientific claims.
+5. **Hierarchical phase routing:** give frontier capability only the hard control phase, apply the balanced opportunity gate before stronger non-review execution, and return stable work to a lower lane through a compact checkpoint.
+6. **Permission and scope boundaries:** read-only discovery, one writing worker, explicit ownership, stop conditions, and human gates.
+7. **Provider separation:** a host may change from OpenAI to Anthropic, DeepSeek, Gemini, or local models without rewriting scientific contracts.
+8. **Recoverable evidence:** actual diffs, tests, comparisons, task records, and explicit uncertainty; add an event store only when long-running recovery warrants it.
+9. **Independent evaluation:** review evidence separately from the implementer's narrative, especially for scientific claims.
 
 ## Deliberately not adopted
 
