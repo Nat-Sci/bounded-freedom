@@ -14,9 +14,19 @@ The model sets what may be possible, context sets what it can see, and the harne
 
 ## Repository activity
 
-[![Repository activity since the first commit](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg)](.github/workflows/update-repository-activity.yml)
+[![Commits in the generated main snapshot](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg?schema=2)](https://github.com/Nat-Sci/bounded-freedom/blob/repository-activity/repository-activity.svg)
 
-The card runs from the first commit to the refresh date and adapts its interval to repository age. It updates after `main` changes and once daily on a separate branch. Activity is a maintenance signal, not a research-quality score.
+The card counts all commits reachable from its displayed source SHA on `main`,
+grouped by **committer date in Asia/Shanghai (UTC+08)**. It spans the history's
+earliest date through the refresh date (or a later commit timestamp), adapting
+its interval to repository age. The source SHA and generation time identify
+the exact snapshot; compare with that revision, not a newer commit list.
+
+[Generation](.github/workflows/update-repository-activity.yml) runs after `main`
+changes and once daily, publishing only to a separate image branch. The card is
+a static image: refresh an already open README to load updates, and allow for
+the raw image's five-minute cache. Click the card to inspect the generated file.
+Activity is a maintenance signal, not a research-quality score.
 
 ## The small portable core
 
