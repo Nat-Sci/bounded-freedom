@@ -21,6 +21,10 @@ For Codex custom agents, the effective per-setting precedence is: a named custom
 
 These are configured defaults, not runtime proof and not task-wide profiles. Spark remains a fast-code specialization; keep non-code volume on Luna and coordinated code on Terra. If Spark is unavailable, route the same frozen unit to Luna when genuinely mechanical or Terra when coordinated, without increasing the worker budget.
 
+### Fast-code gate
+
+A request that merely mentions code does not select Coder. Use the named Coder when the work requires an actual code edit-test loop, the interface and checks are frozen, ownership is narrow, failure is observable, and no unresolved scientific or architectural decision remains. On a strong or frontier Chief, this is the default route even without parallel Chief work because it retires implementation context from the expensive lane. Run a test, formatter, or other known command directly; keep an obvious micro-edit direct when its full implementation is cheaper than the handoff. Use Builder instead when the change coordinates interfaces, migrations, or multiple coupled responsibilities.
+
 An unpinned route must restate the execution contract and permissions; it does
 not inherit a named role's restrictions automatically. If the host cannot
 enforce a required sandbox boundary, use a suitable supported profile or return

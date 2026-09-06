@@ -18,7 +18,7 @@ Start from the least costly adequate lane: fast general for repeated fields and 
 
 Before non-review strong or frontier execution, start balanced if the unit is bounded and reversible, its interface/evidence boundary is stable, acceptance is observable, failure is detectable before consequential use, and no unresolved scientific or architectural choice is delegated. Keep mechanical volume fast. Do not target a model share or consume a separate allowance.
 
-Run direct deterministic commands directly. For a frozen, substantial, reversible coordinated unit on an expensive fixed Chief, a bounded balanced worker is economical only when it has independent ownership and Chief has useful concurrent work. Otherwise direct work records a concrete handoff, tool, or worker-availability cost. “Chief knows the scope” alone is not a direct-work exception, and keeping work on an expensive Chief is not proof of a downgrade.
+Run deterministic commands and trivial micro-edits directly. A frozen, separable code edit-test loop with narrow ownership and observable checks should leave a strong or frontier Chief for the fast-code Coder lane; retiring implementation context is enough, so this route does not require concurrent Chief work. Keep it direct only when concrete handoff cost exceeds the context retired. For a frozen, substantial, reversible coordinated unit on an expensive fixed Chief, a bounded balanced worker is economical only when it has independent ownership and Chief has useful concurrent work. Otherwise direct work records a concrete handoff, tool, or worker-availability cost. “Chief knows the scope” alone is not a direct-work exception, and keeping work on an expensive Chief is not proof of a downgrade.
 
 ## Route receipt and user-visible events
 

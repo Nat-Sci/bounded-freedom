@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.4.3 — Astra Edition**.
+Current package: **v0.4.4 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -110,11 +110,13 @@ Chief control phase
 Before non-review work starts on Sol or Astra, the dispatcher checks whether
 stable scope and objective verification make Terra sufficient. If Astra remains
 Chief, substantial independent implementation can run on one Terra worker while
-Chief handles a separate decision or acceptance check. Small known commands
-run directly. A direct-work exception records the actual handoff, tool, or
-availability cost; merely labeling a phase "balanced" does not change its
-runtime model. General volume stays on Luna and narrow frozen code edits can
-use Spark. There is no required model share or quota-draining target.
+Chief handles a separate decision or acceptance check. Known commands and
+obvious micro-edits run directly. A frozen, separable edit-test loop leaves a
+Sol or Astra Chief for Coder/Spark even when Chief has no parallel work; the
+saving comes from retiring implementation context. A direct-work exception
+records the actual handoff, tool, or availability cost; merely labeling a phase
+"balanced" does not change its runtime model. General volume stays on Luna.
+There is no required model share or quota-draining target.
 
 Astra receives the smallest phase packet that preserves intent, accepted evidence, unresolved dependencies, verification, and the stop condition. Bulk discovery, completed logs, inactive Skills, predictable implementation, and routine testing stay outside its standing context. Cost evaluation uses accepted outcomes, rework, escalation, elapsed time, evidence coverage, and authoritative billing or quota data when available; stored model counts and incomplete token fields are not treated as savings.
 
@@ -215,7 +217,7 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.4.3 provides the Astra-aware hierarchical control plane, six research
+Version 0.4.4 provides the Astra-aware hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
 phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional

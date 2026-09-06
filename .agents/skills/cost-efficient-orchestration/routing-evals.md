@@ -5,6 +5,7 @@ Use these cases after changing routing policy, descriptions, or host mappings. R
 | Prompt | Expected route |
 | --- | --- |
 | Run the known formatter command on these two files and report its result. | Direct deterministic tool work; zero workers. |
+| A Sol/high Chief receives one frozen module whose immutable behavioral tests fail; only its implementation file may change and the known test command must pass. | Named Coder / Spark / medium. This is a separable edit-test loop, not merely a command or obvious micro-edit; retiring code context does not require concurrent Chief work. |
 | A fixed expensive Chief must coordinate a frozen reversible change across three modules while it independently validates a supplied migration plan. | One bounded Terra Builder is eligible if it owns the change and Chief has useful concurrent work; otherwise state the concrete handoff/tool/availability cost for direct work. |
 | Summarize a fixed supplied evidence set with stable concepts and output fields while Chief is on Astra. | Balanced stable synthesis or a bounded Terra worker if the independent-unit gate holds; do not keep it on Astra merely because Chief is expensive. |
 | Rename a frozen internal function and run its known tests. | Direct for a simple deterministic edit; otherwise a bounded Coder / Spark / medium when available; no mandatory spawn. |
