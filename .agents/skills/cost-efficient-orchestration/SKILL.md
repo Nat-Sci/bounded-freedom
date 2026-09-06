@@ -59,14 +59,15 @@ Use one active method Skill per bounded work unit. A larger request may move thr
    - **Coder:** narrow, explicit, low-ambiguity edits inside frozen ownership.
    - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
 9. Before strong or frontier non-review execution, apply the balanced opportunity gate. Use balanced capability when the work is bounded, reversible, stable, and objectively verifiable; do not promote fast mechanical work to satisfy a model-share target.
-10. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it. Reserve the frontier lane for the hardest end-to-end work or a documented shortfall in a lower lane.
-11. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
-12. After a difficult decision is frozen, lower the model or effort for predictable implementation, extraction, testing, or formatting.
-13. At phase boundaries, update the task checkpoint with accepted inputs, the retired context slice, changed artifacts or repository state, completed checks, route outcome, retries, worker state, unresolved items, and the next safe action.
-14. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
-15. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
-16. Reconcile every spawned worker to a terminal lifecycle state and close completed worker threads through supported host controls.
-17. Record nontrivial work in one file under `tasks/`.
+10. Within the fast lane, distinguish general volume from code iteration when the host offers a specialized coding model. Use the code-specialized route only after the edit boundary and checks are frozen; keep non-code extraction and transformation on the general fast route.
+11. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it. Reserve the frontier lane for the hardest end-to-end work or a documented shortfall in a lower lane.
+12. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
+13. After a difficult decision is frozen, lower the model or effort for predictable implementation, extraction, testing, or formatting.
+14. At phase boundaries, update the task checkpoint with accepted inputs, the retired context slice, changed artifacts or repository state, completed checks, route outcome, retries, worker state, unresolved items, and the next safe action.
+15. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
+16. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
+17. Reconcile every spawned worker to a terminal lifecycle state and close completed worker threads through supported host controls.
+18. Record nontrivial work in one file under `tasks/`.
 
 ## Capability and cost gates
 
@@ -79,12 +80,12 @@ Use one active method Skill per bounded work unit. A larger request may move thr
 - Do not spawn Scout when Chief already knows the relevant paths.
 - Do not spawn Coder or Builder before scope and verification are frozen.
 - Do not use Reviewer for routine formatting or mechanical checks.
-- Use a fast economical model for high-volume, bounded, reversible work only when its tool use and output reliability are sufficient.
+- Use a fast economical model for high-volume, bounded, reversible work only when its tool use and output reliability are sufficient. When a separate fast coding model is available, reserve it for code mapping and narrow edit-test loops rather than non-code bulk work.
 - Use a balanced model as the default for bounded coordinated implementation or stable synthesis with clear acceptance evidence.
 - Use strong reasoning for high-ambiguity judgment, conflicting evidence, or consequential independent review.
 - Use frontier capability only when the work itself demands exceptional end-to-end coherence across tools or domains, or when a lower lane leaves a material documented failure, ambiguity, or conflict. Assurance level, context size, or model novelty alone does not justify it.
 - Do not make maximum reasoning the default. Escalate after ambiguity, failure, conflict, or consequence demonstrates value.
-- Do not optimize model counts in isolation. Evaluate eligible work, first-pass acceptance, evidence coverage, escalation, time, and authoritative cost or quota data when available.
+- Do not optimize model counts in isolation or create work merely to exhaust a separate allowance. Evaluate eligible work, first-pass acceptance, evidence coverage, escalation, time, and authoritative cost or quota data when available.
 - Keep the frontier control phase small. A frontier model may freeze the hard decision while lower lanes execute the stable plan.
 - Stop a worker after two materially different failed attempts.
 

@@ -31,12 +31,15 @@ Start with the least costly lane that clears the phase's limiting factor:
 
 | Phase limit | Starting lane |
 | --- | --- |
-| Repeated fields, bulk discovery, or narrow reversible edits | Fast and economical |
+| Repeated fields, bulk discovery, or general mechanical transformation | Fast general |
+| Frozen code mapping, narrow edits, or targeted test loops | Fast code when the host provides it; otherwise fast general |
 | Stable synthesis, coordinated files, or bounded implementation with clear acceptance | Balanced |
 | Ambiguous judgment, conflicting evidence, or consequential independent review | Strong reasoning |
 | Exceptional end-to-end coherence across tools or domains, or a documented strong-lane shortfall | Frontier escalation |
 
 Escalate one lane at a time after a relevant failure, unresolved ambiguity, or evidence conflict. Record why the lower lane was insufficient. After the difficult decision or design is frozen, route the predictable implementation, extraction, or formatting phase back down. A frontier entry is incomplete until its exit lane is considered.
+
+Some hosts expose a separate low-latency coding model with an independent allowance. Treat that as a specialization inside the fast lane, not as another execution contract or a quota target. Prefer it for bounded code-path mapping and edit-test iteration after interfaces and acceptance checks are frozen. Keep document extraction, fixed-field processing, broad repository synthesis, coordinated implementation, and consequential review on the lane selected by their own limiting factor. If the specialized model is unavailable, fall back by task shape: general fast capability for mechanical code work or balanced capability for coordinated code work.
 
 ## Balanced opportunity gate
 
@@ -48,7 +51,7 @@ Before assigning non-review execution to strong or frontier capability, ask whet
 - failure can be detected before consequential use;
 - no unresolved scientific or architectural choice is being delegated.
 
-When they are true, start in the balanced lane. When the unit is mechanical and high-volume, keep it in the fast lane; do not promote it merely to increase balanced-model usage. Reviewer independence and S3/S4 evidence requirements remain separate from this gate.
+When they are true, start in the balanced lane. When the unit is mechanical and high-volume, keep it in the appropriate general or code fast route; do not promote it merely to increase balanced-model usage or consume a separate model allowance. Reviewer independence and S3/S4 evidence requirements remain separate from this gate.
 
 ## Frontier control phase
 

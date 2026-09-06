@@ -6,6 +6,7 @@ usage() {
   cat <<'EOF'
 Usage: scripts/install-global.sh [--dry-run|--install|--update|--status]
                                  [--host codex|claude|portable|all]
+                                 [--codex-proxy unchanged|system|remove]
                                  [--target-root DIRECTORY]
 
   --dry-run              Show the changes that --install would make (default).
@@ -13,6 +14,9 @@ Usage: scripts/install-global.sh [--dry-run|--install|--update|--status]
   --status               Report installation state without changing files.
   --host HOST            Install the Codex adapter (default), Claude adapter,
                          portable Skills only, or both host adapters.
+  --codex-proxy MODE     Leave Codex network settings unchanged (default), import
+                         the active macOS HTTP(S) system proxy into a managed .env
+                         block, or remove only that managed block.
   --target-root DIR      Install below DIR instead of the current user's home directory.
                          Intended for testing or an isolated host profile.
 EOF
@@ -20,6 +24,7 @@ EOF
 
 mode="dry-run"
 host="codex"
+codex_proxy="unchanged"
 target_root=""
 
 while [ "$#" -gt 0 ]; do
@@ -34,6 +39,14 @@ while [ "$#" -gt 0 ]; do
         exit 2
       fi
       host=$1
+      ;;
+    --codex-proxy)
+      shift
+      if [ "$#" -eq 0 ]; then
+        echo "--codex-proxy requires unchanged, system, or remove" >&2
+        exit 2
+      fi
+      codex_proxy=$1
       ;;
     --target-root)
       shift
@@ -78,6 +91,21 @@ case "$host" in
     ;;
 esac
 
+case "$codex_proxy" in
+  unchanged|system|remove)
+    ;;
+  *)
+    echo "Unsupported Codex proxy mode: $codex_proxy" >&2
+    usage >&2
+    exit 2
+    ;;
+esac
+
+if [ "$codex_proxy" != "unchanged" ] && [ "$use_codex" -ne 1 ]; then
+  echo "--codex-proxy requires --host codex or --host all" >&2
+  exit 2
+fi
+
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
 if [ -z "$target_root" ]; then
   target_root=$HOME
@@ -103,6 +131,7 @@ codex_dir="$target_root/.codex"
 codex_agents_dir="$codex_dir/agents"
 codex_global_agents="$codex_dir/AGENTS.md"
 codex_global_config="$codex_dir/config.toml"
+codex_proxy_env="$codex_dir/.env"
 
 claude_dir="$target_root/.claude"
 claude_skills_dir="$claude_dir/skills"
@@ -112,6 +141,8 @@ global_instructions_source="$repo_root/install/global-agents.md"
 agents_config_source="$repo_root/install/agents-config.toml"
 begin_marker="# >>> BoundedFreedom managed block >>>"
 end_marker="# <<< BoundedFreedom managed block <<<"
+proxy_http_url=""
+proxy_https_url=""
 apply=0
 
 case "$mode" in
@@ -251,6 +282,9 @@ preflight_installation() {
     done
     check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
     check_managed_destination "$codex_global_config" "Codex config.toml"
+    if [ "$codex_proxy" != "unchanged" ]; then
+      check_managed_destination "$codex_proxy_env" "Codex proxy .env"
+    fi
   fi
 
   if [ "$use_claude" -eq 1 ]; then
@@ -333,6 +367,85 @@ has_unmanaged_agents_table() {
   ' "$destination"
 }
 
+has_unmanaged_proxy_setting() {
+  destination=$1
+  if [ ! -f "$destination" ]; then
+    return 1
+  fi
+  awk -v begin="$begin_marker" -v end="$end_marker" '
+    $0 == begin { inside = 1; next }
+    $0 == end { inside = 0; next }
+    !inside && $0 ~ /^[[:space:]]*(export[[:space:]]+)?(HTTP_PROXY|HTTPS_PROXY|NO_PROXY|ALL_PROXY|http_proxy|https_proxy|no_proxy|all_proxy)[[:space:]]*=/ { found = 1 }
+    END { exit(found ? 0 : 1) }
+  ' "$destination"
+}
+
+system_proxy_field() {
+  field=$1
+  printf '%s\n' "$system_proxy_snapshot" | awk -v key="$field" '
+    $1 == key && $2 == ":" { print $3; exit }
+  '
+}
+
+valid_proxy_host() {
+  case "$1" in
+    ""|*[!A-Za-z0-9._-]*)
+      return 1
+      ;;
+    *)
+      return 0
+      ;;
+  esac
+}
+
+valid_proxy_port() {
+  case "$1" in
+    ""|*[!0-9]*)
+      return 1
+      ;;
+  esac
+  [ "$1" -ge 1 ] && [ "$1" -le 65535 ]
+}
+
+load_macos_system_proxy() {
+  if [ "$(uname -s)" != "Darwin" ]; then
+    echo "system proxy import is currently supported only on macOS" >&2
+    return 1
+  fi
+  if ! command -v scutil >/dev/null 2>&1; then
+    echo "system proxy import requires the macOS scutil command" >&2
+    return 1
+  fi
+  if ! system_proxy_snapshot=$(scutil --proxy); then
+    echo "unable to read the active macOS proxy configuration" >&2
+    return 1
+  fi
+
+  http_enabled=$(system_proxy_field HTTPEnable)
+  https_enabled=$(system_proxy_field HTTPSEnable)
+  http_host=$(system_proxy_field HTTPProxy)
+  https_host=$(system_proxy_field HTTPSProxy)
+  http_port=$(system_proxy_field HTTPPort)
+  https_port=$(system_proxy_field HTTPSPort)
+
+  if [ "$http_enabled" != "1" ] || [ "$https_enabled" != "1" ]; then
+    echo "system proxy import requires active macOS HTTP and HTTPS proxies" >&2
+    return 1
+  fi
+  if ! valid_proxy_host "$http_host" || ! valid_proxy_host "$https_host"; then
+    echo "system proxy import found an unsupported proxy host format" >&2
+    return 1
+  fi
+  if ! valid_proxy_port "$http_port" || ! valid_proxy_port "$https_port"; then
+    echo "system proxy import found an invalid proxy port" >&2
+    return 1
+  fi
+
+  proxy_http_url="http://$http_host:$http_port"
+  proxy_https_url="http://$https_host:$https_port"
+  echo "active macOS HTTP(S) proxy detected"
+}
+
 refresh_managed_block() {
   destination=$1
   source=$2
@@ -358,6 +471,51 @@ refresh_managed_block() {
   } > "$temporary.next"
   mv "$temporary.next" "$destination"
   rm -f "$temporary"
+}
+
+refresh_proxy_block() {
+  destination=$1
+  parent_dir=$(dirname "$destination")
+  if [ "$apply" -eq 1 ]; then
+    echo "refresh managed Codex proxy .env block"
+  else
+    echo "would refresh managed Codex proxy .env block"
+  fi
+  if [ "$apply" -ne 1 ]; then
+    return
+  fi
+  mkdir -p "$parent_dir"
+  temporary=$(mktemp "$parent_dir/.bounded-freedom.XXXXXX")
+  without_managed_block "$destination" "$temporary"
+  {
+    cat "$temporary"
+    printf '%s\n' "$begin_marker"
+    printf '\n'
+    printf 'HTTP_PROXY="%s"\n' "$proxy_http_url"
+    printf 'HTTPS_PROXY="%s"\n' "$proxy_https_url"
+    printf 'NO_PROXY="localhost,127.0.0.1,::1"\n'
+    printf '%s\n' "$end_marker"
+  } > "$temporary.next"
+  chmod 600 "$temporary.next"
+  mv "$temporary.next" "$destination"
+  rm -f "$temporary"
+}
+
+remove_proxy_block() {
+  destination=$1
+  if [ ! -f "$destination" ] || ! grep -Fq "$begin_marker" "$destination"; then
+    echo "Codex proxy .env managed block already absent"
+    return
+  fi
+  if [ "$apply" -ne 1 ]; then
+    echo "would remove managed Codex proxy .env block"
+    return
+  fi
+  parent_dir=$(dirname "$destination")
+  temporary=$(mktemp "$parent_dir/.bounded-freedom.XXXXXX")
+  without_managed_block "$destination" "$temporary"
+  mv "$temporary" "$destination"
+  echo "removed managed Codex proxy .env block"
 }
 
 show_link_status() {
@@ -410,6 +568,7 @@ show_status() {
     done
     show_block_status "$codex_global_agents" "Codex AGENTS.md"
     show_block_status "$codex_global_config" "Codex config.toml"
+    show_block_status "$codex_proxy_env" "Codex proxy .env"
   fi
   if [ "$use_claude" -eq 1 ]; then
     for skill_source in "$skills_source_dir"/*; do
@@ -428,12 +587,21 @@ if [ "$mode" = "status" ]; then
   exit 0
 fi
 
+if [ "$codex_proxy" = "system" ]; then
+  load_macos_system_proxy
+fi
+
 preflight_installation
 
 if [ "$use_codex" -eq 1 ] && has_unmanaged_agents_table "$codex_global_config"; then
   echo "config manual merge required: the global Codex config already contains a user-owned [agents] table" >&2
   echo "source to merge: install/agents-config.toml" >&2
   exit 3
+fi
+
+if [ "$codex_proxy" = "system" ] && has_unmanaged_proxy_setting "$codex_proxy_env"; then
+  echo "proxy manual merge required: Codex .env already contains user-owned proxy variables" >&2
+  exit 4
 fi
 
 ensure_dir "$portable_skills_dir" "portable Skills"
@@ -453,6 +621,16 @@ if [ "$use_codex" -eq 1 ]; then
   link_file "$repo_root/.codex/agents/reviewer.toml" "$codex_agents_dir/reviewer.toml" "Codex agent reviewer"
   refresh_managed_block "$codex_global_agents" "$global_instructions_source" "Codex AGENTS.md"
   refresh_managed_block "$codex_global_config" "$agents_config_source" "Codex config.toml"
+  case "$codex_proxy" in
+    system)
+      refresh_proxy_block "$codex_proxy_env"
+      ;;
+    remove)
+      remove_proxy_block "$codex_proxy_env"
+      ;;
+    unchanged)
+      ;;
+  esac
 fi
 
 if [ "$use_claude" -eq 1 ]; then

@@ -36,21 +36,31 @@ This table is a constraint matrix, not a required team. Most tasks need Chief al
 
 ## Current host mappings
 
-Snapshot: 2026-09-05. Concrete names stay here instead of in the portable Skill.
+Snapshot: 2026-09-06. Concrete names stay here instead of in the portable Skill.
 
 | Host or provider | Fast bounded work | Coordinated work | Strong judgment or review | Frontier escalation |
 | --- | --- | --- | --- | --- |
-| Codex reference adapter | `gpt-5.6-luna` / medium for Scout or Coder | `gpt-5.6-terra` / medium for Builder | `gpt-5.6-sol` / high for Reviewer or ambiguous Chief work | `gpt-6-astra` / medium for the hardest end-to-end Chief or Builder work, or unresolved independent review; raise effort only with evidence |
+| Codex reference adapter | `gpt-5.6-luna` / medium for Scout and non-code volume; `gpt-5.3-codex-spark` / medium for a frozen Coder edit-test loop | `gpt-5.6-terra` / medium for Builder | `gpt-5.6-sol` / high for Reviewer or ambiguous Chief work | `gpt-6-astra` / medium for the hardest end-to-end Chief or Builder work, or unresolved independent review; raise effort only with evidence |
 | Claude Code | `haiku` for bounded Scout or Coder work | `sonnet` for Builder work | `opus` for consequential Reviewer work | Use a newer frontier tier only after verifying its host behavior and cost |
 | DeepSeek models | V4 Flash for volume and bounded execution | V4 Pro when coordination or harder reasoning warrants it | V4 Pro with high reasoning; use `max` only after an unresolved consequential conflict | No separate mapped tier until a distinct model and measured need exist |
 | Gemini CLI | Current Flash-class model for bounded volume | Current Pro-class model for coordinated work | Strongest reliable Pro-class model with an independent prompt and evidence set | Use a distinct frontier tier only after host verification and a documented lower-lane limit |
 | Provider-neutral hosts such as OpenCode, Cursor, Roo Code, Cline, or OpenHands | Select the provider's fast capable model | Select its balanced coding/reasoning model | Select its strong reliable reasoning model | Select a distinct frontier model only when the provider offers one and the escalation gate is met |
 
-For mixed Codex work, the practical starting pattern remains Terra / medium Chief, Luna / medium Scout or Coder, Terra / medium Builder, and Sol / high Reviewer. Start or switch Chief to Sol when the main output needs unresolved high-ambiguity reasoning. Select Astra explicitly when the task is among the hardest end-to-end workflows across code, browsing, computer use, research, or documents, or when Sol has exposed a material shortfall. A Skill cannot switch Chief silently. These defaults are not proof that a model remains the cheapest capable choice.
+For mixed Codex work, the practical starting pattern is Terra / medium Chief, Luna / medium Scout, Spark / medium Coder, Terra / medium Builder, and Sol / high Reviewer. Start or switch Chief to Sol when the main output needs unresolved high-ambiguity reasoning. Select Astra explicitly when the task is among the hardest end-to-end workflows across code, browsing, computer use, research, or documents, or when Sol has exposed a material shortfall. A Skill cannot switch Chief silently. These defaults are not proof that a model remains the cheapest capable choice.
+
+## Codex-Spark boundary
+
+Codex-Spark is the reference adapter's specialized fast-code route. Its separate usage limit makes eligible code work available without displacing the general fast lane, but allowance utilization is not itself an outcome.
+
+- Start the Coder profile on `gpt-5.3-codex-spark` / medium for a small targeted fix, code-path mapping, a frozen refactor, or a short edit-test loop with objective acceptance.
+- Keep bulk non-code extraction and general mechanical transformations on Luna. Use Terra when the implementation coordinates related logic, interfaces, or several files, even if every artifact is code.
+- Do not ask Spark to resolve an unfrozen architecture, absorb broad repository context, conduct consequential review, or keep retrying after the Coder stop condition.
+- If Spark is unavailable, its allowance is exhausted, or the current host does not expose it, treat that as availability evidence rather than a capability failure. Reuse the frozen work unit on Luna for genuinely mechanical code work or Terra for coordinated implementation without increasing the declared worker budget. Installation must remain usable without Spark.
+- Measure first-pass acceptance, rework, elapsed time, and authoritative quota evidence when available. Never create low-value work merely to drain Spark's independent allowance.
 
 ## Terra opportunity gate
 
-The Codex adapter keeps the untyped subagent fallback on Luna / low, maps bounded coordinated Builder work to Terra / medium, and reserves Sol / high for independent review or unresolved judgment. Increasing Terra use means moving eligible work down from Sol or Astra, not moving mechanical work up from Luna.
+The Codex adapter keeps the untyped subagent fallback on Luna / low, maps narrow frozen code work to Spark / medium, maps bounded coordinated Builder work to Terra / medium, and reserves Sol / high for independent review or unresolved judgment. Increasing Terra use means moving eligible work down from Sol or Astra, not moving mechanical work up from Luna or Spark.
 
 Before selecting Sol or Astra for non-review execution, start with Terra / medium when the unit is reversible, its interfaces or evidence boundary are stable, acceptance is objectively checkable, and a failure will be visible before consequential use. Examples include a coordinated change across related files, stable synthesis from a frozen evidence set, implementation of a frozen architecture, and the first bounded repair of a verifiable workflow.
 
@@ -58,13 +68,13 @@ Do not select Terra merely to satisfy a global model-share target. For a new or 
 
 ## GPT-6 Astra boundary
 
-Astra is a frontier capability lane, not a fifth execution contract and not a replacement for the Luna, Terra, and Sol cost ladder. Selecting it does not widen scope, authority, worker budget, assurance, or acceptance requirements. When Astra is selected, use it as a thin control phase for the hard dependency or judgment boundary, then route stable downstream work back to the least costly capable lane.
+Astra is a frontier capability lane, not a fifth execution contract and not a replacement for the Luna, Spark, Terra, and Sol cost ladder. Selecting it does not widen scope, authority, worker budget, assurance, or acceptance requirements. When Astra is selected, use it as a thin control phase for the hard dependency or judgment boundary, then route stable downstream work back to the least costly capable lane.
 
 - Start at medium effort. Raise to high, xhigh, or max only when the task's ambiguity, failed evidence, or consequence justifies the additional reasoning. The Codex host may expose `ultra` as an automatic-delegation mode; do not use it unless the declared worker budget and user intent explicitly allow that behavior.
-- Keep fixed-field extraction and narrow reversible edits on Luna, coordinated implementation on Terra, and ordinary high-judgment or independent review on Sol while those lanes remain capable.
+- Keep fixed-field extraction on Luna, narrow frozen code edits on Spark, coordinated implementation on Terra, and ordinary high-judgment or independent review on Sol while those lanes remain capable.
 - Do not route to Astra merely because the context is long, the task is S3/S4, or Astra is newer. An S3/S4 gate adds independent evidence and human acceptance where required; it does not select a model.
 - Give Astra a compact phase packet: intent and non-goals, accepted evidence, unresolved dependencies, the active project and Skill rules, expected output, and stop condition. Keep raw discovery, completed logs, and inactive Skill bodies outside the standing context.
-- Require an exit decision. Once Astra freezes an architecture, evidence boundary, or cross-tool plan, send predictable implementation to Terra and mechanical follow-up to Luna; retain Sol for independent review when assurance requires it.
+- Require an exit decision. Once Astra freezes an architecture, evidence boundary, or cross-tool plan, send predictable coordinated implementation to Terra, narrow code iteration to Spark, and general mechanical follow-up to Luna; retain Sol for independent review when assurance requires it.
 - Astra may ask for clarification earlier, delegate less often, and test more broadly. Continue authorized reversible work, state the exact delegation budget, and keep verification proportional to the accepted claim.
 - Where the host supports changing reasoning without rebuilding the prompt prefix, lower effort after the difficult phase. Otherwise create a compact checkpoint and continue the next work unit through the appropriate lower lane.
 

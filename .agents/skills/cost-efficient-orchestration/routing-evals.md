@@ -8,12 +8,13 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | --- | --- | --- |
 | Fix one typo in the README and verify the diff. | General | Direct, zero workers |
 | Inventory where authentication configuration is defined; make no changes. | General | Scout / fast economical, at most one worker |
-| Rename one frozen internal function and update its known tests. | General | Coder / fast economical, at most one worker |
+| Rename one frozen internal function and update its known tests. | General | Coder / fast code, Spark when available, at most one worker |
 | Coordinate an interface change across the parser, storage layer, and CLI. | General | Builder / balanced, at most one writing worker |
 | Implement a reversible change across several related modules after the interface and acceptance tests have been frozen. | General | Builder / balanced; count as a balanced opportunity rather than starting strong |
 | Synthesize a fixed, already-retrieved evidence set whose concepts and output fields are stable. | Matching method or General | Balanced; no upgrade merely because the context is long |
 | Lead a novel end-to-end migration across code, browser workflows, and documents after a capable strong-model attempt left material dependency conflicts unresolved. | General | Chief or Builder / frontier escalation with the prior shortfall recorded |
-| Use frontier capability to resolve that migration's cross-tool architecture, then implement its now-frozen modules and update repetitive configuration. | General | Frontier control phase, then Builder / balanced and Coder / fast; compact checkpoint between phases |
+| Use frontier capability to resolve that migration's cross-tool architecture, then implement its now-frozen modules and update repetitive configuration. | General | Frontier control phase, then Builder / balanced, Coder / fast code, and general fast work as appropriate; compact checkpoint between phases |
+| Make a small targeted UI fix after the failing code path and acceptance test are frozen. | General | Coder / fast code, Spark / medium when available, at most one writing worker |
 | Independently audit a consequential release claim after implementation. | General | Reviewer / strong reasoning, independent |
 | Conduct a systematic review within a registered search boundary. | `evidence-review` | Chief freezes boundary; bounded retrieval units only as justified |
 | Form competing hypotheses and freeze a study design before seeing outcomes. | `hypothesis-study-design` | Chief direct for judgment; bounded support only |
@@ -32,6 +33,9 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Draw a chart from already accepted supplied values. | Select `scientific-figure`, not `scientific-data-quality`. |
 | Update a dependency pin in an ordinary service repository. | General; do not load a research-method Skill merely because the repository contains data. |
 | Extract the same fixed fields from 500 files. | Scout / fast economical; volume alone does not justify frontier capability. |
+| Use Spark to summarize 500 supplied documents because its quota is still available. | Reject quota-driven routing; use the general fast lane because the work is not code-specific. |
+| Use Spark to redesign an unfrozen multi-module architecture and implement it end to end. | Freeze the architecture with Chief or the justified reasoning lane, then use Builder / balanced; Spark may receive only a later narrow code unit. |
+| A frozen Spark Coder unit cannot start because its separate allowance is exhausted, so spawn another Coder in parallel. | Treat this as availability, not capability evidence; keep the same worker budget and route the frozen unit to Luna if mechanical or Terra if coordinated. |
 | Independently review a clearly specified S4 claim with a complete evidence package. | Reviewer / strong reasoning plus S4 human acceptance; consequence alone does not require frontier capability. |
 | Use Astra for every step because it is the newest model. | Reject the task-wide model profile; choose the least costly capable lane for each bounded unit. |
 | Increase Terra usage by routing every Scout and Coder to Terra. | Reject the global quota; keep mechanical work fast and move eligible coordinated work down from strong or frontier capability. |

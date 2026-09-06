@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.2.0 — Astra Edition**.
+Current package: **v0.3.0 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -49,13 +49,15 @@ Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence le
 | Execution contract | Owns | Current Codex default |
 | --- | --- | --- |
 | Scout | Bounded read-only discovery | Luna / medium |
-| Coder | Narrow, frozen, reversible edits | Luna / medium |
+| Coder | Narrow, frozen, code-specific edits | Codex-Spark / medium |
 | Builder | Coordinated implementation across logic or files | Terra / medium |
 | Reviewer | Independent read-only assessment | Sol / high |
 
 These are host defaults, not fixed identities. Chief uses the least costly capable model for each unit and escalates after ambiguity, failure, conflicting evidence, or consequential judgment demonstrates the need.
 
-GPT-6 Astra is the Codex adapter's on-demand frontier lane, not a fifth execution contract. Select it explicitly for the hardest end-to-end Chief or Builder phase, or after Sol leaves a material documented shortfall. The conservative Luna, Terra, and Sol role profiles remain the defaults; a new model and an S3/S4 assurance level do not by themselves justify the higher-cost lane. Start Astra at medium effort and keep its host-specific automatic-delegation mode inside the declared worker budget. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
+The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write.
+
+GPT-6 Astra is the Codex adapter's on-demand frontier lane, not a fifth execution contract. Select it explicitly for the hardest end-to-end Chief or Builder phase, or after Sol leaves a material documented shortfall. Luna, Spark, Terra, and Sol remain the default execution ladder; a new model and an S3/S4 assurance level do not by themselves justify the higher-cost lane. Start Astra at medium effort and keep its host-specific automatic-delegation mode inside the declared worker budget. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
 
 ## Astra Edition: a thin frontier and a strong middle
 
@@ -65,17 +67,18 @@ The Astra Edition routes phases rather than assigning one model to a whole task:
 deterministic preparation
         ↓
 Chief control phase
-        ├── Luna: bounded discovery and mechanical edits
+        ├── Luna: bounded discovery and general mechanical work
+        ├── Spark: frozen code mapping and narrow edit-test loops
         ├── Terra: coordinated, reversible, objectively verifiable work
         ├── Sol: ambiguous judgment and independent review
         └── Astra: exceptional cross-tool coherence or documented shortfall
                           ↓
                  compact accepted checkpoint
                           ↓
-                 return to Terra or Luna
+                 return to Terra, Spark, or Luna
 ```
 
-Before non-review work starts on Sol or Astra, the dispatcher checks whether stable scope and objective verification make Terra sufficient. This increases Terra use by moving eligible work down from stronger lanes; it does not make inexpensive Luna work more costly. A default calibration window uses 30 eligible balanced work units, with at least 20 starting on Terra unless the route records why they are excluded.
+Before non-review work starts on Sol or Astra, the dispatcher checks whether stable scope and objective verification make Terra sufficient. This increases Terra use by moving eligible work down from stronger lanes; it does not make inexpensive Luna or Spark work more costly. Within the fast lane, general volume remains on Luna while frozen code edits and short test loops start on Spark when that model is available. Spark's separate allowance is an opportunity for suitable work, not a target that justifies creating work or sending it non-code tasks. A default calibration window uses 30 eligible balanced work units, with at least 20 starting on Terra unless the route records why they are excluded.
 
 Astra receives the smallest phase packet that preserves intent, accepted evidence, unresolved dependencies, verification, and the stop condition. Bulk discovery, completed logs, inactive Skills, predictable implementation, and routine testing stay outside its standing context. Cost evaluation uses accepted outcomes, rework, escalation, elapsed time, evidence coverage, and authoritative billing or quota data when available; stored model counts and incomplete token fields are not treated as savings.
 
@@ -115,6 +118,15 @@ Preview the default Codex installation:
 
 Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check. Installer output reports the package version and edition so linked Skills and managed host instructions can be checked against the repository revision.
 
+If `codex doctor` reports that HTTPS works but the Responses WebSocket times out while macOS has an active manual HTTP(S) proxy, preview and then import that proxy into a marked Codex `.env` block:
+
+```sh
+./scripts/install-global.sh --dry-run --host codex --codex-proxy system
+./scripts/install-global.sh --update --host codex --codex-proxy system
+```
+
+The proxy address is detected at installation time and is never stored in the repository or printed by the installer. Existing user-owned proxy variables cause a safe stop. Use `--codex-proxy remove` to remove only the managed block, and restart Codex after either change. The option is explicit because a local proxy may later stop or move; ordinary installations leave network settings unchanged. An HTTP-only custom provider was verified as a fallback but is intentionally not installed because changing provider identity is more invasive than repairing the existing WebSocket route.
+
 The installer links back to this clone, updates only marked global blocks, and refuses to replace conflicting user files. It does not copy the repository into every project and does not require Python.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
@@ -123,7 +135,7 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.2.0 provides the Astra-aware hierarchical control plane, six method contracts, compact phase handoffs, a Terra opportunity gate, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
+Version 0.3.0 provides the Astra-aware hierarchical control plane, six method contracts, compact phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional reversible Codex system-proxy adapter, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
 
 ## Documentation and credits
 

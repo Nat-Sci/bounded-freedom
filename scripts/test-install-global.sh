@@ -54,6 +54,21 @@ assert_contains() {
   pass "$3"
 }
 
+assert_not_contains() {
+  if grep -Fq "$1" "$2"; then
+    fail "$3"
+  fi
+  pass "$3"
+}
+
+file_mode() {
+  if stat -f '%Lp' "$1" >/dev/null 2>&1; then
+    stat -f '%Lp' "$1"
+  else
+    stat -c '%a' "$1"
+  fi
+}
+
 expect_exit() {
   expected_status=$1
   output_file=$2
@@ -73,7 +88,7 @@ pass "installer has valid POSIX shell syntax"
 dry_root="$test_root/dry-run"
 "$installer" --host all --target-root "$dry_root" --dry-run > "$test_root/dry-run.out"
 assert_path_absent "$dry_root" "dry-run makes no changes"
-assert_contains "BoundedFreedom package: v0.2.0 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
+assert_contains "BoundedFreedom package: v0.3.0 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
 assert_contains "dry-run complete; no files were changed" "$test_root/dry-run.out" "dry-run reports completion"
 
 all_root="$test_root/all-hosts"
@@ -100,17 +115,20 @@ done
 pass "all Codex agent profiles link to repository sources"
 "$installer" --host all --target-root "$all_root" --status > "$test_root/all-status.out"
 assert_contains "portable Skill evidence-review: linked" "$test_root/all-status.out" "status reports portable Skills"
-assert_contains "BoundedFreedom package: v0.2.0 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
+assert_contains "BoundedFreedom package: v0.3.0 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
+assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
 
 if ! cmp -s "$repo_root/.codex/config.toml" "$repo_root/install/agents-config.toml"; then
   fail "project and install Codex agent defaults diverged"
 fi
 pass "project and install Codex agent defaults match"
+assert_contains 'model = "gpt-5.3-codex-spark"' "$repo_root/.codex/agents/coder.toml" "Coder uses the specialized Spark route"
 assert_contains 'model = "gpt-5.6-terra"' "$repo_root/.codex/agents/builder.toml" "Builder keeps the balanced Terra route"
 assert_contains 'model = "gpt-5.6-sol"' "$repo_root/.codex/agents/reviewer.toml" "Reviewer keeps the strong Sol route"
 assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
+assert_contains 'max_concurrent_threads_per_session = 2' "$repo_root/.codex/config.toml" "Codex keeps the two-worker concurrency ceiling"
 
 idempotent_root="$test_root/idempotent"
 mkdir -p "$idempotent_root/.codex"
@@ -128,6 +146,70 @@ sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/AGENTS.md" > "$test_root/a
 sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/config.toml" > "$test_root/config-prefix"
 assert_file_unchanged "$test_root/user-agents" "$test_root/agents-prefix" "AGENTS.md preserves user-owned content"
 assert_file_unchanged "$test_root/user-config" "$test_root/config-prefix" "config.toml preserves user-owned content"
+
+proxy_bin="$test_root/proxy-bin"
+mkdir -p "$proxy_bin"
+cat > "$proxy_bin/scutil" <<'EOF'
+#!/bin/sh
+if [ "${1:-}" != "--proxy" ]; then
+  exit 2
+fi
+cat <<'PROXY'
+<dictionary> {
+  HTTPEnable : 1
+  HTTPPort : 18080
+  HTTPProxy : 127.0.0.1
+  HTTPSEnable : 1
+  HTTPSPort : 18080
+  HTTPSProxy : 127.0.0.1
+}
+PROXY
+EOF
+chmod +x "$proxy_bin/scutil"
+cat > "$proxy_bin/uname" <<'EOF'
+#!/bin/sh
+printf 'Darwin\n'
+EOF
+chmod +x "$proxy_bin/uname"
+
+proxy_dry_root="$test_root/proxy-dry-run"
+PATH="$proxy_bin:$PATH" "$installer" --host codex --target-root "$proxy_dry_root" --codex-proxy system --dry-run > "$test_root/proxy-dry-run.out"
+assert_path_absent "$proxy_dry_root" "proxy dry-run makes no target-root changes"
+assert_contains "would refresh managed Codex proxy .env block" "$test_root/proxy-dry-run.out" "proxy dry-run reports the managed .env action"
+
+proxy_root="$test_root/proxy-install"
+mkdir -p "$proxy_root/.codex"
+printf 'USER_SETTING="preserved"\n\n' > "$proxy_root/.codex/.env"
+PATH="$proxy_bin:$PATH" "$installer" --host codex --target-root "$proxy_root" --codex-proxy system --install > "$test_root/proxy-install.out"
+assert_contains 'USER_SETTING="preserved"' "$proxy_root/.codex/.env" "proxy import preserves unrelated user .env content"
+assert_contains 'HTTP_PROXY="http://127.0.0.1:18080"' "$proxy_root/.codex/.env" "proxy import records the detected HTTP proxy"
+assert_contains 'HTTPS_PROXY="http://127.0.0.1:18080"' "$proxy_root/.codex/.env" "proxy import records the detected HTTPS proxy"
+assert_contains 'NO_PROXY="localhost,127.0.0.1,::1"' "$proxy_root/.codex/.env" "proxy import keeps local services outside the proxy"
+if [ "$(file_mode "$proxy_root/.codex/.env")" != "600" ]; then
+  fail "managed proxy .env is not private to its owner"
+fi
+pass "managed proxy .env is private to its owner"
+"$installer" --host codex --target-root "$proxy_root" --status > "$test_root/proxy-status.out"
+assert_contains "Codex proxy .env: managed block present" "$test_root/proxy-status.out" "status reports the managed proxy block"
+cp "$proxy_root/.codex/.env" "$test_root/proxy-installed"
+PATH="$proxy_bin:$PATH" "$installer" --host codex --target-root "$proxy_root" --codex-proxy system --update > "$test_root/proxy-update.out"
+assert_file_unchanged "$test_root/proxy-installed" "$proxy_root/.codex/.env" "proxy update is byte-idempotent"
+"$installer" --host codex --target-root "$proxy_root" --codex-proxy remove --update > "$test_root/proxy-remove.out"
+assert_contains 'USER_SETTING="preserved"' "$proxy_root/.codex/.env" "proxy removal preserves unrelated user .env content"
+assert_not_contains "$begin_marker" "$proxy_root/.codex/.env" "proxy removal removes only the managed block"
+assert_not_contains 'HTTP_PROXY=' "$proxy_root/.codex/.env" "proxy removal removes managed proxy values"
+
+proxy_conflict_root="$test_root/proxy-conflict"
+mkdir -p "$proxy_conflict_root/.codex"
+printf 'HTTPS_PROXY="http://user-owned.invalid:18080"\n' > "$proxy_conflict_root/.codex/.env"
+cp "$proxy_conflict_root/.codex/.env" "$test_root/proxy-conflict-before"
+expect_exit 4 "$test_root/proxy-conflict.out" env PATH="$proxy_bin:$PATH" "$installer" --host codex --target-root "$proxy_conflict_root" --codex-proxy system --install
+assert_file_unchanged "$test_root/proxy-conflict-before" "$proxy_conflict_root/.codex/.env" "proxy import preserves user-owned proxy variables"
+assert_path_absent "$proxy_conflict_root/.agents" "proxy conflict creates no portable configuration"
+assert_path_absent "$proxy_conflict_root/.codex/agents" "proxy conflict creates no Codex agent links"
+
+expect_exit 2 "$test_root/proxy-host.out" "$installer" --host portable --target-root "$test_root/proxy-host" --codex-proxy system --install
+assert_path_absent "$test_root/proxy-host" "non-Codex proxy request makes no changes"
 
 link_conflict_root="$test_root/link-conflict"
 mkdir -p "$link_conflict_root/.claude/skills/evidence-review"
