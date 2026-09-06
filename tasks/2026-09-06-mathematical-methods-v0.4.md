@@ -35,7 +35,7 @@
 
 - Relevant evidence: User-approved single-entry architecture; the existing one-active-method contract; official Skill progressive-disclosure behavior; explicit host profiles for workers; and the v0.4.0 mathematical contracts retained as internal modules.
 - Changes or artifacts: The discoverable layer now contains `mathematical-methods`; problem mapping is its default reference stage; statistical, network, and loss/optimization bodies are internal modules without Skill frontmatter; cross-Skill routes and documentation target the parent; separate planned/runtime model and reasoning-effort fields are mandatory in `CHIEF DECISION`; and the installer removes only legacy links whose source exactly matches the retired repository directories.
-- Checkpoint: The v0.4.1 structure, route contract, safe migration, documentation, tests, and user-level portable, Codex, and Claude deployment are accepted. The next safe action is final staged-diff inspection, one coherent commit, remote publication, and a fresh-session trigger check.
+- Checkpoint: The v0.4.1 structure, route contract, safe migration, documentation, tests, and user-level portable, Codex, and Claude deployment are accepted. Implementation commit `c5edd11` is published on `origin/main`; the next safe action is a fresh-session trigger check.
 - Retries: One local directory-cleanup retry. The sandbox denied removal of eight already-inspected empty legacy directories without changing them; the same exact `rmdir` operation succeeded after the required permission escalation. No installer, deployment, network, or worker retry was needed.
 - Elapsed time: 15–30 minute bucket.
 - Cost or quota evidence: Unknown; no billing estimate is inferred.
@@ -52,6 +52,6 @@
 
 ## Decision
 
-- Outcome: Accepted and deployed locally as BoundedFreedom v0.4.1 Astra Edition; one coherent repository commit and push remain as the authorized publication step.
+- Outcome: Accepted, deployed locally, committed as `c5edd11`, and published on `origin/main` as BoundedFreedom v0.4.1 Astra Edition. This record-only closure follows the implementation commit; no method or runtime behavior changed after verification.
 - Alternatives rejected: Four peer-level mathematical Skills; undocumented recursive nested discovery; keeping stale managed links; removing legacy paths without exact source ownership; omitting unknown Chief metadata fields; and presenting planned settings as runtime-observed facts.
 - Remaining uncertainty: Fresh-session trigger quality and real-task module selection need longitudinal use; strict proof remains `formal-proof-verification` Future Work.
