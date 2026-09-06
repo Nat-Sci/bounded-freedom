@@ -2,3 +2,17 @@
 .idea/
 __pycache__/
 *.py[cod]
+
+# Local task history and one-off reports are not part of the shared Skills package.
+# Keep the reusable task template discoverable and versioned.
+/tasks/*
+!/tasks/TEMPLATE.md
+/docs/usage-analysis/
+
+# Generated test output; regression tests and fixtures remain versioned.
+/test-results/
+/playwright-report/
+/coverage/
+/.pytest_cache/
+/.coverage
+/.coverage.*

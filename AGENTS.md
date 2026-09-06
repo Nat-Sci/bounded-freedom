@@ -21,6 +21,7 @@ Operational rules:
 - Require independent Reviewer evidence for S3/S4 and explicit human acceptance for S4.
 - Treat any code, configuration, executable-workflow, or routing mutation as at least S1; S0 is read-only or presentation-only.
 - Create or update one record in `tasks/` for nontrivial changes; do not create separate brief, QA, and decision files.
+- In this repository, task records, one-off test output, and personal usage reports are local-only and ignored by Git; keep only `tasks/TEMPLATE.md` shared from `tasks/`. Do not force-add ignored records or link shared documentation to them without explicit human authorization. Skills, installation code, regression tests, reusable templates, and current package documentation remain versioned. Keep durable package decisions in the current documentation rather than publishing a run diary.
 - Treat machine-local identity and layout as private by default. In Markdown, task records, commands, retained logs, and worker returns, use repository-relative paths or neutral placeholders instead of machine-specific absolute paths, account names, private hostnames, or local-only environment, workspace, checkout, and mount names. Exact disclosure requires explicit human instruction.
 - Run commands from the current working directory when possible, redact incidental local identifiers before preserving output, and scan changed text for accidental host-specific paths before completion.
 - Verify inside the active harness using actual diffs, outputs, repository-native commands, and human inspection where appropriate.

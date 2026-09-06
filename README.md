@@ -217,6 +217,21 @@ unknown unless they provide an equivalent receipt.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
+### Shared package versus local records
+
+This repository versions reusable Skills and references, host adapters, the
+installer, regression tests, current documentation, and `tasks/TEMPLATE.md`.
+Historical task records, one-off smoke-test output, and personal usage analyses
+are local working material, not package releases: `tasks/` (except its template),
+`docs/usage-analysis/`, and generated test-output directories are ignored.
+Keep consequential local task records when required, but do not force-add them
+or link shared documentation to them. Promote only durable, relevant decisions
+into the maintained package documentation.
+
+Removing an already tracked record from Git does not erase earlier commits.
+The cleanup preserves files in the checkout performing it; other clones receive
+deletions on pull, so back up any records needed there before updating.
+
 ## Compatibility and current boundary
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.

@@ -53,7 +53,9 @@ The research repositories already inventoried are method, tool, system, benchmar
 - [AI-Scientist](https://github.com/SakanaAI/AI-Scientist) and [open-coscientist](https://github.com/jataware/open-coscientist) are end-to-end autonomous-system references, not cost-efficient defaults.
 - [ScienceAgentBench](https://github.com/OSU-NLP-Group/ScienceAgentBench) and [PaperBench](https://github.com/openai/frontier-evals/tree/main/project/paperbench) contribute evaluation boundaries: generated code, executed code, implemented method, and reproduced claim are different states.
 
-The detailed repository inventory remains in `tasks/2026-09-01-research-capability-inventory.md`.
+The maintained research references and adoption decisions are in the
+[ecosystem and credits](ecosystem-and-credits.md). One-off inventories remain
+local task records rather than dependencies of this shared guide.
 
 ## Capabilities adopted now
 

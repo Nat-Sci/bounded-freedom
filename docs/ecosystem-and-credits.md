@@ -85,7 +85,10 @@ CORE-Bench now directs users to the Holistic Agent Leaderboard because its origi
 | [Kedro](https://github.com/kedro-org/kedro), [Snakemake](https://github.com/snakemake/snakemake), [DVC](https://github.com/treeverse/dvc), and [DataLad](https://github.com/datalad/datalad) | Optional modular execution and data or experiment lineage | Routed only after a project demonstrates the relevant workflow or identity problem |
 | [FAIR4RS](https://github.com/force11/FAIR4RS) | FAIR principles for research software | A maturity goal, not a claim that every script is FAIR or release-ready |
 
-Coding harnesses and application-level agent frameworks are cataloged separately in the [harness landscape](harness-landscape.md). The fuller research inventory, including standards and additional experimental projects, is recorded in the [research capability inventory](../tasks/2026-09-01-research-capability-inventory.md).
+Coding harnesses and application-level agent frameworks are cataloged separately
+in the [harness landscape](harness-landscape.md). The maintained references above
+and adoption ledger below are the shared record; exploratory inventories and
+individual test runs stay in local task records.
 
 ## Adoption ledger by local Skill
 
