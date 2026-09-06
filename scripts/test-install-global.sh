@@ -165,6 +165,28 @@ assert_contains 'model = "gpt-5.6-terra"' "$repo_root/.codex/agents/builder.toml
 assert_contains 'model = "gpt-5.6-sol"' "$repo_root/.codex/agents/reviewer.toml" "Reviewer keeps the strong Sol route"
 assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
 assert_contains 'max_concurrent_threads_per_session = 2' "$repo_root/.codex/config.toml" "Codex keeps the two-worker concurrency ceiling"
+runtime_probe="$repo_root/.agents/skills/cost-efficient-orchestration/scripts/codex-runtime-metadata.sh"
+sh -n "$runtime_probe"
+pass "Codex runtime metadata probe has valid POSIX shell syntax"
+CODEX_HOME="$test_root/runtime-missing" CODEX_THREAD_ID= CODEX_SESSION_ID= sh "$runtime_probe" > "$test_root/runtime-missing.out"
+assert_contains '"status":"unknown"' "$test_root/runtime-missing.out" "runtime probe fails closed without a thread identifier"
+if command -v sqlite3 >/dev/null 2>&1; then
+  runtime_root="$test_root/runtime-metadata"
+  mkdir -p "$runtime_root"
+  sqlite3 "$runtime_root/state_5.sqlite" <<'SQL'
+CREATE TABLE threads (id TEXT PRIMARY KEY, model TEXT, reasoning_effort TEXT, agent_role TEXT, created_at INTEGER);
+CREATE TABLE thread_spawn_edges (parent_thread_id TEXT, child_thread_id TEXT, status TEXT);
+INSERT INTO threads VALUES ('11111111-1111-1111-1111-111111111111', 'gpt-5.6-sol', 'high', NULL, 1);
+INSERT INTO threads VALUES ('22222222-2222-2222-2222-222222222222', 'gpt-5.3-codex-spark', 'medium', 'Coder', 2);
+INSERT INTO thread_spawn_edges VALUES ('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222', 'open');
+SQL
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-chief.out"
+  assert_contains '"scope":"chief","model":"gpt-5.6-sol","reasoning_effort":"high"' "$test_root/runtime-chief.out" "runtime probe reports the host-recorded Chief pair"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
+  assert_contains '"scope":"child","role":"Coder","model":"gpt-5.3-codex-spark","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe reports the host-recorded child pair"
+else
+  echo "skip - sqlite3 is unavailable for runtime metadata regression coverage"
+fi
 assert_managed_source "$all_root/.codex/AGENTS.md" "$repo_root/install/global-agents.md" "Codex receives the complete managed instructions"
 assert_managed_source "$all_root/.codex/config.toml" "$repo_root/install/agents-config.toml" "Codex receives the complete managed configuration"
 assert_managed_source "$all_root/.claude/CLAUDE.md" "$repo_root/install/global-agents.md" "Claude receives the complete managed instructions"

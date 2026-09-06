@@ -122,3 +122,35 @@ The planning-only request reported 10,552 total tokens. That number includes hos
 - Configured Coder identity is Spark / medium; runtime-observed child model and effort remain unknown without an authoritative receipt. The routing objective is accepted, while runtime attribution and cost efficiency remain open measurements.
 - Verification accounting: one final read-only summary command was accidentally launched from the disposable fixture rather than the repository root, so repository-relative checks were unavailable there. One safe root-corrected retry passed Skill validation, whitespace and privacy checks, installed-state inspection, and routing-text presence. No mutation was retried.
 - The user subsequently authorized one v0.4.4 commit and an ordinary push to `main`. The publication scope is limited to the routing, version, concise documentation, and this audit record; pre-existing untracked publicity work remains outside the change.
+
+## v0.4.5 runtime metadata and route-conformance follow-up
+
+### Current host evidence
+
+- The current Codex 0.153.4 model catalog accepts every configured route. Astra supports low through ultra and defaults to medium; Sol and Terra support low through ultra, defaulting to low and medium respectively; Luna supports low through max and defaults to medium; Spark supports low through xhigh and defaults to high.
+- Repository and installed profiles agree: Scout is Luna / medium, Coder is Spark / medium, Builder is Terra / medium, Reviewer is Sol / high, and the untyped fallback is Luna / low. Spark's profile therefore makes a valid explicit override from its catalog default of high to medium.
+- The current Chief's latest host turn record reports Sol / max. This resolves the active session pair without inferring it from prose or UI state.
+
+### Automatic-route reproduction
+
+- One neutral one-file fixture began with four failing behavioral tests. A fresh explicitly launched Sol / high Chief received a frozen interface, immutable tests, narrow ownership, and no unresolved scientific or architectural choice; the prompt did not force a role.
+- Chief automatically selected one named Coder. Host thread state records the parent as Sol / high and its direct child as Coder / Spark / medium. Only the implementation file changed and Chief's repeated acceptance run passed 4/4 tests.
+- The pre-change receipt still labeled the Chief pair as inherited/unknown even though host state recorded it, and it classified the code mutation as S0. The first issue is missing model-visible launch metadata; the second contradicts the S1 engineering-change gate.
+- One preliminary CLI command was rejected during argument parsing because an approval flag was placed after the `exec` subcommand. No task, model call, child, or file mutation occurred; the corrected launch was the first created evaluation task. A transient plugin-catalog warning and one rejected attempt to remove a test cache did not affect the route or accepted files.
+
+### Accepted repair boundary
+
+- Add a read-only Codex runtime probe inside the orchestration Skill. It uses the current host thread identifier to return only model, reasoning effort, role, and lifecycle; it emits no local path or thread identifier and fails closed to `unknown` when host evidence is unavailable.
+- Run the probe once before the first nontrivial Codex route receipt and optionally after a direct child returns. Host-recorded session selection does not prove a hidden backend snapshot, billing, model quality, or scientific validity.
+- Reserve `inherited` for host-established inheritance. Chief may explicitly plan to keep an observed current pair for the bounded phase, but must not describe that decision as proof of the launcher's original intent.
+- Make every code, configuration, executable-workflow, or routing mutation at least S1. Preserve S0 for read-only and presentation-only work.
+- Keep the existing Chief, four execution contracts, model mapping, worker budget, specialized Skills, and routing gates unchanged.
+
+### Post-change route check
+
+- Skill validation, diff checks, privacy scanning, and 101 installer/adapter assertions passed. The four new assertions cover probe syntax, fail-closed behavior, Chief metadata, and direct-child metadata.
+- The v0.4.5 Codex adapter was installed on the current host. All eight Skill links and four managed role files report current; the managed global instruction and configuration blocks were refreshed.
+- A new Sol / high planning-only task loaded the updated Skill and runtime probe. Its receipt reported S1, Chief planned and runtime Sol / high with source `runtime`, and the hypothetical route Coder / Spark / medium. Host state independently confirms the parent pair and zero children; the task performed no implementation or delegation.
+- The post-change planning task reported 70,728 input tokens, of which 51,072 were cached, plus 1,214 output tokens. The pre-change code task included real implementation and a child and is not a comparable cost baseline; neither result establishes Token savings.
+- A combined final-check command containing temporary-directory cleanup was rejected before execution by command policy. Cleanup was not retried; the read-only installed-block, file-mode, and worktree checks were run separately and passed, leaving the disposable fixture to normal system-temporary-file handling.
+- The user authorized one v0.4.5 commit and an ordinary push to `main`. Publication remains limited to the runtime metadata, assurance, route-evaluation, adapter documentation, tests, version, and this audit record; pre-existing publicity assets and platform drafts remain outside the change.

@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.4.4 — Astra Edition**.
+Current package: **v0.4.5 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -210,6 +210,10 @@ model/effort evidence are required before calling a route verified. Validate the
 next suitable bounded task outside this source repository, whose project-local
 profiles can otherwise hide a broken personal installation. A failed role launch
 must not silently become an expensive Chief route or a weaker independent review.
+On Codex, the orchestration Skill includes a read-only runtime probe that can
+record the current Chief and direct-child model/effort from host thread state
+without retaining local paths or thread IDs. Other harnesses keep these fields
+unknown unless they provide an equivalent receipt.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
@@ -217,7 +221,7 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.4.4 provides the Astra-aware hierarchical control plane, six research
+Version 0.4.5 provides the Astra-aware hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
 phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional
@@ -225,6 +229,8 @@ reversible Codex system-proxy adapter, thin host adapters, and a tested
 installer with safe legacy-link migration and secure-readable role copies. The efficiency audit removes
 duplicated route banners, clarifies fixed-profile precedence and actual lane
 changes, and separates direct calculations from delegated implementation.
+The Codex adapter can now resolve host-recorded Chief and child model/effort,
+while code, configuration, workflow, and routing mutations start at S1.
 Required checks stop once accepted unless a new change or failure warrants more.
 Strict proof production and
 proof-assistant verification remain explicit Future Work: the mathematical
