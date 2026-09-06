@@ -15,6 +15,8 @@
 - Execution contract: direct, scout, coder, builder, or builder+reviewer
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
+- Model and effort metadata provenance: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, or unknown
+- User-visible route receipts: `ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
 - Balanced opportunity: eligible, excluded with reason, or not applicable
 - Planned workers: distinct workers, initial spawn attempts, and retry allowance
 - Actual workers: distinct workers, spawn attempts, retries, and terminal lifecycle states

@@ -2,6 +2,11 @@
 
 Use this protocol when a task may spawn workers, retry operations, mutate external state, or outlive one context window. It supplements the Chief decision; it does not create a second task record.
 
+For nontrivial work, keep the user-visible `ROUTE START`, material
+`ROUTE CHANGE`, and final `ROUTE END` events synchronized with the task
+record. Follow the metadata provenance and non-inference rules in
+[hierarchical routing](hierarchical-routing.md#route-receipt-and-user-visible-events).
+
 ## 1. Freeze the phase and context budget
 
 Before a substantial phase, state its objective, accepted inputs, active Skill and project rules, files or evidence in scope, expected verification, and next safe action. Include only the smallest context slice that can support the work. Prefer deterministic inventory or aggregation over placing raw logs, whole corpora, or repository-wide content into a model prompt.
@@ -71,6 +76,7 @@ Update the existing task record after scope freeze and after each meaningful pha
 - changed artifacts and current repository or artifact identity;
 - completed checks with pass/fail/unknown status;
 - route outcome and the evidence for any escalation or return to a lower lane;
+- user-visible route events and the provenance of any exact model or effort value;
 - unresolved uncertainty and the next safe action.
 
 Do not paste raw logs or private local paths into the checkpoint. Preserve only the smallest evidence needed to resume and verify.

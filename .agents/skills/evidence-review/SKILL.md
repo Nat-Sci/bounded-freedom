@@ -77,6 +77,11 @@ If the boundary is supplied by the user, preserve it. If it is inferred, label i
 - A database or paper-QA tool can retrieve from a corpus but cannot establish that the corpus is complete.
 - Novelty is always bounded by the searched sources, dates, languages, terminology, and accessible full text.
 - A knowledge network is a view of retained evidence relationships; network position, node count, or link density is not scientific evidence.
+- When a retained source or claim needs equation, implementation, or data-object
+  reconstruction, hand the bounded anchors to
+  [`mathematical-problem-mapping`](../mathematical-problem-mapping/SKILL.md).
+  Evidence review still owns corpus boundaries and source support; the
+  mathematical Skill does not reopen the search by itself.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.
 
 ## Upstream adoption

@@ -64,11 +64,14 @@ BoundedFreedom takes the smallest useful common set:
 3. **Chief accountability:** specialists return bounded evidence; the primary session keeps intent, integration, and the final decision.
 4. **Four separate routing decisions:** choose task method, execution contract, model and reasoning effort, and S0–S4 assurance independently for each relevant work unit.
 5. **Hierarchical phase routing:** give frontier capability only the hard control phase, apply the balanced opportunity gate before stronger non-review execution, and return stable work to a lower lane through a compact checkpoint.
-6. **Permission and scope boundaries:** read-only discovery, one writing worker, explicit ownership, stop conditions, and human gates.
-7. **Provider separation:** a host may change from OpenAI to Anthropic, DeepSeek, Gemini, or local models without rewriting scientific contracts.
-8. **Recoverable evidence:** actual diffs, tests, comparisons, task records, and explicit uncertainty; add an event store only when long-running recovery warrants it.
-9. **Independent evaluation:** review evidence separately from the implementer's narrative, especially for scientific claims.
-10. **Transport diagnosis before retry:** distinguish a WebSocket handshake problem from model failure, preserve the default provider when a process-level proxy fixes the route, and keep any network import explicit, local, and reversible.
+6. **Visible route receipts:** expose planned and observed routing through compact
+   start, material-change, and end events; mark unavailable model or effort
+   metadata as inherited, UI-selected, or unknown instead of guessing.
+7. **Permission and scope boundaries:** read-only discovery, one writing worker, explicit ownership, stop conditions, and human gates.
+8. **Provider separation:** a host may change from OpenAI to Anthropic, DeepSeek, Gemini, or local models without rewriting scientific contracts.
+9. **Recoverable evidence:** actual diffs, tests, comparisons, task records, and explicit uncertainty; add an event store only when long-running recovery warrants it.
+10. **Independent evaluation:** review evidence separately from the implementer's narrative, especially for scientific claims.
+11. **Transport diagnosis before retry:** distinguish a WebSocket handshake problem from model failure, preserve the default provider when a process-level proxy fixes the route, and keep any network import explicit, local, and reversible.
 
 ## Deliberately not adopted
 

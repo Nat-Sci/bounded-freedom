@@ -1,6 +1,13 @@
 # Skill coordination
 
-BoundedFreedom has one dispatcher and six research-method Skills. They are not a permanent team and do not all run for every request. Chief keeps accountability, activates one method for the current bounded work unit, verifies its return, and then decides whether another method is needed.
+BoundedFreedom has one dispatcher, six research-method Skills, and four
+mathematical-method Skills. They are not a permanent team and do not all run
+for every request. Chief keeps accountability, activates one method for the
+current bounded work unit, verifies its return, and then decides whether
+another method is needed. The mathematical layer is hierarchical:
+`mathematical-problem-mapping` is the normal entry for existing artifacts;
+Chief may then open one statistical, neural-network, or loss/objective analysis
+unit.
 
 ## Layers and precedence
 
@@ -29,7 +36,15 @@ admit and bound
 
 Each phase carries the frozen objective, accepted evidence, active project rules, relevant files or source slice, verification, and stop condition. Completed logs, inactive Skill bodies, superseded plans, and unrelated history stay outside the next phase's context. If a frontier phase resolves a hard architecture or evidence conflict, its stable implementation returns to balanced capability, narrow code iteration returns to the host's fast-code route, and general mechanical follow-up returns to fast general capability.
 
-A handoff records the planned and actual route, whether balanced capability was eligible, the outcome, any escalation evidence, and the next safe action. This receipt supports cost evaluation without retaining prompts, private paths, or raw message and command bodies. Method lineage remains separate from execution telemetry.
+A handoff records the planned and actual route, whether balanced capability was
+eligible, the outcome, any escalation evidence, and the next safe action. For
+nontrivial work, compact `ROUTE START`, material `ROUTE CHANGE`, and final
+`ROUTE END` events make this control state visible. Exact model and effort
+values require an explicit launch setting, loaded host profile, authoritative
+runtime metadata, or a UI value supplied in the active request; otherwise the
+receipt says `inherited`, `UI-selected`, or `unknown`. The receipt never
+exposes hidden reasoning. Method lineage remains separate from execution
+telemetry.
 
 ## Method ownership
 
@@ -37,6 +52,10 @@ A handoff records the planned and actual route, whether balanced capability was 
 | --- | --- | --- | --- |
 | What is known within a declared search boundary? | `evidence-review` | Sources, evidence, claims, gaps, and uncertainty | It does not design one preferred story or execute a project study |
 | Which competing explanations and tests should be frozen? | `hypothesis-study-design` | Hypotheses, predictions, study contract, statistical plan, and human freeze points | It does not relabel post hoc interpretation as confirmation |
+| What mathematical problem do existing papers, code, and data actually define? | `mathematical-problem-mapping` | Mathematical objects, assumptions, claim-equation-code-data links, inconsistencies, and one next method | It reconstructs before proposing and does not perform the downstream analysis |
+| Which statistical model answers one frozen cross-sectional, longitudinal, developmental, or clinical-prediction question? | `statistical-model-analysis` | Estimand, dependence and observation model, code correspondence, diagnostics, uncertainty, sensitivity, and supported claim boundary | It does not clean data, select a hypothesis post hoc, or make a clinical decision |
+| What does a neural network compute and which structural or optimization claims can it support? | `neural-network-mathematical-analysis` | Operator and dependency maps, property checks, counterexamples, redesign contract, and proof obligations | Numerical checks are not universal proof and implementation is a later work unit |
+| Does the implemented loss express the intended objective and produce the intended gradients? | `loss-objective-optimization` | Objective ledger, reductions, weights, gradient paths, degeneracy checks, and a frozen redesign | It does not own the whole architecture, training run, or scientific conclusion |
 | Are data structurally understood, traceable, and safe to hand into the frozen analysis? | `scientific-data-quality` | Data contract, QC summary, exclusion ledger, leakage audit, transformation lineage, and uncertainty | It does not perform statistical inference, interpret results, or own the whole pipeline |
 | Does a paper's code implement or reproduce a named claim? | `paper-code-reproduction` | Source and requirement map, run receipt, comparison state, and finding | New populations or conditions return to study design and project execution |
 | How should a retained claim or finding be communicated visually? | `scientific-figure` | Figure contract, editable source, render, caption inputs, and QA state | A figure is not new evidence and may not invent values or anatomy |
@@ -51,12 +70,21 @@ Question or OBS
     │                         ↓
     └────────────────→ hypothesis-study-design ─→ HYP / PRD / STD
                                                ├─→ targeted evidence update
+                                               ├─→ mathematical-problem-mapping
                                                ├─→ paper-code-reproduction
                                                └─→ project-owned execution
 
-data source + STD rules ─→ scientific-data-quality ─→ DSET / QCK / SPL
-                                                            ↓
-                                                    project-owned execution
+paper + code + data + CLM/HYP/STD
+    └─→ mathematical-problem-mapping ─→ mathematical map
+                                           ├─→ statistical-model-analysis
+                                           ├─→ neural-network-mathematical-analysis
+                                           ├─→ loss-objective-optimization
+                                           └─→ formal-proof-gap
+
+data source + STD or mathematical rules
+    └─→ scientific-data-quality ─→ DSET / QCK / SPL
+                                      ├─→ statistical-model-analysis
+                                      └─→ project-owned execution
 
 paper-code or project RUN ─→ FND
                                ├─→ scientific-figure ─→ ART-FIG
@@ -70,14 +98,38 @@ This is a route map, not a mandatory linear pipeline. A task may enter at any no
 - **Search versus reproduction:** `evidence-review` finds and evaluates the landscape; `paper-code-reproduction` freezes one paper, implementation source, and observable for mapping or execution.
 - **Study design versus result interpretation:** the study Skill freezes hypotheses and analysis choices. Project execution records observations and findings. New post-result explanations remain exploratory and create a new version.
 - **Study design versus data quality:** study design owns estimands, populations, and planned analysis. `scientific-data-quality` tests data contracts, exclusions, transformation lineage, and leakage against that frozen authority; it does not revise the study after seeing outcomes.
+- **Hypothesis versus mathematical formulation:** hypothesis design owns competing explanations and the human freeze point. `mathematical-problem-mapping` reconstructs the mathematics already present in retained artifacts; it does not choose the most attractive hypothesis.
+- **Paper-code mapping versus mathematical mapping:** reproduction owns source identity, protocol, execution, and claim comparison. Mathematical mapping owns the symbols, operators, assumptions, and code-data correspondence inside that frozen source boundary.
 - **Data quality versus pipeline implementation:** the data-quality Skill defines checks and evidence. General or lifecycle work implements a broader ETL, training, deployment, or monitoring pipeline.
-- **Data quality versus statistical inference:** schema validity, missingness, exclusions, and leakage are preconditions, not estimates or scientific conclusions. Statistical interpretation remains project-owned until a dedicated method is justified.
+- **Data quality versus statistical inference:** schema validity, missingness, exclusions, and leakage are preconditions, not estimates or scientific conclusions. `statistical-model-analysis` consumes the accepted contract and owns the bounded model, uncertainty, diagnostics, and claim-support analysis.
+- **Network mathematics versus loss mathematics:** network analysis owns functional structure, information paths, parameter coupling, and architecture-level properties. Loss analysis owns scalarization, reductions, weights, surrogate meaning, and resulting gradient incentives. A coupled problem is split at a frozen interface rather than loading both full Skills at once.
+- **Mathematical analysis versus implementation:** the mathematical Skill returns a frozen problem or change contract. Coder, Builder, reproduction, or lifecycle work implements and tests it in a later unit; passing code checks does not retroactively validate the mathematics.
+- **Mathematical analysis versus proof:** algebra, symbolic manipulation, automatic differentiation, numerical probes, and counterexample search provide bounded evidence. They do not certify a universal theorem.
 - **Analysis versus figure:** analysis code owns values and scientific geometry; the figure Skill owns visual argument, assembly, and QA. Visual polish cannot change the analysis.
 - **Project code versus software lifecycle:** general project work executes the current contract. The lifecycle Skill is activated only when accepting a durable capability, changing the frame, hardening, or releasing it.
 - **Skill versus tool:** a Skill defines method and evidence. Databases, RAG systems, plotting libraries, runtimes, and scaffolds remain optional capabilities selected for a frozen need.
 - **Execution contract versus intelligence:** Scout, Coder, Builder, and Reviewer describe ownership and independence. Model family and reasoning effort are selected separately for the work unit; eligible coordinated work starts balanced before non-review strong or frontier execution. A host-specific fast-code model may back Coder without turning the model into another role.
 - **Method versus assurance:** S0–S4 controls the evidence and review gate. It neither names the task nor automatically upgrades every executor.
 
-## Known gaps
+## Future Work: formal proof verification
 
-Cross-domain statistical analysis and post-result inference do not yet have one local method Skill. Project contracts and frozen study plans currently own that work. Scientific writing also has no local Skill. These are explicit gaps, not permission for another existing Skill to expand silently; repeated real tasks should establish a stable contract before either becomes a new directory.
+Strict proof production and machine-checked verification remain an explicit
+capability gap. Current mathematical Skills may state definitions, assumptions,
+lemmas, proof obligations, informal derivations, numerical evidence, and
+counterexamples, but they must return `formal-proof-gap` when acceptance
+requires a proof-assistant-checked theorem.
+
+Add an independent `formal-proof-verification` Skill only after real tasks
+repeatedly require it and the repository can freeze:
+
+- the supported theorem language and proof assistant;
+- the translation contract from paper/code objects into formal definitions;
+- trusted assumptions, imported libraries, environment identity, and build
+  command;
+- the machine-checked artifact and kernel verification receipt;
+- the boundary between proof of a formal statement and applicability to the
+  scientific or clinical system.
+
+Lean is a plausible future adapter, not a current dependency or certification
+claim. Scientific writing also remains a separate unimplemented method. These
+gaps are not permission for another Skill to expand silently.

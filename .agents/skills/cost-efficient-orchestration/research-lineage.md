@@ -29,6 +29,8 @@ Use stable project-local IDs. Prefixes are examples, not a required naming syste
 | Hypothesis | A candidate explanation or relationship to test | `HYP` | `hypothesis-study-design` |
 | Prediction | An observable implication that may distinguish hypotheses | `PRD` | `hypothesis-study-design` |
 | Study | A frozen experiment or analysis contract | `STD` | `hypothesis-study-design` and the project |
+| Mathematical contract | A versioned problem, statistical model, network, or objective representation mapped to retained artifacts | `MTH` | The active mathematical method Skill |
+| Proof obligation | A theorem-like statement with explicit definitions, assumptions, scope, and evidence state | `PFO` | The active mathematical method Skill or the project |
 | Run | An identified analysis, simulation, or reproduction execution | `RUN` | The executing project or `paper-code-reproduction` |
 | Finding | A result interpreted only within a frozen study, run, and evidence boundary | `FND` | Chief and the project |
 | Artifact | A manuscript statement, figure, code component, dataset release, or software release | `ART` | The producing task or Skill |
@@ -67,6 +69,8 @@ reveals_gap
 motivates
 predicts
 tests
+maps_to | formalizes
+requires_proof
 produces
 updates | weakens | leaves_indeterminate
 states | visualizes | implements
@@ -77,7 +81,8 @@ Example lineage:
 
 ```text
 SRC-012 -> EVD-031 -> CLM-008 -> GAP-004 -> HYP-003
-HYP-003 -> PRD-006 -> STD-002 -> RUN-014 -> FND-009
+HYP-003 -> PRD-006 -> STD-002 -> MTH-004 -> RUN-014 -> FND-009
+MTH-004 -> PFO-002
 FND-009 -> ART-FIG-002 | ART-MANUSCRIPT-005 | ART-SOFTWARE-003
 ```
 
@@ -105,6 +110,11 @@ This is a provenance interface, not a model router. The receiving Skill describe
 - Record whether a hypothesis was proposed before or after inspecting the target result. A hypothesis generated or refined from preliminary data remains exploratory on those data; confirmation requires untouched data, a new sample, or independent replication.
 - Do not overwrite a frozen claim, hypothesis, study, or finding. Create a new version and link it with `supersedes`.
 - A figure communicates a claim or finding; it is not additional evidence. Passing software tests verifies engineering behavior, not the scientific claim implemented by the software.
+- Keep mathematical statements reported by a source, behavior reconstructed from
+  code, and analyst-proposed corrections as different evidence states. A proof
+  obligation remains open unless the accepted verification contract is met;
+  symbolic simplification, tests, and numerical probes do not discharge a
+  strict formal proof.
 - Human owners freeze primary hypotheses, confirmatory outcomes, major scientific claims, ethics decisions, and public release decisions.
 
 ## Storage and scale

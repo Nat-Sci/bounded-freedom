@@ -64,6 +64,13 @@ These are starting routes, not task-wide model profiles. Chief should work direc
 - Random row splits are not valid when subjects, sites, families, devices, locations, or time create dependence; identify the real independence unit.
 - Missingness, outliers, and exclusions are findings to characterize before they become cleaning actions.
 - Data-format validity is not scientific validity, absence of detected leakage is not proof of independence, and passing QC is not evidence for a scientific claim.
+- Consume accepted units, indices, time, grouping, and independence requirements
+  from a mathematical or statistical contract when one exists. This Skill
+  verifies data conformance; it does not repair the mathematics or inference.
+- Hand a QC-approved bounded data contract to
+  [`statistical-model-analysis`](../statistical-model-analysis/SKILL.md) for
+  cross-sectional, longitudinal, developmental, or clinical-prediction model
+  analysis.
 - This Skill does not perform statistical inference, interpret p-values or effects, choose a preferred hypothesis after results, draw the final scientific figure, or own an end-to-end ETL/model/deployment pipeline.
 - Do not retain raw sensitive values, row-level identifiers, credentials, message content, private host paths, or unnecessary samples in reports or worker returns.
 

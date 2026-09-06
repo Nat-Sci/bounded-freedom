@@ -56,6 +56,13 @@ Use fast execution for formatting or frozen fields, not for deciding the scienti
 - If preliminary data generated or refined a hypothesis, testing it on the same data remains exploratory; confirmation requires untouched data, a new sample, or independent replication.
 - New evidence creates a new version or status update; it does not silently rewrite a frozen hypothesis or study.
 - Separate association, prediction, intervention, mediation, and causal identification.
+- This Skill freezes competing hypotheses, discriminating predictions, and the
+  analysis intent. Hand a selected hypothesis to
+  [`mathematical-problem-mapping`](../mathematical-problem-mapping/SKILL.md)
+  when existing paper, code, or data mathematics must be reconstructed, and to
+  [`statistical-model-analysis`](../statistical-model-analysis/SKILL.md) when
+  one frozen question needs a detailed estimand, model, diagnostic, or
+  uncertainty contract.
 - Do not optimize the design around a desired significant result.
 - Ethics approval, clinical interpretation, primary claims, and irreversible study choices remain human decisions.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.

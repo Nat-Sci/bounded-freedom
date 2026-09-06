@@ -74,6 +74,10 @@ The word “software” and the age of a project do not justify a stronger model
 - Do not introduce a scaffold, pipeline engine, data-version system, container, registry, DOI, or release process without a present need.
 - Reproducible does not automatically mean maintainable, citable, FAIR, secure, scientifically valid, or HPC-ready.
 - Project tests establish engineering behavior; they do not by themselves support a scientific claim.
+- Implement mathematical, statistical, network, or objective behavior only
+  from a frozen method contract. Lifecycle acceptance proves that the software
+  increment preserves the declared interface and checks; it does not prove the
+  underlying theorem, model validity, or clinical claim.
 - Do not add hosted services, publish releases, or mutate external systems without the required authority.
 - Do not create a second Chief, standing software crew, persistent agent runtime, or competing S0–S4 system.
 

@@ -2,13 +2,13 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.3.0 — Astra Edition**.
+Current package: **v0.4.0 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
 Modern AI models can already do a great deal. In long research tasks, the bottleneck is often not access to a stronger model but using available capability well. Packing retrieval, paper reading, coding, and scientific judgment into one strongest-model context can increase token use while blurring ownership and verification.
 
-BoundedFreedom is a small, constraint-first control layer for AI-assisted research and engineering. Its **Chief** keeps the goal and final judgment, sends ordinary work through the General route, loads one specialized research Skill only when needed, and selects execution scope and model effort separately for each bounded unit.
+BoundedFreedom is a small, constraint-first control layer for AI-assisted research and engineering. Its **Chief** keeps the goal and final judgment, sends ordinary work through the General route, loads one specialized research or mathematical Skill only when needed, and selects execution scope and model effort separately for each bounded unit.
 
 The model sets what may be possible, context sets what it can see, and the harness sets what it may do, what it must protect, how it gets feedback, and how its work is checked. Sources, evidence, claims, hypotheses, code, figures, and software remain linked so the work can be reviewed and recovered. BoundedFreedom does not replace scientific tools or project-owned rules.
 
@@ -23,7 +23,7 @@ The card runs from the first commit to the refresh date and adapts its interval 
 | Layer | Source of truth |
 | --- | --- |
 | Human, scientific, privacy, and evidence boundaries | `CONSTITUTION.md` |
-| Chief routing and six on-demand research methods | `.agents/skills/` |
+| Chief routing, six research methods, and four mathematical methods | `.agents/skills/` |
 | Host discovery, roles, permissions, and model syntax | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/` |
 | Data, methods, execution, and acceptance for a real study | The working project's own instructions |
 
@@ -45,6 +45,14 @@ request -> admission and phase boundary -> Chief -> General or one Skill
 | Assurance | What evidence, review, or human acceptance does the consequence require? |
 
 Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence levels. S0–S4 controls assurance, not task type or model choice.
+
+For nontrivial work, Chief exposes a compact `ROUTE START` before substantive
+work, a `ROUTE CHANGE` only when the route materially changes, and a
+`ROUTE END` with the accepted result. Model and reasoning-effort values are
+labeled as planned or runtime-observed. When the host does not expose an
+authoritative value, the receipt says `inherited`, `UI-selected`, or
+`unknown` rather than guessing. These receipts show routing control, not
+private chain-of-thought.
 
 | Execution contract | Owns | Current Codex default |
 | --- | --- | --- |
@@ -84,7 +92,7 @@ Astra receives the smallest phase packet that preserves intent, accepted evidenc
 
 The full portable protocol is in [hierarchical routing and cost evaluation](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md). Current model IDs and the Terra calibration boundary remain in the [host mapping](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
 
-## General and six research Skills
+## General, six research, and four mathematical Skills
 
 | Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |
 | --- | --- | --- | --- | --- | --- |
@@ -96,14 +104,41 @@ The full portable protocol is in [hierarchical routing and cost evaluation](.age
 | [`scientific-figure`](.agents/skills/scientific-figure/SKILL.md) | Freeze the visual argument | Locate data, assets, provenance | Make a narrow plotting edit | Build panels or editable schematics | Audit scientific and visual meaning |
 | [`research-software-lifecycle`](.agents/skills/research-software-lifecycle/SKILL.md) | Grow a verified software container | Inventory baseline and tool fit | Add one frozen capability | Coordinate increments or frame migration | Audit baseline, migration, and release boundary |
 
-This is a routing map, not a standing team. Chief normally works alone or selects one cell. One bounded work unit has one active method Skill; larger tasks chain methods through explicit handoffs. S3/S4 require independent review, and S4 also requires human acceptance. Detailed ownership and overlap rules live in [Skill coordination](docs/skill-coordination.md).
+The mathematical layer adds a reconstruction-first bridge between a real
+research question and its data or code:
+
+```text
+paper + code + data + frozen claim or hypothesis
+        ↓
+mathematical-problem-mapping
+        ├── statistical-model-analysis
+        ├── neural-network-mathematical-analysis
+        ├── loss-objective-optimization
+        └── formal-proof-gap
+```
+
+| Mathematical method | Owns | Typical profiles or handoff |
+| --- | --- | --- |
+| [`mathematical-problem-mapping`](.agents/skills/mathematical-problem-mapping/SKILL.md) | Reconstruct existing variables, equations, assumptions, constraints, and claim-equation-code-data links | Select exactly one next mathematical method or stop |
+| [`statistical-model-analysis`](.agents/skills/statistical-model-analysis/SKILL.md) | Estimands, dependence, model specification, uncertainty, diagnostics, sensitivity, and claim support | Cross-sectional, longitudinal, developmental/normative, or clinical-prediction profile |
+| [`neural-network-mathematical-analysis`](.agents/skills/neural-network-mathematical-analysis/SKILL.md) | Functional structure, information and gradient paths, invariance, identifiability, stability, counterexamples, and proof obligations | Freeze an architecture decision or return `formal-proof-gap` |
+| [`loss-objective-optimization`](.agents/skills/loss-objective-optimization/SKILL.md) | Loss terms, reductions, weights, constraints, surrogate alignment, gradient incentives, and degeneracy | Freeze one objective or optimization change for later implementation |
+
+This is a routing map, not a standing team. Chief normally works alone or
+selects one cell. One bounded work unit has one active method Skill; larger
+tasks chain methods through explicit handoffs. Infant development and AD
+diagnostic/prediction are bounded statistical profiles, not catch-all
+top-level agents. S3/S4 require independent review, and S4 also requires human
+acceptance. Detailed ownership and overlap rules live in
+[Skill coordination](docs/skill-coordination.md).
 
 Research handoffs retain only the needed slice of a shared lineage:
 
 ```text
 source -> evidence -> claim -> gap -> hypothesis -> study
-data source -> contract / QC / leakage gate ---------> run -> finding
-                                                               -> code / figure / software
+                                  -> mathematical contract -> proof obligation
+data source -> contract / QC / leakage gate -> model -> run -> finding
+                                                            -> code / figure / software
 ```
 
 The [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) preserves traceability without loading an entire project history into every task.
@@ -135,13 +170,22 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.3.0 provides the Astra-aware hierarchical control plane, six method contracts, compact phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional reversible Codex system-proxy adapter, thin host adapters, and a tested installer. Databases, plotting libraries, reproduction runtimes, and benchmarks remain optional. Token, latency, quality, and scientific benefits still need repeated real-task measurement rather than promotional percentages.
+Version 0.4.0 provides the Astra-aware hierarchical control plane, six research
+method contracts, four mathematical method contracts, visible route receipts,
+compact phase handoffs, a Terra opportunity gate, a Spark fast-code route, an
+optional reversible Codex system-proxy adapter, thin host adapters, and a
+tested installer. Strict proof production and proof-assistant verification
+remain explicit Future Work: current mathematical Skills can record proof
+obligations but must not certify them. Databases, plotting libraries,
+mathematical runtimes, reproduction runtimes, and benchmarks remain optional.
+Token, latency, quality, and scientific benefits still need repeated real-task
+measurement rather than promotional percentages.
 
 ## Documentation and credits
 
 - [Constitution](CONSTITUTION.md): non-negotiable boundaries.
 - [Orchestration Skill](.agents/skills/cost-efficient-orchestration/SKILL.md): live selection algorithm.
-- [Skill coordination](docs/skill-coordination.md): ownership, handoffs, and known gaps.
+- [Skill coordination](docs/skill-coordination.md): ownership, handoffs, and explicit Future Work.
 - [Harness landscape](docs/harness-landscape.md): host compatibility and adopted control ideas.
 - [Ecosystem and credits](docs/ecosystem-and-credits.md): related work and the selected, deferred, and excluded ledger.
 - [Public Wiki](https://github.com/Nat-Sci/bounded-freedom/wiki): shorter navigable introduction.

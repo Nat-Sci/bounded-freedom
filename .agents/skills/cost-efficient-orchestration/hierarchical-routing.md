@@ -75,16 +75,38 @@ next safe action:
 
 Checkpoint when the method changes, a decision is frozen, a worker return is accepted, a large evidence slice is no longer needed, or compaction is likely. Resume from the checkpoint plus observable repository or external state rather than reconstructing the full conversation.
 
-## Route receipt
+## Route receipt and user-visible events
 
-For nontrivial work, retain the smallest aggregate receipt needed to evaluate routing:
+For nontrivial work, retain the smallest aggregate receipt needed to evaluate
+routing and expose three compact events:
+
+- `ROUTE START` before substantive tool work: active method, assurance,
+  execution contract, planned lane, worker count, and model/effort metadata
+  source.
+- `ROUTE CHANGE` only after a material route change: the changed field,
+  observable reason, and new planned or observed value. Do not repeat unchanged
+  state as progress narration.
+- `ROUTE END` in the final response: accepted actual route, verification
+  outcome, retries, worker terminal states, and remaining unknowns.
+
+Simple S0 work may omit these events. Receipts expose routing decisions, not
+private chain-of-thought. Separate a planned model or effort from a
+runtime-observed value. An exact value is valid only when sourced from an
+explicit launch setting, a loaded host profile, authoritative runtime metadata,
+or a UI value supplied in the active request. Otherwise record `inherited`,
+`UI-selected`, or `unknown`; never infer model identity or effort from
+latency, prose style, or task difficulty. A Skill cannot silently change
+Chief's active model.
 
 ```text
+event: ROUTE START | ROUTE CHANGE | ROUTE END
 phase:
 task method:
 execution contract:
 planned capability lane:
-actual host model and effort:
+planned host model and effort:
+runtime-observed host model and effort:
+metadata source: explicit launch | host profile | runtime | supplied UI | inherited | unknown
 lower lane considered and decision:
 context slice or size bucket:
 verification and outcome: accepted | rework | escalated | blocked

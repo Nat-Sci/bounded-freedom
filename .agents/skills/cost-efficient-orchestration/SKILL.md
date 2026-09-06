@@ -24,6 +24,17 @@ checkpoint: durable recovery record and next safe action
 rationale: why this route and delegation are cost-effective
 ```
 
+For nontrivial work, follow the declaration with the smallest user-visible
+`ROUTE START` receipt before substantive tool work. Emit `ROUTE CHANGE` only
+when the method, execution contract, worker, model, effort, or assurance
+materially changes, and summarize the accepted route in `ROUTE END`. Label
+planned choices separately from runtime-observed metadata. State an exact model
+or effort only when it comes from an explicit launch setting, a loaded host
+profile, authoritative runtime metadata, or a UI value supplied in the active
+request; otherwise use `inherited`, `UI-selected`, or `unknown`. A Skill can
+recommend or route a worker, but it cannot silently switch Chief's model or
+expose hidden reasoning.
+
 Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
 
 Read [research-lineage.md](research-lineage.md) when work crosses research Skills or when sources, claims, hypotheses, findings, and downstream artifacts must remain traceable. Pass only the bounded lineage slice needed by the next Skill; do not load a whole project knowledge network by default.
@@ -111,11 +122,11 @@ Chief and every worker treat machine-local identity and layout as private by def
 
 For work likely to span multiple phases or context compaction, keep the one task record current enough to recover from repository state rather than memory. Retire completed evidence and logs from active context after preserving the accepted decision and observable receipt. After compaction, re-read governing instructions and the task checkpoint, inspect actual status and diffs, confirm worker state, and resume from the recorded next safe action. When the user has authorized commits, prefer a coherent verified milestone over a large uncheckpointed change.
 
-Chief reports: outcome, files or artifacts changed, planned and actual phase routes and workers, retries, elapsed time, evidence coverage, lifecycle leftovers, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty. Report cost only from an authoritative source; otherwise report routing evidence without estimating billing.
+Chief reports: outcome, files or artifacts changed, the compact `ROUTE END` receipt, planned and actual phase routes and workers, metadata provenance, retries, elapsed time, evidence coverage, lifecycle leftovers, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty. Report cost only from an authoritative source; otherwise report routing evidence without estimating billing.
 
 ## Upstream adoption
 
-- **Selected:** progressive Skill loading, Chief-owned phase routing, bounded execution contracts, compact context handoffs, a balanced opportunity gate, evidence-gated frontier control, per-work-unit model choice, independent review, thin host adapters, and a lightweight cross-Skill research-lineage handoff.
+- **Selected:** progressive Skill loading, Chief-owned phase routing, bounded execution contracts, compact context handoffs, provenance-aware user-visible route receipts, a balanced opportunity gate, evidence-gated frontier control, per-work-unit model choice, independent review, thin host adapters, and a lightweight cross-Skill research-lineage handoff.
 - **Not selected now:** task-wide model profiles, a standing multi-agent crew, recursive delegation, a custom runtime, a required graph database, automatic upstream merging, forced model-share quotas, or an unmeasured autonomous router.
 
 The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).

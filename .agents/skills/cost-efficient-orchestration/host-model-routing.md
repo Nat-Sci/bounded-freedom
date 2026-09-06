@@ -10,6 +10,24 @@ Use a matching Skill's work-unit execution contract and capability lane first, t
 
 The S0–S4 gate may add review; it does not upgrade the executor. A Markdown Skill cannot switch Chief: work directly, delegate under a configured execution contract, or recommend an explicit switch.
 
+## Report route metadata without guessing
+
+Keep four states distinct in user-visible receipts:
+
+| Field | Meaning |
+| --- | --- |
+| Planned lane | Chief's capability choice for the bounded work unit |
+| Planned model and effort | A requested model/effort pair, or the host-profile default that will be used for an explicit worker launch |
+| Runtime-observed model and effort | A value exposed by authoritative runtime metadata or supplied by the user from the active UI |
+| Metadata source | `explicit launch`, `host profile`, `runtime`, `supplied UI`, `inherited`, or `unknown` |
+
+An explicit worker launch or loaded profile makes its configured pair
+reportable as planned; it is runtime-observed only when the host confirms it.
+For Chief, a Skill may recommend a lane but cannot inspect or silently alter
+the UI selection. If the active runtime does not expose the value, use
+`UI-selected` or `unknown`. Never infer model identity or reasoning effort
+from response time, prose, tool behavior, or task difficulty.
+
 ## Route by limiting factor
 
 Choose the least costly model that clears the bounded work unit's real limit:

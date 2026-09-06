@@ -75,6 +75,9 @@ Deterministic manifest, file, format, and render checks should run as tools rath
 - Preserve the license and attribution of external icons, templates, fonts, and anatomical assets.
 - Treat image-model-generated labels, icons, arrows, and topology as `unverified` until their declared bindings and meanings are checked against the frozen design.
 - A figure visualizes evidence or a finding; it is not additional independent evidence.
+- Consume accepted equations, model properties, and loss definitions from the
+  relevant mathematical Skill. Figure work may visualize or typeset them, but
+  it must not silently repair, simplify, or invent their scientific meaning.
 - Chief retains final model, delegation, S0-S4, and acceptance decisions.
 
 ## Upstream adoption
