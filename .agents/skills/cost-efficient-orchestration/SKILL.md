@@ -15,6 +15,12 @@ CHIEF DECISION
 task method: general | <matching-skill>
 assurance: S0 | S1 | S2 | S3 | S4
 execution: direct | scout | coder | builder | builder+reviewer
+Chief planned capability lane: fast | balanced | strong | frontier | UI-selected | unknown
+Chief planned model: exact value | current UI selection | inherited | unknown
+Chief planned reasoning effort: exact value | current UI selection | inherited | unknown
+Chief runtime model: exact authoritative value | unknown
+Chief runtime reasoning effort: exact authoritative value | unknown
+Chief metadata source: explicit launch | host profile | runtime | supplied UI | inherited | UI-selected | unknown
 workers: execution contract (host model / effort), or none
 worker budget: planned distinct workers / total spawn attempts / retry allowance
 phase and context: current phase / accepted input slice / compaction boundary
@@ -34,6 +40,12 @@ profile, authoritative runtime metadata, or a UI value supplied in the active
 request; otherwise use `inherited`, `UI-selected`, or `unknown`. A Skill can
 recommend or route a worker, but it cannot silently switch Chief's model or
 expose hidden reasoning.
+
+The six Chief capability and model fields above are mandatory in the `CHIEF DECISION`
+itself, even when no worker is used. Do not defer them only to a later route
+receipt. If the active interface exposes only the user's UI selection, record
+the planned model and effort as `current UI selection`, both runtime values as
+`unknown`, and the source as `UI-selected / interface not authoritative`.
 
 Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
 
@@ -55,6 +67,12 @@ When a specialized Skill is loaded, use its work-unit execution contract and cap
 The Skill owns method and work-unit guidance; orchestration owns the final execution contract, model, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
 
 Use one active method Skill per bounded work unit. A larger request may move through several Skills, but Chief closes or freezes the current unit, records the handoff, and passes only the needed lineage slice before loading the next method. Do not stack several full Skill bodies into standing context. The durable ownership and common handoffs are summarized in [Skill coordination](../../../docs/skill-coordination.md).
+
+A discoverable Skill may progressively load one internal reference module. The
+module is not another Skill, does not trigger independently, and cannot route
+itself. In particular, `mathematical-methods` loads at most one statistical,
+network, or loss/optimization module after its problem map is accepted; Chief
+checkpoints before switching modules.
 
 ## Selection algorithm
 

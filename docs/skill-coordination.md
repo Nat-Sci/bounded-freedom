@@ -1,13 +1,28 @@
 # Skill coordination
 
-BoundedFreedom has one dispatcher, six research-method Skills, and four
-mathematical-method Skills. They are not a permanent team and do not all run
-for every request. Chief keeps accountability, activates one method for the
-current bounded work unit, verifies its return, and then decides whether
-another method is needed. The mathematical layer is hierarchical:
-`mathematical-problem-mapping` is the normal entry for existing artifacts;
-Chief may then open one statistical, neural-network, or loss/objective analysis
-unit.
+BoundedFreedom has one dispatcher, six research-method Skills, and one
+discoverable `mathematical-methods` Skill. They are not a permanent team and do
+not all run for every request. Chief keeps accountability, activates one method
+for the current bounded work unit, verifies its return, and then decides
+whether another method is needed. The mathematical Skill first uses its
+problem-mapping reference unless an accepted map already exists, then loads at
+most one statistical, neural-network, or loss/objective method module.
+
+```text
+mathematical-methods/
+├── SKILL.md                              discoverable entry
+└── references/
+    ├── problem-map.md                    default mapping stage
+    ├── statistical-model-analysis/
+    │   └── method.md                     on-demand module
+    ├── neural-network-mathematical-analysis/
+    │   └── method.md                     on-demand module
+    └── loss-objective-optimization/
+        └── method.md                     on-demand module
+```
+
+The three module directories contain `method.md`, not `SKILL.md`, so they do
+not compete for discovery or trigger independently.
 
 ## Layers and precedence
 
@@ -52,10 +67,10 @@ telemetry.
 | --- | --- | --- | --- |
 | What is known within a declared search boundary? | `evidence-review` | Sources, evidence, claims, gaps, and uncertainty | It does not design one preferred story or execute a project study |
 | Which competing explanations and tests should be frozen? | `hypothesis-study-design` | Hypotheses, predictions, study contract, statistical plan, and human freeze points | It does not relabel post hoc interpretation as confirmation |
-| What mathematical problem do existing papers, code, and data actually define? | `mathematical-problem-mapping` | Mathematical objects, assumptions, claim-equation-code-data links, inconsistencies, and one next method | It reconstructs before proposing and does not perform the downstream analysis |
-| Which statistical model answers one frozen cross-sectional, longitudinal, developmental, or clinical-prediction question? | `statistical-model-analysis` | Estimand, dependence and observation model, code correspondence, diagnostics, uncertainty, sensitivity, and supported claim boundary | It does not clean data, select a hypothesis post hoc, or make a clinical decision |
-| What does a neural network compute and which structural or optimization claims can it support? | `neural-network-mathematical-analysis` | Operator and dependency maps, property checks, counterexamples, redesign contract, and proof obligations | Numerical checks are not universal proof and implementation is a later work unit |
-| Does the implemented loss express the intended objective and produce the intended gradients? | `loss-objective-optimization` | Objective ledger, reductions, weights, gradient paths, degeneracy checks, and a frozen redesign | It does not own the whole architecture, training run, or scientific conclusion |
+| What mathematical problem do existing papers, code, and data actually define? | `mathematical-methods` problem-mapping stage | Mathematical objects, assumptions, claim-equation-code-data links, inconsistencies, and one next module | It reconstructs before proposing and does not perform the downstream analysis |
+| Which statistical model answers one frozen cross-sectional, longitudinal, developmental, or clinical-prediction question? | `mathematical-methods` / statistical module | Estimand, dependence and observation model, code correspondence, diagnostics, uncertainty, sensitivity, and supported claim boundary | It does not clean data, select a hypothesis post hoc, or make a clinical decision |
+| What does a neural network compute and which structural or optimization claims can it support? | `mathematical-methods` / network module | Operator and dependency maps, property checks, counterexamples, redesign contract, and proof obligations | Numerical checks are not universal proof and implementation is a later work unit |
+| Does the implemented loss express the intended objective and produce the intended gradients? | `mathematical-methods` / loss and optimization module | Objective ledger, reductions, weights, gradient paths, degeneracy checks, and a frozen redesign | It does not own the whole architecture, training run, or scientific conclusion |
 | Are data structurally understood, traceable, and safe to hand into the frozen analysis? | `scientific-data-quality` | Data contract, QC summary, exclusion ledger, leakage audit, transformation lineage, and uncertainty | It does not perform statistical inference, interpret results, or own the whole pipeline |
 | Does a paper's code implement or reproduce a named claim? | `paper-code-reproduction` | Source and requirement map, run receipt, comparison state, and finding | New populations or conditions return to study design and project execution |
 | How should a retained claim or finding be communicated visually? | `scientific-figure` | Figure contract, editable source, render, caption inputs, and QA state | A figure is not new evidence and may not invent values or anatomy |
@@ -70,20 +85,20 @@ Question or OBS
     │                         ↓
     └────────────────→ hypothesis-study-design ─→ HYP / PRD / STD
                                                ├─→ targeted evidence update
-                                               ├─→ mathematical-problem-mapping
+                                               ├─→ mathematical-methods
                                                ├─→ paper-code-reproduction
                                                └─→ project-owned execution
 
 paper + code + data + CLM/HYP/STD
-    └─→ mathematical-problem-mapping ─→ mathematical map
-                                           ├─→ statistical-model-analysis
-                                           ├─→ neural-network-mathematical-analysis
-                                           ├─→ loss-objective-optimization
-                                           └─→ formal-proof-gap
+    └─→ mathematical-methods ─→ problem map
+                                   ├─→ statistical module
+                                   ├─→ network mathematics module
+                                   ├─→ loss and optimization module
+                                   └─→ formal-proof-gap
 
 data source + STD or mathematical rules
     └─→ scientific-data-quality ─→ DSET / QCK / SPL
-                                      ├─→ statistical-model-analysis
+                                      ├─→ mathematical-methods / statistical module
                                       └─→ project-owned execution
 
 paper-code or project RUN ─→ FND
@@ -98,10 +113,10 @@ This is a route map, not a mandatory linear pipeline. A task may enter at any no
 - **Search versus reproduction:** `evidence-review` finds and evaluates the landscape; `paper-code-reproduction` freezes one paper, implementation source, and observable for mapping or execution.
 - **Study design versus result interpretation:** the study Skill freezes hypotheses and analysis choices. Project execution records observations and findings. New post-result explanations remain exploratory and create a new version.
 - **Study design versus data quality:** study design owns estimands, populations, and planned analysis. `scientific-data-quality` tests data contracts, exclusions, transformation lineage, and leakage against that frozen authority; it does not revise the study after seeing outcomes.
-- **Hypothesis versus mathematical formulation:** hypothesis design owns competing explanations and the human freeze point. `mathematical-problem-mapping` reconstructs the mathematics already present in retained artifacts; it does not choose the most attractive hypothesis.
+- **Hypothesis versus mathematical formulation:** hypothesis design owns competing explanations and the human freeze point. The `mathematical-methods` problem-mapping stage reconstructs the mathematics already present in retained artifacts; it does not choose the most attractive hypothesis.
 - **Paper-code mapping versus mathematical mapping:** reproduction owns source identity, protocol, execution, and claim comparison. Mathematical mapping owns the symbols, operators, assumptions, and code-data correspondence inside that frozen source boundary.
 - **Data quality versus pipeline implementation:** the data-quality Skill defines checks and evidence. General or lifecycle work implements a broader ETL, training, deployment, or monitoring pipeline.
-- **Data quality versus statistical inference:** schema validity, missingness, exclusions, and leakage are preconditions, not estimates or scientific conclusions. `statistical-model-analysis` consumes the accepted contract and owns the bounded model, uncertainty, diagnostics, and claim-support analysis.
+- **Data quality versus statistical inference:** schema validity, missingness, exclusions, and leakage are preconditions, not estimates or scientific conclusions. The `mathematical-methods` statistical module consumes the accepted contract and owns the bounded model, uncertainty, diagnostics, and claim-support analysis.
 - **Network mathematics versus loss mathematics:** network analysis owns functional structure, information paths, parameter coupling, and architecture-level properties. Loss analysis owns scalarization, reductions, weights, surrogate meaning, and resulting gradient incentives. A coupled problem is split at a frozen interface rather than loading both full Skills at once.
 - **Mathematical analysis versus implementation:** the mathematical Skill returns a frozen problem or change contract. Coder, Builder, reproduction, or lifecycle work implements and tests it in a later unit; passing code checks does not retroactively validate the mathematics.
 - **Mathematical analysis versus proof:** algebra, symbolic manipulation, automatic differentiation, numerical probes, and counterexample search provide bounded evidence. They do not certify a universal theorem.
@@ -114,7 +129,7 @@ This is a route map, not a mandatory linear pipeline. A task may enter at any no
 ## Future Work: formal proof verification
 
 Strict proof production and machine-checked verification remain an explicit
-capability gap. Current mathematical Skills may state definitions, assumptions,
+capability gap. The current mathematical Skill and its modules may state definitions, assumptions,
 lemmas, proof obligations, informal derivations, numerical evidence, and
 counterexamples, but they must return `formal-proof-gap` when acceptance
 requires a proof-assistant-checked theorem.

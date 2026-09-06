@@ -1,17 +1,12 @@
----
-name: neural-network-mathematical-analysis
-description: Reconstruct, formalize, and audit the mathematics of a neural network from papers, code, and tensor behavior. Use for functional structure, information paths, parameter coupling, invariance, identifiability, stability, optimization dynamics, counterexamples, and proof obligations; not for ordinary code review, full training implementation, or claiming formal proof without machine-checked evidence.
----
-
-# Neural-network mathematical analysis
+# Neural-network mathematical analysis module
 
 State what a network actually computes and which mathematical claims its structure can support. Use exact implementation evidence to separate architectural intent from executable behavior.
 
-Read [the network analysis contract](references/network-contract.md) for the shared representation, checks, and return schema.
+Read [the network analysis contract](network-contract.md) for the shared representation, checks, and return schema.
 
-Read [proof obligations and the formal-proof gap](references/proof-obligations.md) when a paper, code comment, or proposed method makes a theorem-like claim about invariance, convergence, uniqueness, stability, identifiability, approximation, or optimality.
+Read [proof obligations and the formal-proof gap](proof-obligations.md) when a paper, code comment, or proposed method makes a theorem-like claim about invariance, convergence, uniqueness, stability, identifiability, approximation, or optimality.
 
-Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when the analysis consumes a retained claim or hypothesis or produces a method decision, test, finding, or software artifact.
+The parent Skill supplies the accepted problem map, bounded lineage slice, execution route, and assurance level. This module owns only the network-mathematical method and return contract.
 
 ## Select the entry
 
@@ -58,18 +53,8 @@ Do not escalate because the network is large. Reduce it to the smallest subgraph
 - Do not infer a mathematical property from a module name, architecture diagram, or author description when code behavior can be inspected.
 - A network passing tests on sampled inputs does not prove a universal property. Numerical gradients and automatic differentiation establish observed computations, not theorem validity.
 - Predictive improvement does not establish the proposed mechanism; require an alternative explanation, baseline, intervention, or ablation capable of discriminating it.
-- Keep architecture mathematics separate from loss semantics. Route a loss, weighting, regularization, or multi-objective question to `loss-objective-optimization` after freezing the relevant network context.
+- Keep architecture mathematics separate from loss semantics. Return a frozen handoff to the parent when the next work unit requires the [loss, objective, and optimization module](../loss-objective-optimization/method.md).
 - Do not silently change data, labels, splits, clinical targets, or scientific hypotheses to make an architectural proposal work.
 - Strict formal proof and proof-assistant verification are an explicit Future Work gap. Do not use plausible derivations, symbolic algebra, or empirical testing as certification.
-- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, and final acceptance.
-
-## Upstream adoption
-
-- **Selected:** executable architecture reconstruction, information and gradient paths, property-specific checks, counterexamples, explicit redesign hypotheses, and proof-obligation records.
-- **Not selected now:** architecture names as explanations, benchmark improvement as mechanism proof, a bundled training runtime, automatic model redesign, or strict formal verification.
-
-The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
-
-## Influences and credits
-
-This Skill is an original synthesis informed by computational-graph analysis, automatic differentiation, numerical stability practice, and paper-to-code correspondence. The [PyTorch autograd mechanics](https://docs.pytorch.org/docs/stable/notes/autograd.html) are one optional implementation reference; PyTorch is not bundled. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
+- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, module transitions, and final acceptance.
+- Return to the parent `mathematical-methods` Skill after this bounded module; do not invoke another module recursively.

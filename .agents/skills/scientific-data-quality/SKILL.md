@@ -68,9 +68,9 @@ These are starting routes, not task-wide model profiles. Chief should work direc
   from a mathematical or statistical contract when one exists. This Skill
   verifies data conformance; it does not repair the mathematics or inference.
 - Hand a QC-approved bounded data contract to
-  [`statistical-model-analysis`](../statistical-model-analysis/SKILL.md) for
-  cross-sectional, longitudinal, developmental, or clinical-prediction model
-  analysis.
+  [`mathematical-methods`](../mathematical-methods/SKILL.md), selecting its
+  statistical model module for cross-sectional, longitudinal, developmental,
+  or clinical-prediction analysis.
 - This Skill does not perform statistical inference, interpret p-values or effects, choose a preferred hypothesis after results, draw the final scientific figure, or own an end-to-end ETL/model/deployment pipeline.
 - Do not retain raw sensitive values, row-level identifiers, credentials, message content, private host paths, or unnecessary samples in reports or worker returns.
 

@@ -1,24 +1,19 @@
----
-name: statistical-model-analysis
-description: Reconstruct, design, or audit statistical models from a frozen scientific question, data contract, analysis code, or reported result. Use for cross-sectional or longitudinal dependence, estimands, model specification, uncertainty, diagnostics, sensitivity, and claim support; not for data cleaning, unrestricted pipeline implementation, or treating statistical output as clinical truth.
----
-
-# Statistical model analysis
+# Statistical model analysis module
 
 Determine which statistical model existing data and code define, whether that model answers the frozen question, and what evidence is required for a defensible inference. Keep design, implementation, observed output, and interpretation separate.
 
-Read [the statistical model contract](references/statistical-contract.md) for the shared schema and model-comparison rules.
+Read [the statistical model contract](statistical-contract.md) for the shared schema and model-comparison rules.
 
 Then read only the relevant profile:
 
-- [cross-sectional analysis](references/cross-sectional.md) for one-time, grouped, clustered, paired, survey, or case-control structures;
-- [longitudinal analysis](references/longitudinal.md) for repeated measures, trajectories, irregular follow-up, time-varying quantities, censoring, or dropout;
-- [developmental and normative analysis](references/developmental-normative.md) for infant or child development, age-conditioned reference curves, milestones, or individual deviation;
-- [clinical prediction analysis](references/clinical-prediction.md) for diagnostic, prognostic, staging, screening, or decision-support models.
+- [cross-sectional analysis](cross-sectional.md) for one-time, grouped, clustered, paired, survey, or case-control structures;
+- [longitudinal analysis](longitudinal.md) for repeated measures, trajectories, irregular follow-up, time-varying quantities, censoring, or dropout;
+- [developmental and normative analysis](developmental-normative.md) for infant or child development, age-conditioned reference curves, milestones, or individual deviation;
+- [clinical prediction analysis](clinical-prediction.md) for diagnostic, prognostic, staging, screening, or decision-support models.
 
 Multiple profiles may be relevant across a larger request, but use one primary profile for the current bounded work unit and checkpoint before changing profiles.
 
-Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when the model consumes a retained hypothesis or study, produces a finding, or supports a paper, figure, or software artifact.
+The parent Skill supplies the accepted problem map, bounded lineage slice, execution route, and assurance level. This module owns only the statistical method and return contract.
 
 ## Select the entry
 
@@ -63,7 +58,7 @@ An S3 inference requires independent review because of consequence, not because 
 
 ## Boundaries
 
-- `hypothesis-study-design` owns competing hypotheses, discriminating studies, and the human freeze point. This Skill owns the detailed statistical model for one frozen question.
+- `hypothesis-study-design` owns competing hypotheses, discriminating studies, and the human freeze point. This module owns the detailed statistical model for one frozen question.
 - `scientific-data-quality` owns schema, exclusions, transformations, split integrity, and leakage. Passing data QC does not validate a model; a statistical model must not silently redefine the data contract.
 - Association, prediction, diagnosis, prognosis, intervention, mediation, and causal identification are different claims. Do not move among them because the same model syntax can be used.
 - Do not use a test set, future visit, outcome-derived feature, or post hoc subgroup to design a confirmatory model.
@@ -74,15 +69,5 @@ An S3 inference requires independent review because of consequence, not because 
   convergence, or another universal property, record the proposition and
   assumptions and return `formal-proof-gap`; statistical diagnostics do not
   discharge it.
-- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, and final acceptance.
-
-## Upstream adoption
-
-- **Selected:** artifact-first reconstruction, explicit estimands and independence units, profile-specific dependence checks, model comparison before outcome-driven selection, uncertainty and sensitivity requirements, and bounded claim interpretation.
-- **Not selected now:** one universal statistical recipe, automatic model selection, significance-driven optimization, a bundled statistical runtime, causal conclusions from predictive performance, or clinical deployment authority.
-
-The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
-
-## Influences and credits
-
-This Skill is an original synthesis informed by established statistical-model criticism, longitudinal and hierarchical modeling practice, clinical-prediction guidance, and the [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/index.html). Statistical software remains an optional project capability rather than a bundled dependency. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
+- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, module transitions, and final acceptance.
+- Return to the parent `mathematical-methods` Skill after this bounded module; do not invoke another module recursively.

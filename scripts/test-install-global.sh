@@ -88,7 +88,7 @@ pass "installer has valid POSIX shell syntax"
 dry_root="$test_root/dry-run"
 "$installer" --host all --target-root "$dry_root" --dry-run > "$test_root/dry-run.out"
 assert_path_absent "$dry_root" "dry-run makes no changes"
-assert_contains "BoundedFreedom package: v0.4.0 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
+assert_contains "BoundedFreedom package: v0.4.1 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
 assert_contains "dry-run complete; no files were changed" "$test_root/dry-run.out" "dry-run reports completion"
 
 all_root="$test_root/all-hosts"
@@ -115,11 +115,12 @@ done
 pass "all Codex agent profiles link to repository sources"
 "$installer" --host all --target-root "$all_root" --status > "$test_root/all-status.out"
 assert_contains "portable Skill evidence-review: linked" "$test_root/all-status.out" "status reports portable Skills"
-assert_contains "portable Skill mathematical-problem-mapping: linked" "$test_root/all-status.out" "status reports the mathematical entry Skill"
-assert_contains "portable Skill statistical-model-analysis: linked" "$test_root/all-status.out" "status reports the statistical analysis Skill"
-assert_contains "portable Skill neural-network-mathematical-analysis: linked" "$test_root/all-status.out" "status reports the network mathematics Skill"
-assert_contains "portable Skill loss-objective-optimization: linked" "$test_root/all-status.out" "status reports the loss and objective Skill"
-assert_contains "BoundedFreedom package: v0.4.0 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
+assert_contains "portable Skill mathematical-methods: linked" "$test_root/all-status.out" "status reports the sole mathematical entry Skill"
+assert_not_contains "portable Skill mathematical-problem-mapping: linked" "$test_root/all-status.out" "status omits the former problem-mapping Skill"
+assert_not_contains "portable Skill statistical-model-analysis: linked" "$test_root/all-status.out" "status omits the former statistical Skill"
+assert_not_contains "portable Skill neural-network-mathematical-analysis: linked" "$test_root/all-status.out" "status omits the former network Skill"
+assert_not_contains "portable Skill loss-objective-optimization: linked" "$test_root/all-status.out" "status omits the former loss Skill"
+assert_contains "BoundedFreedom package: v0.4.1 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
 assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
@@ -135,7 +136,60 @@ assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/con
 assert_contains 'max_concurrent_threads_per_session = 2' "$repo_root/.codex/config.toml" "Codex keeps the two-worker concurrency ceiling"
 assert_contains 'ROUTE START' "$repo_root/install/global-agents.md" "global instructions expose the route start receipt"
 assert_contains 'ROUTE END' "$repo_root/install/global-agents.md" "global instructions expose the route end receipt"
-assert_contains 'formal-proof-gap' "$repo_root/.agents/skills/neural-network-mathematical-analysis/references/proof-obligations.md" "network mathematics records the strict proof gap"
+assert_contains 'Chief planned model' "$repo_root/install/global-agents.md" "global instructions require the planned Chief model in the decision"
+assert_contains 'Chief planned reasoning effort' "$repo_root/install/global-agents.md" "global instructions require the planned Chief reasoning effort in the decision"
+assert_contains 'Chief runtime model' "$repo_root/install/global-agents.md" "global instructions require the runtime Chief model in the decision"
+assert_contains 'Chief runtime reasoning effort' "$repo_root/install/global-agents.md" "global instructions require the runtime Chief reasoning effort in the decision"
+assert_contains 'Chief metadata source' "$repo_root/install/global-agents.md" "global instructions require Chief metadata provenance in the decision"
+assert_contains 'formal-proof-gap' "$repo_root/.agents/skills/mathematical-methods/references/neural-network-mathematical-analysis/proof-obligations.md" "network mathematics records the strict proof gap"
+
+discoverable_skill_count=$(find "$repo_root/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l | tr -d ' ')
+if [ "$discoverable_skill_count" -ne 8 ]; then
+  fail "the repository does not expose the expected eight Skills"
+fi
+pass "the repository exposes the expected eight Skills"
+discoverable_math_count=$(find "$repo_root/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md -path '*/mathematical-*/*' | wc -l | tr -d ' ')
+if [ "$discoverable_math_count" -ne 1 ]; then
+  fail "the repository does not expose exactly one mathematical Skill"
+fi
+pass "the repository exposes exactly one mathematical Skill"
+if find "$repo_root/.agents/skills/mathematical-methods/references" -name SKILL.md | grep -q .; then
+  fail "an internal mathematical module is independently discoverable"
+fi
+pass "mathematical method modules are references rather than discoverable Skills"
+
+legacy_root="$test_root/legacy-migration"
+mkdir -p "$legacy_root/.agents/skills" "$legacy_root/.claude/skills"
+for legacy_name in mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization; do
+  ln -s "$repo_root/.agents/skills/$legacy_name" "$legacy_root/.agents/skills/$legacy_name"
+  ln -s "$repo_root/.agents/skills/$legacy_name" "$legacy_root/.claude/skills/$legacy_name"
+done
+"$installer" --host all --target-root "$legacy_root" --dry-run > "$test_root/legacy-dry-run.out"
+assert_contains "would remove legacy managed portable Skill mathematical-problem-mapping" "$test_root/legacy-dry-run.out" "migration dry-run reports portable legacy cleanup"
+assert_contains "would remove legacy managed Claude Skill mathematical-problem-mapping" "$test_root/legacy-dry-run.out" "migration dry-run reports Claude legacy cleanup"
+if [ ! -L "$legacy_root/.agents/skills/mathematical-problem-mapping" ]; then
+  fail "migration dry-run changed a portable legacy link"
+fi
+pass "migration dry-run preserves portable legacy links"
+"$installer" --host all --target-root "$legacy_root" --update > "$test_root/legacy-update.out"
+for legacy_name in mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization; do
+  assert_path_absent "$legacy_root/.agents/skills/$legacy_name" "migration removes exact managed portable legacy link $legacy_name"
+  assert_path_absent "$legacy_root/.claude/skills/$legacy_name" "migration removes exact managed Claude legacy link $legacy_name"
+done
+if [ ! -L "$legacy_root/.agents/skills/mathematical-methods" ]; then
+  fail "migration did not install the consolidated mathematical entry"
+fi
+pass "migration installs the consolidated mathematical entry"
+
+legacy_preserve_root="$test_root/legacy-preserve"
+mkdir -p "$legacy_preserve_root/.agents/skills"
+printf 'user-owned\n' > "$legacy_preserve_root/user-owned-target"
+ln -s "$legacy_preserve_root/user-owned-target" "$legacy_preserve_root/.agents/skills/statistical-model-analysis"
+"$installer" --host portable --target-root "$legacy_preserve_root" --update > "$test_root/legacy-preserve.out"
+if [ ! -L "$legacy_preserve_root/.agents/skills/statistical-model-analysis" ] || [ "$(readlink "$legacy_preserve_root/.agents/skills/statistical-model-analysis")" != "$legacy_preserve_root/user-owned-target" ]; then
+  fail "migration changed a user-owned legacy-name path"
+fi
+pass "migration preserves a user-owned legacy-name path"
 
 idempotent_root="$test_root/idempotent"
 mkdir -p "$idempotent_root/.codex"

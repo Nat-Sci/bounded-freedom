@@ -80,6 +80,11 @@ Checkpoint when the method changes, a decision is frozen, a worker return is acc
 For nontrivial work, retain the smallest aggregate receipt needed to evaluate
 routing and expose three compact events:
 
+- `CHIEF DECISION` before the events: always include the Chief's planned
+  capability lane, planned model, planned reasoning effort, runtime model,
+  runtime reasoning effort, and metadata source; an unavailable runtime value
+  is shown as `unknown`, not omitted.
+
 - `ROUTE START` before substantive tool work: active method, assurance,
   execution contract, planned lane, worker count, and model/effort metadata
   source.

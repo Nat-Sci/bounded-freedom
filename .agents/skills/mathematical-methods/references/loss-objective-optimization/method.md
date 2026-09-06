@@ -1,15 +1,10 @@
----
-name: loss-objective-optimization
-description: Reconstruct, audit, or design machine-learning losses, regularizers, constraints, and multi-objective optimization from papers and code. Use for objective semantics, reductions, weighting, gradient paths, scale, degeneracy, surrogate alignment, and optimization tests; not for full network redesign, training execution, clinical threshold selection, or claiming universal optimality.
----
-
-# Loss, objective, and optimization analysis
+# Loss, objective, and optimization analysis module
 
 State precisely what the implemented objective optimizes, where its gradients flow, and whether the surrogate and training procedure align with the frozen scientific or engineering target.
 
-Read [the loss and optimization contract](references/loss-contract.md) for component fields, gradient and scale checks, failure modes, and acceptance evidence.
+Read [the loss and optimization contract](loss-contract.md) for component fields, gradient and scale checks, failure modes, and acceptance evidence.
 
-Read the shared [research-lineage contract](../cost-efficient-orchestration/research-lineage.md) when the objective implements a retained method claim or produces a finding, method decision, or software artifact.
+The parent Skill supplies the accepted problem and network maps, bounded lineage slice, execution route, and assurance level. This module owns only the objective and optimization method and return contract.
 
 ## Select the entry
 
@@ -26,7 +21,7 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Resolve surrogate alignment, coupled objectives, degeneracy, unstable optimization, or consequential method claims | Chief, direct; Reviewer when assurance requires independence | Strong reasoning |
 | Implement one frozen objective change and its tests | Coder when narrow; Builder when coordinated | Fast code or balanced |
 
-Keep network-wide architectural redesign in `neural-network-mathematical-analysis`. This Skill may freeze the loss-facing interface a later network unit must preserve.
+Keep network-wide architectural redesign in the [neural-network mathematical analysis module](../neural-network-mathematical-analysis/method.md). This module may freeze the loss-facing interface a later network unit must preserve.
 
 ## Workflow
 
@@ -62,15 +57,5 @@ Keep network-wide architectural redesign in `neural-network-mathematical-analysi
 - Numerical gradient checks and finite examples verify sampled behavior, not a universal theorem.
 - Do not tune objective weights on held-out evaluation data or report post hoc ablations as confirmatory.
 - Do not change network architecture, data contract, target label, clinical threshold, or primary hypothesis without a separately frozen and authorized work unit.
-- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, and final acceptance.
-
-## Upstream adoption
-
-- **Selected:** effective-objective reconstruction, explicit reduction and gradient paths, scale and degeneracy checks, surrogate-target alignment, competing explanations, and code-ready acceptance tests.
-- **Not selected now:** one universal loss recipe, automatic weight tuning, benchmark-driven objective search without a frozen target, a bundled optimizer runtime, or claims of universal optimality.
-
-The source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
-
-## Influences and credits
-
-This Skill is an original synthesis informed by optimization, numerical analysis, multi-objective learning, automatic differentiation, and reproducible ablation practice. Frameworks and solvers remain optional project capabilities rather than bundled dependencies. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md).
+- Chief retains execution, model, reasoning effort, delegation, S0-S4 assurance, module transitions, and final acceptance.
+- Return to the parent `mathematical-methods` Skill after this bounded module; do not invoke another module recursively.

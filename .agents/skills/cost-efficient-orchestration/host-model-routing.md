@@ -28,6 +28,11 @@ the UI selection. If the active runtime does not expose the value, use
 `UI-selected` or `unknown`. Never infer model identity or reasoning effort
 from response time, prose, tool behavior, or task difficulty.
 
+Put the planned capability lane, planned model, planned reasoning effort,
+runtime model, runtime reasoning effort, and source directly in every
+nontrivial `CHIEF DECISION`. A later route receipt may repeat them compactly,
+but it does not replace the decision fields.
+
 ## Route by limiting factor
 
 Choose the least costly model that clears the bounded work unit's real limit:

@@ -104,7 +104,7 @@ Emit only the route needed for the next bounded task:
 
 ```text
 handoff_id
-route: evidence-review | paper-code-reproduction | project-execution
+route: evidence-review | mathematical-methods | paper-code-reproduction | project-execution
 target_claim_hypothesis_prediction_or_study_ids
 question_or_expected_observable
 mode_or_scope

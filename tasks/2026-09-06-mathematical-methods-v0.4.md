@@ -1,91 +1,57 @@
-# Task record: Mathematical methods v0.4.0
+# Task record: Consolidated mathematical methods v0.4.1
 
 ## Intent
 
-- Objective: Add a progressively disclosed mathematical-method layer that reconstructs mathematical problems already present in papers, code, and data; routes bounded work to statistical-model, neural-network, or loss-objective analysis; and makes model, reasoning-effort, and worker routing visible without exposing hidden reasoning.
-- Non-goals: Do not create a standing mathematics agent crew, bundle numerical software, invent scientific models without source or project authority, execute a study, change a project's data or claims, or claim formal proof support.
-- Assumptions and uncertainty: The four-method hierarchy and user-visible route receipt are human-approved. Strict formal proof is an explicit capability gap and Future Work; real-task calibration will still be needed after structural and routing tests.
+- Objective: Replace the four peer-level mathematical Skills introduced in v0.4.0 with one discoverable `mathematical-methods` entry, one default problem-mapping stage, and three on-demand method modules; make Chief model and reasoning-effort provenance visible directly in `CHIEF DECISION`.
+- Non-goals: Do not create recursive Skill execution, a nested worker hierarchy, bundled mathematical software, automatic model selection, unrestricted study execution, clinical authority, or a present formal-proof capability.
+- Assumptions and uncertainty: The user explicitly selected the single-entry design. Current Codex documentation specifies Skill directories and progressive reference loading but does not promise recursive discovery of nested child Skills, so internal modules deliberately use `method.md` rather than `SKILL.md`. Fresh-session trigger behavior still requires post-deployment use.
 
 ## Chief decision
 
-- Package version and edition: BoundedFreedom v0.4.0, Astra Edition.
+- Package version and edition: BoundedFreedom v0.4.1, Astra Edition.
 - Task method: `skill-creator`, governed by `cost-efficient-orchestration`.
-- Assurance: S2; the package changes future mathematical and statistical method contracts but does not alter a current study, dataset, numerical result, or clinical conclusion.
-- Current phase and active context slice: Architecture frozen; implement four mathematical Skills, references, coordination, visible route receipts, routing evaluations, version documentation, and installer expectations.
+- Assurance: S2; this changes future mathematical and statistical method contracts and installation layout but no current study data, estimate, clinical result, or scientific conclusion.
+- Current phase and active context slice: The single-entry architecture is frozen; repository structure, references, route receipts, migration, documentation, tests, deployment, and publication are in scope.
 - Execution contract: direct.
-- Planned route: Chief direct for contract design and repository edits; no lower lane is needed because delegation would duplicate a tightly coupled documentation change.
-- Actual route: Chief direct; no escalation.
-- Model and effort metadata provenance: Planned lane was the current
-  UI-selected Chief. The active interface did not expose authoritative runtime
-  model or effort metadata, so both remain `UI-selected / unknown`; no value
-  was inferred.
-- User-visible route receipts: The initial Chief decision carried the route
-  fields; `ROUTE START` was emitted after the new event contract was written.
-  No material `ROUTE CHANGE` occurred. `ROUTE END` is due in the final
-  response.
-- Balanced opportunity: not applicable; no worker is planned.
-- Planned workers: 0 distinct workers, 0 spawn attempts, 1 retry allowance for a proven-idempotent validation command after observable diagnosis.
-- Actual workers: 0 distinct workers, 0 spawn attempts, 0 worker retries, no lifecycle state to reconcile.
-- Worker-budget rationale: The accepted design, affected documents, and validation surface are already known; one writing owner avoids overlap across closely coupled Skill boundaries.
-- Owned scope: Four new mathematical Skills and focused references; orchestration route receipts and evaluations; shared coordination, lineage, ecosystem, README, version, installer tests, and this task record.
-- Verification: Validate every Skill, resolve repository-local Markdown links, run routing and installer invariants, compare expected Skill count and package version, scan changed text for private machine identifiers, and inspect the final diff.
-- Stop conditions: Stop before adding strict formal proof, silently changing Chief's selected model, creating automatic nested Skill execution, or changing scientific conclusions; record unresolved capability instead.
+- Chief planned capability lane: UI-selected; no silent capability switch.
+- Chief planned model: current UI selection.
+- Chief planned reasoning effort: current UI selection.
+- Chief runtime model: `unknown`.
+- Chief runtime reasoning effort: `unknown`.
+- Chief metadata source: UI-selected route; the current task interface exposes no authoritative runtime model or effort value.
+- Planned route: Chief direct for the tightly coupled Skill, documentation, migration, and test edits; no delegated lower lane because the accepted boundary and files are already known.
+- Actual route: Chief direct; no capability escalation.
+- Model and effort metadata provenance: No exact Chief value is inferred. No worker profile is loaded or launched.
+- User-visible route receipts: `CHIEF DECISION` and `ROUTE START` were emitted before substantive edits. No material `ROUTE CHANGE` has occurred; `ROUTE END` is due with the accepted result.
+- Balanced opportunity: not applicable because no worker or separate implementation phase is justified.
+- Planned workers: 0 distinct workers, 0 spawn attempts, and 1 retry allowance after an observable no-side-effect failure or for a proven-idempotent check.
+- Actual workers: 0 distinct workers, 0 spawn attempts, 0 worker retries, and no lifecycle state to reconcile.
+- Worker-budget rationale: One writing owner avoids conflicts across a structural move whose Skill names, references, installer migration, and documentation must change together.
+- Owned scope: Mathematical Skill layout and modules; cross-Skill links; orchestration decision fields and routing evaluations; installer migration and regressions; README, coordination, ecosystem, version, and this record.
+- Verification: Validate every discoverable Skill, assert exactly one mathematical `SKILL.md`, resolve repository-local Markdown links, run installer and repository regressions, verify safe legacy-link cleanup and deployed status, scan changed text for private machine identifiers, and inspect the staged diff.
+- Stop conditions: Stop before removing a user-owned legacy-name path, inventing Chief runtime metadata, activating more than one mathematical module per bounded unit, adding strict proof support, or changing scientific conclusions.
 
 ## Evidence and execution
 
-- Relevant evidence: Human-approved hierarchy; current one-Skill-per-work-unit contract; official Codex model and subagent configuration behavior; existing paper, code, data-quality, hypothesis, software, and figure handoffs.
-- Changes or artifacts: Added `mathematical-problem-mapping` as the
-  reconstruction-first entry, plus `statistical-model-analysis`,
-  `neural-network-mathematical-analysis`, and
-  `loss-objective-optimization` as bounded leaves. Added cross-sectional,
-  longitudinal, developmental/normative, and clinical-prediction statistical
-  profiles; problem, network, objective, and proof-obligation contracts;
-  cross-Skill handoffs and lineage objects; visible route receipts with
-  metadata provenance; mathematical routing evaluations; v0.4.0 package and
-  ecosystem documentation; installer assertions; and local portable, Codex,
-  and Claude links.
-- Checkpoint: The four-method hierarchy, proof gap, route-receipt contract,
-  documentation, and installer are accepted in the working tree. All declared
-  repository checks and installed-state checks pass. No worker exists. The next
-  safe action is final diff inspection, one coherent commit, remote
-  publication, and a fresh-session trigger check by the user.
-- Retries: One read-only repository-activity test retry. The first call
-  reported that Node was absent from the shell path; the bundled runtime was
-  located without changing repository state, and the same deterministic test
-  passed on the single allowed retry.
+- Relevant evidence: User-approved single-entry architecture; the existing one-active-method contract; official Skill progressive-disclosure behavior; explicit host profiles for workers; and the v0.4.0 mathematical contracts retained as internal modules.
+- Changes or artifacts: The discoverable layer now contains `mathematical-methods`; problem mapping is its default reference stage; statistical, network, and loss/optimization bodies are internal modules without Skill frontmatter; cross-Skill routes and documentation target the parent; separate planned/runtime model and reasoning-effort fields are mandatory in `CHIEF DECISION`; and the installer removes only legacy links whose source exactly matches the retired repository directories.
+- Checkpoint: The v0.4.1 structure, route contract, safe migration, documentation, tests, and user-level portable, Codex, and Claude deployment are accepted. The next safe action is final staged-diff inspection, one coherent commit, remote publication, and a fresh-session trigger check.
+- Retries: One local directory-cleanup retry. The sandbox denied removal of eight already-inspected empty legacy directories without changing them; the same exact `rmdir` operation succeeded after the required permission escalation. No installer, deployment, network, or worker retry was needed.
 - Elapsed time: 15–30 minute bucket.
 - Cost or quota evidence: Unknown; no billing estimate is inferred.
-- Deviations: The new literal `ROUTE START` format was introduced during this
-  task, so it followed the earlier semantically equivalent Chief decision
-  rather than preceding the first edit.
+- Deviations: The v0.4.0 four-Skill structure was a useful first implementation but remained too visible and flat. This v0.4.1 follow-up preserves the methods while correcting discovery granularity.
 
 ## Verification and review
 
-- Checks and comparisons: All 11 Skills passed the structural validator; all
-  58 installer regressions passed; all 20 repository-activity checks passed
-  after the recorded environment retry; 93 repository-local Markdown targets
-  resolved; package and installer report v0.4.0; all four mathematical Skills
-  are linked in portable, Codex, and Claude status; route receipts and the
-  formal proof gap have installer assertions; changed text passes whitespace
-  and host-specific-model boundary checks.
-- Evidence coverage: 9 of 9 declared checks passed: Skill structure, method
-  hierarchy and boundary inspection, routing evaluations, installer
-  regression, unrelated repository regression, Markdown links, package
-  identity, privacy and portability, and deployed-state status.
-- Route evidence: Chief direct, zero workers, no escalation, one transparent
-  environment retry, and first-pass acceptance for Skill and installer checks.
-  Balanced-opportunity capture was not applicable.
-- Privacy and portability check: Passed. Changed text contains no
-  machine-specific absolute path, account name, private hostname, or private
-  environment name; portable mathematical Skills contain no host model IDs.
+- Checks and comparisons: All 8 discoverable Skills passed the structural validator; all 80 installer regressions passed; the suite asserts 8 total Skills, exactly 1 mathematical Skill, no nested module `SKILL.md`, exact managed-link cleanup, user-owned legacy-name preservation, and all five Chief model/effort provenance fields. All 20 repository-activity checks passed; 88 repository-local Markdown targets resolved; package and installer report v0.4.1; the real dry-run, update, and installed-state status show only `mathematical-methods` for the mathematical layer; and whitespace checks passed.
+- Evidence coverage: 10 of 10 declared checks passed: Skill structure, single-entry/module boundary, cross-Skill links, route-decision fields, installer regression, unrelated repository regression, Markdown links, package identity, privacy/portability, and deployed-state status.
+- Route evidence: Chief direct, zero workers, no capability escalation, one permission-only filesystem retry after an observable no-change failure, and first-pass acceptance for all product checks.
+- Privacy and portability check: Passed. Repository text contains no machine-specific home path, account name, private temporary path, private environment path, file URI, or SSH remote; installer output identifies logical targets without printing their filesystem paths; portable mathematical content contains no host model IDs.
 - Reviewer verdict when required: Not required at S2.
-- Human acceptance when required: The hierarchy and formal-proof deferral were explicitly accepted; S4 acceptance is not applicable.
+- Human acceptance when required: The consolidation choice is explicitly user-approved; S4 acceptance is not applicable.
 
 ## Decision
 
-- Outcome: Accepted and deployed locally as BoundedFreedom v0.4.0 Astra
-  Edition; repository publication is the final authorized external operation.
-- Alternatives rejected: One catch-all mathematics Skill; domain profiles as peer-level top Skills; recursive Skill invocation; silent Chief model switching; presenting unverified runtime metadata as fact.
-- Remaining uncertainty: Fresh-session trigger behavior and real-task routing
-  quality still need longitudinal use; strict proof remains
-  `formal-proof-verification` Future Work rather than a present capability.
+- Outcome: Accepted and deployed locally as BoundedFreedom v0.4.1 Astra Edition; one coherent repository commit and push remain as the authorized publication step.
+- Alternatives rejected: Four peer-level mathematical Skills; undocumented recursive nested discovery; keeping stale managed links; removing legacy paths without exact source ownership; omitting unknown Chief metadata fields; and presenting planned settings as runtime-observed facts.
+- Remaining uncertainty: Fresh-session trigger quality and real-task module selection need longitudinal use; strict proof remains `formal-proof-verification` Future Work.

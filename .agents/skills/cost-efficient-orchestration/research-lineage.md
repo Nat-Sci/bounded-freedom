@@ -29,8 +29,8 @@ Use stable project-local IDs. Prefixes are examples, not a required naming syste
 | Hypothesis | A candidate explanation or relationship to test | `HYP` | `hypothesis-study-design` |
 | Prediction | An observable implication that may distinguish hypotheses | `PRD` | `hypothesis-study-design` |
 | Study | A frozen experiment or analysis contract | `STD` | `hypothesis-study-design` and the project |
-| Mathematical contract | A versioned problem, statistical model, network, or objective representation mapped to retained artifacts | `MTH` | The active mathematical method Skill |
-| Proof obligation | A theorem-like statement with explicit definitions, assumptions, scope, and evidence state | `PFO` | The active mathematical method Skill or the project |
+| Mathematical contract | A versioned problem, statistical model, network, or objective representation mapped to retained artifacts | `MTH` | The active module under `mathematical-methods` |
+| Proof obligation | A theorem-like statement with explicit definitions, assumptions, scope, and evidence state | `PFO` | The active `mathematical-methods` module or the project |
 | Run | An identified analysis, simulation, or reproduction execution | `RUN` | The executing project or `paper-code-reproduction` |
 | Finding | A result interpreted only within a frozen study, run, and evidence boundary | `FND` | Chief and the project |
 | Artifact | A manuscript statement, figure, code component, dataset release, or software release | `ART` | The producing task or Skill |

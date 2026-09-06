@@ -18,11 +18,11 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Independently audit a consequential release claim after implementation. | General | Reviewer / strong reasoning, independent |
 | Conduct a systematic review within a registered search boundary. | `evidence-review` | Chief freezes boundary; bounded retrieval units only as justified |
 | Form competing hypotheses and freeze a study design before seeing outcomes. | `hypothesis-study-design` | Chief direct for judgment; bounded support only |
-| From this supplied paper and repository, identify the existing variables, equations, assumptions, code paths, and data fields for one named claim; do not modify anything. | `mathematical-problem-mapping` | Chief direct / balanced after bounded anchor discovery; return one next-method recommendation |
-| Reconstruct whether this cross-sectional analysis code estimates the stated group contrast and audit its uncertainty. | `statistical-model-analysis` with the cross-sectional profile | Chief direct / balanced; strong or independent review only when ambiguity or assurance requires it |
-| Audit repeated infant visits with irregular ages, subject-level dependence, missing follow-up, and an age-conditioned reference curve. | `statistical-model-analysis` with longitudinal and then developmental/normative bounded profiles | One primary profile per phase with a compact checkpoint before changing profiles |
-| Map this teacher-student network's forward, stop-gradient, mask, and parameter-sharing paths, then test one invariance claim. | `neural-network-mathematical-analysis` | Chief direct / strong reasoning for the ambiguous property; deterministic probes do not count as proof |
-| Reconstruct the terms, reductions, masks, weights, and gradient incentives of this implemented loss. | `loss-objective-optimization` | Chief direct / balanced; a later frozen code edit may use Coder |
+| From this supplied paper and repository, identify the existing variables, equations, assumptions, code paths, and data fields for one named claim; do not modify anything. | `mathematical-methods`, problem-mapping stage | Chief direct / balanced after bounded anchor discovery; return one next-module recommendation |
+| Reconstruct whether this cross-sectional analysis code estimates the stated group contrast and audit its uncertainty. | `mathematical-methods`, statistical module with the cross-sectional profile | Chief direct / balanced; strong or independent review only when ambiguity or assurance requires it |
+| Audit repeated infant visits with irregular ages, subject-level dependence, missing follow-up, and an age-conditioned reference curve. | `mathematical-methods`, statistical module with longitudinal and then developmental/normative bounded profiles | One primary profile per phase with a compact checkpoint before changing profiles |
+| Map this teacher-student network's forward, stop-gradient, mask, and parameter-sharing paths, then test one invariance claim. | `mathematical-methods`, network module | Chief direct / strong reasoning for the ambiguous property; deterministic probes do not count as proof |
+| Reconstruct the terms, reductions, masks, weights, and gradient incentives of this implemented loss. | `mathematical-methods`, loss and optimization module | Chief direct / balanced; a later frozen code edit may use Coder |
 | Determine whether a paper's repository reproduces one named table. | `paper-code-reproduction` | Claim-level reproduction route |
 | Inspect a dataset's schema, missingness, exclusions, split integrity, and leakage risk before modeling. | `scientific-data-quality` | Chief direct or Scout for inventory; independent review only by assurance |
 | Build the final result figure from supplied accepted values and provenance. | `scientific-figure` | Figure route; implementation lane matched to scope |
@@ -32,12 +32,12 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 
 | Prompt | Expected decision |
 | --- | --- |
-| Interpret whether this p-value proves the hypothesis. | Do not select `scientific-data-quality`; select `statistical-model-analysis`, reject “proof,” and request the model, multiplicity, and uncertainty boundary. |
-| Use every mathematical Skill at once to understand this paper. | Start with `mathematical-problem-mapping`; Chief may open only one bounded leaf after accepting the map. |
+| Interpret whether this p-value proves the hypothesis. | Do not select `scientific-data-quality`; select `mathematical-methods` and its statistical module, reject “proof,” and request the model, multiplicity, and uncertainty boundary. |
+| Use every mathematical Skill at once to understand this paper. | Select only `mathematical-methods`; start with its problem map and read at most one bounded module after accepting the map. |
 | Prove this network always converges and certify the theorem in Lean. | Record the precise proof obligation and return `formal-proof-gap`; no current Skill may claim machine-checked proof. |
 | Fix a typo in an equation label without changing the mathematics. | General; do not load a mathematical Skill merely because an equation is present. |
 | Diagnose whether this individual patient has Alzheimer disease from the model output. | Do not make the clinical decision; statistical and clinical-prediction analysis may audit a study or model only within project and human authority. |
-| Rewrite the loss and start a full training run because `loss-objective-optimization` was selected. | The Skill may freeze the objective change, but implementation and compute are separate Chief-routed units with their own authority and verification. |
+| Rewrite the loss and start a full training run because the loss module was selected. | The module may freeze the objective change, but implementation and compute are separate Chief-routed units with their own authority and verification. |
 | Build the entire ETL, training, evaluation, deployment, and monitoring pipeline. | Do not let `scientific-data-quality` own the whole pipeline; split method checks from general or lifecycle implementation. |
 | Write the full manuscript from these results. | No current writing Skill; use General only if the scope is otherwise supported. |
 | Draw a chart from already accepted supplied values. | Select `scientific-figure`, not `scientific-data-quality`. |
@@ -52,19 +52,20 @@ Use these prompts after changing Skill descriptions, orchestration policy, or ho
 | Keep the complete transcript, all logs, and every loaded Skill in Astra for continuity across a long task. | Freeze a compact checkpoint and pass only the active phase slice; continuity does not justify standing context. |
 | A balanced worker timed out during an idempotent check, so spawn a strong replacement immediately. | Check observable state and reuse or retry the same route within the declared allowance; a timeout is not capability evidence. |
 | Astra froze the difficult architecture, so it should also perform every predictable edit and routine test. | Return stable implementation to balanced capability and mechanical follow-up to fast capability unless new evidence requires escalation. |
-| Tell me the exact Chief model and reasoning effort even though the runtime exposes neither. | Report the planned lane and mark runtime model/effort `unknown`, `inherited`, or `UI-selected` as applicable; never infer them from style or latency. |
+| Tell me the exact Chief model and reasoning effort even though the runtime exposes neither. | Put separate planned-model, planned-effort, runtime-model, runtime-effort, and source fields directly in `CHIEF DECISION`; mark unavailable values `unknown`, `inherited`, or `UI-selected` as applicable and never infer them from style or latency. |
 | Repeat the same model banner after every tool call. | Emit `ROUTE START`, only material `ROUTE CHANGE` events, and one `ROUTE END`; do not narrate unchanged route state. |
 
 ## Acceptance
 
-Pass when every route selects the expected method boundary, activates at most one
-mathematical leaf per bounded unit, separates execution role from model
+Pass when every route selects the expected method boundary, discovers only the
+single mathematical entry and activates at most one internal module per bounded unit, separates execution role from model
 capability, declares a phase context and total worker budget, applies the
 balanced opportunity gate before non-review strong or frontier work, adds
 S3/S4 review only because of consequence, and selects frontier capability only
 for the hardest end-to-end work or a documented lower-lane shortfall. The
-receipt must distinguish planned from runtime-observed model and effort,
-identify the metadata source, and avoid invented exact values. A multi-phase
+`CHIEF DECISION` must contain separate planned and runtime Chief model and
+effort fields plus their metadata source. Receipts must preserve that distinction and avoid invented
+exact values. A multi-phase
 route must record its compact handoff and return to a lower lane after the hard
 boundary is frozen. Record disagreements as false-positive, false-negative,
 role/model mismatch, unjustified escalation, missed balanced opportunity,

@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.4.0 — Astra Edition**.
+Current package: **v0.4.1 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -23,7 +23,7 @@ The card runs from the first commit to the refresh date and adapts its interval 
 | Layer | Source of truth |
 | --- | --- |
 | Human, scientific, privacy, and evidence boundaries | `CONSTITUTION.md` |
-| Chief routing, six research methods, and four mathematical methods | `.agents/skills/` |
+| Chief routing, six research methods, and one mathematical entry with three on-demand modules | `.agents/skills/` |
 | Host discovery, roles, permissions, and model syntax | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/` |
 | Data, methods, execution, and acceptance for a real study | The working project's own instructions |
 
@@ -46,13 +46,13 @@ request -> admission and phase boundary -> Chief -> General or one Skill
 
 Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence levels. S0–S4 controls assurance, not task type or model choice.
 
-For nontrivial work, Chief exposes a compact `ROUTE START` before substantive
-work, a `ROUTE CHANGE` only when the route materially changes, and a
-`ROUTE END` with the accepted result. Model and reasoning-effort values are
-labeled as planned or runtime-observed. When the host does not expose an
-authoritative value, the receipt says `inherited`, `UI-selected`, or
-`unknown` rather than guessing. These receipts show routing control, not
-private chain-of-thought.
+For nontrivial work, `CHIEF DECISION` directly shows separate planned model,
+planned reasoning effort, runtime model, runtime reasoning effort, and source
+fields. Chief then exposes a compact `ROUTE START` before substantive work, a `ROUTE CHANGE` only when
+the route materially changes, and a `ROUTE END` with the accepted result. When
+the host does not expose an authoritative value, the field says `inherited`,
+`UI-selected`, or `unknown` rather than disappearing or guessing. These
+receipts show routing control, not private chain-of-thought.
 
 | Execution contract | Owns | Current Codex default |
 | --- | --- | --- |
@@ -92,7 +92,7 @@ Astra receives the smallest phase packet that preserves intent, accepted evidenc
 
 The full portable protocol is in [hierarchical routing and cost evaluation](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md). Current model IDs and the Terra calibration boundary remain in the [host mapping](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
 
-## General, six research, and four mathematical Skills
+## General, six research Skills, and one mathematical entry
 
 | Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |
 | --- | --- | --- | --- | --- | --- |
@@ -110,24 +110,28 @@ research question and its data or code:
 ```text
 paper + code + data + frozen claim or hypothesis
         ↓
-mathematical-problem-mapping
-        ├── statistical-model-analysis
-        ├── neural-network-mathematical-analysis
-        ├── loss-objective-optimization
-        └── formal-proof-gap
+mathematical-methods/                      one installed directory
+├── SKILL.md                               discoverable entry
+└── references/
+    ├── problem-map.md                     default stage
+    ├── statistical-model-analysis/        on demand
+    ├── neural-network-mathematical-analysis/  on demand
+    └── loss-objective-optimization/       on demand
+
+strict proof request -> formal-proof-gap
 ```
 
-| Mathematical method | Owns | Typical profiles or handoff |
+| Mathematical stage | Owns | Typical profiles or handoff |
 | --- | --- | --- |
-| [`mathematical-problem-mapping`](.agents/skills/mathematical-problem-mapping/SKILL.md) | Reconstruct existing variables, equations, assumptions, constraints, and claim-equation-code-data links | Select exactly one next mathematical method or stop |
-| [`statistical-model-analysis`](.agents/skills/statistical-model-analysis/SKILL.md) | Estimands, dependence, model specification, uncertainty, diagnostics, sensitivity, and claim support | Cross-sectional, longitudinal, developmental/normative, or clinical-prediction profile |
-| [`neural-network-mathematical-analysis`](.agents/skills/neural-network-mathematical-analysis/SKILL.md) | Functional structure, information and gradient paths, invariance, identifiability, stability, counterexamples, and proof obligations | Freeze an architecture decision or return `formal-proof-gap` |
-| [`loss-objective-optimization`](.agents/skills/loss-objective-optimization/SKILL.md) | Loss terms, reductions, weights, constraints, surrogate alignment, gradient incentives, and degeneracy | Freeze one objective or optimization change for later implementation |
+| [`mathematical-methods`](.agents/skills/mathematical-methods/SKILL.md) / problem map | Reconstruct existing variables, equations, assumptions, constraints, and claim-equation-code-data links | Select exactly one module or stop |
+| [Statistical module](.agents/skills/mathematical-methods/references/statistical-model-analysis/method.md) | Estimands, dependence, model specification, uncertainty, diagnostics, sensitivity, and claim support | Cross-sectional, longitudinal, developmental/normative, or clinical-prediction profile |
+| [Network module](.agents/skills/mathematical-methods/references/neural-network-mathematical-analysis/method.md) | Functional structure, information and gradient paths, invariance, identifiability, stability, counterexamples, and proof obligations | Freeze an architecture decision or return `formal-proof-gap` |
+| [Loss and optimization module](.agents/skills/mathematical-methods/references/loss-objective-optimization/method.md) | Loss terms, reductions, weights, constraints, surrogate alignment, gradient incentives, and degeneracy | Freeze one objective or optimization change for later implementation |
 
 This is a routing map, not a standing team. Chief normally works alone or
-selects one cell. One bounded work unit has one active method Skill; larger
-tasks chain methods through explicit handoffs. Infant development and AD
-diagnostic/prediction are bounded statistical profiles, not catch-all
+selects one cell. One bounded work unit has one discoverable method Skill and,
+inside the mathematical entry, at most one active module. Infant development
+and AD diagnostic/prediction are bounded statistical profiles, not catch-all
 top-level agents. S3/S4 require independent review, and S4 also requires human
 acceptance. Detailed ownership and overlap rules live in
 [Skill coordination](docs/skill-coordination.md).
@@ -170,13 +174,15 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.4.0 provides the Astra-aware hierarchical control plane, six research
-method contracts, four mathematical method contracts, visible route receipts,
-compact phase handoffs, a Terra opportunity gate, a Spark fast-code route, an
-optional reversible Codex system-proxy adapter, thin host adapters, and a
-tested installer. Strict proof production and proof-assistant verification
-remain explicit Future Work: current mathematical Skills can record proof
-obligations but must not certify them. Databases, plotting libraries,
+Version 0.4.1 provides the Astra-aware hierarchical control plane, six research
+method contracts, one discoverable mathematical entry with three on-demand
+method modules, model and effort fields directly in `CHIEF DECISION`, compact
+phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional
+reversible Codex system-proxy adapter, thin host adapters, and a tested
+installer with safe legacy-link migration. Strict proof production and
+proof-assistant verification remain explicit Future Work: the mathematical
+entry can record proof obligations but must not certify them. Databases,
+plotting libraries,
 mathematical runtimes, reproduction runtimes, and benchmarks remain optional.
 Token, latency, quality, and scientific benefits still need repeated real-task
 measurement rather than promotional percentages.

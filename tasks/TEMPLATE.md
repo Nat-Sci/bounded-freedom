@@ -13,9 +13,15 @@
 - Assurance: S0–S4, classified by the highest plausible consequence
 - Current phase and active context slice:
 - Execution contract: direct, scout, coder, builder, or builder+reviewer
+- Chief planned capability lane: fast, balanced, strong, frontier, UI-selected, or unknown
+- Chief planned model: exact value, current UI selection, inherited, or unknown
+- Chief planned reasoning effort: exact value, current UI selection, inherited, or unknown
+- Chief runtime model: exact authoritative value or unknown
+- Chief runtime reasoning effort: exact authoritative value or unknown
+- Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
-- Model and effort metadata provenance: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, or unknown
+- Worker model and effort metadata provenance when delegated: explicit launch, loaded host profile, authoritative runtime, inherited, or unknown
 - User-visible route receipts: `ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
 - Balanced opportunity: eligible, excluded with reason, or not applicable
 - Planned workers: distinct workers, initial spawn attempts, and retry allowance

@@ -58,11 +58,10 @@ Use fast execution for formatting or frozen fields, not for deciding the scienti
 - Separate association, prediction, intervention, mediation, and causal identification.
 - This Skill freezes competing hypotheses, discriminating predictions, and the
   analysis intent. Hand a selected hypothesis to
-  [`mathematical-problem-mapping`](../mathematical-problem-mapping/SKILL.md)
-  when existing paper, code, or data mathematics must be reconstructed, and to
-  [`statistical-model-analysis`](../statistical-model-analysis/SKILL.md) when
-  one frozen question needs a detailed estimand, model, diagnostic, or
-  uncertainty contract.
+  [`mathematical-methods`](../mathematical-methods/SKILL.md) when existing
+  paper, code, or data mathematics must be reconstructed. The same entry loads
+  its statistical model module when one frozen question needs a detailed
+  estimand, model, diagnostic, or uncertainty contract.
 - Do not optimize the design around a desired significant result.
 - Ethics approval, clinical interpretation, primary claims, and irreversible study choices remain human decisions.
 - These rows are starting points. Chief retains the final model, delegation, and S0–S4 decisions.

@@ -126,6 +126,7 @@ echo "BoundedFreedom package: v$package_version ($edition_name)"
 
 portable_skills_dir="$target_root/.agents/skills"
 skills_source_dir="$repo_root/.agents/skills"
+legacy_math_skills="mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization"
 
 codex_dir="$target_root/.codex"
 codex_agents_dir="$codex_dir/agents"
@@ -338,6 +339,42 @@ link_file() {
   else
     echo "would link: $label"
   fi
+}
+
+remove_legacy_managed_links() {
+  destination_dir=$1
+  label_prefix=$2
+  for legacy_name in $legacy_math_skills; do
+    destination="$destination_dir/$legacy_name"
+    expected_source="$repo_root/.agents/skills/$legacy_name"
+    if [ ! -L "$destination" ]; then
+      continue
+    fi
+    current_target=$(readlink "$destination")
+    if [ "$current_target" != "$expected_source" ]; then
+      continue
+    fi
+    if [ "$apply" -eq 1 ]; then
+      echo "remove legacy managed $label_prefix $legacy_name"
+      rm "$destination"
+    else
+      echo "would remove legacy managed $label_prefix $legacy_name"
+    fi
+  done
+}
+
+show_legacy_link_status() {
+  destination_dir=$1
+  label_prefix=$2
+  for legacy_name in $legacy_math_skills; do
+    destination="$destination_dir/$legacy_name"
+    expected_source="$repo_root/.agents/skills/$legacy_name"
+    if [ -L "$destination" ] && [ "$(readlink "$destination")" = "$expected_source" ]; then
+      echo "legacy managed $label_prefix $legacy_name: stale"
+    elif [ -L "$destination" ] || [ -e "$destination" ]; then
+      echo "legacy $label_prefix $legacy_name: preserved user-owned path"
+    fi
+  done
 }
 
 without_managed_block() {
@@ -562,6 +599,7 @@ show_status() {
     skill_name=${skill_source##*/}
     show_link_status "$skill_source" "$portable_skills_dir/$skill_name" "portable Skill $skill_name"
   done
+  show_legacy_link_status "$portable_skills_dir" "portable Skill"
   if [ "$use_codex" -eq 1 ]; then
     for role in scout coder builder reviewer; do
       show_link_status "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
@@ -578,6 +616,7 @@ show_status() {
       skill_name=${skill_source##*/}
       show_link_status "$skill_source" "$claude_skills_dir/$skill_name" "Claude Skill $skill_name"
     done
+    show_legacy_link_status "$claude_skills_dir" "Claude Skill"
     show_block_status "$claude_global_instructions" "Claude CLAUDE.md"
   fi
 }
@@ -605,6 +644,7 @@ if [ "$codex_proxy" = "system" ] && has_unmanaged_proxy_setting "$codex_proxy_en
 fi
 
 ensure_dir "$portable_skills_dir" "portable Skills"
+remove_legacy_managed_links "$portable_skills_dir" "portable Skill"
 for skill_source in "$skills_source_dir"/*; do
   if [ ! -d "$skill_source" ]; then
     continue
@@ -635,6 +675,7 @@ fi
 
 if [ "$use_claude" -eq 1 ]; then
   ensure_dir "$claude_skills_dir" "Claude Skills"
+  remove_legacy_managed_links "$claude_skills_dir" "Claude Skill"
   for skill_source in "$skills_source_dir"/*; do
     if [ ! -d "$skill_source" ]; then
       continue

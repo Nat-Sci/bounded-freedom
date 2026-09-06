@@ -1,4 +1,4 @@
-# Mathematical problem-map contract
+# Problem-mapping contract
 
 Use the smallest fields that preserve the target mathematical meaning and its evidence. Omit sections that do not apply; do not fill unknowns with plausible guesses.
 
@@ -74,9 +74,9 @@ Return one primary next method:
 
 | Problem class | Next method |
 | --- | --- |
-| Model, estimand, sampling, dependence, uncertainty, or statistical code | `statistical-model-analysis` |
-| Network function, tensor dependency, representation, invariance, stability, or theorem-like architecture claim | `neural-network-mathematical-analysis` |
-| Loss, regularization, multi-objective weighting, gradients, or constrained training objective | `loss-objective-optimization` |
+| Model, estimand, sampling, dependence, uncertainty, or statistical code | Statistical model analysis module |
+| Network function, tensor dependency, representation, invariance, stability, or theorem-like architecture claim | Neural-network mathematical analysis module |
+| Loss, regularization, multi-objective weighting, gradients, or constrained training objective | Loss, objective, and optimization analysis module |
 | A machine-checked theorem or strict proof is required | `formal-proof-gap` |
 | The mathematical target depends on an unresolved scientific or clinical definition | Return to project authority or `hypothesis-study-design` |
 

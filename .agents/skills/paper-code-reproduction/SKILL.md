@@ -85,10 +85,9 @@ Progress does not imply a claim result. `mismatched` requires a sufficiently mat
 - Independent implementation may test a paper specification but cannot inherit the author's implementation identity.
 - This Skill owns the paper, implementation source, protocol, run, and claim
   comparison. Hand exact paper/code/data anchors to
-  [`mathematical-problem-mapping`](../mathematical-problem-mapping/SKILL.md)
-  when the mathematical semantics or a code-equation mismatch must be
-  reconstructed; return the accepted map before changing the reproduction
-  protocol.
+  [`mathematical-methods`](../mathematical-methods/SKILL.md) when the
+  mathematical semantics or a code-equation mismatch must be reconstructed;
+  return the accepted map before changing the reproduction protocol.
 - A failed reproduction does not by itself refute the paper; distinguish mismatch, missing information, environment failure, and genuine contradictory evidence.
 - Do not tune toward reported values or silently downscale a retained claim. Change the target explicitly or report it as blocked.
 - A reproduction finding may update confidence in a bounded claim, but successful execution or software tests do not create new scientific evidence by themselves.
