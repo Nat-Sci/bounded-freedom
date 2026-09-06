@@ -6,7 +6,8 @@ not all run for every request. Chief keeps accountability, activates one method
 for the current bounded work unit, verifies its return, and then decides
 whether another method is needed. The mathematical Skill first uses its
 problem-mapping reference unless an accepted map already exists, then loads at
-most one statistical, neural-network, or loss/objective method module.
+most one statistical, neural-network, or loss/objective method module if a
+further question remains. A mapping-only request ends with the accepted map.
 
 ```text
 mathematical-methods/
@@ -53,13 +54,20 @@ Each phase carries the frozen objective, accepted evidence, active project rules
 
 A handoff records the planned and actual route, whether balanced capability was
 eligible, the outcome, any escalation evidence, and the next safe action. For
-nontrivial work, compact `ROUTE START`, material `ROUTE CHANGE`, and final
-`ROUTE END` events make this control state visible. Exact model and effort
-values require an explicit launch setting, loaded host profile, authoritative
-runtime metadata, or a UI value supplied in the active request; otherwise the
-receipt says `inherited`, `UI-selected`, or `unknown`. The receipt never
-exposes hidden reasoning. Method lineage remains separate from execution
-telemetry.
+nontrivial work, one combined `CHIEF DECISION / ROUTE START`, material
+`ROUTE CHANGE`, and final `ROUTE END` make this control state visible. Profile
+and launch settings describe configured values; supplied UI values remain
+UI-selected. Only authoritative runtime metadata establishes backend model and
+effort. Missing values stay `unknown`. The receipt exposes decisions, not
+hidden reasoning. Method lineage remains separate from execution telemetry.
+
+Method tables describe suitable work, not mandatory agent launches. Existing
+calculations and checks run directly. Bounded read-only synthesis can use a
+Scout contract with balanced capability, while coordinated writing uses
+Builder. Chief accepts the result in either case. A method's "direct" row
+does not bypass the orchestration balanced gate or change Chief's runtime
+model. Named host profiles may fix a pair, so another pair requires a supported
+unpinned route preserving the same permissions and ownership.
 
 ## Method ownership
 

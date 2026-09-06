@@ -2,7 +2,7 @@
 
 BoundedFreedom did not begin from a blank page. Research methods, agent Skills, scientific tools, benchmarks, and coding harnesses already solve important parts of the problem. This page explains what those projects do, what BoundedFreedom learns from them, and where the boundary remains.
 
-A link here means **influence or interoperability**, not bundled code, endorsement, or automatic trust. The v0.4.1 Astra Edition Skills are an original synthesis. Third-party repositories are not vendored or installed by default.
+A link here means **influence or interoperability**, not bundled code, endorsement, or automatic trust. The v0.4.2 Astra Edition Skills are an original synthesis. Third-party repositories are not vendored or installed by default.
 
 ## What the repository owns
 

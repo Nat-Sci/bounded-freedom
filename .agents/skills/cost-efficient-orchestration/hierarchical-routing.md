@@ -1,136 +1,31 @@
-# Hierarchical routing and cost evaluation
+# Hierarchical routing and calibration
 
-Use this protocol when work spans several phases or capability lanes, when frontier capability is selected, or when a host's balanced lane is being calibrated. It refines the dispatcher without creating a standing agent hierarchy.
+Use this reference for multi-phase work, frontier control, substantial delegation, or optional lane calibration. It refines the dispatcher; it does not require a standing hierarchy.
 
-## Route phases, not whole tasks
+## Phase control
 
-A long request may contain work units with different limits. Freeze the current phase and make the four routing decisions for that phase only:
-
-```text
-admission -> bounded method -> execution and capability -> verification
-          -> compact checkpoint -> next phase or stop
-```
-
-The hierarchy is a sequence of decisions, not a requirement to spawn more workers. Chief normally works directly or uses one worker, reuses a suitable worker for an in-scope follow-up, and retains the total worker budget across every phase.
-
-## Keep the control plane thin
-
-Chief retains the user's intent, non-goals, assurance, accepted evidence, unresolved choices, worker lifecycle, and final decision. A phase receives only:
-
-- the frozen objective and permitted actions;
-- the active method and relevant project rules;
-- the smallest evidence or file slice needed for the work;
-- the expected observable and verification command or inspection;
-- the stop condition and next return boundary.
-
-Do not pass the full conversation, raw logs, an entire literature corpus, or every Skill body when a compact accepted record is sufficient. Use deterministic inventory, filtering, comparison, and rendering before spending model context on judgment.
-
-## Apply the capability ladder in both directions
-
-Start with the least costly lane that clears the phase's limiting factor:
-
-| Phase limit | Starting lane |
-| --- | --- |
-| Repeated fields, bulk discovery, or general mechanical transformation | Fast general |
-| Frozen code mapping, narrow edits, or targeted test loops | Fast code when the host provides it; otherwise fast general |
-| Stable synthesis, coordinated files, or bounded implementation with clear acceptance | Balanced |
-| Ambiguous judgment, conflicting evidence, or consequential independent review | Strong reasoning |
-| Exceptional end-to-end coherence across tools or domains, or a documented strong-lane shortfall | Frontier escalation |
-
-Escalate one lane at a time after a relevant failure, unresolved ambiguity, or evidence conflict. Record why the lower lane was insufficient. After the difficult decision or design is frozen, route the predictable implementation, extraction, or formatting phase back down. A frontier entry is incomplete until its exit lane is considered.
-
-Some hosts expose a separate low-latency coding model with an independent allowance. Treat that as a specialization inside the fast lane, not as another execution contract or a quota target. Prefer it for bounded code-path mapping and edit-test iteration after interfaces and acceptance checks are frozen. Keep document extraction, fixed-field processing, broad repository synthesis, coordinated implementation, and consequential review on the lane selected by their own limiting factor. If the specialized model is unavailable, fall back by task shape: general fast capability for mechanical code work or balanced capability for coordinated code work.
-
-## Balanced opportunity gate
-
-Before assigning non-review execution to strong or frontier capability, ask whether all of the following are true:
-
-- the work unit is bounded and reversible;
-- its interfaces, evidence boundary, or expected observable are stable;
-- a test, comparison, render, or inspection can decide acceptance;
-- failure can be detected before consequential use;
-- no unresolved scientific or architectural choice is being delegated.
-
-When they are true, start in the balanced lane. When the unit is mechanical and high-volume, keep it in the appropriate general or code fast route; do not promote it merely to increase balanced-model usage or consume a separate model allowance. Reviewer independence and S3/S4 evidence requirements remain separate from this gate.
-
-## Frontier control phase
-
-Use frontier capability for the smallest phase that needs it. Appropriate work includes resolving a cross-domain design whose dependencies must remain coherent, integrating several tools when lower lanes have exposed material conflicts, or adjudicating an unresolved strong-review disagreement.
-
-The frontier phase should return a frozen decision, interface, evidence boundary, or implementation contract that a lower lane can execute. It should not absorb bulk discovery, routine edits, repeated testing, or final formatting. If the frontier model remains Chief for host reasons, keep those lower-cost phases delegated or otherwise isolated from its standing context.
-
-## Context and checkpoint budget
-
-Declare an active context slice before each substantial phase:
+Route phases, not whole tasks:
 
 ```text
-phase objective:
-accepted inputs:
-active Skill and project rules:
-files or evidence in scope:
-discarded or checkpointed context:
-expected verification:
-next safe action:
+admission -> bounded method -> execution/lane -> verification -> checkpoint -> next phase or stop
 ```
 
-Checkpoint when the method changes, a decision is frozen, a worker return is accepted, a large evidence slice is no longer needed, or compaction is likely. Resume from the checkpoint plus observable repository or external state rather than reconstructing the full conversation.
+Chief retains intent, non-goals, assurance, accepted evidence, unresolved choices, lifecycle, and final decision. A phase receives only frozen objective and permissions, active rules, bounded files/evidence, expected observable and verification, and return boundary. Use deterministic inventory or comparison before spending context on judgment. Checkpoint when a decision, method, lane, or worker result changes; preserve accepted inputs, retired context, changed artifacts, evidence, uncertainty, and next safe action.
+
+Start from the least costly adequate lane: fast general for repeated fields and mechanical transformation; fast code for frozen edit-test loops; balanced for stable synthesis or coordinated bounded implementation; strong for ambiguous judgment or consequential review; frontier for exceptional cross-tool coherence or a documented lower-lane shortfall. Escalate one lane at a time with observable evidence, then return stable work down. A frontier phase must produce a frozen decision, interface, evidence boundary, or implementation contract rather than absorb routine edits or testing.
+
+## Balanced gate and direct work
+
+Before non-review strong or frontier execution, start balanced if the unit is bounded and reversible, its interface/evidence boundary is stable, acceptance is observable, failure is detectable before consequential use, and no unresolved scientific or architectural choice is delegated. Keep mechanical volume fast. Do not target a model share or consume a separate allowance.
+
+Run direct deterministic commands directly. For a frozen, substantial, reversible coordinated unit on an expensive fixed Chief, a bounded balanced worker is economical only when it has independent ownership and Chief has useful concurrent work. Otherwise direct work records a concrete handoff, tool, or worker-availability cost. “Chief knows the scope” alone is not a direct-work exception, and keeping work on an expensive Chief is not proof of a downgrade.
 
 ## Route receipt and user-visible events
 
-For nontrivial work, retain the smallest aggregate receipt needed to evaluate
-routing and expose three compact events:
+Show one combined `CHIEF DECISION / ROUTE START` before mutation or delegation, including all six named Chief fields, method, assurance, execution, and worker budget. Preserve detailed scope, evidence, checkpoint, and rationale in the task record; do not emit a second start banner. `ROUTE CHANGE` records only material changes. `ROUTE END` records accepted route, verification outcome, retries, worker terminal state, and unknowns. Do not repeat full durable tables or retain raw prompts, command bodies, private paths, row-level data, or inferred billing.
 
-- `CHIEF DECISION` before the events: always include the Chief's planned
-  capability lane, planned model, planned reasoning effort, runtime model,
-  runtime reasoning effort, and metadata source; an unavailable runtime value
-  is shown as `unknown`, not omitted.
+An exact configured pair comes from explicit launch or host profile. A UI-supplied value is labeled `UI-selected` separately. Exact runtime values require a host receipt; otherwise they remain `unknown`. A model/effort downgrade needs a real host control or a newly spawned fitting worker within budget; it is not a label applied to an existing context. Reuse an existing worker only if its ownership and capability fit. Compact fresh context is an actual handoff action when a lower lane needs it.
 
-- `ROUTE START` before substantive tool work: active method, assurance,
-  execution contract, planned lane, worker count, and model/effort metadata
-  source.
-- `ROUTE CHANGE` only after a material route change: the changed field,
-  observable reason, and new planned or observed value. Do not repeat unchanged
-  state as progress narration.
-- `ROUTE END` in the final response: accepted actual route, verification
-  outcome, retries, worker terminal states, and remaining unknowns.
+## Calibration
 
-Simple S0 work may omit these events. Receipts expose routing decisions, not
-private chain-of-thought. Separate a planned model or effort from a
-runtime-observed value. An exact value is valid only when sourced from an
-explicit launch setting, a loaded host profile, authoritative runtime metadata,
-or a UI value supplied in the active request. Otherwise record `inherited`,
-`UI-selected`, or `unknown`; never infer model identity or effort from
-latency, prose style, or task difficulty. A Skill cannot silently change
-Chief's active model.
-
-```text
-event: ROUTE START | ROUTE CHANGE | ROUTE END
-phase:
-task method:
-execution contract:
-planned capability lane:
-planned host model and effort:
-runtime-observed host model and effort:
-metadata source: explicit launch | host profile | runtime | supplied UI | inherited | unknown
-lower lane considered and decision:
-context slice or size bucket:
-verification and outcome: accepted | rework | escalated | blocked
-retry count and escalation evidence:
-elapsed-time bucket:
-authoritative cost or quota source, when available:
-```
-
-Do not retain prompts, message or command bodies, private paths, row-level identifiers, or inferred billing. If the host's token or cost fields are incomplete, mark cost unknown.
-
-## Evaluate accepted work, not model counts alone
-
-Use an explicitly frozen calibration window when changing a route. Compare:
-
-- balanced-opportunity capture: eligible balanced units that started there;
-- first-pass acceptance and evidence coverage;
-- rework, retry, and escalation rates;
-- wall time to an accepted result;
-- authoritative billed cost or account quota consumption when available;
-- failures grouped by limiting factor rather than model prestige.
-
-A higher model count is not success. Promote a route only when it preserves the required evidence and reduces expected cost per accepted work unit. Do not infer quality, causality, or billing from stored thread counts or unreliable token fields.
+Optional calibration has a declared, bounded window drawn from actual accepted work, not a mandatory quota. Compare balanced-eligible units that started balanced, first-pass acceptance, evidence coverage, rework/retry/escalation, elapsed time, and authoritative billed cost or quota consumption when available. Cost otherwise remains unknown. Promote a route only when accepted outcomes preserve required evidence and improve expected cost per accepted unit; do not infer causality from counts or token fields.

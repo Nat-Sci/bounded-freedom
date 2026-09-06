@@ -32,7 +32,7 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Decide scientific meanings, acceptable exclusions, split policy, or unresolved tradeoffs | Chief, direct | Strong reasoning when ambiguity or consequence requires it |
 | Independently audit leakage or consequential exclusion evidence for S3/S4 | Reviewer | Strong reasoning and independent |
 
-These are starting routes, not task-wide model profiles. Chief should work directly when paths and checks are already known. The presence of a large dataset does not by itself justify a stronger model; reduce or summarize inputs with deterministic tools first.
+These are starting routes, not task-wide model profiles. Run a known bounded check directly; knowing the paths alone does not make substantial implementation a direct-work exception to the balanced gate. The presence of a large dataset does not by itself justify a stronger model; reduce or summarize inputs with deterministic tools first.
 
 ## Workflow
 

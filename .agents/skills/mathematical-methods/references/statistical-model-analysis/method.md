@@ -26,8 +26,9 @@ The parent Skill supplies the accepted problem map, bounded lineage slice, execu
 | Work unit | Starting execution contract | Capability lane |
 | --- | --- | --- |
 | Inventory analysis files, variables, model calls, and fixed output fields | Scout | Fast and economical |
-| Reconstruct or compare a stable bounded model specification | Chief, direct | Balanced |
-| Implement one frozen model check or diagnostic | Coder | Fast code when narrow; balanced when coordinated |
+| Reconstruct or compare a stable bounded model specification | Direct or Scout for a bounded read-only return | Balanced |
+| Run an existing frozen model check or diagnostic | Direct tool call | No separate model required |
+| Implement a frozen model check or diagnostic | Coder when narrow; Builder when coordinated | Fast code or balanced |
 | Resolve estimand ambiguity, model incompatibility, missingness assumptions, or consequential interpretation | Chief, direct; Reviewer when assurance requires independence | Strong reasoning |
 | Independently audit inference that may alter a retained scientific conclusion | Reviewer | Strong reasoning and independent |
 

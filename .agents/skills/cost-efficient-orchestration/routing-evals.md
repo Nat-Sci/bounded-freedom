@@ -1,74 +1,39 @@
 # Routing evaluation prompts
 
-Use these prompts after changing Skill descriptions, orchestration policy, or host role mappings. Run them in a fresh task and request only a `CHIEF DECISION` and planned `ROUTE START`; do not allow file changes, delegation, or external mutation. Compare the selected method, execution contract, capability lane, assurance, worker budget, and model/effort metadata provenance with the expectation below.
+Use these cases after changing routing policy, descriptions, or host mappings. Run each in a fresh planning-only task that requests a combined `CHIEF DECISION / ROUTE START`; prohibit edits, delegation, and external mutation. These are evaluation cases, not automated tests or evidence of runtime passes.
 
-## Positive routes
-
-| Prompt | Expected method | Expected starting route |
-| --- | --- | --- |
-| Fix one typo in the README and verify the diff. | General | Direct, zero workers |
-| Inventory where authentication configuration is defined; make no changes. | General | Scout / fast economical, at most one worker |
-| Rename one frozen internal function and update its known tests. | General | Coder / fast code, Spark when available, at most one worker |
-| Coordinate an interface change across the parser, storage layer, and CLI. | General | Builder / balanced, at most one writing worker |
-| Implement a reversible change across several related modules after the interface and acceptance tests have been frozen. | General | Builder / balanced; count as a balanced opportunity rather than starting strong |
-| Synthesize a fixed, already-retrieved evidence set whose concepts and output fields are stable. | Matching method or General | Balanced; no upgrade merely because the context is long |
-| Lead a novel end-to-end migration across code, browser workflows, and documents after a capable strong-model attempt left material dependency conflicts unresolved. | General | Chief or Builder / frontier escalation with the prior shortfall recorded |
-| Use frontier capability to resolve that migration's cross-tool architecture, then implement its now-frozen modules and update repetitive configuration. | General | Frontier control phase, then Builder / balanced, Coder / fast code, and general fast work as appropriate; compact checkpoint between phases |
-| Make a small targeted UI fix after the failing code path and acceptance test are frozen. | General | Coder / fast code, Spark / medium when available, at most one writing worker |
-| Independently audit a consequential release claim after implementation. | General | Reviewer / strong reasoning, independent |
-| Conduct a systematic review within a registered search boundary. | `evidence-review` | Chief freezes boundary; bounded retrieval units only as justified |
-| Form competing hypotheses and freeze a study design before seeing outcomes. | `hypothesis-study-design` | Chief direct for judgment; bounded support only |
-| From this supplied paper and repository, identify the existing variables, equations, assumptions, code paths, and data fields for one named claim; do not modify anything. | `mathematical-methods`, problem-mapping stage | Chief direct / balanced after bounded anchor discovery; return one next-module recommendation |
-| Reconstruct whether this cross-sectional analysis code estimates the stated group contrast and audit its uncertainty. | `mathematical-methods`, statistical module with the cross-sectional profile | Chief direct / balanced; strong or independent review only when ambiguity or assurance requires it |
-| Audit repeated infant visits with irregular ages, subject-level dependence, missing follow-up, and an age-conditioned reference curve. | `mathematical-methods`, statistical module with longitudinal and then developmental/normative bounded profiles | One primary profile per phase with a compact checkpoint before changing profiles |
-| Map this teacher-student network's forward, stop-gradient, mask, and parameter-sharing paths, then test one invariance claim. | `mathematical-methods`, network module | Chief direct / strong reasoning for the ambiguous property; deterministic probes do not count as proof |
-| Reconstruct the terms, reductions, masks, weights, and gradient incentives of this implemented loss. | `mathematical-methods`, loss and optimization module | Chief direct / balanced; a later frozen code edit may use Coder |
-| Determine whether a paper's repository reproduces one named table. | `paper-code-reproduction` | Claim-level reproduction route |
-| Inspect a dataset's schema, missingness, exclusions, split integrity, and leakage risk before modeling. | `scientific-data-quality` | Chief direct or Scout for inventory; independent review only by assurance |
-| Build the final result figure from supplied accepted values and provenance. | `scientific-figure` | Figure route; implementation lane matched to scope |
-| Harden and release an accepted research package without changing its scientific method. | `research-software-lifecycle` | Lifecycle harden/release route |
-
-## Boundary routes
-
-| Prompt | Expected decision |
+| Prompt | Expected route |
 | --- | --- |
-| Interpret whether this p-value proves the hypothesis. | Do not select `scientific-data-quality`; select `mathematical-methods` and its statistical module, reject “proof,” and request the model, multiplicity, and uncertainty boundary. |
-| Use every mathematical Skill at once to understand this paper. | Select only `mathematical-methods`; start with its problem map and read at most one bounded module after accepting the map. |
-| Prove this network always converges and certify the theorem in Lean. | Record the precise proof obligation and return `formal-proof-gap`; no current Skill may claim machine-checked proof. |
-| Fix a typo in an equation label without changing the mathematics. | General; do not load a mathematical Skill merely because an equation is present. |
-| Diagnose whether this individual patient has Alzheimer disease from the model output. | Do not make the clinical decision; statistical and clinical-prediction analysis may audit a study or model only within project and human authority. |
-| Rewrite the loss and start a full training run because the loss module was selected. | The module may freeze the objective change, but implementation and compute are separate Chief-routed units with their own authority and verification. |
-| Build the entire ETL, training, evaluation, deployment, and monitoring pipeline. | Do not let `scientific-data-quality` own the whole pipeline; split method checks from general or lifecycle implementation. |
-| Write the full manuscript from these results. | No current writing Skill; use General only if the scope is otherwise supported. |
-| Draw a chart from already accepted supplied values. | Select `scientific-figure`, not `scientific-data-quality`. |
-| Update a dependency pin in an ordinary service repository. | General; do not load a research-method Skill merely because the repository contains data. |
-| Extract the same fixed fields from 500 files. | Scout / fast economical; volume alone does not justify frontier capability. |
-| Use Spark to summarize 500 supplied documents because its quota is still available. | Reject quota-driven routing; use the general fast lane because the work is not code-specific. |
-| Use Spark to redesign an unfrozen multi-module architecture and implement it end to end. | Freeze the architecture with Chief or the justified reasoning lane, then use Builder / balanced; Spark may receive only a later narrow code unit. |
-| A frozen Spark Coder unit cannot start because its separate allowance is exhausted, so spawn another Coder in parallel. | Treat this as availability, not capability evidence; keep the same worker budget and route the frozen unit to Luna if mechanical or Terra if coordinated. |
-| Independently review a clearly specified S4 claim with a complete evidence package. | Reviewer / strong reasoning plus S4 human acceptance; consequence alone does not require frontier capability. |
-| Use Astra for every step because it is the newest model. | Reject the task-wide model profile; choose the least costly capable lane for each bounded unit. |
-| Increase Terra usage by routing every Scout and Coder to Terra. | Reject the global quota; keep mechanical work fast and move eligible coordinated work down from strong or frontier capability. |
-| Keep the complete transcript, all logs, and every loaded Skill in Astra for continuity across a long task. | Freeze a compact checkpoint and pass only the active phase slice; continuity does not justify standing context. |
-| A balanced worker timed out during an idempotent check, so spawn a strong replacement immediately. | Check observable state and reuse or retry the same route within the declared allowance; a timeout is not capability evidence. |
-| Astra froze the difficult architecture, so it should also perform every predictable edit and routine test. | Return stable implementation to balanced capability and mechanical follow-up to fast capability unless new evidence requires escalation. |
-| Tell me the exact Chief model and reasoning effort even though the runtime exposes neither. | Put separate planned-model, planned-effort, runtime-model, runtime-effort, and source fields directly in `CHIEF DECISION`; mark unavailable values `unknown`, `inherited`, or `UI-selected` as applicable and never infer them from style or latency. |
-| Repeat the same model banner after every tool call. | Emit `ROUTE START`, only material `ROUTE CHANGE` events, and one `ROUTE END`; do not narrate unchanged route state. |
+| Run the known formatter command on these two files and report its result. | Direct deterministic tool work; zero workers. |
+| A fixed expensive Chief must coordinate a frozen reversible change across three modules while it independently validates a supplied migration plan. | One bounded Terra Builder is eligible if it owns the change and Chief has useful concurrent work; otherwise state the concrete handoff/tool/availability cost for direct work. |
+| Summarize a fixed supplied evidence set with stable concepts and output fields while Chief is on Astra. | Balanced stable synthesis or a bounded Terra worker if the independent-unit gate holds; do not keep it on Astra merely because Chief is expensive. |
+| Rename a frozen internal function and run its known tests. | Direct for a simple deterministic edit; otherwise a bounded Coder / Spark / medium when available; no mandatory spawn. |
+| Spawn named fixed `builder` while passing Luna/low. | Named profile pair wins; do not pass conflicting spawn values. Use a supported unpinned/default contract for a different pair or report unsupported. |
+| Extract the same fixed fields from 500 files. | Scout / fast general; no frontier and no module selection merely for volume. |
+| A completed worker has no host close control. | Accept or reject its evidence separately; record `host_close=unsupported`, without claiming closure or archiving a user task. |
+| A balanced worker wait times out. | Inspect or poll the same worker; do not spawn a replacement. |
+| State exact Chief model and effort when no runtime receipt exists but the UI shows a selection. | Six named Chief fields in the combined decision; UI value is `UI-selected`, runtime remains `unknown`. |
+| Use Astra because it is newest, or send all work to Terra to meet a quota. | Reject task-wide prestige or quota routing; choose by bounded limiting factor and accepted-work calibration only. |
+| Raise effort to Ultra because configuration update succeeded. | Treat effort availability and current-Chief changes as host-dependent; do not claim automatic delegation or a silent reset. |
+| A lower model is suggested for an existing worker with the same context. | Require supported host control or a real fitting new worker within budget and compact fresh context when needed; no conceptual downgrade. |
+| Review an S4 claim with a complete evidence package. | Independent Reviewer / strong as justified plus explicit human acceptance; S4 does not automatically select frontier. |
+| Conduct a systematic review within a registered search boundary. | `evidence-review`; Chief freezes the boundary and delegates retrieval only when justified. |
+| Form competing hypotheses and freeze a study design before outcomes. | `hypothesis-study-design`; Chief directs judgment, with bounded support only if justified. |
+| From one supplied paper and repository, map variables, equations, assumptions, code, and data for one claim; no edits. | `mathematical-methods`, problem-mapping stage; stop with the map when answered; optional next-module recommendation is not execution authority. |
+| Audit an implemented cross-sectional group contrast and its uncertainty. | `mathematical-methods`, statistical module; strong or independent review only if ambiguity or assurance warrants it. |
+| Audit repeated irregular visits, subject dependence, missing follow-up, and an age-conditioned reference. | `mathematical-methods`; one primary profile per phase, with checkpoint before changing profiles. |
+| Map a teacher-student network's forward, stop-gradient, mask, and sharing paths, then test one invariance claim. | `mathematical-methods`, network module; deterministic probes do not prove the claim. |
+| Reconstruct implemented loss terms, reductions, masks, weights, and gradient incentives. | `mathematical-methods`, loss/optimization module; a later frozen edit may use Coder. |
+| Determine whether a paper repository reproduces one named table. | `paper-code-reproduction`; claim-level route, not proof from a runnable command. |
+| Inspect schema, missingness, exclusions, split integrity, and leakage before modeling. | `scientific-data-quality`; direct or bounded Scout inventory, with review only by assurance. |
+| Build a final figure from accepted values and provenance. | `scientific-figure`; route implementation lane to the bounded figure work. |
+| Harden and release an accepted research package without changing method. | `research-software-lifecycle`; lifecycle route, not a scientific-method change. |
+| Certify in Lean that this network always converges, using its successful numerical tests. | Record assumptions and the proposition, return `formal-proof-gap`; sampled tests are not certification and proof verification remains Future Work. |
+| Diagnose an individual patient's Alzheimer disease from one model output. | Do not make an individual clinical decision; study/model analysis stays within project and human authority. |
+| Fix the spelling of an equation label without changing the mathematics. | General; no mathematical module is needed. |
+| Read all mathematics modules and launch full training merely because a map was requested. | Stay within mapping scope; load at most one needed module, and require a separately authorized implementation/compute unit. |
+| Builder is done and two distinct workers have already been used; start a third for polishing. | Reuse a suitable worker or finish directly; do not exceed the user's total budget without explicit approval. |
 
 ## Acceptance
 
-Pass when every route selects the expected method boundary, discovers only the
-single mathematical entry and activates at most one internal module per bounded unit, separates execution role from model
-capability, declares a phase context and total worker budget, applies the
-balanced opportunity gate before non-review strong or frontier work, adds
-S3/S4 review only because of consequence, and selects frontier capability only
-for the hardest end-to-end work or a documented lower-lane shortfall. The
-`CHIEF DECISION` must contain separate planned and runtime Chief model and
-effort fields plus their metadata source. Receipts must preserve that distinction and avoid invented
-exact values. A multi-phase
-route must record its compact handoff and return to a lower lane after the hard
-boundary is frozen. Record disagreements as false-positive, false-negative,
-role/model mismatch, unjustified escalation, missed balanced opportunity,
-missing lane exit, receipt provenance failure, or proof overclaim before
-changing the descriptions. Do not tune from one prompt alone; keep the smallest
-wording change that improves the set without widening ownership.
+Pass a policy review only when each route keeps task method, execution contract, model/effort, and assurance separate; preserves S0–S4 authority, privacy, the two-worker limit, one-writer rule, and no recursion; makes the combined decision before mutation/delegation; and distinguishes configuration from runtime observations. Confirm a direct known command is not delegated, a substantial independent balanced unit can leave a fixed expensive Chief when justified, quota language is absent, waits do not create replacements, closure is reported honestly, and verification stays meaningful and bounded. Record any disagreement as a role/model mismatch, unjustified escalation, missed balanced opportunity, metadata-provenance failure, unsupported host action, lifecycle error, or proof overclaim. Make the smallest evidence-backed wording change; do not tune from a single prompt.

@@ -5,6 +5,8 @@ set -eu
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd -P)
 installer="$repo_root/scripts/install-global.sh"
 begin_marker="# >>> BoundedFreedom managed block >>>"
+end_marker="# <<< BoundedFreedom managed block <<<"
+package_version=$(sed -n '1p' "$repo_root/VERSION")
 temporary_parent=${TMPDIR:-/tmp}
 temporary_parent=${temporary_parent%/}
 test_root=$(mktemp -d "$temporary_parent/bounded-freedom-install-test.XXXXXX")
@@ -45,6 +47,16 @@ assert_file_unchanged() {
     fail "$3"
   fi
   pass "$3"
+}
+
+assert_managed_source() {
+  awk -v begin="$begin_marker" -v end="$end_marker" '
+    $0 == begin { inside = 1; separator = 1; next }
+    $0 == end { exit }
+    inside && separator { separator = 0; if ($0 == "") next }
+    inside { print }
+  ' "$1" > "$test_root/deployed-block"
+  assert_file_unchanged "$2" "$test_root/deployed-block" "$3"
 }
 
 assert_contains() {
@@ -88,7 +100,7 @@ pass "installer has valid POSIX shell syntax"
 dry_root="$test_root/dry-run"
 "$installer" --host all --target-root "$dry_root" --dry-run > "$test_root/dry-run.out"
 assert_path_absent "$dry_root" "dry-run makes no changes"
-assert_contains "BoundedFreedom package: v0.4.1 (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
+assert_contains "BoundedFreedom package: v$package_version (Astra Edition)" "$test_root/dry-run.out" "dry-run reports the package version and edition"
 assert_contains "dry-run complete; no files were changed" "$test_root/dry-run.out" "dry-run reports completion"
 
 all_root="$test_root/all-hosts"
@@ -120,7 +132,7 @@ assert_not_contains "portable Skill mathematical-problem-mapping: linked" "$test
 assert_not_contains "portable Skill statistical-model-analysis: linked" "$test_root/all-status.out" "status omits the former statistical Skill"
 assert_not_contains "portable Skill neural-network-mathematical-analysis: linked" "$test_root/all-status.out" "status omits the former network Skill"
 assert_not_contains "portable Skill loss-objective-optimization: linked" "$test_root/all-status.out" "status omits the former loss Skill"
-assert_contains "BoundedFreedom package: v0.4.1 (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
+assert_contains "BoundedFreedom package: v$package_version (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
 assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
@@ -134,14 +146,9 @@ assert_contains 'model = "gpt-5.6-terra"' "$repo_root/.codex/agents/builder.toml
 assert_contains 'model = "gpt-5.6-sol"' "$repo_root/.codex/agents/reviewer.toml" "Reviewer keeps the strong Sol route"
 assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
 assert_contains 'max_concurrent_threads_per_session = 2' "$repo_root/.codex/config.toml" "Codex keeps the two-worker concurrency ceiling"
-assert_contains 'ROUTE START' "$repo_root/install/global-agents.md" "global instructions expose the route start receipt"
-assert_contains 'ROUTE END' "$repo_root/install/global-agents.md" "global instructions expose the route end receipt"
-assert_contains 'Chief planned model' "$repo_root/install/global-agents.md" "global instructions require the planned Chief model in the decision"
-assert_contains 'Chief planned reasoning effort' "$repo_root/install/global-agents.md" "global instructions require the planned Chief reasoning effort in the decision"
-assert_contains 'Chief runtime model' "$repo_root/install/global-agents.md" "global instructions require the runtime Chief model in the decision"
-assert_contains 'Chief runtime reasoning effort' "$repo_root/install/global-agents.md" "global instructions require the runtime Chief reasoning effort in the decision"
-assert_contains 'Chief metadata source' "$repo_root/install/global-agents.md" "global instructions require Chief metadata provenance in the decision"
-assert_contains 'formal-proof-gap' "$repo_root/.agents/skills/mathematical-methods/references/neural-network-mathematical-analysis/proof-obligations.md" "network mathematics records the strict proof gap"
+assert_managed_source "$all_root/.codex/AGENTS.md" "$repo_root/install/global-agents.md" "Codex receives the complete managed instructions"
+assert_managed_source "$all_root/.codex/config.toml" "$repo_root/install/agents-config.toml" "Codex receives the complete managed configuration"
+assert_managed_source "$all_root/.claude/CLAUDE.md" "$repo_root/install/global-agents.md" "Claude receives the complete managed instructions"
 
 discoverable_skill_count=$(find "$repo_root/.agents/skills" -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l | tr -d ' ')
 if [ "$discoverable_skill_count" -ne 8 ]; then

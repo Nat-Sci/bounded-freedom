@@ -22,7 +22,7 @@ An accepted and versioned problem map may be reused. Do not remap an unchanged s
 
 ## Select one method module
 
-After the problem map is accepted, read exactly one primary module for the current work unit:
+Stop after the problem map if it answers the user's question. Otherwise, after Chief accepts that map, read at most one primary module for the current work unit:
 
 | Bounded question | On-demand module |
 | --- | --- |
@@ -30,7 +30,7 @@ After the problem map is accepted, read exactly one primary module for the curre
 | What does a neural network compute, and what can be established about its information paths, invariance, identifiability, stability, or optimization dynamics? | [Neural-network mathematical analysis](references/neural-network-mathematical-analysis/method.md) |
 | What objective is actually optimized, where do its gradients flow, and are its reductions, weights, constraints, and surrogate aligned with the target? | [Loss, objective, and optimization analysis](references/loss-objective-optimization/method.md) |
 
-If none matches, return to project authority or another discoverable Skill. If strict or machine-checked proof is required, record `formal-proof-gap`; `formal-proof-verification` remains Future Work.
+An optional next-module recommendation does not authorize executing it. If a further question remains and none matches, return to project authority or another discoverable Skill. If strict or machine-checked proof is required, record `formal-proof-gap`; `formal-proof-verification` remains Future Work.
 
 Use one primary module at a time. A larger request may change modules only after Chief accepts a compact checkpoint containing the map identity, source anchors, frozen definitions, accepted findings, unresolved issue, next verification, and stop condition. Do not load all module bodies into standing context.
 
@@ -41,8 +41,9 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Work unit | Starting execution contract | Capability lane |
 | --- | --- | --- |
 | Locate bounded equation, symbol, function, tensor, field, and configuration anchors | Scout | Fast and economical |
-| Reconstruct a stable map or apply a well-defined module | Chief, direct | Balanced |
-| Run a frozen deterministic calculation, shape check, gradient probe, or diagnostic | Coder in a later bounded unit | Fast code when narrow; balanced when coordinated |
+| Reconstruct a stable map or apply a well-defined module | Direct or Scout for a bounded read-only return | Balanced |
+| Run an existing frozen calculation, shape check, gradient probe, or diagnostic | Direct tool call | No separate model required |
+| Write a new frozen diagnostic or probe | Coder when narrow; Builder when coordinated | Fast code or balanced |
 | Resolve ambiguous semantics, identifiability, model incompatibility, mechanism, or consequential interpretation | Chief, direct; Reviewer when assurance requires independence | Strong reasoning |
 | Implement a frozen model, network, or objective change | Coder or Builder in a later bounded unit | Fast code or balanced, matched to scope |
 

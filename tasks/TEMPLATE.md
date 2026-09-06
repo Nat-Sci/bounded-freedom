@@ -21,11 +21,11 @@
 - Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
-- Worker model and effort metadata provenance when delegated: explicit launch, loaded host profile, authoritative runtime, inherited, or unknown
-- User-visible route receipts: `ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
+- Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch
+- User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
 - Balanced opportunity: eligible, excluded with reason, or not applicable
 - Planned workers: distinct workers, initial spawn attempts, and retry allowance
-- Actual workers: distinct workers, spawn attempts, retries, and terminal lifecycle states
+- Actual workers: distinct workers, spawn attempts, retries, accepted/rejected returns, and host close status (confirmed, unsupported, or unknown)
 - Worker-budget rationale:
 - Owned scope:
 - Verification:
@@ -45,7 +45,7 @@
 
 - Checks and comparisons:
 - Evidence coverage: verified acceptance checks divided by all declared acceptance checks, with any unknown checks named
-- Route evidence: first-pass acceptance, rework, escalation, elapsed time, and balanced-opportunity capture when measured
+- Route evidence: actual host action when changing model/effort, first-pass acceptance, rework, escalation, elapsed time, and balanced-opportunity capture when measured; distinguish planned scenarios from executed tests
 - Privacy and portability check:
 - Reviewer verdict when required:
 - Human acceptance when required:

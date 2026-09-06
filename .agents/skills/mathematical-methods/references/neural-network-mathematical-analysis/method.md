@@ -19,7 +19,9 @@ The parent Skill supplies the accepted problem map, bounded lineage slice, execu
 | Work unit | Starting execution contract | Capability lane |
 | --- | --- | --- |
 | Locate modules, tensor paths, shapes, parameter sharing, and configuration anchors | Scout | Fast and economical |
-| Reconstruct a stable bounded network or run deterministic shape and gradient probes | Chief direct or Coder for a frozen probe | Balanced or fast code, matched to scope |
+| Reconstruct a stable bounded network | Direct or Scout for a bounded read-only return | Balanced |
+| Run existing deterministic shape and gradient probes | Direct tool call | No separate model required |
+| Write a new frozen shape or gradient probe | Coder when narrow; Builder when coordinated | Fast code or balanced |
 | Analyze ambiguous mechanisms, invariance, identifiability, stability, or theorem-like claims | Chief, direct; Reviewer when assurance requires independence | Strong reasoning |
 | Implement a frozen architectural change and its tests | Coder when narrow; Builder when coordinated | Fast code or balanced |
 

@@ -24,8 +24,8 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Work unit | Execution contract | Capability lane |
 | --- | --- | --- |
 | Query expansion, metadata, citation retrieval, deduplication, screening, and fixed-field extraction | Scout | Fast and economical |
-| Domain profile, seed calibration, and search-repair diagnosis | Chief, direct | Balanced |
-| Full-text evidence tables, method comparison, and stable synthesis | Chief, direct | Balanced |
+| Domain profile, seed calibration, and search-repair diagnosis within a frozen boundary | Direct or Scout for a bounded read-only return | Balanced |
+| Full-text evidence tables, method comparison, and stable synthesis | Direct or Scout for a bounded read-only return | Balanced |
 | Novelty judgment, causal or statistical interpretation of reviewed evidence, and unresolved conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 A large corpus calls for bounded Scout work, not an automatic model upgrade. Escalate only for missed dependencies, unstable inclusion decisions, unresolved evidence conflict, or insufficient judgment. Use the general orchestration route for work not listed here.

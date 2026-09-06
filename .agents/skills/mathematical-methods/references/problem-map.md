@@ -70,7 +70,9 @@ Do not collapse `reported` and `observed`: documentation can disagree with execu
 
 ## Problem classes and handoff
 
-Return one primary next method:
+If the map answers the bounded request, return its completion state and stop.
+Only when a further question remains, recommend one primary next method; the
+recommendation does not itself authorize execution:
 
 | Problem class | Next method |
 | --- | --- |

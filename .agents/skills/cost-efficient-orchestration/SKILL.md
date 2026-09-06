@@ -1,154 +1,57 @@
 ---
 name: cost-efficient-orchestration
-description: Use when nontrivial research or repository work needs Chief-led hierarchical routing, per-work-unit model choice, bounded delegation, context control, scientific-risk gates, verification, or independent review.
+description: Use for nontrivial research or repository work that needs Chief-led routing, bounded delegation, model choice, risk gates, verification, or independent review.
 ---
 
 # Chief-first orchestration
 
-The current primary session is Chief. Chief owns intent, task routing, risk, scope, delegation, verification, and the final answer. Do not create a Chief subagent.
+The primary session is Chief: it owns intent, scope, scientific-risk classification, routing, verification, and the final decision. Do not create a Chief subagent. Keep four decisions independent: task method; execution contract (direct, Scout, Coder, Builder, Reviewer); model and effort; and S0–S4 assurance. Neither a role nor an assurance level selects a model.
 
-For nontrivial work, declare before delegation or mutation:
+Bootstrap reads needed to discover instructions or the host may precede the declaration. Before any mutation or delegation, freeze scope, permitted and prohibited actions, acceptance evidence, stop conditions, and unresolved choices. For nontrivial work, show one compact combined receipt and preserve its evidence in one `tasks/` record:
 
 ```text
-CHIEF DECISION
-
-task method: general | <matching-skill>
-assurance: S0 | S1 | S2 | S3 | S4
-execution: direct | scout | coder | builder | builder+reviewer
+CHIEF DECISION / ROUTE START
+task method; assurance; execution; workers and total budget
 Chief planned capability lane: fast | balanced | strong | frontier | UI-selected | unknown
-Chief planned model: exact value | current UI selection | inherited | unknown
-Chief planned reasoning effort: exact value | current UI selection | inherited | unknown
+Chief planned model: exact value | inherited | UI-selected | unknown
+Chief planned reasoning effort: exact value | inherited | UI-selected | unknown
 Chief runtime model: exact authoritative value | unknown
 Chief runtime reasoning effort: exact authoritative value | unknown
 Chief metadata source: explicit launch | host profile | runtime | supplied UI | inherited | UI-selected | unknown
-workers: execution contract (host model / effort), or none
-worker budget: planned distinct workers / total spawn attempts / retry allowance
-phase and context: current phase / accepted input slice / compaction boundary
-scope: exact files, systems, or evidence boundary
-verification: evidence required for acceptance
-checkpoint: durable recovery record and next safe action
-rationale: why this route and delegation are cost-effective
+phase/context; exact scope; verification; checkpoint/next safe action; rationale
 ```
 
-For nontrivial work, follow the declaration with the smallest user-visible
-`ROUTE START` receipt before substantive tool work. Emit `ROUTE CHANGE` only
-when the method, execution contract, worker, model, effort, or assurance
-materially changes, and summarize the accepted route in `ROUTE END`. Label
-planned choices separately from runtime-observed metadata. State an exact model
-or effort only when it comes from an explicit launch setting, a loaded host
-profile, authoritative runtime metadata, or a UI value supplied in the active
-request; otherwise use `inherited`, `UI-selected`, or `unknown`. A Skill can
-recommend or route a worker, but it cannot silently switch Chief's model or
-expose hidden reasoning.
+Keep all six named Chief fields in this user-visible receipt, including unknowns; storing them only in a task file does not satisfy visibility. There is no second start banner. Keep detailed scope and evidence in the task record. Emit `ROUTE CHANGE` only for a material method, role, worker, model, effort, assurance, or scope change, and a compact `ROUTE END` with route, evidence, retries, lifecycle state, and remaining unknowns. Exact values require an explicit launch, loaded host profile, authoritative runtime receipt, or a value supplied by the UI; otherwise use `inherited`, `UI-selected`, or `unknown`. Launch or profile data proves configuration, not backend runtime. A Skill cannot silently switch Chief or infer hidden state.
 
-The six Chief capability and model fields above are mandatory in the `CHIEF DECISION`
-itself, even when no worker is used. Do not defer them only to a later route
-receipt. If the active interface exposes only the user's UI selection, record
-the planned model and effort as `current UI selection`, both runtime values as
-`unknown`, and the source as `UI-selected / interface not authoritative`.
+Read [scientific-risk.md](scientific-risk.md) when the assurance classification is not clearly S0. Read [host-model-routing.md](host-model-routing.md) before selecting a worker model or adapting to another harness. Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before spawning, retrying, external mutation, compaction, or lifecycle closure. Read [hierarchical-routing.md](hierarchical-routing.md) for phases, frontier work, calibration, or substantial delegation. Read [research-lineage.md](research-lineage.md) only when research Skills or claim lineage cross boundaries. Use [routing-evals.md](routing-evals.md) for policy changes without mutating project files.
 
-Read [scientific-risk.md](scientific-risk.md) when classification is not obviously S0. Read [host-model-routing.md](host-model-routing.md) before choosing a worker model or adapting this Skill to another harness.
+## Select the smallest adequate route
 
-Read [research-lineage.md](research-lineage.md) when work crosses research Skills or when sources, claims, hypotheses, findings, and downstream artifacts must remain traceable. Pass only the bounded lineage slice needed by the next Skill; do not load a whole project knowledge network by default.
+1. Match one specialized Skill only when its method or deliverable is needed; otherwise use general work. A larger task closes or freezes one method unit before loading the next and passes only the needed lineage slice.
+2. Split phases only for genuinely different methods, contexts, or capability limits. Freeze the unit before consequential work.
+3. Select the execution contract from ownership and independence: direct for clear work; Scout for read-only discovery that would flood Chief context; Coder for narrow frozen edits; Builder for coordinated implementation; Reviewer only for independent evidence.
+4. Select the least costly capable lane. Fast is for clear, reversible volume; balanced for stable synthesis or coordinated implementation; strong for ambiguous judgment or consequential independent review; frontier only for exceptional end-to-end coherence or a documented lower-lane shortfall.
+5. Classify S0–S4 by highest plausible consequence. S3/S4 require independent Reviewer evidence; S4 also needs explicit human acceptance. These gates do not upgrade an executor or relax scientific authority.
+6. Verify actual diffs, outputs, comparisons, artifacts, or inspection proportional to the accepted claim. Command success alone does not prove scientific validity.
 
-Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before a task may spawn a worker, retry an operation, run long enough to compact, or mutate external state. Use [routing-evals.md](routing-evals.md) to test changes to Skill selection or execution-role routing without changing project files.
+Work directly for known deterministic commands. Do not spawn merely to run one. Default to zero workers; one is normal. Plan at most two distinct workers and two initial attempts; exceeding the user's limit requires their explicit approval and a revised decision. Permit one writing worker, no recursion, and no duplicate work. When Chief is fixed on an expensive lane and a substantial reversible coordinated unit has a frozen boundary, use one bounded balanced worker only if it has an independent work unit *and* Chief has useful concurrent work. A direct exception records the concrete handoff, tool, or availability cost; “Chief already knows the scope” is insufficient. Direct work on an expensive Chief is not a measured downgrade.
 
-Read [hierarchical-routing.md](hierarchical-routing.md) when work spans several phases or capability lanes, frontier capability is selected, standing context is likely to become large, or balanced-lane utilization and cost are being calibrated. It defines the compact control plane, balanced opportunity gate, lane exit rules, and route receipt.
+Before non-review strong or frontier execution, use the balanced opportunity gate: bounded, reversible, stable interface/evidence boundary, observable acceptance, detectable failure, and no unresolved scientific or architectural decision delegated. Keep mechanical work fast. Once the hard decision is frozen, return predictable implementation, extraction, tests, and formatting to the lower adequate lane. Do not create work, count models, or drain allowance to meet a quota. Optional bounded calibration compares accepted eligible work, first-pass acceptance, rework, elapsed time, evidence coverage, and authoritative cost or quota data when available; otherwise cost is unknown.
 
-## Make four decisions separately
+## Delegation, context, and recovery
 
-1. **Task method:** Match the request against available Skill descriptions. Load only a clearly relevant Skill; otherwise continue with general work. Chief needs the catalog, not every specialist method in standing context.
-2. **Execution contract:** Choose direct work, Scout, Coder, Builder, or Reviewer from scope, write permission, ownership, and the need for independence. These contracts do not denote intelligence.
-3. **Model and effort:** Choose a model family and reasoning effort for each bounded unit from volume, context length, ambiguity, coding depth, tool reliability, and judgment. Use fast, balanced, strong, and frontier capability lanes when the host offers them. Frontier is an evidence-gated escalation, not a task-wide default.
-4. **Assurance:** Classify S0–S4 by the highest plausible consequence. Assurance sets evidence, independent review, and human acceptance; it does not name the task, execution contract, or model.
+Every worker message states objective, owned files/evidence, known inputs, permissions and prohibitions, required verification, return format, and stop conditions. Workers preserve unrelated edits and do not delegate. Chief consumes cited evidence instead of repeating assigned discovery.
 
-When a specialized Skill is loaded, use its work-unit execution contract and capability lane first, then resolve both through the host mapping. Use the general policy only for an unmatched unit. This is one refined dispatcher, not a task-wide model profile. The S0–S4 gate may add review; it does not automatically upgrade the executor.
+Pass the smallest phase packet: frozen objective, active rules, bounded evidence/files, expected observable, verification, and return boundary. Checkpoint at a frozen decision, method or lane change, worker return, retired large context, or likely compaction. Preserve accepted inputs, changed artifacts, checks, route outcome, retries, worker lifecycle, unresolved items, and next safe action—not raw logs or private identifiers.
 
-The Skill owns method and work-unit guidance; orchestration owns the final execution contract, model, delegation, and assurance; project instructions own local facts. Do not duplicate these layers.
+Use `planned -> running -> done | attention -> closed`. A timeout is unknown, not failure: inspect observable state and retry only a read-only or proven-idempotent operation once under the declared allowance. Never spawn a replacement after a wait timeout. Reuse an existing worker only when ownership and capability still fit. A lower model requires an actual host action: supported control or a genuinely new worker within budget with compact fresh context where needed, never a conceptual relabel. If no close control exists, record accepted/completed work separately from `host_close=unsupported`; do not claim process closure or archive a user task.
 
-Use one active method Skill per bounded work unit. A larger request may move through several Skills, but Chief closes or freezes the current unit, records the handoff, and passes only the needed lineage slice before loading the next method. Do not stack several full Skill bodies into standing context. The durable ownership and common handoffs are summarized in [Skill coordination](../../../docs/skill-coordination.md).
+## Boundaries
 
-A discoverable Skill may progressively load one internal reference module. The
-module is not another Skill, does not trigger independently, and cannot route
-itself. In particular, `mathematical-methods` loads at most one statistical,
-network, or loss/optimization module after its problem map is accepted; Chief
-checkpoints before switching modules.
+Frontier is a capability lane, not a fifth role: it does not widen scope, authority, worker budget, assurance, privacy, or acceptance requirements. Model names, supported effort values, defaults, and launch controls belong in [host-model-routing.md](host-model-routing.md). Do not silently reset a user-selected model or effort, or infer current-session changes from configuration edits.
 
-## Selection algorithm
+Keep repository artifacts, commands, retained evidence, and returns portable: use repository-relative paths or neutral placeholders; omit machine-specific absolute paths, account names, private hostnames, and local environment or mount names unless the user explicitly authorizes exact disclosure. Continue already authorized in-scope reversible work without repeated conversational permission requests; sandbox escalation remains required where the harness requires it. Stop when meaningful planned checks pass; do not add wording-mirror tests or rerun unchanged passes. Report outcome, changed artifacts, route end, metadata provenance, verification, deviations, and uncertainty. Report cost only from an authoritative source.
 
-1. Frame the user's intent and identify ambiguity that would materially alter the result.
-2. Split only genuinely different methods, context slices, or capability limits into phases; keep a simple task whole.
-3. Select a matching Skill only when specialized method or output contracts are needed.
-4. Freeze scope, permitted actions, active context, verification, stop conditions, and unresolved uncertainty.
-5. For each work unit, use the selected Skill's starting execution contract and capability lane when listed; otherwise use the general limiting-factor policy.
-6. Classify S0–S4 before consequential mutation.
-7. Work directly when the task is clear and a handoff would cost at least as much as completion.
-8. Otherwise select one primary execution contract:
-   - **Scout:** read-only discovery that would otherwise flood Chief's context.
-   - **Coder:** narrow, explicit, low-ambiguity edits inside frozen ownership.
-   - **Builder:** nontrivial implementation across logic, interfaces, or coordinated files.
-9. Before strong or frontier non-review execution, apply the balanced opportunity gate. Use balanced capability when the work is bounded, reversible, stable, and objectively verifiable; do not promote fast mechanical work to satisfy a model-share target.
-10. Within the fast lane, distinguish general volume from code iteration when the host offers a specialized coding model. Use the code-specialized route only after the edit boundary and checks are frozen; keep non-code extraction and transformation on the general fast route.
-11. Select the least costly capable host model and reasoning effort independently, then adjust only when evidence supports it. Reserve the frontier lane for the hardest end-to-end work or a documented shortfall in a lower lane.
-12. Chief consumes the worker's cited evidence and does not repeat the assigned discovery.
-13. After a difficult decision is frozen, lower the model or effort for predictable implementation, extraction, testing, or formatting.
-14. At phase boundaries, update the task checkpoint with accepted inputs, the retired context slice, changed artifacts or repository state, completed checks, route outcome, retries, worker state, unresolved items, and the next safe action.
-15. Chief verifies actual diffs, outputs, comparisons, artifacts, or human inspection appropriate to the claim.
-16. Add a fresh independent **Reviewer** execution contract for S3/S4. S4 also requires explicit human acceptance.
-17. Reconcile every spawned worker to a terminal lifecycle state and close completed worker threads through supported host controls.
-18. Record nontrivial work in one file under `tasks/`.
+## Credits
 
-## Capability and cost gates
-
-- Default to zero workers; one is normal.
-- A second worker is justified only for independent review or clearly non-overlapping evidence collection.
-- Default task budget: at most two distinct worker threads and two initial spawn attempts. A retry is not a new plan: declare its allowance separately and record every use.
-- Concurrency and delegation depth limit simultaneous shape, not total task spend. They never replace the total worker budget.
-- Exceed the declared budget only after Chief revises the decision with new evidence, scope, verification, and a concrete reason that direct work or reuse cannot finish safely.
-- Permit only one writing worker and no nested delegation.
-- Do not spawn Scout when Chief already knows the relevant paths.
-- Do not spawn Coder or Builder before scope and verification are frozen.
-- Do not use Reviewer for routine formatting or mechanical checks.
-- Use a fast economical model for high-volume, bounded, reversible work only when its tool use and output reliability are sufficient. When a separate fast coding model is available, reserve it for code mapping and narrow edit-test loops rather than non-code bulk work.
-- Use a balanced model as the default for bounded coordinated implementation or stable synthesis with clear acceptance evidence.
-- Use strong reasoning for high-ambiguity judgment, conflicting evidence, or consequential independent review.
-- Use frontier capability only when the work itself demands exceptional end-to-end coherence across tools or domains, or when a lower lane leaves a material documented failure, ambiguity, or conflict. Assurance level, context size, or model novelty alone does not justify it.
-- Do not make maximum reasoning the default. Escalate after ambiguity, failure, conflict, or consequence demonstrates value.
-- Do not optimize model counts in isolation or create work merely to exhaust a separate allowance. Evaluate eligible work, first-pass acceptance, evidence coverage, escalation, time, and authoritative cost or quota data when available.
-- Keep the frontier control phase small. A frontier model may freeze the hard decision while lower lanes execute the stable plan.
-- Stop a worker after two materially different failed attempts.
-
-## Worker contract
-
-Every delegated message states: objective, owned scope, known evidence, permitted and prohibited actions, required verification, return format, and stop conditions. A worker must know that other work may exist, must preserve unrelated changes, and must not recursively delegate.
-
-Worker returns stay concise. Raw logs remain in the worker context unless unresolved diagnosis requires them. A successful command is engineering evidence, not proof of a scientific claim.
-
-Follow the lifecycle `planned -> running -> done | attention -> closed`. A stored `open` relationship is not evidence of a live process. Inspect the current runtime before acting, close only work confirmed complete through supported host controls, and never edit host state databases to simulate closure.
-
-Treat timeout as an unknown result, not an automatic failure. Check observable state before retrying. Retry a read-only or proven-idempotent operation at most once under the declared allowance; reuse the same idempotency key when the interface provides one. Never blindly retry an ambiguous mutation or spawn a replacement worker because a wait timed out.
-
-## Host boundary
-
-Keep this Skill within the open Agent Skills fields and plain Markdown. Put model IDs, agent-file schemas, permissions, hooks, and provider credentials in host adapters. A different harness may lack subagents or enforce different tool names; in that case Chief works directly while preserving the same scope and evidence contract.
-
-## Privacy and portability gate
-
-Chief and every worker treat machine-local identity and layout as private by default. Repository artifacts, Markdown, task records, command text, retained logs, and worker returns use repository-relative paths or neutral placeholders instead of machine-specific absolute paths, account names, private hostnames, or local-only environment, workspace, checkout, and mount names. Run from the current working directory when possible, redact incidental local identifiers before preserving evidence, and scan changed text before completion. Exact disclosure requires explicit human instruction.
-
-## Recovery and completion
-
-For work likely to span multiple phases or context compaction, keep the one task record current enough to recover from repository state rather than memory. Retire completed evidence and logs from active context after preserving the accepted decision and observable receipt. After compaction, re-read governing instructions and the task checkpoint, inspect actual status and diffs, confirm worker state, and resume from the recorded next safe action. When the user has authorized commits, prefer a coherent verified milestone over a large uncheckpointed change.
-
-Chief reports: outcome, files or artifacts changed, the compact `ROUTE END` receipt, planned and actual phase routes and workers, metadata provenance, retries, elapsed time, evidence coverage, lifecycle leftovers, verification evidence, reviewer verdict when required, deviations, and remaining uncertainty. Report cost only from an authoritative source; otherwise report routing evidence without estimating billing.
-
-## Upstream adoption
-
-- **Selected:** progressive Skill loading, Chief-owned phase routing, bounded execution contracts, compact context handoffs, provenance-aware user-visible route receipts, a balanced opportunity gate, evidence-gated frontier control, per-work-unit model choice, independent review, thin host adapters, and a lightweight cross-Skill research-lineage handoff.
-- **Not selected now:** task-wide model profiles, a standing multi-agent crew, recursive delegation, a custom runtime, a required graph database, automatic upstream merging, forced model-share quotas, or an unmeasured autonomous router.
-
-The full source-by-source decision is in the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).
-
-## Influences and credits
-
-This Skill is an original integration informed by the open [Agent Skills specification](https://agentskills.io/specification) and the control surfaces compared in the [harness landscape](../../../docs/harness-landscape.md). Its separation of task method, execution contract, model and effort, and assurance is the local BoundedFreedom contract. See [ecosystem, influences, and credits](../../../docs/ecosystem-and-credits.md) for the attribution and reuse policy.
+This is an original local integration informed by the [Agent Skills specification](https://agentskills.io/specification), [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents), and the repository [harness landscape](../../../docs/harness-landscape.md). See the [adoption ledger](../../../docs/ecosystem-and-credits.md#adoption-ledger-by-local-skill).

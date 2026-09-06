@@ -17,7 +17,9 @@ The parent Skill supplies the accepted problem and network maps, bounded lineage
 | Work unit | Starting execution contract | Capability lane |
 | --- | --- | --- |
 | Locate loss modules, weights, schedules, reductions, detach points, and optimizer configuration | Scout | Fast and economical |
-| Reconstruct a stable objective or run frozen gradient and limiting-case probes | Chief direct or Coder for a narrow probe | Balanced or fast code, matched to scope |
+| Reconstruct a stable objective | Direct or Scout for a bounded read-only return | Balanced |
+| Run existing frozen gradient and limiting-case probes | Direct tool call | No separate model required |
+| Write a new frozen gradient or limiting-case probe | Coder when narrow; Builder when coordinated | Fast code or balanced |
 | Resolve surrogate alignment, coupled objectives, degeneracy, unstable optimization, or consequential method claims | Chief, direct; Reviewer when assurance requires independence | Strong reasoning |
 | Implement one frozen objective change and its tests | Coder when narrow; Builder when coordinated | Fast code or balanced |
 

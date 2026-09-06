@@ -20,7 +20,7 @@ Read the shared [research-lineage contract](../cost-efficient-orchestration/rese
 | Work unit | Execution contract | Capability lane |
 | --- | --- | --- |
 | Extract observations, assumptions, constraints, and candidate confounders | Scout | Fast and economical |
-| Turn frozen hypotheses into feasibility, measurement, and statistical-plan structure | Chief, direct | Balanced |
+| Turn frozen hypotheses into feasibility, measurement, and statistical-plan structure | Direct or Scout for bounded read-only support; Chief accepts the plan | Balanced |
 | Generate competing mechanisms and discriminating predictions, or judge causality and conflicting evidence | Chief, direct; Reviewer when independence is required | Strong reasoning |
 
 Use fast execution for formatting or frozen fields, not for deciding the scientific story. Use the general orchestration route for work not listed here.
