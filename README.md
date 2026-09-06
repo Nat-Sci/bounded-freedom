@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.4.2 — Astra Edition**.
+Current package: **v0.4.3 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -194,7 +194,20 @@ If `codex doctor` reports that HTTPS works but the Responses WebSocket times out
 
 The proxy address is detected at installation time and is never stored in the repository or printed by the installer. Existing user-owned proxy variables cause a safe stop. Use `--codex-proxy remove` to remove only the managed block, and restart Codex after either change. The option is explicit because a local proxy may later stop or move; ordinary installations leave network settings unchanged. An HTTP-only custom provider was verified as a fallback but is intentionally not installed because changing provider identity is more invasive than repairing the existing WebSocket route.
 
-The installer links back to this clone, updates only marked global blocks, and refuses to replace conflicting user files. It does not copy the repository into every project and does not require Python.
+The installer links Skill directories back to this clone, installs Codex role
+TOMLs as managed regular files, and updates marked global blocks. `--update`
+migrates the previous repository-owned role links: Codex can display symlinked
+profiles but its secure launch reader rejects them. Foreign links, unmanaged
+files, and locally modified managed role files are preserved as conflicts.
+Refresh the installation after changing role profiles; Skill links still follow
+the checkout. The installer does not copy the repository into every project and
+does not require Python.
+
+`--status` checks files, not live routing. A successful child launch and separate
+model/effort evidence are required before calling a route verified. Validate the
+next suitable bounded task outside this source repository, whose project-local
+profiles can otherwise hide a broken personal installation. A failed role launch
+must not silently become an expensive Chief route or a weaker independent review.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
@@ -202,12 +215,12 @@ A working project normally keeps only its local instruction file, one `tasks/` r
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.4.2 provides the Astra-aware hierarchical control plane, six research
+Version 0.4.3 provides the Astra-aware hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
 phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional
 reversible Codex system-proxy adapter, thin host adapters, and a tested
-installer with safe legacy-link migration. The efficiency audit removes
+installer with safe legacy-link migration and secure-readable role copies. The efficiency audit removes
 duplicated route banners, clarifies fixed-profile precedence and actual lane
 changes, and separates direct calculations from delegated implementation.
 Required checks stop once accepted unless a new change or failure warrants more.

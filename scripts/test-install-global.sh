@@ -49,6 +49,26 @@ assert_file_unchanged() {
   pass "$3"
 }
 
+assert_managed_role_payload() {
+  installed=$1
+  source=$2
+  label=$3
+  if [ -L "$installed" ] || [ ! -f "$installed" ]; then
+    fail "$label"
+  fi
+  if [ "$(sed -n '1p' "$installed")" != "# BoundedFreedom managed role file" ]; then
+    fail "$label"
+  fi
+  if ! sed -n '2p' "$installed" | grep -Eq '^# payload cksum: [0-9]+ [0-9]+$'; then
+    fail "$label"
+  fi
+  sed '1,2d' "$installed" > "$test_root/role-payload"
+  if ! cmp -s "$source" "$test_root/role-payload"; then
+    fail "$label"
+  fi
+  pass "$label"
+}
+
 assert_managed_source() {
   awk -v begin="$begin_marker" -v end="$end_marker" '
     $0 == begin { inside = 1; separator = 1; next }
@@ -119,12 +139,9 @@ done
 pass "all portable and Claude Skills link to repository sources"
 for role in scout coder builder reviewer; do
   role_source="$repo_root/.codex/agents/$role.toml"
-  role_link="$all_root/.codex/agents/$role.toml"
-  if [ ! -L "$role_link" ] || [ "$(readlink "$role_link")" != "$role_source" ]; then
-    fail "Codex agent $role was not linked to its repository source"
-  fi
+  role_file="$all_root/.codex/agents/$role.toml"
+  assert_managed_role_payload "$role_file" "$role_source" "Codex agent $role is a managed regular file with literal source metadata"
 done
-pass "all Codex agent profiles link to repository sources"
 "$installer" --host all --target-root "$all_root" --status > "$test_root/all-status.out"
 assert_contains "portable Skill evidence-review: linked" "$test_root/all-status.out" "status reports portable Skills"
 assert_contains "portable Skill mathematical-methods: linked" "$test_root/all-status.out" "status reports the sole mathematical entry Skill"
@@ -134,6 +151,8 @@ assert_not_contains "portable Skill neural-network-mathematical-analysis: linked
 assert_not_contains "portable Skill loss-objective-optimization: linked" "$test_root/all-status.out" "status omits the former loss Skill"
 assert_contains "BoundedFreedom package: v$package_version (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
+assert_contains "Codex agent builder: managed regular file (current)" "$test_root/all-status.out" "status reports current managed role files"
+assert_contains "Codex role file status is file-level only; it does not verify live role launch or model selection" "$test_root/all-status.out" "status states that role files are not live runtime verification"
 assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
 
@@ -214,6 +233,115 @@ sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/AGENTS.md" > "$test_root/a
 sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/config.toml" > "$test_root/config-prefix"
 assert_file_unchanged "$test_root/user-agents" "$test_root/agents-prefix" "AGENTS.md preserves user-owned content"
 assert_file_unchanged "$test_root/user-config" "$test_root/config-prefix" "config.toml preserves user-owned content"
+
+role_idempotent_before="$test_root/role-idempotent-before"
+cp "$idempotent_root/.codex/agents/builder.toml" "$role_idempotent_before"
+"$installer" --host codex --target-root "$idempotent_root" --update > "$test_root/role-idempotent-update.out"
+assert_file_unchanged "$role_idempotent_before" "$idempotent_root/.codex/agents/builder.toml" "managed role update is byte-idempotent"
+
+role_legacy_root="$test_root/role-legacy-migration"
+mkdir -p "$role_legacy_root/.codex/agents"
+for role in scout coder builder reviewer; do
+  ln -s "$repo_root/.codex/agents/$role.toml" "$role_legacy_root/.codex/agents/$role.toml"
+done
+"$installer" --host codex --target-root "$role_legacy_root" --dry-run > "$test_root/role-legacy-dry-run.out"
+assert_contains "would install managed role file: Codex agent scout" "$test_root/role-legacy-dry-run.out" "dry-run reports legacy role migration"
+if [ ! -L "$role_legacy_root/.codex/agents/scout.toml" ]; then
+  fail "role migration dry-run changed a legacy role link"
+fi
+pass "role migration dry-run preserves legacy links"
+"$installer" --host codex --target-root "$role_legacy_root" --update > "$test_root/role-legacy-update.out"
+for role in scout coder builder reviewer; do
+  assert_managed_role_payload "$role_legacy_root/.codex/agents/$role.toml" "$repo_root/.codex/agents/$role.toml" "legacy Codex agent $role migrates to a managed regular file"
+done
+
+role_foreign_root="$test_root/role-foreign-conflict"
+mkdir -p "$role_foreign_root/.codex/agents"
+printf 'user-owned\n' > "$role_foreign_root/foreign-role"
+ln -s "$role_foreign_root/foreign-role" "$role_foreign_root/.codex/agents/scout.toml"
+expect_exit 1 "$test_root/role-foreign-conflict.out" "$installer" --host codex --target-root "$role_foreign_root" --install
+if [ ! -L "$role_foreign_root/.codex/agents/scout.toml" ]; then
+  fail "foreign role link was replaced"
+fi
+pass "foreign role link is preserved"
+assert_path_absent "$role_foreign_root/.agents" "foreign role conflict causes no portable installation"
+assert_path_absent "$role_foreign_root/.codex/agents/coder.toml" "foreign role conflict causes no preceding role mutation"
+
+role_unmanaged_root="$test_root/role-unmanaged-conflict"
+mkdir -p "$role_unmanaged_root/.codex/agents"
+printf 'model = "user-choice"\n' > "$role_unmanaged_root/.codex/agents/coder.toml"
+cp "$role_unmanaged_root/.codex/agents/coder.toml" "$test_root/role-unmanaged-before"
+expect_exit 1 "$test_root/role-unmanaged-conflict.out" "$installer" --host codex --target-root "$role_unmanaged_root" --install
+assert_file_unchanged "$test_root/role-unmanaged-before" "$role_unmanaged_root/.codex/agents/coder.toml" "unmanaged role file is preserved"
+assert_path_absent "$role_unmanaged_root/.agents" "unmanaged role conflict causes no portable installation"
+assert_path_absent "$role_unmanaged_root/.codex/agents/scout.toml" "unmanaged role conflict causes no preceding role mutation"
+
+role_modified_root="$test_root/role-modified-conflict"
+mkdir -p "$role_modified_root/.codex/agents"
+cp "$all_root/.codex/agents/reviewer.toml" "$role_modified_root/.codex/agents/reviewer.toml"
+printf '# local modification\n' >> "$role_modified_root/.codex/agents/reviewer.toml"
+cp "$role_modified_root/.codex/agents/reviewer.toml" "$test_root/role-modified-before"
+expect_exit 1 "$test_root/role-modified-conflict.out" "$installer" --host codex --target-root "$role_modified_root" --update
+assert_file_unchanged "$test_root/role-modified-before" "$role_modified_root/.codex/agents/reviewer.toml" "modified managed role payload is preserved"
+assert_path_absent "$role_modified_root/.agents/skills/evidence-review" "modified role conflict causes no partial portable installation"
+
+role_fixture_root="$test_root/role-source-fixture"
+mkdir -p "$role_fixture_root"
+cp -R "$repo_root/scripts" "$repo_root/.codex" "$repo_root/.agents" "$repo_root/install" "$role_fixture_root/"
+cp "$repo_root/VERSION" "$role_fixture_root/VERSION"
+fixture_installer="$role_fixture_root/scripts/install-global.sh"
+role_refresh_root="$test_root/role-refresh"
+"$fixture_installer" --host codex --target-root "$role_refresh_root" --install > "$test_root/role-refresh-install.out"
+printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder.toml"
+"$fixture_installer" --host codex --target-root "$role_refresh_root" --update > "$test_root/role-refresh-update.out"
+assert_managed_role_payload "$role_refresh_root/.codex/agents/builder.toml" "$role_fixture_root/.codex/agents/builder.toml" "managed role refreshes when its isolated source changes"
+
+if command -v python3 >/dev/null 2>&1; then
+  secure_open_root="$test_root/secure-open"
+  mkdir -p "$secure_open_root"
+  printf 'fixture payload\n' > "$secure_open_root/source.toml"
+  ln -s "$secure_open_root/source.toml" "$secure_open_root/legacy.toml"
+  if python3 - "$secure_open_root/legacy.toml" \
+      "$role_refresh_root/.codex/agents/scout.toml" \
+      "$role_refresh_root/.codex/agents/coder.toml" \
+      "$role_refresh_root/.codex/agents/builder.toml" \
+      "$role_refresh_root/.codex/agents/reviewer.toml" <<'PY'
+import errno
+import os
+import sys
+
+legacy, *installed_roles = sys.argv[1:]
+with open(legacy, encoding="utf-8") as handle:
+    assert handle.read() == "fixture payload\n"
+if not hasattr(os, "O_NOFOLLOW"):
+    print("SKIP - O_NOFOLLOW is unavailable")
+    raise SystemExit(77)
+flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0)
+try:
+    descriptor = os.open(legacy, flags)
+except OSError as error:
+    if error.errno != errno.ELOOP:
+        raise
+else:
+    os.close(descriptor)
+    raise AssertionError("secure open unexpectedly accepted a symlink")
+for installed in installed_roles:
+    descriptor = os.open(installed, flags)
+    os.close(descriptor)
+PY
+  then
+    pass "secure open rejects a role symlink and accepts all four installer-produced regular role files when supported"
+  else
+    secure_open_status=$?
+    if [ "$secure_open_status" -eq 77 ]; then
+      echo "skip - O_NOFOLLOW is unavailable for secure-open regression coverage"
+    else
+      fail "secure-open regression failed"
+    fi
+  fi
+else
+  echo "skip - python3 is unavailable for O_NOFOLLOW regression coverage"
+fi
 
 proxy_bin="$test_root/proxy-bin"
 mkdir -p "$proxy_bin"

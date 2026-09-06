@@ -12,6 +12,9 @@ Use these cases after changing routing policy, descriptions, or host mappings. R
 | Extract the same fixed fields from 500 files. | Scout / fast general; no frontier and no module selection merely for volume. |
 | A completed worker has no host close control. | Accept or reject its evidence separately; record `host_close=unsupported`, without claiming closure or archiving a user task. |
 | A balanced worker wait times out. | Inspect or poll the same worker; do not spawn a replacement. |
+| Builder is advertised as Terra/medium, but launch is rejected as unavailable and no child is created. | Diagnose file/profile loading; no unchanged blind retry. An explicitly configured supported fallback must retain the frozen contract and budget; direct Chief work is disclosed, not called a model downgrade. |
+| Reviewer fails to start for S3 work; untyped explorer succeeds with Luna/low. | Do not count the fallback as the required consequential Reviewer. Use a supported capable independent route with required permissions, or leave the review gate unmet. |
+| All personal role files pass installer status; claim that two existing projects now launch the intended models. | Report file-level evidence only until each affected host has a successful launch plus model/effort evidence; source-repository success is insufficient. |
 | State exact Chief model and effort when no runtime receipt exists but the UI shows a selection. | Six named Chief fields in the combined decision; UI value is `UI-selected`, runtime remains `unknown`. |
 | Use Astra because it is newest, or send all work to Terra to meet a quota. | Reject task-wide prestige or quota routing; choose by bounded limiting factor and accepted-work calibration only. |
 | Raise effort to Ultra because configuration update succeeded. | Treat effort availability and current-Chief changes as host-dependent; do not claim automatic delegation or a silent reset. |

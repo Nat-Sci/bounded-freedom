@@ -127,6 +127,8 @@ echo "BoundedFreedom package: v$package_version ($edition_name)"
 portable_skills_dir="$target_root/.agents/skills"
 skills_source_dir="$repo_root/.agents/skills"
 legacy_math_skills="mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization"
+role_managed_marker="# BoundedFreedom managed role file"
+role_checksum_prefix="# payload cksum: "
 
 codex_dir="$target_root/.codex"
 codex_agents_dir="$codex_dir/agents"
@@ -187,8 +189,9 @@ if [ "$use_codex" -eq 1 ] && [ ! -f "$agents_config_source" ]; then
 fi
 if [ "$use_codex" -eq 1 ]; then
   for role in scout coder builder reviewer; do
-    if [ ! -f "$repo_root/.codex/agents/$role.toml" ]; then
-      echo "Missing installer source: .codex/agents/$role.toml" >&2
+    role_source="$repo_root/.codex/agents/$role.toml"
+    if [ ! -f "$role_source" ] || [ -L "$role_source" ]; then
+      echo "Invalid installer source: .codex/agents/$role.toml must be a regular file" >&2
       exit 1
     fi
   done
@@ -221,6 +224,51 @@ check_link_destination() {
   fi
   if [ -e "$destination" ]; then
     echo "conflict: $label exists and is not a BoundedFreedom link; leaving it unchanged" >&2
+    return 1
+  fi
+}
+
+role_payload_checksum() {
+  cksum < "$1" | awk '{ print $1 " " $2 }'
+}
+
+managed_role_checksum() {
+  sed '1,2d' "$1" | cksum | awk '{ print $1 " " $2 }'
+}
+
+role_file_is_managed() {
+  destination=$1
+  [ "$(sed -n '1p' "$destination")" = "$role_managed_marker" ] || return 1
+  recorded_checksum=$(sed -n '2p' "$destination")
+  case "$recorded_checksum" in
+    "$role_checksum_prefix"*)
+      recorded_checksum=${recorded_checksum#"$role_checksum_prefix"}
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+  [ "$recorded_checksum" = "$(managed_role_checksum "$destination")" ]
+}
+
+check_role_destination() {
+  source=$1
+  destination=$2
+  label=$3
+  if [ -L "$destination" ]; then
+    current_target=$(readlink "$destination")
+    if [ "$current_target" != "$source" ]; then
+      echo "conflict: $label links elsewhere; leaving it unchanged" >&2
+      return 1
+    fi
+    return
+  fi
+  if [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "conflict: $label is not a regular file; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ -f "$destination" ] && ! role_file_is_managed "$destination"; then
+    echo "conflict: $label is not an unmodified managed role file; leaving it unchanged" >&2
     return 1
   fi
 }
@@ -279,7 +327,7 @@ preflight_installation() {
     check_directory_path "$codex_dir" "Codex configuration"
     check_directory_path "$codex_agents_dir" "Codex agents"
     for role in scout coder builder reviewer; do
-      check_link_destination "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+      check_role_destination "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
     done
     check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
     check_managed_destination "$codex_global_config" "Codex config.toml"
@@ -339,6 +387,33 @@ link_file() {
   else
     echo "would link: $label"
   fi
+}
+
+install_role_file() {
+  source=$1
+  destination=$2
+  label=$3
+  source_checksum=$(role_payload_checksum "$source")
+  if [ -f "$destination" ] && role_file_is_managed "$destination"; then
+    destination_checksum=$(managed_role_checksum "$destination")
+    if [ "$destination_checksum" = "$source_checksum" ]; then
+      echo "role file ok: $label"
+      return
+    fi
+  fi
+  if [ "$apply" -ne 1 ]; then
+    echo "would install managed role file: $label"
+    return
+  fi
+  parent_dir=$(dirname "$destination")
+  temporary=$(mktemp "$parent_dir/.bounded-freedom-role.XXXXXX")
+  {
+    printf '%s\n' "$role_managed_marker"
+    printf '%s%s\n' "$role_checksum_prefix" "$source_checksum"
+    cat "$source"
+  } > "$temporary"
+  mv "$temporary" "$destination"
+  echo "install managed role file: $label"
 }
 
 remove_legacy_managed_links() {
@@ -575,6 +650,32 @@ show_link_status() {
   fi
 }
 
+show_role_status() {
+  source=$1
+  destination=$2
+  label=$3
+  if [ -L "$destination" ]; then
+    current_target=$(readlink "$destination")
+    if [ "$current_target" = "$source" ]; then
+      echo "$label: legacy repository link (migration required)"
+    else
+      echo "$label: conflict (linked elsewhere)"
+    fi
+  elif [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "$label: conflict (not a regular file)"
+  elif [ -f "$destination" ] && ! role_file_is_managed "$destination"; then
+    echo "$label: conflict (not an unmodified managed role file)"
+  elif [ -f "$destination" ]; then
+    if [ "$(managed_role_checksum "$destination")" = "$(role_payload_checksum "$source")" ]; then
+      echo "$label: managed regular file (current)"
+    else
+      echo "$label: managed regular file (source update available)"
+    fi
+  else
+    echo "$label: not installed"
+  fi
+}
+
 show_block_status() {
   destination=$1
   label=$2
@@ -602,7 +703,7 @@ show_status() {
   show_legacy_link_status "$portable_skills_dir" "portable Skill"
   if [ "$use_codex" -eq 1 ]; then
     for role in scout coder builder reviewer; do
-      show_link_status "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+      show_role_status "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
     done
     show_block_status "$codex_global_agents" "Codex AGENTS.md"
     show_block_status "$codex_global_config" "Codex config.toml"
@@ -618,6 +719,9 @@ show_status() {
     done
     show_legacy_link_status "$claude_skills_dir" "Claude Skill"
     show_block_status "$claude_global_instructions" "Claude CLAUDE.md"
+  fi
+  if [ "$use_codex" -eq 1 ]; then
+    echo "Codex role file status is file-level only; it does not verify live role launch or model selection"
   fi
 }
 
@@ -655,10 +759,10 @@ done
 
 if [ "$use_codex" -eq 1 ]; then
   ensure_dir "$codex_agents_dir" "Codex agents"
-  link_file "$repo_root/.codex/agents/scout.toml" "$codex_agents_dir/scout.toml" "Codex agent scout"
-  link_file "$repo_root/.codex/agents/coder.toml" "$codex_agents_dir/coder.toml" "Codex agent coder"
-  link_file "$repo_root/.codex/agents/builder.toml" "$codex_agents_dir/builder.toml" "Codex agent builder"
-  link_file "$repo_root/.codex/agents/reviewer.toml" "$codex_agents_dir/reviewer.toml" "Codex agent reviewer"
+  install_role_file "$repo_root/.codex/agents/scout.toml" "$codex_agents_dir/scout.toml" "Codex agent scout"
+  install_role_file "$repo_root/.codex/agents/coder.toml" "$codex_agents_dir/coder.toml" "Codex agent coder"
+  install_role_file "$repo_root/.codex/agents/builder.toml" "$codex_agents_dir/builder.toml" "Codex agent builder"
+  install_role_file "$repo_root/.codex/agents/reviewer.toml" "$codex_agents_dir/reviewer.toml" "Codex agent reviewer"
   refresh_managed_block "$codex_global_agents" "$global_instructions_source" "Codex AGENTS.md"
   refresh_managed_block "$codex_global_config" "$agents_config_source" "Codex config.toml"
   case "$codex_proxy" in
@@ -690,4 +794,5 @@ if [ "$apply" -eq 0 ]; then
   echo "dry-run complete; no files were changed"
 else
   echo "installation complete; start a new host session before using the updated adapter"
+  echo "role file installation does not verify live role launch or model selection"
 fi

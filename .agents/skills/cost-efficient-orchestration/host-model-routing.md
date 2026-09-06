@@ -29,6 +29,30 @@ sandbox. With shared-history spawning, verify whether explicit model overrides
 are supported; a compact fresh launch may be required. Untyped fallback remains
 Luna / low and should not be mistaken for the Builder route.
 
+## A named role is visible but cannot start
+
+An advertised profile is not a launch receipt. For `agent type is currently not
+available`, first distinguish a rejected launch from an unknown or running child;
+do not retry an unchanged configuration or create a replacement after a timeout.
+Codex can display a symlinked role file but reject it when its secure launch reader
+requires a regular file. Use managed regular copies for installed role TOMLs;
+do not disable safe file loading. Skill directory links are a separate mechanism.
+
+If repair is outside the authorized scope, a host-supported unpinned route may
+carry the same frozen unit only with explicit model/effort, preserved ownership,
+required permissions and independence, and remaining launch/worker budget. Do not
+treat default Luna/low as Terra execution or consequential Reviewer evidence. If
+the required boundary or review capability is unavailable, report that gate as
+unmet. Direct continuation may do already authorized safe work, but must disclose
+the actual Chief route rather than claim a lower-model handoff.
+
+Keep three acceptance levels separate: files installed, child successfully
+started, and configured/observed model and effort matched. Validate a changed
+adapter with the next suitable bounded work unit outside the source repository;
+do not spend allowance on artificial work or claim that installation alone fixes
+existing sessions. See the [installer](../../../scripts/install-global.sh) and
+[Codex custom agents](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+
 ## Capability gates
 
 Use fast for clear reversible volume, balanced for stable synthesis or related-file coordination, strong for unresolved judgment or consequential independent review, and frontier only for exceptional end-to-end work or a documented lower-lane shortfall. S3/S4 adds review and human acceptance as applicable; it does not choose Astra. Before non-review strong or frontier work, apply the balanced gate. After the hard boundary is frozen, return predictable work to Terra, Spark, or Luna.
