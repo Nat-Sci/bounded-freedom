@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const TWO_WEEK_ANCHOR = new Date(Date.UTC(1970, 0, 5)); // Monday.
 const MONTH_NAMES = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
@@ -100,6 +101,18 @@ function shiftDays(date, days) {
   return new Date(date.getTime() + days * DAY_MS);
 }
 
+function shiftMonths(date, months) {
+  return new Date(Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth() + months,
+    date.getUTCDate(),
+  ));
+}
+
+function shiftYears(date, years) {
+  return new Date(Date.UTC(date.getUTCFullYear() + years, date.getUTCMonth(), date.getUTCDate()));
+}
+
 function isoDate(date) {
   return date.toISOString().slice(0, 10);
 }
@@ -116,18 +129,138 @@ function rangeLabel(start, end, timeZone) {
   return `${displayDate(start, true)} → ${displayDate(end, true)} · ${timeZone}`;
 }
 
-function chooseBucketDays(totalDays, maxBars) {
-  const usefulIntervals = [1, 7, 14, 28, 91, 182, 365];
-  return usefulIntervals.find((days) => Math.ceil(totalDays / days) <= maxBars)
-    || Math.ceil(totalDays / maxBars);
+function alignToMonday(date) {
+  const weekday = date.getUTCDay();
+  const mondayOffset = (weekday + 6) % 7;
+  return shiftDays(date, -mondayOffset);
 }
 
-function intervalName(bucketDays) {
-  if (bucketDays === 1) return "day";
-  if (bucketDays === 7) return "week";
-  if (bucketDays === 14) return "2-week period";
-  if (bucketDays === 28) return "4-week period";
-  return `${bucketDays}-day period`;
+function alignToTwoWeek(date) {
+  const daysSinceAnchor = Math.floor((date.getTime() - TWO_WEEK_ANCHOR.getTime()) / DAY_MS);
+  const alignedOffset = Math.floor(daysSinceAnchor / 14) * 14;
+  return shiftDays(TWO_WEEK_ANCHOR, alignedOffset);
+}
+
+function alignToMonth(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
+}
+
+function alignToQuarter(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), Math.floor(date.getUTCMonth() / 3) * 3, 1));
+}
+
+function alignToHalfYear(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() >= 6 ? 6 : 0, 1));
+}
+
+function alignToYear(date) {
+  return new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+}
+
+function alignToNYear(date, bucketYears) {
+  return new Date(Date.UTC(
+    Math.floor(date.getUTCFullYear() / bucketYears) * bucketYears,
+    0,
+    1,
+  ));
+}
+
+function buildIntervalSpecs() {
+  return [
+    {
+      machineLabel: "DAY",
+      displayLabel: "day",
+      alignStart: (date) => date,
+      nextStart: (date) => shiftDays(date, 1),
+    },
+    {
+      machineLabel: "WEEK",
+      displayLabel: "week",
+      alignStart: alignToMonday,
+      nextStart: (date) => shiftDays(date, 7),
+    },
+    {
+      machineLabel: "2-WEEK",
+      displayLabel: "2-week period",
+      alignStart: alignToTwoWeek,
+      nextStart: (date) => shiftDays(date, 14),
+    },
+    {
+      machineLabel: "MONTH",
+      displayLabel: "month",
+      alignStart: alignToMonth,
+      nextStart: (date) => shiftMonths(date, 1),
+    },
+    {
+      machineLabel: "QUARTER",
+      displayLabel: "quarter",
+      alignStart: alignToQuarter,
+      nextStart: (date) => shiftMonths(date, 3),
+    },
+    {
+      machineLabel: "HALF-YEAR",
+      displayLabel: "half-year",
+      alignStart: alignToHalfYear,
+      nextStart: (date) => shiftMonths(date, 6),
+    },
+    {
+      machineLabel: "YEAR",
+      displayLabel: "year",
+      alignStart: alignToYear,
+      nextStart: (date) => shiftYears(date, 1),
+    },
+  ];
+}
+
+function pluralize(unit, count) {
+  if (count === 1) return unit;
+  return `${unit}s`;
+}
+
+function buildBuckets(firstDate, throughDate, interval) {
+  const starts = [];
+  let start = interval.alignStart(firstDate);
+
+  while (start.getTime() <= throughDate.getTime()) {
+    starts.push(start);
+    start = interval.nextStart(start);
+  }
+
+  const ranges = starts.map((start, index) => {
+    const nominalEnd = index < starts.length - 1
+      ? shiftDays(starts[index + 1], -1)
+      : shiftDays(throughDate, 0);
+    const end = nominalEnd > throughDate ? throughDate : nominalEnd;
+    return { start, end };
+  });
+
+  return { starts, ranges };
+}
+
+function chooseInterval(firstDate, throughDate, maxBars) {
+  const intervalSpecs = buildIntervalSpecs();
+
+  for (const interval of intervalSpecs) {
+    const { starts } = buildBuckets(firstDate, throughDate, interval);
+    if (starts.length <= maxBars) {
+      return { ...interval, starts };
+    }
+  }
+
+  for (let yearSpan = 2; ; yearSpan += 1) {
+    const starts = buildBuckets(firstDate, throughDate, {
+      alignStart: (date) => alignToNYear(date, yearSpan),
+      nextStart: (date) => shiftYears(date, yearSpan),
+    }).starts;
+    if (starts.length <= maxBars) {
+      return {
+        machineLabel: `${yearSpan}-YEAR`,
+        displayLabel: `${yearSpan}-year period`,
+        alignStart: (date) => alignToNYear(date, yearSpan),
+        nextStart: (date) => shiftYears(date, yearSpan),
+      };
+    }
+  }
 }
 
 function escapeXml(value) {
@@ -166,13 +299,14 @@ function readActivity({ gitDir, now, maxBars, ref, timeZone }) {
   const nowDate = zonedDate(now, timeZone);
 
   if (!sourceSha) {
+    const emptyInterval = buildIntervalSpecs()[0];
     return {
-      bucketDays: 1,
+      interval: emptyInterval,
+      intervalRanges: [{ start: nowDate, end: nowDate }],
       counts: [0],
       firstDate: null,
       lastDate: null,
       throughDate: nowDate,
-      windowStart: nowDate,
       sourceSha: null,
     };
   }
@@ -190,28 +324,27 @@ function readActivity({ gitDir, now, maxBars, ref, timeZone }) {
     history[0],
   );
   const throughDate = lastDate > nowDate ? lastDate : nowDate;
-  const windowStart = firstDate;
-  const totalDays = Math.floor(
-    (throughDate.getTime() - windowStart.getTime()) / DAY_MS,
-  ) + 1;
-  const bucketDays = chooseBucketDays(totalDays, maxBars);
-  const bucketCount = Math.ceil(totalDays / bucketDays);
+  const interval = chooseInterval(firstDate, throughDate, maxBars);
+  const { ranges } = buildBuckets(firstDate, throughDate, interval);
+  const bucketCount = ranges.length;
   const counts = Array.from({ length: bucketCount }, () => 0);
 
   for (const committedDate of history) {
-    const bucket = Math.floor(
-      (committedDate.getTime() - windowStart.getTime()) / (bucketDays * DAY_MS),
-    );
-    counts[bucket] += 1;
+    for (let index = 0; index < ranges.length; index += 1) {
+      if (committedDate.getTime() <= ranges[index].end.getTime()) {
+        counts[index] += 1;
+        break;
+      }
+    }
   }
 
   return {
-    bucketDays,
+    interval,
+    intervalRanges: ranges,
     counts,
     firstDate,
     lastDate,
     throughDate,
-    windowStart,
     sourceSha,
   };
 }
@@ -228,26 +361,27 @@ function renderSvg({ activity, repo, now, timeZone }) {
   const maxCount = Math.max(1, ...activity.counts);
   const total = activity.counts.reduce((sum, count) => sum + count, 0);
   const activeBuckets = activity.counts.filter((count) => count > 0).length;
-  const interval = intervalName(activity.bucketDays);
-  const activeUnit = activity.bucketDays === 1 ? "day" : interval;
+  const intervalDisplay = activity.interval.displayLabel;
+  const intervalMachine = activity.interval.machineLabel;
+  const activeUnit = pluralize(intervalDisplay, activeBuckets);
   const repoLabel = repo.replaceAll("/", " / ");
   const summary = activity.firstDate
-    ? `${total} commit${total === 1 ? "" : "s"} · ${activeBuckets} active ${activeUnit}${activeBuckets === 1 ? "" : "s"}`
+    ? `${total} commit${total === 1 ? "" : "s"} · ${activeBuckets} active ${activeUnit}`
     : "No commits yet";
+  const displayStart = activity.firstDate || activity.throughDate;
   const dateRange = activity.firstDate
-    ? rangeLabel(activity.windowStart, activity.throughDate, timeZone)
+    ? rangeLabel(displayStart, activity.throughDate, timeZone)
     : `As of ${displayDate(activity.throughDate, true)} · ${timeZone}`;
   const startLabel = activity.firstDate
-    ? `EARLIEST DATE · ${displayDate(activity.windowStart).toUpperCase()}`
+    ? `EARLIEST DATE · ${displayDate(displayStart).toUpperCase()}`
     : "NO COMMITS YET";
   const throughLabel = `THROUGH · ${displayDate(activity.throughDate).toUpperCase()}`;
   const sourceLabel = activity.sourceSha ? activity.sourceSha.slice(0, 12) : "none";
   const generatedAt = now.toISOString().replace(".000Z", "Z");
 
   const bars = activity.counts.map((count, index) => {
-    const periodStart = shiftDays(activity.windowStart, index * activity.bucketDays);
-    const nominalEnd = shiftDays(periodStart, activity.bucketDays - 1);
-    const periodEnd = nominalEnd > activity.throughDate ? activity.throughDate : nominalEnd;
+    const periodStart = activity.intervalRanges[index].start;
+    const periodEnd = activity.intervalRanges[index].end;
     const ratio = count / maxCount;
     const barHeight = count === 0 ? 4 : Math.max(14, Math.round(ratio * 72));
     const x = chartLeft + index * slot + (slot - barWidth) / 2;
@@ -258,9 +392,7 @@ function renderSvg({ activity, repo, now, timeZone }) {
       : index === bucketCount - 1
         ? "#c66a45"
         : "#3f7964";
-    const titleRange = isoDate(periodStart) === isoDate(periodEnd)
-      ? isoDate(periodStart)
-      : `${isoDate(periodStart)} through ${isoDate(periodEnd)}`;
+    const titleRange = `${isoDate(periodStart)} through ${isoDate(periodEnd)}`;
 
     return `
         <g>
@@ -273,7 +405,7 @@ function renderSvg({ activity, repo, now, timeZone }) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title description">
   <title id="title">${escapeXml(repoLabel)} repository activity</title>
-  <desc id="description">${total} commits reachable from ${activity.sourceSha || "no source"}, from ${isoDate(activity.windowStart)} through ${isoDate(activity.throughDate)}, grouped by ${escapeXml(interval)} using committer-date ${escapeXml(timeZone)} civil dates.</desc>
+  <desc id="description">${total} commits reachable from ${activity.sourceSha || "no source"}, from ${isoDate(displayStart)} through ${isoDate(activity.throughDate)}, grouped by ${escapeXml(intervalMachine)} using committer-date ${escapeXml(timeZone)} civil dates.</desc>
   <style>
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     .eyebrow { fill: #6b6a62; font-size: 15px; font-weight: 650; letter-spacing: 1.2px; }
@@ -290,7 +422,7 @@ function renderSvg({ activity, repo, now, timeZone }) {
   <text x="948" y="75" text-anchor="end" class="meta">${escapeXml(dateRange)}</text>
   <line x1="52" y1="190" x2="948" y2="190" stroke="#cec7b8" stroke-width="1"/>${bars}
   <text x="52" y="215" class="axis">${escapeXml(startLabel)}</text>
-  <text x="500" y="215" text-anchor="middle" class="axis">${escapeXml(interval.toUpperCase())} INTERVALS</text>
+  <text x="500" y="215" text-anchor="middle" class="axis">${escapeXml(intervalMachine.toUpperCase())} INTERVALS</text>
   <text x="948" y="215" text-anchor="end" class="axis">${escapeXml(throughLabel)}</text>
   <text x="52" y="248" class="foot">Source · ${sourceLabel} · all reachable commits</text>
   <text x="948" y="248" text-anchor="end" class="foot">Generated · ${generatedAt} (UTC)</text>

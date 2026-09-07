@@ -17,10 +17,13 @@ The model sets what may be possible, context sets what it can see, and the harne
 [![Commits in the generated main snapshot](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg?schema=2)](https://github.com/Nat-Sci/bounded-freedom/blob/repository-activity/repository-activity.svg)
 
 The card counts all commits reachable from its displayed source SHA on `main`,
-grouped by **committer date in Asia/Shanghai (UTC+08)**. It spans the history's
-earliest date through the refresh date (or a later commit timestamp), adapting
-its interval to repository age. The source SHA and generation time identify
-the exact snapshot; compare with that revision, not a newer commit list.
+grouped by **committer-date** in Asia/Shanghai (UTC+08), using the finest
+calendar interval that keeps the bar count within the configured limit: day,
+Monday-based week, aligned two-week period, month, quarter, half-year, or year.
+If those still exceed the limit, it falls back to an aligned multi-year interval.
+It spans the history's earliest commit date through the refresh date (or a later
+commit timestamp). The source SHA and generation time identify the exact snapshot;
+compare with that revision, not a newer commit list.
 
 [Generation](.github/workflows/update-repository-activity.yml) runs after `main`
 changes and once daily, publishing only to a separate image branch. The card is
