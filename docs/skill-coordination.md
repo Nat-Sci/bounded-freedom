@@ -66,18 +66,22 @@ calculations and checks run directly. Bounded read-only synthesis can use a
 Scout contract with balanced capability, while coordinated writing uses
 Builder. Chief accepts the result in either case. A method's "direct" row
 does not bypass the orchestration balanced gate or change Chief's runtime
-model. Named host profiles may fix a pair, so another pair requires a supported
-unpinned route preserving the same permissions and ownership.
+model. The current four profiles are unpinned and require explicit model/effort
+controls while preserving their permissions; stale loaded settings are not a
+second supported configuration.
 
 The task-kind matrix in the [host routing adapter](../.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 is the single model/effort starting policy. Code mapping, general evidence, and
 system mapping can all use Scout with different models; changing to code edits
 changes the execution contract and cannot silently grant write permissions to
-a Scout. The packaged Routed variants are explicit-pair host adapters, not new
+a Scout. The four canonical profiles are explicit-pair host adapters, not new
 specialist Skills or additional worker slots. A launch ticket binds the task
 kind, contract, assurance, profile, requested pair, scope, checks, and remaining
 budget; actual controls and observed receipts establish whether it was honored.
 Reserve required review before discovery so a three-worker chain is not implied.
+Known Spark quota blocks select the matrix's fitting Luna/Terra alternative
+before launch. Confirm terminal state and inspect side effects before mid-task
+handoff; neither quota failure nor a passed reset time expands the worker budget.
 
 ## Method ownership
 

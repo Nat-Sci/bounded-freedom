@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.5.0 — Astra Edition**.
+Current package: **v0.6.0 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -83,16 +83,24 @@ Scout models, and routine engineering review is distinguished from consequential
 review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 own these starting choices; they are policies to validate, not measured savings.
 
-The four original named profiles keep their fixed pairs for compatibility.
-`ScoutRouted`, `CoderRouted`, `BuilderRouted`, and `ReviewerRouted` retain the
-corresponding contracts and sandboxes without pinning model or effort. Chief
-must supply both through supported, advertised launch controls. A fixed
-profile's pair still wins over conflicting arguments; an unpinned profile
-does not silently become the intended pair from prose alone. The [launch adapter protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#codex-launch-adapters)
-covers precedence, missing controls, permission overrides, runtime receipts,
-and safe fallback. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+Only four canonical profiles remain: `Scout`, `Coder`, `Builder`, and `Reviewer`.
+All preserve their permission boundary without pinning model or effort; there
+are no fixed-model counterparts or duplicate Routed aliases. Chief supplies
+both values through supported, advertised launch controls. A stale loaded
+profile can still override those values, and prose cannot switch a running
+model. The [launch adapter protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#codex-launch-adapters)
+covers current controls, permission overrides, runtime receipts and unsupported
+sessions. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
-The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write. The additional profiles are alternate adapters, not extra worker slots. Reserve required independent review before allocating discovery; there is no mandatory Scout → writer → Reviewer sequence, and closing a worker does not reset the total.
+The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write. Reserve required independent review before allocating discovery; there is no mandatory Scout → writer → Reviewer sequence, and closing or failing a worker does not reset the total.
+
+Known quota blocks are filtered before launch. When Spark is blocked,
+straightforward bounded code work uses Luna/medium; interacting state or
+constraints use Terra/medium. Other task kinds keep their own route. Quota
+exhaustion does not justify a Sol/Astra escalation, weaker scientific review,
+or another worker beyond budget. After a mid-task block, inspect partial writes
+and process state before a real handoff. Do not interrupt a healthy fallback
+merely because Spark's reset time passes. See [availability and fallback](.agents/skills/cost-efficient-orchestration/host-model-routing.md#availability-before-launch-and-quota-fallback).
 
 GPT-6 Astra is the Codex adapter's on-demand frontier lane. Select it explicitly
 for the hardest end-to-end phase or a material documented shortfall. For a new
@@ -219,6 +227,10 @@ TOMLs from the explicit [role manifest](install/codex-role-files.txt) as managed
 migrates the previous repository-owned role links: Codex can display symlinked
 profiles but its secure launch reader rejects them. Foreign links, unmanaged
 files, and locally modified managed role files are preserved as conflicts.
+The active adapter no longer supports the old dual profile set. An update
+retires only provably unmodified managed Routed copies or exact repository-owned
+links; foreign or modified aliases cause a safe stop rather than silent deletion.
+Dry-run and status distinguish this cleanup from a current installed role.
 Refresh the installation after changing role profiles; Skill links still follow
 the checkout. The installer does not copy the repository into every project and
 does not require Python.
@@ -254,8 +266,8 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.5.0 provides task-shaped model and effort selection with four compatible
-fixed profiles and four explicit-pair Routed adapters, plus the Astra-aware
+Version 0.6.0 provides quota-aware task-shaped model and effort selection with
+four unpinned canonical profiles and no fixed-model compatibility set, plus the Astra-aware
 hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
@@ -267,7 +279,7 @@ changes, and separates direct calculations from delegated implementation.
 The Codex adapter can now resolve host-recorded Chief and child model/effort,
 while code, configuration, workflow, and routing mutations start at S1.
 Source and isolated-install checks do not establish that a running host exposes
-the new Routed profiles. After an authorized update, use a newly loaded task
+the current unpinned profiles. After an authorized update, use a newly loaded task
 and a suitable real work unit to verify advertised controls, the requested pair,
 effective permissions, and the observed runtime receipt. Linked Skill files may
 be read on a subsequent load before role files are refreshed; keep the missing-

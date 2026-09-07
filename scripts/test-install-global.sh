@@ -185,10 +185,6 @@ expected_role_name() {
     coder) printf '%s\n' Coder ;;
     builder) printf '%s\n' Builder ;;
     reviewer) printf '%s\n' Reviewer ;;
-    scout-routed) printf '%s\n' ScoutRouted ;;
-    coder-routed) printf '%s\n' CoderRouted ;;
-    builder-routed) printf '%s\n' BuilderRouted ;;
-    reviewer-routed) printf '%s\n' ReviewerRouted ;;
     *)
       return 1
       ;;
@@ -271,10 +267,10 @@ assert_managed_source "$claude_no_codex_target/.claude/CLAUDE.md" "$repo_root/in
 assert_path_absent "$claude_no_codex_target/.codex" "Claude-only mode creates no Codex adapter files"
 if [ "$tomllib_available" -eq 1 ]; then
   expected_role_count=$(printf '%s\n' "$codex_role_files" | wc -l | tr -d ' ')
-  if [ "$expected_role_count" -ne 8 ]; then
-    fail "installer role manifest does not list exactly eight role profiles"
+  if [ "$expected_role_count" -ne 4 ]; then
+    fail "installer role manifest does not list exactly four canonical role profiles"
   fi
-  pass "installer role manifest lists exactly eight role profiles"
+  pass "installer role manifest lists exactly four canonical role profiles"
   role_names_seen=""
   for role_file_name in $codex_role_files; do
     role_base_name=${role_file_name%.toml}
@@ -291,43 +287,23 @@ $expected_name_text"
     case "$role_base_name" in
       scout)
         toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Scout role profile keeps read-only sandbox policy"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-luna" "Scout role profile keeps the model contract"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Scout role profile keeps the scouting reasoning effort"
-        ;;
-      scout-routed)
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Scout-routed profile keeps read-only sandbox policy"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Scout-routed profile omits model"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Scout-routed profile omits model_reasoning_effort"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Scout role profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Scout role profile omits model_reasoning_effort"
         ;;
       coder)
         toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Coder profile keeps workspace-write policy"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.3-codex-spark" "Coder keeps the specialized Spark model"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Coder keeps the Spark reasoning effort"
-        ;;
-      coder-routed)
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Coder-routed profile keeps workspace-write policy"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Coder-routed profile omits model"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Coder-routed profile omits model_reasoning_effort"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Coder role profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Coder role profile omits model_reasoning_effort"
         ;;
       builder)
         toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Builder profile keeps workspace-write policy"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-terra" "Builder keeps the balanced Terra model"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Builder keeps the Terra reasoning effort"
-        ;;
-      builder-routed)
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Builder-routed profile keeps workspace-write policy"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Builder-routed profile omits model"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Builder-routed profile omits model_reasoning_effort"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Builder role profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Builder role profile omits model_reasoning_effort"
         ;;
       reviewer)
         toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Reviewer profile keeps read-only policy"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-sol" "Reviewer keeps the strong Sol model"
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "high" "Reviewer keeps the Sol reasoning effort"
-        ;;
-      reviewer-routed)
-        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Reviewer-routed profile keeps read-only policy"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Reviewer-routed profile omits model"
-        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Reviewer-routed profile omits model_reasoning_effort"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Reviewer role profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Reviewer role profile omits model_reasoning_effort"
         ;;
       *)
         fail "unknown installer role profile: $role_file_name"
@@ -486,21 +462,64 @@ for role_file_name in $codex_role_files; do
   assert_path_absent "$role_unmanaged_root/.codex/agents/$role_file_name" "unmanaged role conflict causes no preceding role mutation for $role_label"
 done
 
-role_routed_conflict_root="$test_root/role-routed-conflict"
-mkdir -p "$role_routed_conflict_root/.codex/agents"
-printf 'name = "UserOwnedReviewer"\n' > "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml"
-cp "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml" "$test_root/role-routed-before"
-expect_exit 1 "$test_root/role-routed-conflict.out" "$installer" --host codex --target-root "$role_routed_conflict_root" --install
-assert_contains "Codex agent reviewer-routed" "$test_root/role-routed-conflict.out" "preflight checks the last Routed role destination"
-assert_file_unchanged "$test_root/role-routed-before" "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml" "an unmanaged Routed role is preserved"
-assert_path_absent "$role_routed_conflict_root/.agents" "a late Routed role conflict creates no portable configuration"
-assert_path_absent "$role_routed_conflict_root/.codex/config.toml" "a late Routed role conflict creates no Codex configuration"
-for role_file_name in $codex_role_files; do
-  if [ "$role_file_name" = "reviewer-routed.toml" ]; then
-    continue
-  fi
-  assert_path_absent "$role_routed_conflict_root/.codex/agents/$role_file_name" "a late Routed role conflict creates no preceding $role_file_name"
+retired_roles="scout-routed.toml coder-routed.toml builder-routed.toml reviewer-routed.toml"
+retired_role_fixture_dir="$repo_root/scripts/fixtures/retired-codex-roles"
+role_retirement_root="$test_root/role-retirement"
+mkdir -p "$role_retirement_root/.codex/agents"
+for retired_role in $retired_roles; do
+  cp "$retired_role_fixture_dir/$retired_role" "$test_root/retired-role-payload"
+  payload_checksum=$(cksum < "$test_root/retired-role-payload" | awk '{ print $1 " " $2 }')
+  { printf '%s\n' '# BoundedFreedom managed role file'; printf '%s%s\n' '# payload cksum: ' "$payload_checksum"; cat "$test_root/retired-role-payload"; } > "$role_retirement_root/.codex/agents/$retired_role.next"
+  mv "$role_retirement_root/.codex/agents/$retired_role.next" "$role_retirement_root/.codex/agents/$retired_role"
 done
+"$installer" --host codex --target-root "$role_retirement_root" --dry-run > "$test_root/role-retirement-dry-run.out"
+assert_contains "would retire managed role file: Retired Codex agent scout-routed" "$test_root/role-retirement-dry-run.out" "dry-run reports managed retired-role cleanup"
+"$installer" --host codex --target-root "$role_retirement_root" --status > "$test_root/role-retirement-status.out"
+assert_contains "Retired Codex agent reviewer-routed: retirement required (managed regular file)" "$test_root/role-retirement-status.out" "status distinguishes retired managed role cleanup"
+"$installer" --host codex --target-root "$role_retirement_root" --update > "$test_root/role-retirement-update.out"
+for retired_role in $retired_roles; do
+  assert_path_absent "$role_retirement_root/.codex/agents/$retired_role" "update retires managed $retired_role"
+done
+"$installer" --host codex --target-root "$role_retirement_root" --update > "$test_root/role-retirement-idempotent.out"
+assert_not_contains "retire managed role file" "$test_root/role-retirement-idempotent.out" "retired-role cleanup is idempotent"
+
+role_retired_foreign_root="$test_root/role-retired-foreign-conflict"
+mkdir -p "$role_retired_foreign_root/.codex/agents"
+printf 'user-owned\n' > "$role_retired_foreign_root/foreign-role"
+ln -s "$role_retired_foreign_root/foreign-role" "$role_retired_foreign_root/.codex/agents/reviewer-routed.toml"
+expect_exit 1 "$test_root/role-retired-foreign-conflict.out" "$installer" --host codex --target-root "$role_retired_foreign_root" --install
+assert_contains "retired Codex agent reviewer-routed" "$test_root/role-retired-foreign-conflict.out" "preflight checks retired alias conflicts"
+if [ ! -L "$role_retired_foreign_root/.codex/agents/reviewer-routed.toml" ]; then
+  fail "foreign retired alias link was replaced"
+fi
+pass "foreign retired alias is preserved"
+assert_path_absent "$role_retired_foreign_root/.agents" "foreign retired alias conflict causes no portable installation"
+assert_path_absent "$role_retired_foreign_root/.codex/agents/scout.toml" "foreign retired alias conflict causes no canonical role mutation"
+
+role_retired_matching_link_root="$test_root/role-retired-matching-link-conflict"
+mkdir -p "$role_retired_matching_link_root/.codex/agents"
+cp "$retired_role_fixture_dir/builder-routed.toml" "$role_retired_matching_link_root/foreign-managed-role"
+payload_checksum=$(cksum < "$role_retired_matching_link_root/foreign-managed-role" | awk '{ print $1 " " $2 }')
+{ printf '%s\n' '# BoundedFreedom managed role file'; printf '%s%s\n' '# payload cksum: ' "$payload_checksum"; cat "$role_retired_matching_link_root/foreign-managed-role"; } > "$role_retired_matching_link_root/foreign-managed-role.next"
+mv "$role_retired_matching_link_root/foreign-managed-role.next" "$role_retired_matching_link_root/foreign-managed-role"
+cp "$role_retired_matching_link_root/foreign-managed-role" "$test_root/role-retired-matching-link-target-before"
+ln -s "$role_retired_matching_link_root/foreign-managed-role" "$role_retired_matching_link_root/.codex/agents/builder-routed.toml"
+expect_exit 1 "$test_root/role-retired-matching-link-conflict.out" "$installer" --host codex --target-root "$role_retired_matching_link_root" --install
+if [ ! -L "$role_retired_matching_link_root/.codex/agents/builder-routed.toml" ]; then
+  fail "foreign checksum-matched retired alias link was replaced"
+fi
+pass "foreign checksum-matched retired alias link is preserved"
+assert_file_unchanged "$test_root/role-retired-matching-link-target-before" "$role_retired_matching_link_root/foreign-managed-role" "foreign checksum-matched retired alias target is unchanged"
+assert_path_absent "$role_retired_matching_link_root/.agents" "foreign checksum-matched retired alias conflict causes no portable installation"
+assert_path_absent "$role_retired_matching_link_root/.codex/agents/scout.toml" "foreign checksum-matched retired alias conflict causes no canonical role mutation"
+
+role_retired_modified_root="$test_root/role-retired-modified-conflict"
+mkdir -p "$role_retired_modified_root/.codex/agents"
+printf '%s\n%s\nlegacy role payload\n# local modification\n' '# BoundedFreedom managed role file' '# payload cksum: 0 0' > "$role_retired_modified_root/.codex/agents/builder-routed.toml"
+cp "$role_retired_modified_root/.codex/agents/builder-routed.toml" "$test_root/role-retired-modified-before"
+expect_exit 1 "$test_root/role-retired-modified-conflict.out" "$installer" --host codex --target-root "$role_retired_modified_root" --update
+assert_file_unchanged "$test_root/role-retired-modified-before" "$role_retired_modified_root/.codex/agents/builder-routed.toml" "modified retired managed role payload is preserved"
+assert_path_absent "$role_retired_modified_root/.agents" "modified retired alias conflict causes no partial portable installation"
 
 role_modified_root="$test_root/role-modified-conflict"
 mkdir -p "$role_modified_root/.codex/agents"
@@ -526,10 +545,26 @@ fixture_installer="$role_fixture_root/scripts/install-global.sh"
 role_refresh_root="$test_root/role-refresh"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --install > "$test_root/role-refresh-install.out"
 printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder.toml"
-printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder-routed.toml"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --update > "$test_root/role-refresh-update.out"
 assert_managed_role_payload "$role_refresh_root/.codex/agents/builder.toml" "$role_fixture_root/.codex/agents/builder.toml" "managed role refreshes when its isolated source changes"
-assert_managed_role_payload "$role_refresh_root/.codex/agents/builder-routed.toml" "$role_fixture_root/.codex/agents/builder-routed.toml" "managed routed role refreshes when its isolated source changes"
+
+role_fixed_payload_root="$test_root/role-fixed-payload-update"
+cp "$role_fixture_root/.codex/agents/builder.toml" "$test_root/builder-unpinned-source"
+awk '
+  /^sandbox_mode/ {
+    print "model = \"gpt-5.6-terra\""
+    print "model_reasoning_effort = \"medium\""
+  }
+  { print }
+' "$test_root/builder-unpinned-source" > "$role_fixture_root/.codex/agents/builder.toml"
+"$fixture_installer" --host codex --target-root "$role_fixed_payload_root" --install > "$test_root/role-fixed-payload-install.out"
+cp "$test_root/builder-unpinned-source" "$role_fixture_root/.codex/agents/builder.toml"
+"$fixture_installer" --host codex --target-root "$role_fixed_payload_root" --update > "$test_root/role-fixed-payload-update.out"
+assert_managed_role_payload "$role_fixed_payload_root/.codex/agents/builder.toml" "$role_fixture_root/.codex/agents/builder.toml" "old managed fixed canonical payload refreshes to the unpinned source"
+if [ "$tomllib_available" -eq 1 ]; then
+  toml_key_absent "$role_fixed_payload_root/.codex/agents/builder.toml" "model" "updated canonical Builder payload removes the former fixed model"
+  toml_key_absent "$role_fixed_payload_root/.codex/agents/builder.toml" "model_reasoning_effort" "updated canonical Builder payload removes the former fixed effort"
+fi
 
 if command -v python3 >/dev/null 2>&1; then
   secure_open_root="$test_root/secure-open"
@@ -575,27 +610,6 @@ PY
 else
   skip "python3 is unavailable for O_NOFOLLOW regression coverage"
 fi
-
-role_four_root="$test_root/role-four-upgrade"
-role_four_fixture_root="$test_root/role-four-fixture"
-mkdir -p "$role_four_fixture_root"
-cp -R "$repo_root/scripts" "$repo_root/.codex" "$repo_root/.agents" "$repo_root/install" "$repo_root/VERSION" "$role_four_fixture_root/"
-role_four_installer="$role_four_fixture_root/scripts/install-global.sh"
-old_manifest_file="$role_four_fixture_root/install/codex-role-files.txt"
-cat > "$old_manifest_file" <<'EOF_ROLES'
-scout.toml
-coder.toml
-builder.toml
-reviewer.toml
-EOF_ROLES
-"$role_four_installer" --host codex --target-root "$role_four_root" --install > "$test_root/role-four-upgrade-install.out"
-printf 'user-owned\n' > "$role_four_root/.codex/agents/user-owned.txt"
-cp "$repo_root/install/codex-role-files.txt" "$old_manifest_file"
-"$role_four_installer" --host codex --target-root "$role_four_root" --update > "$test_root/role-four-upgrade-update.out"
-for role_file_name in $codex_role_files; do
-  assert_managed_role_payload "$role_four_root/.codex/agents/$role_file_name" "$repo_root/.codex/agents/$role_file_name" "existing four-role installation upgrades to eight with managed $role_file_name"
-done
-assert_contains "user-owned" "$role_four_root/.codex/agents/user-owned.txt" "existing four-role upgrade preserves non-role user-owned files"
 
 manifest_error_root="$test_root/manifest-errors"
 mkdir -p "$manifest_error_root"

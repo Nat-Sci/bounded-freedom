@@ -18,6 +18,12 @@ scope and acceptance must agree. Record configured and observed pairs
 separately; stop on an observed mismatch. An unknown runtime value stays
 unknown and cannot establish a successful runtime-routing test.
 
+Apply the host reference's availability filter before launch. After a confirmed
+quota termination, inspect partial side effects and writer state before a real
+Luna/Terra handoff; unknown/time-out state never authorizes a replacement.
+Failed workers still consume the total budget. A reset time does not justify
+interrupting a healthy fallback or claiming the blocked model has recovered.
+
 If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a genuinely new worker within the remaining budget; when a lower lane needs compact fresh context, make that handoff real.
 
 Stop a worker after two materially different failed attempts and return the

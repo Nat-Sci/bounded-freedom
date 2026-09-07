@@ -127,6 +127,8 @@ echo "BoundedFreedom package: v$package_version ($edition_name)"
 portable_skills_dir="$target_root/.agents/skills"
 skills_source_dir="$repo_root/.agents/skills"
 legacy_math_skills="mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization"
+retired_codex_role_files="scout-routed.toml coder-routed.toml builder-routed.toml reviewer-routed.toml"
+retired_role_manifest_source="$repo_root/install/codex-retired-role-files.txt"
 role_managed_marker="# BoundedFreedom managed role file"
 role_checksum_prefix="# payload cksum: "
 role_manifest_source="$repo_root/install/codex-role-files.txt"
@@ -217,6 +219,16 @@ load_codex_roles() {
     echo "Missing installer source: install/codex-role-files.txt is empty" >&2
     exit 1
   fi
+  if [ ! -f "$retired_role_manifest_source" ]; then
+    echo "Missing installer source: install/codex-retired-role-files.txt" >&2
+    exit 1
+  fi
+  for retired_role_file in $retired_codex_role_files; do
+    if ! awk -v name="$retired_role_file" '$1 == name && $2 ~ /^[0-9]+$/ && $3 ~ /^[0-9]+$/ { count++ } END { exit(count == 1 ? 0 : 1) }' "$retired_role_manifest_source"; then
+      echo "Invalid installer source: install/codex-retired-role-files.txt is incomplete" >&2
+      exit 1
+    fi
+  done
 }
 
 if [ "$use_codex" -eq 1 ]; then
@@ -299,6 +311,36 @@ check_role_destination() {
   fi
 }
 
+retired_role_is_repository_link() {
+  destination=$1
+  retired_name=$2
+  [ -L "$destination" ] && [ "$(readlink "$destination")" = "$repo_root/.codex/agents/$retired_name" ]
+}
+
+retired_role_is_managed_copy() {
+  destination=$1
+  retired_name=$2
+  expected_checksum=$(awk -v name="$retired_name" '$1 == name { print $2 " " $3; exit }' "$retired_role_manifest_source")
+  [ -n "$expected_checksum" ] && [ ! -L "$destination" ] && [ -f "$destination" ] && role_file_is_managed "$destination" && [ "$(managed_role_checksum "$destination")" = "$expected_checksum" ]
+}
+
+check_retired_role_destination() {
+  destination=$1
+  retired_name=$2
+  label=$3
+  if [ ! -e "$destination" ] && [ ! -L "$destination" ]; then
+    return
+  fi
+  if retired_role_is_repository_link "$destination" "$retired_name"; then
+    return
+  fi
+  if retired_role_is_managed_copy "$destination" "$retired_name"; then
+    return
+  fi
+  echo "conflict: $label is not an unmodified managed retired role file; leaving it unchanged" >&2
+  return 1
+}
+
 has_valid_managed_markers() {
   destination=$1
   awk -v begin="$begin_marker" -v end="$end_marker" '
@@ -355,6 +397,10 @@ preflight_installation() {
     for role_file in $codex_role_files; do
       role_label=${role_file%.toml}
       check_role_destination "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"
+    done
+    for retired_role_file in $retired_codex_role_files; do
+      retired_role_label=${retired_role_file%.toml}
+      check_retired_role_destination "$codex_agents_dir/$retired_role_file" "$retired_role_file" "retired Codex agent $retired_role_label"
     done
     check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
     check_managed_destination "$codex_global_config" "Codex config.toml"
@@ -441,6 +487,25 @@ install_role_file() {
   } > "$temporary"
   mv "$temporary" "$destination"
   echo "install managed role file: $label"
+}
+
+retire_role_file() {
+  destination=$1
+  retired_name=$2
+  label=$3
+  if [ ! -e "$destination" ] && [ ! -L "$destination" ]; then
+    return
+  fi
+  if ! retired_role_is_repository_link "$destination" "$retired_name" && ! retired_role_is_managed_copy "$destination" "$retired_name"; then
+    echo "conflict: $label is not an unmodified managed retired role file; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ "$apply" -eq 1 ]; then
+    rm "$destination"
+    echo "retire managed role file: $label"
+  else
+    echo "would retire managed role file: $label"
+  fi
 }
 
 remove_legacy_managed_links() {
@@ -703,6 +768,21 @@ show_role_status() {
   fi
 }
 
+show_retired_role_status() {
+  destination=$1
+  retired_name=$2
+  label=$3
+  if [ ! -e "$destination" ] && [ ! -L "$destination" ]; then
+    echo "$label: retired"
+  elif retired_role_is_repository_link "$destination" "$retired_name"; then
+    echo "$label: retirement required (repository link)"
+  elif retired_role_is_managed_copy "$destination" "$retired_name"; then
+    echo "$label: retirement required (managed regular file)"
+  else
+    echo "$label: conflict (preserved)"
+  fi
+}
+
 show_block_status() {
   destination=$1
   label=$2
@@ -732,6 +812,10 @@ show_status() {
     for role_file in $codex_role_files; do
       role_label=${role_file%.toml}
       show_role_status "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"
+    done
+    for retired_role_file in $retired_codex_role_files; do
+      retired_role_label=${retired_role_file%.toml}
+      show_retired_role_status "$codex_agents_dir/$retired_role_file" "$retired_role_file" "Retired Codex agent $retired_role_label"
     done
     show_block_status "$codex_global_agents" "Codex AGENTS.md"
     show_block_status "$codex_global_config" "Codex config.toml"
@@ -787,6 +871,10 @@ done
 
 if [ "$use_codex" -eq 1 ]; then
   ensure_dir "$codex_agents_dir" "Codex agents"
+  for retired_role_file in $retired_codex_role_files; do
+    retired_role_label=${retired_role_file%.toml}
+    retire_role_file "$codex_agents_dir/$retired_role_file" "$retired_role_file" "Retired Codex agent $retired_role_label"
+  done
   for role_file in $codex_role_files; do
     role_label=${role_file%.toml}
     install_role_file "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"

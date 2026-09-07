@@ -2,7 +2,3 @@ scout.toml
 coder.toml
 builder.toml
 reviewer.toml
-scout-routed.toml
-coder-routed.toml
-builder-routed.toml
-reviewer-routed.toml

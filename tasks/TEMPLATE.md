@@ -22,7 +22,8 @@
 - Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Selection reason: limiting factor, why the cheaper/simpler route is inadequate when escalating, and why the chosen effort is sufficient
-- Host launch adapter: fixed or Routed profile; advertised availability, actual model/effort controls, effective permission boundary, and fallback if unsupported
+- Host launch adapter: one current unpinned role; actual explicit model/effort controls, effective permissions, and unsupported/stale-session boundary
+- Availability and fallback: known block and source/window/reset time or unknown; selected Luna/Terra alternative for blocked Spark, side-effect checkpoint, and remaining worker/review budget
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
 - Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch
 - User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`

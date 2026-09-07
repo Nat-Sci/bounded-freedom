@@ -8,7 +8,7 @@ Report planned lane and configured model/effort separately from runtime-observed
 
 For Codex, the entry Skill's read-only runtime metadata probe may supply a host-recorded current-thread pair and direct-child pairs. Treat `status=observed` as runtime session evidence and `status=unknown` as no evidence. The probe is an optional Codex adapter: it must fail closed, emit no local path or thread identifier, and never be required by another harness. Use `codex debug models` separately to validate that configured model IDs and effort values exist in the current catalog; catalog presence is availability evidence, not a launch or runtime receipt.
 
-For Codex custom agents, the effective per-setting precedence is: a named custom agent file's `model` or `model_reasoning_effort` wins; otherwise explicit spawn value wins; otherwise `[agents]` default wins; otherwise parent value is inherited. A selected model without an effort uses that model's default; a named file setting only `model` preserves the already resolved effort. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). A named fixed-role profile therefore fixes its paired model/effort: do not pass conflicting spawn model or effort arguments. If a different pair is needed, use a host-supported unpinned/default contract with the required ownership and permissions, or report the route unsupported.
+For Codex custom agents, a file's `model` or `model_reasoning_effort` takes precedence over explicit launch values, which take precedence over configured defaults and parent inheritance. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). The current package therefore omits both keys from all four role files and requires both explicit launch controls. A loaded host that still fixes a pair is not made dynamic by editing a source file; do not send conflicting overrides or claim the new adapter is active.
 
 ## Canonical task-kind matrix
 
@@ -18,17 +18,17 @@ the contracts and link here instead of defining competing model tables. The
 pairs are local starting policies, not measured quality or price guarantees.
 Direct deterministic commands and trivial micro-edits still need no worker.
 
-| Task kind | Bounded output | Contract | Starting model / effort | Codex profile when available |
+| Task kind | Bounded output | Contract | Starting model / effort | When Spark is blocked |
 | --- | --- | --- | --- | --- |
-| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-5.6-luna` / low | ScoutRouted |
-| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-5.6-luna` / medium | Scout |
-| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-5.3-codex-spark` / medium | ScoutRouted |
-| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium | ScoutRouted |
-| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium | ScoutRouted |
-| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | `gpt-5.3-codex-spark` / medium | Coder |
-| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | `gpt-5.6-terra` / medium | Builder |
-| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-terra` / medium | ReviewerRouted |
-| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high | Reviewer |
+| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-5.6-luna` / low | Unchanged |
+| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-5.6-luna` / medium | Unchanged |
+| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward flow; Terra / medium for interacting state or constraints |
+| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium | Unchanged |
+| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium | Unchanged |
+| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward tested edits; Terra / medium for coupled logic within the frozen boundary |
+| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | `gpt-5.6-terra` / medium | Unchanged |
+| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-terra` / medium | Unchanged |
+| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high | Unchanged; never weaken this gate for quota |
 
 Task method remains separate: for example, a mathematical Skill can request a
 code map, a bounded analysis, or a later frozen edit. Ordinary source mapping
@@ -42,17 +42,23 @@ factor: simple repeated structure may need less effort; coupled logic may need
 balanced capability; a documented reasoning shortfall may need strong or
 frontier capability. Keep the contract and authority unchanged. A read-only
 Spark assignment uses Scout, never a writable Coder merely to reach Spark.
-If Spark is unavailable, mechanical units may use Luna and coordinated units
-may use Terra with an explicit changed route and preserved permissions. Do not
-invent a fallback launch or increase the worker budget.
+Luna and Terra alternatives are selected by the same work-unit boundary, not
+by trying every model in sequence. Code with state transitions, interacting
+invariants, or repeated failed checks starts Terra when Spark is unavailable;
+a truly trivial edit remains direct. Changing the model alone does not turn a
+narrow Coder into a broader Builder or grant write access to Scout.
 
-A host-reported quota block is an availability failure, not a reasoning
-shortfall. Remaining allowance in another window does not unblock the active
-limit. Use an authoritative limit receipt when needed to explain that failure;
-do not poll quota before every unit, retry a known block, redeem a reset without
-authorization, or infer billed cost from local token counters. Inspect any
-partial side effects before a permitted continuation and attribute that work
-to the model that actually completed it.
+## Availability before launch and quota fallback
+
+1. Use known current availability before allocating a worker. A host quota error or an authoritative usage receipt can establish a block; the user's current report is labeled user-reported. Record the affected model/window and known reset time in the local task record, not a permanent repository setting. Unknown availability is not an invented block or unlimited allowance. Do not try Spark just to rediscover a known block, and do not poll quota before every unit.
+2. For blocked Spark, select the fitting Luna/Terra row above and its supported explicit model/effort. A short-window block still applies when weekly allowance remains. This is an availability change, not proof of weak reasoning; do not jump to Sol/Astra solely because Spark is out of quota. Normal scientific-review and evidence-based capability gates still apply.
+3. If quota interrupts a running worker, first distinguish a confirmed terminal failure from a timeout or unknown state. Inspect partial diffs, tests, processes, and other side effects; freeze the accepted checkpoint and outstanding unit before handing it over. Never run two writers on an uncertain former worker's files or replay a non-idempotent action blindly.
+4. Change the actual model/effort only with supported host controls or one fitting new worker inside the remaining two-distinct-worker budget, retaining ownership, permissions, assurance, and any reserved independent review. A confirmed failure still counts toward that budget. No slot means no third worker: finish only minimal safe direct work or report the needed budget/control decision for substantial remaining work. A follow-up prompt cannot relabel the same model into a fallback.
+5. Keep a healthy fallback on its unit even if Spark's reset time passes. Reconsider Spark for the next eligible unit only with fresh availability evidence; the timestamp alone is not proof of recovery. Never redeem a reset, buy quota, or wait/monitor indefinitely without the applicable user authorization.
+
+The target is low expected cost per accepted unit, including context, handoff,
+rework, and verification. Model counts, unused quota, and incomplete local token
+counters are not evidence of measured savings or a globally optimal routing.
 
 ## Effort and escalation
 
@@ -80,32 +86,32 @@ a fictitious cheap-model route.
 
 ## Codex launch adapters
 
-Four legacy profiles retain their fixed pairs for compatibility. Four
-`Routed` profiles preserve the same execution contracts but omit both `model`
-and `model_reasoning_effort`, so explicit supported launch values can apply:
+There is one current adapter, with exactly four canonical profiles. All omit
+`model` and `model_reasoning_effort`; the launch supplies both explicitly:
 
-| Contract | Fixed default profile | Explicit-pair profile | Required sandbox |
-| --- | --- | --- | --- |
-| Scout | Scout: Luna / medium | ScoutRouted | read-only |
-| Coder | Coder: Spark / medium | CoderRouted | workspace-write |
-| Builder | Builder: Terra / medium | BuilderRouted | workspace-write |
-| Reviewer | Reviewer: Sol / high | ReviewerRouted | read-only |
+| Contract and profile | Required sandbox |
+| --- | --- |
+| Scout | read-only |
+| Coder | workspace-write |
+| Builder | workspace-write |
+| Reviewer | read-only |
 
-These are alternate launch adapters, not eight responsibilities, an agent pool,
-or additional worker slots. Exact fixed values live in the TOML payloads; the
-installer's explicit [role manifest](../../../install/codex-role-files.txt)
-keeps install, update, conflict preflight, and status on the same inventory.
+No fixed-model counterpart or Routed alias remains in the active package. The
+installer's [role manifest](../../../install/codex-role-files.txt) keeps install,
+update, conflict preflight, and status on the same four-file inventory. Cleanup
+of provably unmodified retired managed copies is migration hygiene, not a
+second supported routing system; modified or foreign files remain protected.
 
 Before launch:
 
 1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, and remaining worker/review budget.
-2. Inspect the current host's advertised controls. Use the fixed profile only when its pair matches. Otherwise use the corresponding Routed profile **only when advertised** and the host supports explicit model and effort for it. Supply both actual launch arguments, never just a prompt or an inherited setting. A host that fixes the pair despite an unpinned file cannot honor that route.
+2. Inspect the current host's advertised controls and the model's supported efforts. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
 4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on a mismatch; missing runtime metadata stays unknown, not a fabricated match.
-5. If the necessary controls/profile are absent, do not repeatedly try an unavailable role. Use a genuinely fitting available profile with a disclosed actual pair and permissions, continue minimal direct work when appropriate, or report the unsupported boundary. Never satisfy S3/S4 review with a cheap untyped fallback.
+5. If necessary controls are absent, distinguish unsupported launch capability from model quota. A different available model must still use enforceable permissions and actual controls. Otherwise continue only minimal direct work when appropriate or report the unsupported boundary. Never satisfy S3/S4 review with a cheap untyped fallback, and never claim source edits switched a running session.
 
-The untyped Luna/low default is a compatibility fallback, not the selected
-route for every unpinned role. Calling a Routed profile without explicit model
+The untyped Luna/low default is a defensive cost limit for unspecified calls,
+not a valid typed route or a compatibility profile. Calling a role without explicit model
 **and** effort is a routing error even if an inherited pair happens to work.
 Changing model, effort, permission, or ownership after launch requires supported
 host controls or a new fitting worker within the same total budget; a follow-up
@@ -113,9 +119,9 @@ message or role label alone does not perform that change.
 
 ### Fast-code gate
 
-A request that merely mentions code does not select Coder. Use the Coder contract when the work requires an actual code edit-test loop, the interface and checks are frozen, ownership is narrow, failure is observable, and no unresolved scientific or architectural decision remains. Choose Coder or CoderRouted after selecting the intended pair. On a strong or frontier Chief, this is the default route even without parallel Chief work because it retires implementation context from the expensive lane. Run a test, formatter, or other known command directly; keep an obvious micro-edit direct when its full implementation is cheaper than the handoff. Use Builder instead when the change coordinates interfaces, migrations, or multiple coupled responsibilities. Pure code mapping follows the Scout row above and does not pass through this write gate.
+A request that merely mentions code does not select Coder. Use the Coder contract when the work requires an actual code edit-test loop, the interface and checks are frozen, ownership is narrow, failure is observable, and no unresolved scientific or architectural decision remains. Choose its explicit pair after the availability check. On a strong or frontier Chief, this is the default route even without parallel Chief work because it retires implementation context from the expensive lane. Run a test, formatter, or other known command directly; keep an obvious micro-edit direct when its full implementation is cheaper than the handoff. Use Builder instead when the change coordinates interfaces, migrations, or multiple coupled responsibilities. Pure code mapping follows the Scout row above and does not pass through this write gate.
 
-The packaged Routed profiles explicitly carry their corresponding sandbox and
+The four packaged profiles explicitly carry their corresponding sandbox and
 contract. A generic unpinned/default agent does not inherit those restrictions
 merely from its prompt; use it only if the host can enforce the required
 boundary and explicit pair. Otherwise return the limitation to Chief.
