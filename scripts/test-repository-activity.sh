@@ -72,15 +72,19 @@ render "$history" 2026-09-03T12:00:00Z "$first"
 test ! "$first" -nt "$test_root/marker"
 checks=$((checks + 1))
 has '7 commits · 5 active days' "$first"
+has 'DAY INTERVALS' "$first"
 has 'Aug 20 → Sep 3, 2026 · UTC' "$first"
-has '2026-08-20: 2 commits' "$first"
-has '2026-09-03: 2 commits' "$first"
+has '2026-08-20 through 2026-08-20: 2 commits' "$first"
+has '2026-09-03 through 2026-09-03: 2 commits' "$first"
 has 'Generated · 2026-09-03T12:00:00Z (UTC)' "$first"
 has 'Source · ' "$first"
 
 compressed="$test_root/compressed.svg"
 render "$history" 2026-09-03T12:00:00Z "$compressed" --max-bars 8
 has '7 commits · 3 active weeks' "$compressed"
+has 'WEEK INTERVALS' "$compressed"
+has '2026-08-17 through 2026-08-23: 2 commits' "$compressed"
+has '2026-08-31 through 2026-09-03: 4 commits' "$compressed"
 
 empty="$test_root/empty"
 init_repo "$empty"
@@ -106,9 +110,53 @@ shanghai="$test_root/shanghai.svg"
 render "$cross" 2026-08-21T12:00:00Z "$utc"
 render "$cross" 2026-08-21T12:00:00Z "$shanghai" --time-zone Asia/Shanghai
 has '2 commits · 1 active day' "$utc"
+has 'DAY INTERVALS' "$utc"
 has '2 commits · 2 active days' "$shanghai"
-has '2026-08-20: 1 commit' "$shanghai"
-has '2026-08-21: 1 commit' "$shanghai"
+has 'DAY INTERVALS' "$shanghai"
+has '2026-08-20 through 2026-08-20: 1 commit' "$shanghai"
+has '2026-08-21 through 2026-08-21: 1 commit' "$shanghai"
+
+week="$test_root/week"
+init_repo "$week"
+commit_at "$week" 2026-03-03T12:00:00Z w1
+commit_at "$week" 2026-03-08T12:00:00Z w2
+commit_at "$week" 2026-03-10T12:00:00Z w3
+commit_at "$week" 2026-03-20T12:00:00Z w4
+week_svg="$test_root/week.svg"
+render "$week" 2026-03-20T12:00:00Z "$week_svg" --max-bars 8
+has '4 commits · 3 active weeks' "$week_svg"
+has 'WEEK INTERVALS' "$week_svg"
+has '2026-03-02 through 2026-03-08: 2 commits' "$week_svg"
+has '2026-03-09 through 2026-03-15: 1 commit' "$week_svg"
+has '2026-03-16 through 2026-03-20: 1 commit' "$week_svg"
+
+two_week="$test_root/two-week"
+init_repo "$two_week"
+commit_at "$two_week" 2026-01-01T12:00:00Z t1
+commit_at "$two_week" 2026-01-10T12:00:00Z t2
+commit_at "$two_week" 2026-02-05T12:00:00Z t3
+commit_at "$two_week" 2026-03-10T12:00:00Z t4
+two_week_svg="$test_root/two-week.svg"
+render "$two_week" 2026-03-18T12:00:00Z "$two_week_svg" --max-bars 8
+has '4 commits · 4 active 2-week periods' "$two_week_svg"
+has '2-WEEK INTERVALS' "$two_week_svg"
+has '2025-12-22 through 2026-01-04: 1 commit' "$two_week_svg"
+has '2026-03-02 through 2026-03-15: 1 commit' "$two_week_svg"
+
+month="$test_root/month"
+init_repo "$month"
+commit_at "$month" 2024-02-29T12:00:00Z m1
+commit_at "$month" 2024-03-31T12:00:00Z m2
+commit_at "$month" 2024-06-15T12:00:00Z m3
+commit_at "$month" 2024-09-01T12:00:00Z m4
+month_svg="$test_root/month.svg"
+render "$month" 2024-09-01T12:00:00Z "$month_svg" --max-bars 8
+has '4 commits · 4 active months' "$month_svg"
+has 'MONTH INTERVALS' "$month_svg"
+has '2024-02-01 through 2024-02-29: 1 commit' "$month_svg"
+has '2024-03-01 through 2024-03-31: 1 commit' "$month_svg"
+has '2024-06-01 through 2024-06-30: 1 commit' "$month_svg"
+has '2024-09-01 through 2024-09-01: 1 commit' "$month_svg"
 
 dst="$test_root/dst"
 init_repo "$dst"
@@ -117,7 +165,52 @@ commit_at "$dst" 2026-03-09T03:30:00Z after
 dst_svg="$test_root/dst.svg"
 render "$dst" 2026-03-10T12:00:00Z "$dst_svg" --time-zone America/New_York
 has '2 commits · 2 active days' "$dst_svg"
+has 'DAY INTERVALS' "$dst_svg"
 has 'Mar 7 → Mar 10, 2026 · America/New_York' "$dst_svg"
+
+quarter="$test_root/quarter"
+init_repo "$quarter"
+commit_at "$quarter" 2025-01-15T12:00:00Z q1
+commit_at "$quarter" 2025-04-01T12:00:00Z q2
+commit_at "$quarter" 2025-08-01T12:00:00Z q3
+commit_at "$quarter" 2026-01-15T12:00:00Z q4
+quarter_svg="$test_root/quarter.svg"
+render "$quarter" 2026-01-31T12:00:00Z "$quarter_svg" --max-bars 8
+has '4 commits · 4 active quarters' "$quarter_svg"
+has 'QUARTER INTERVALS' "$quarter_svg"
+has '2025-01-01 through 2025-03-31: 1 commit' "$quarter_svg"
+has '2025-04-01 through 2025-06-30: 1 commit' "$quarter_svg"
+has '2026-01-01 through 2026-01-31: 1 commit' "$quarter_svg"
+
+half_year="$test_root/half-year"
+init_repo "$half_year"
+commit_at "$half_year" 2022-02-01T12:00:00Z h1
+commit_at "$half_year" 2022-08-01T12:00:00Z h2
+commit_at "$half_year" 2023-04-01T12:00:00Z h3
+commit_at "$half_year" 2024-07-15T12:00:00Z h4
+commit_at "$half_year" 2025-11-10T12:00:00Z h5
+half_svg="$test_root/half-year.svg"
+render "$half_year" 2025-12-31T12:00:00Z "$half_svg" --max-bars 8
+has '5 commits · 5 active half-years' "$half_svg"
+has 'HALF-YEAR INTERVALS' "$half_svg"
+has '2022-01-01 through 2022-06-30: 1 commit' "$half_svg"
+has '2022-07-01 through 2022-12-31: 1 commit' "$half_svg"
+has '2025-07-01 through 2025-12-31: 1 commit' "$half_svg"
+
+year="$test_root/year"
+init_repo "$year"
+commit_at "$year" 2016-06-01T12:00:00Z y1
+commit_at "$year" 2018-06-01T12:00:00Z y2
+commit_at "$year" 2020-06-01T12:00:00Z y3
+commit_at "$year" 2022-06-01T12:00:00Z y4
+commit_at "$year" 2024-06-01T12:00:00Z y5
+commit_at "$year" 2026-06-01T12:00:00Z y6
+year_svg="$test_root/year.svg"
+render "$year" 2026-12-31T12:00:00Z "$year_svg" --max-bars 12
+has '6 commits · 6 active years' "$year_svg"
+has 'YEAR INTERVALS' "$year_svg"
+has '2016-01-01 through 2016-12-31: 1 commit' "$year_svg"
+has '2026-01-01 through 2026-12-31: 1 commit' "$year_svg"
 
 older=$(git -C "$history" rev-parse HEAD~1)
 pinned="$test_root/pinned.svg"
@@ -150,13 +243,32 @@ inversion_svg="$test_root/inversion.svg"
 render "$inversion" 2026-06-11T12:00:00Z "$inversion_svg"
 has 'Jun 1 → Jun 11, 2026 · UTC' "$inversion_svg"
 has '2 commits · 2 active days' "$inversion_svg"
+has 'DAY INTERVALS' "$inversion_svg"
 future="$test_root/future"
 init_repo "$future"
 commit_at "$future" 2030-01-02T12:00:00Z future
 future_svg="$test_root/future.svg"
 render "$future" 2026-01-01T12:00:00Z "$future_svg"
 has 'Jan 2, 2030 · UTC' "$future_svg"
-has '2030-01-02: 1 commit' "$future_svg"
+has '1 commit · 1 active day' "$future_svg"
+has 'DAY INTERVALS' "$future_svg"
+has '2030-01-02 through 2030-01-02: 1 commit' "$future_svg"
+
+multi_year="$test_root/multi-year"
+init_repo "$multi_year"
+commit_at "$multi_year" 2009-02-01T12:00:00Z m1
+commit_at "$multi_year" 2011-05-01T12:00:00Z m2
+commit_at "$multi_year" 2013-07-01T12:00:00Z m3
+commit_at "$multi_year" 2016-08-01T12:00:00Z m4
+commit_at "$multi_year" 2019-09-01T12:00:00Z m5
+commit_at "$multi_year" 2022-10-01T12:00:00Z m6
+commit_at "$multi_year" 2024-11-01T12:00:00Z m7
+multi_year_svg="$test_root/multi-year.svg"
+render "$multi_year" 2026-06-01T12:00:00Z "$multi_year_svg" --max-bars 8
+has '7 commits · 6 active 3-year periods' "$multi_year_svg"
+has '3-YEAR INTERVALS' "$multi_year_svg"
+has '2007-01-01 through 2009-12-31: 1 commit' "$multi_year_svg"
+has '2022-01-01 through 2024-12-31: 2 commits' "$multi_year_svg"
 
 if command -v xmllint >/dev/null 2>&1; then
     xmllint --noout "$first" "$empty_svg" "$escaped" "$shanghai"
