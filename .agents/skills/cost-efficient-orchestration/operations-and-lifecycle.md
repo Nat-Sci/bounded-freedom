@@ -4,13 +4,19 @@ Use this reference when work may spawn, retry, mutate external state, compact, o
 
 ## Freeze and budget
 
-Before a substantial phase, state objective, accepted inputs, active rules, files/evidence in scope, expected verification, and next safe action. Record planned distinct workers (normally zero or one, at most two), initial spawn attempts (at most two), and retry allowance (normally zero; one only for a known safe transient retry). Concurrency does not expand the total budget. A second worker needs independent review or non-overlapping evidence. Allow one writing owner and no nested delegation.
+Before a substantial phase, state objective, task kind, accepted inputs, active rules, files/evidence in scope, expected verification, and next safe action. Resolve conflicts between old and current specifications before delegation. Record planned distinct workers (normally zero or one, at most two), initial spawn attempts (at most two), and retry allowance (normally zero; one only for a known safe transient retry). Reserve mandatory review before allocating a Scout. Concurrency, profile variants, and closure do not expand or reset the total budget. A second worker needs independent review or non-overlapping evidence. Allow one writing owner and no nested delegation.
 
 Update the existing task record after scope freeze and each meaningful phase with the compact decision/route evidence, accepted inputs, worker state, changed artifacts, checks, unresolved uncertainty, and next safe action. Keep retained evidence portable and concise; omit raw logs and local identifiers.
 
 ## Worker lifecycle
 
 Track `planned -> running -> done | attention -> closed`. `done` means a return arrived, not that it was accepted. Inspect current observable worker state, consume and verify completed returns, and close only completed work through a supported host control. Do not edit host state, archive a user task, or treat a stored relationship as a live process.
+
+Before task work, check the selected launch adapter and the worker's ticket:
+contract, task kind, requested model/effort, effective permission boundary,
+scope and acceptance must agree. Record configured and observed pairs
+separately; stop on an observed mismatch. An unknown runtime value stays
+unknown and cannot establish a successful runtime-routing test.
 
 If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a genuinely new worker within the remaining budget; when a lower lane needs compact fresh context, make that handoff real.
 

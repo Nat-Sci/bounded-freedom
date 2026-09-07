@@ -129,6 +129,8 @@ skills_source_dir="$repo_root/.agents/skills"
 legacy_math_skills="mathematical-problem-mapping statistical-model-analysis neural-network-mathematical-analysis loss-objective-optimization"
 role_managed_marker="# BoundedFreedom managed role file"
 role_checksum_prefix="# payload cksum: "
+role_manifest_source="$repo_root/install/codex-role-files.txt"
+codex_role_files=""
 
 codex_dir="$target_root/.codex"
 codex_agents_dir="$codex_dir/agents"
@@ -187,14 +189,38 @@ if [ "$use_codex" -eq 1 ] && [ ! -f "$agents_config_source" ]; then
   echo "Missing installer source: install/agents-config.toml" >&2
   exit 1
 fi
-if [ "$use_codex" -eq 1 ]; then
-  for role in scout coder builder reviewer; do
-    role_source="$repo_root/.codex/agents/$role.toml"
-    if [ ! -f "$role_source" ] || [ -L "$role_source" ]; then
-      echo "Invalid installer source: .codex/agents/$role.toml must be a regular file" >&2
+load_codex_roles() {
+  if [ ! -f "$role_manifest_source" ]; then
+    echo "Missing installer source: install/codex-role-files.txt" >&2
+    exit 1
+  fi
+  while IFS= read -r role_entry || [ -n "$role_entry" ]; do
+    role_entry=$(printf '%s\n' "$role_entry" | sed 's/[[:space:]]*#.*$//; s/^[[:space:]]*//; s/[[:space:]]*$//; s/\r$//')
+    [ -z "$role_entry" ] && continue
+    if ! printf '%s\n' "$role_entry" | grep -Eq '^[A-Za-z0-9_-]+\.toml$'; then
+      echo "Invalid installer source: install/codex-role-files.txt contains an invalid role entry" >&2
       exit 1
     fi
-  done
+    if [ -n "$codex_role_files" ] && printf '%s\n' "$codex_role_files" | grep -Fxq -- "$role_entry"; then
+      echo "Invalid installer source: install/codex-role-files.txt contains duplicate role entries" >&2
+      exit 1
+    fi
+    role_source="$repo_root/.codex/agents/$role_entry"
+    if [ ! -f "$role_source" ] || [ -L "$role_source" ]; then
+      echo "Invalid installer source: a Codex role source is not a regular file" >&2
+      exit 1
+    fi
+    codex_role_files="${codex_role_files}${codex_role_files:+
+}$role_entry"
+  done < "$role_manifest_source"
+  if [ -z "$codex_role_files" ]; then
+    echo "Missing installer source: install/codex-role-files.txt is empty" >&2
+    exit 1
+  fi
+}
+
+if [ "$use_codex" -eq 1 ]; then
+  load_codex_roles
 fi
 
 check_directory_path() {
@@ -326,8 +352,9 @@ preflight_installation() {
   if [ "$use_codex" -eq 1 ]; then
     check_directory_path "$codex_dir" "Codex configuration"
     check_directory_path "$codex_agents_dir" "Codex agents"
-    for role in scout coder builder reviewer; do
-      check_role_destination "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+    for role_file in $codex_role_files; do
+      role_label=${role_file%.toml}
+      check_role_destination "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"
     done
     check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
     check_managed_destination "$codex_global_config" "Codex config.toml"
@@ -702,8 +729,9 @@ show_status() {
   done
   show_legacy_link_status "$portable_skills_dir" "portable Skill"
   if [ "$use_codex" -eq 1 ]; then
-    for role in scout coder builder reviewer; do
-      show_role_status "$repo_root/.codex/agents/$role.toml" "$codex_agents_dir/$role.toml" "Codex agent $role"
+    for role_file in $codex_role_files; do
+      role_label=${role_file%.toml}
+      show_role_status "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"
     done
     show_block_status "$codex_global_agents" "Codex AGENTS.md"
     show_block_status "$codex_global_config" "Codex config.toml"
@@ -759,10 +787,10 @@ done
 
 if [ "$use_codex" -eq 1 ]; then
   ensure_dir "$codex_agents_dir" "Codex agents"
-  install_role_file "$repo_root/.codex/agents/scout.toml" "$codex_agents_dir/scout.toml" "Codex agent scout"
-  install_role_file "$repo_root/.codex/agents/coder.toml" "$codex_agents_dir/coder.toml" "Codex agent coder"
-  install_role_file "$repo_root/.codex/agents/builder.toml" "$codex_agents_dir/builder.toml" "Codex agent builder"
-  install_role_file "$repo_root/.codex/agents/reviewer.toml" "$codex_agents_dir/reviewer.toml" "Codex agent reviewer"
+  for role_file in $codex_role_files; do
+    role_label=${role_file%.toml}
+    install_role_file "$repo_root/.codex/agents/$role_file" "$codex_agents_dir/$role_file" "Codex agent $role_label"
+  done
   refresh_managed_block "$codex_global_agents" "$global_instructions_source" "Codex AGENTS.md"
   refresh_managed_block "$codex_global_config" "$agents_config_source" "Codex config.toml"
   case "$codex_proxy" in

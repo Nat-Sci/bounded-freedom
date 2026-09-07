@@ -5,13 +5,13 @@ description: Use for nontrivial research or repository work that needs Chief-led
 
 # Chief-first orchestration
 
-The primary session is Chief: it owns intent, scope, scientific-risk classification, routing, verification, and the final decision. Do not create a Chief subagent. Keep four decisions independent: task method; execution contract (direct, Scout, Coder, Builder, Reviewer); model and effort; and S0–S4 assurance. Neither a role nor an assurance level selects a model.
+The primary session is Chief: it owns intent, scope, scientific-risk classification, routing, verification, and the final decision. Do not create a Chief subagent. Keep four decisions independent: task method; execution contract (direct, Scout, Coder, Builder, Reviewer); model and effort; and S0–S4 assurance. Describe the concrete task kind and expected output before choosing a host profile. Neither a role nor an assurance level selects a model.
 
 Bootstrap reads needed to discover instructions or the host may precede the declaration. Before any mutation or delegation, freeze scope, permitted and prohibited actions, acceptance evidence, stop conditions, and unresolved choices. For nontrivial work, show one compact combined receipt and preserve its evidence in one `tasks/` record:
 
 ```text
 CHIEF DECISION / ROUTE START
-task method; assurance; execution; workers and total budget
+task method; task kind; assurance; execution; workers and total budget
 Chief planned capability lane: fast | balanced | strong | frontier | UI-selected | unknown
 Chief planned model: exact value | inherited | UI-selected | unknown
 Chief planned reasoning effort: exact value | inherited | UI-selected | unknown
@@ -25,14 +25,14 @@ Keep all six named Chief fields in this user-visible receipt, including unknowns
 
 On Codex, before the first nontrivial receipt, run [the read-only runtime metadata probe](scripts/codex-runtime-metadata.sh) once when it is available, resolving the script relative to this loaded `SKILL.md`. An `observed` result fills the Chief runtime fields and uses `runtime` as metadata source; an unavailable result leaves them `unknown`. If Chief explicitly plans to keep the observed current pair for this phase, the same exact pair may appear in the planned fields; that records the new route decision, not original launch provenance. `inherited` is valid only when the host establishes inheritance, not merely because launch flags are invisible to the model. After a direct child returns, `--children` can verify the host-recorded role, model, effort, and lifecycle for `ROUTE END`. This Codex session record proves effective host selection, not a hidden backend snapshot, billing, or scientific quality. Other hosts use their own receipt or keep the values unknown; never expose state paths or thread IDs.
 
-Read [scientific-risk.md](scientific-risk.md) when the assurance classification is not clearly S0. Read [host-model-routing.md](host-model-routing.md) before selecting a worker model or adapting to another harness. Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before spawning, retrying, external mutation, compaction, or lifecycle closure. Read [hierarchical-routing.md](hierarchical-routing.md) for phases, frontier work, calibration, or substantial delegation. Read [research-lineage.md](research-lineage.md) only when research Skills or claim lineage cross boundaries. Use [routing-evals.md](routing-evals.md) for policy changes without mutating project files.
+Read [scientific-risk.md](scientific-risk.md) when the assurance classification is not clearly S0. Read [host-model-routing.md](host-model-routing.md) before selecting a worker model or adapting to another harness; it owns the canonical task-kind matrix, effort rules, and launch adapter selection. Read [operations-and-lifecycle.md](operations-and-lifecycle.md) before spawning, retrying, external mutation, compaction, or lifecycle closure. Read [hierarchical-routing.md](hierarchical-routing.md) for phases, frontier work, calibration, or substantial delegation. Read [research-lineage.md](research-lineage.md) only when research Skills or claim lineage cross boundaries. Use [routing-evals.md](routing-evals.md) for policy changes without mutating project files.
 
 ## Select the smallest adequate route
 
 1. Match one specialized Skill only when its method or deliverable is needed; otherwise use general work. A larger task closes or freezes one method unit before loading the next and passes only the needed lineage slice.
-2. Split phases only for genuinely different methods, contexts, or capability limits. Freeze the unit before consequential work.
-3. Select the execution contract from ownership and independence: direct for clear work; Scout for read-only discovery that would flood Chief context; Coder for narrow frozen edits; Builder for coordinated implementation; Reviewer only for independent evidence.
-4. Select the least costly capable lane. Fast is for clear, reversible volume; balanced for stable synthesis or coordinated implementation; strong for ambiguous judgment or consequential independent review; frontier only for exceptional end-to-end coherence or a documented lower-lane shortfall.
+2. Identify the unit by its actual output: inventory, evidence map, code map, system map, code edit, coordinated build, bounded synthesis, or review. These are task kinds, not new Skills or standing workers. Split phases only for genuinely different methods, contexts, or capability limits. Resolve conflicting input specifications and freeze the effective unit before consequential work.
+3. Select the execution contract from ownership and independence: direct for clear work; Scout for bounded read-only discovery or synthesis; Coder for narrow frozen edits; Builder for coordinated implementation; Reviewer only for independent evidence. Reading code is still Scout work; it does not require granting Coder write permissions.
+4. Select model and effort separately using the unit's limiting factor and host matrix, then resolve a launch profile that can actually honor the pair and permissions. Fast is for clear, reversible volume; balanced for stable synthesis or coordinated implementation; strong for ambiguous judgment or consequential independent review; frontier only for exceptional end-to-end coherence or a documented lower-lane shortfall. A familiar role name, long context, or the Chief's effort is not a reason to inherit its model or effort.
 5. Classify S0–S4 by highest plausible consequence. S3/S4 require independent Reviewer evidence; S4 also needs explicit human acceptance. These gates do not upgrade an executor or relax scientific authority.
 6. Verify actual diffs, outputs, comparisons, artifacts, or inspection proportional to the accepted claim. Command success alone does not prove scientific validity.
 
@@ -44,7 +44,9 @@ Before non-review strong or frontier execution, use the balanced opportunity gat
 
 ## Delegation, context, and recovery
 
-Every worker message states objective, owned files/evidence, known inputs, permissions and prohibitions, required verification, return format, and stop conditions. Workers preserve unrelated edits and do not delegate. Chief consumes cited evidence instead of repeating assigned discovery.
+Every worker receives a compact launch ticket: task kind, execution contract, assurance, selected host profile, requested model and effort with selection reason, owned files/evidence, accepted inputs, permissions, observable checks, return format, stop conditions, and remaining worker budget. Bind model and effort through actual host controls; prose is not a model switch. Record configured and observed pairs separately, stop on an observed mismatch, and label missing runtime metadata unknown. Workers preserve unrelated edits and do not delegate. Chief consumes cited evidence instead of repeating assigned discovery.
+
+Plan required review before allocating discovery. There is no mandatory Scout → Coder/Builder → Reviewer sequence: if execution and independent review need both worker slots, Chief performs minimal discovery directly. A Scout cannot become a writer by prompt or name change. Closed workers still count toward the total budget; a different profile does not create an extra allowance.
 
 Pass the smallest phase packet: frozen objective, active rules, bounded evidence/files, expected observable, verification, and return boundary. Checkpoint at a frozen decision, method or lane change, worker return, retired large context, or likely compaction. Preserve accepted inputs, changed artifacts, checks, route outcome, retries, worker lifecycle, unresolved items, and next safe action—not raw logs or private identifiers.
 

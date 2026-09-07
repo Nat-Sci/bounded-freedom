@@ -10,9 +10,20 @@ Route phases, not whole tasks:
 admission -> bounded method -> execution/lane -> verification -> checkpoint -> next phase or stop
 ```
 
-Chief retains intent, non-goals, assurance, accepted evidence, unresolved choices, lifecycle, and final decision. A phase receives only frozen objective and permissions, active rules, bounded files/evidence, expected observable and verification, and return boundary. Use deterministic inventory or comparison before spending context on judgment. Checkpoint when a decision, method, lane, or worker result changes; preserve accepted inputs, retired context, changed artifacts, evidence, uncertainty, and next safe action.
+Chief retains intent, non-goals, assurance, accepted evidence, unresolved choices, lifecycle, and final decision. A phase receives only frozen objective and permissions, active rules, bounded files/evidence, expected observable and verification, and return boundary. Select its task kind and then its model/effort using the [canonical host matrix](host-model-routing.md#canonical-task-kind-matrix); do not retain the initial pair just because the role name has not changed. Use deterministic inventory or comparison before spending context on judgment. Checkpoint when a decision, method, lane, or worker result changes; preserve accepted inputs, retired context, changed artifacts, evidence, uncertainty, and next safe action.
 
 Start from the least costly adequate lane: fast general for repeated fields and mechanical transformation; fast code for frozen edit-test loops; balanced for stable synthesis or coordinated bounded implementation; strong for ambiguous judgment or consequential review; frontier for exceptional cross-tool coherence or a documented lower-lane shortfall. Escalate one lane at a time with observable evidence, then return stable work down. A frontier phase must produce a frozen decision, interface, evidence boundary, or implementation contract rather than absorb routine edits or testing.
+
+These are phase options, not a required Scout → writer → Reviewer chain. Reserve
+mandatory independent review before allocating discovery; if execution and
+review need both workers, keep minimal discovery with Chief. Select one coherent
+implementation boundary and ask for an early minimal test through the actual
+entry point. A toy engine, scaffold, or successful helper test is not evidence
+that the production path is integrated. Resolve old-versus-current specification
+conflicts before handoff; do not let a larger task packet substitute for that
+decision. Reuse is allowed only while contract, permissions, model and effort
+remain fitting; changing them needs a real supported host action and does not
+reset the distinct-worker budget.
 
 ## Balanced gate and direct work
 

@@ -57,8 +57,8 @@ eligible, the outcome, any escalation evidence, and the next safe action. For
 nontrivial work, one combined `CHIEF DECISION / ROUTE START`, material
 `ROUTE CHANGE`, and final `ROUTE END` make this control state visible. Profile
 and launch settings describe configured values; supplied UI values remain
-UI-selected. Only authoritative runtime metadata establishes backend model and
-effort. Missing values stay `unknown`. The receipt exposes decisions, not
+UI-selected. Authoritative host runtime metadata establishes the host-recorded
+model and effort, not a hidden backend snapshot or billing. Missing values stay `unknown`. The receipt exposes decisions, not
 hidden reasoning. Method lineage remains separate from execution telemetry.
 
 Method tables describe suitable work, not mandatory agent launches. Existing
@@ -68,6 +68,16 @@ Builder. Chief accepts the result in either case. A method's "direct" row
 does not bypass the orchestration balanced gate or change Chief's runtime
 model. Named host profiles may fix a pair, so another pair requires a supported
 unpinned route preserving the same permissions and ownership.
+
+The task-kind matrix in the [host routing adapter](../.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
+is the single model/effort starting policy. Code mapping, general evidence, and
+system mapping can all use Scout with different models; changing to code edits
+changes the execution contract and cannot silently grant write permissions to
+a Scout. The packaged Routed variants are explicit-pair host adapters, not new
+specialist Skills or additional worker slots. A launch ticket binds the task
+kind, contract, assurance, profile, requested pair, scope, checks, and remaining
+budget; actual controls and observed receipts establish whether it was honored.
+Reserve required review before discovery so a three-worker chain is not implied.
 
 ## Method ownership
 
@@ -131,7 +141,7 @@ This is a route map, not a mandatory linear pipeline. A task may enter at any no
 - **Analysis versus figure:** analysis code owns values and scientific geometry; the figure Skill owns visual argument, assembly, and QA. Visual polish cannot change the analysis.
 - **Project code versus software lifecycle:** general project work executes the current contract. The lifecycle Skill is activated only when accepting a durable capability, changing the frame, hardening, or releasing it.
 - **Skill versus tool:** a Skill defines method and evidence. Databases, RAG systems, plotting libraries, runtimes, and scaffolds remain optional capabilities selected for a frozen need.
-- **Execution contract versus intelligence:** Scout, Coder, Builder, and Reviewer describe ownership and independence. Model family and reasoning effort are selected separately for the work unit; eligible coordinated work starts balanced before non-review strong or frontier execution. A host-specific fast-code model may back Coder without turning the model into another role.
+- **Execution contract versus intelligence:** Scout, Coder, Builder, and Reviewer describe ownership and independence. Model family and reasoning effort are selected separately for the concrete task kind; eligible coordinated work starts balanced before non-review strong or frontier execution. A fast-code model may back a read-only Scout or a writing Coder; the selected profile must preserve that distinction rather than equate the model with a role.
 - **Method versus assurance:** S0–S4 controls the evidence and review gate. It neither names the task nor automatically upgrades every executor.
 
 ## Future Work: formal proof verification

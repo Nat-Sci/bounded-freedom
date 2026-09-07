@@ -2,7 +2,8 @@
 enabled = true
 max_concurrent_threads_per_session = 2
 max_depth = 1
-# Untyped bounded work stays on Luna. Select Coder for a frozen code edit on
-# Spark, or Builder for coordinated work that passes the balanced opportunity gate.
+# Compatibility fallback only. Choose task kind and an explicit model/effort
+# before selecting a fixed or Routed contract; never rely on these defaults
+# for a Routed launch or for consequential independent review.
 default_subagent_model = "gpt-5.6-luna"
 default_subagent_reasoning_effort = "low"

@@ -11,6 +11,7 @@ temporary_parent=${TMPDIR:-/tmp}
 temporary_parent=${temporary_parent%/}
 test_root=$(mktemp -d "$temporary_parent/bounded-freedom-install-test.XXXXXX")
 test_count=0
+skip_count=0
 
 cleanup() {
   case "$test_root" in
@@ -33,6 +34,11 @@ pass() {
 fail() {
   echo "not ok - $1" >&2
   exit 1
+}
+
+skip() {
+  skip_count=$((skip_count + 1))
+  echo "skip $skip_count - $1"
 }
 
 assert_path_absent() {
@@ -114,6 +120,81 @@ expect_exit() {
   fi
 }
 
+codex_role_manifest="$repo_root/install/codex-role-files.txt"
+codex_role_files=""
+load_codex_roles() {
+  while IFS= read -r role_entry || [ -n "$role_entry" ]; do
+    role_entry=$(printf '%s\n' "$role_entry" | sed 's/[[:space:]]*#.*$//; s/^[[:space:]]*//; s/[[:space:]]*$//; s/\r$//')
+    [ -z "$role_entry" ] && continue
+    codex_role_files="${codex_role_files}${codex_role_files:+
+}$role_entry"
+  done < "$codex_role_manifest"
+}
+
+load_codex_roles
+tomllib_available=0
+if command -v python3 >/dev/null 2>&1 && python3 -c 'import tomllib' >/dev/null 2>&1
+then
+  tomllib_available=1
+fi
+
+toml_scalar_assert() {
+  file=$1
+  key=$2
+  expected=$3
+  label=$4
+  if python3 - "$file" "$key" "$expected" <<'PY'
+import sys
+import tomllib
+
+with open(sys.argv[1], "rb") as handle:
+  data = tomllib.load(handle)
+if data.get(sys.argv[2]) != sys.argv[3]:
+  raise SystemExit(1)
+PY
+  then
+    pass "$label"
+  else
+    fail "$label"
+  fi
+}
+
+toml_key_absent() {
+  file=$1
+  key=$2
+  label=$3
+  if python3 - "$file" "$key" <<'PY'
+import sys
+import tomllib
+
+with open(sys.argv[1], "rb") as handle:
+  data = tomllib.load(handle)
+if sys.argv[2] in data:
+  raise SystemExit(1)
+PY
+  then
+    pass "$label"
+  else
+    fail "$label"
+  fi
+}
+
+expected_role_name() {
+  case "$1" in
+    scout) printf '%s\n' Scout ;;
+    coder) printf '%s\n' Coder ;;
+    builder) printf '%s\n' Builder ;;
+    reviewer) printf '%s\n' Reviewer ;;
+    scout-routed) printf '%s\n' ScoutRouted ;;
+    coder-routed) printf '%s\n' CoderRouted ;;
+    builder-routed) printf '%s\n' BuilderRouted ;;
+    reviewer-routed) printf '%s\n' ReviewerRouted ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
 sh -n "$installer"
 pass "installer has valid POSIX shell syntax"
 
@@ -137,10 +218,11 @@ for skill_source in "$repo_root/.agents/skills"/*; do
   fi
 done
 pass "all portable and Claude Skills link to repository sources"
-for role in scout coder builder reviewer; do
-  role_source="$repo_root/.codex/agents/$role.toml"
-  role_file="$all_root/.codex/agents/$role.toml"
-  assert_managed_role_payload "$role_file" "$role_source" "Codex agent $role is a managed regular file with literal source metadata"
+for role_file_name in $codex_role_files; do
+  role_label=${role_file_name%.toml}
+  role_source="$repo_root/.codex/agents/$role_file_name"
+  role_file="$all_root/.codex/agents/$role_file_name"
+  assert_managed_role_payload "$role_file" "$role_source" "Codex agent $role_label is a managed regular file with literal source metadata"
 done
 "$installer" --host all --target-root "$all_root" --status > "$test_root/all-status.out"
 assert_contains "portable Skill evidence-review: linked" "$test_root/all-status.out" "status reports portable Skills"
@@ -151,7 +233,10 @@ assert_not_contains "portable Skill neural-network-mathematical-analysis: linked
 assert_not_contains "portable Skill loss-objective-optimization: linked" "$test_root/all-status.out" "status omits the former loss Skill"
 assert_contains "BoundedFreedom package: v$package_version (Astra Edition)" "$test_root/all-status.out" "status reports the package version and edition"
 assert_contains "Codex config.toml: managed block present" "$test_root/all-status.out" "status reports the Codex managed block"
-assert_contains "Codex agent builder: managed regular file (current)" "$test_root/all-status.out" "status reports current managed role files"
+for role_file_name in $codex_role_files; do
+  role_label=${role_file_name%.toml}
+  assert_contains "Codex agent $role_label: managed regular file (current)" "$test_root/all-status.out" "status reports current managed role $role_label"
+done
 assert_contains "Codex role file status is file-level only; it does not verify live role launch or model selection" "$test_root/all-status.out" "status states that role files are not live runtime verification"
 assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
@@ -160,9 +245,98 @@ if ! cmp -s "$repo_root/.codex/config.toml" "$repo_root/install/agents-config.to
   fail "project and install Codex agent defaults diverged"
 fi
 pass "project and install Codex agent defaults match"
-assert_contains 'model = "gpt-5.3-codex-spark"' "$repo_root/.codex/agents/coder.toml" "Coder uses the specialized Spark route"
-assert_contains 'model = "gpt-5.6-terra"' "$repo_root/.codex/agents/builder.toml" "Builder keeps the balanced Terra route"
-assert_contains 'model = "gpt-5.6-sol"' "$repo_root/.codex/agents/reviewer.toml" "Reviewer keeps the strong Sol route"
+
+portable_no_codex_root="$test_root/portable-no-codex"
+mkdir -p "$portable_no_codex_root/scripts" "$portable_no_codex_root/install"
+portable_no_codex_root=$(CDPATH= cd -- "$portable_no_codex_root" && pwd -P)
+cp "$repo_root/scripts/install-global.sh" "$portable_no_codex_root/scripts/"
+cp -R "$repo_root/.agents" "$portable_no_codex_root/"
+cp "$repo_root/install/global-agents.md" "$portable_no_codex_root/install/"
+cp "$repo_root/VERSION" "$portable_no_codex_root/VERSION"
+portable_no_codex_target="$portable_no_codex_root/target"
+"$portable_no_codex_root/scripts/install-global.sh" --host portable --target-root "$portable_no_codex_target" --install > "$test_root/portable-no-codex.out"
+assert_path_absent "$portable_no_codex_root/.codex" "portable mode ignores missing Codex adapter sources"
+assert_path_absent "$portable_no_codex_root/install/codex-role-files.txt" "portable mode ignores a missing Codex role manifest"
+for skill_source in "$portable_no_codex_root/.agents/skills"/*; do
+  skill_name=${skill_source##*/}
+  portable_link="$portable_no_codex_target/.agents/skills/$skill_name"
+  if [ ! -L "$portable_link" ] || [ "$(readlink "$portable_link")" != "$skill_source" ]; then
+    fail "portable mode links the Skill $skill_name without a source Codex install manifest"
+  fi
+done
+pass "portable mode links Skills without Codex adapter source requirements"
+claude_no_codex_target="$portable_no_codex_root/claude-target"
+"$portable_no_codex_root/scripts/install-global.sh" --host claude --target-root "$claude_no_codex_target" --install > "$test_root/claude-no-codex.out"
+assert_managed_source "$claude_no_codex_target/.claude/CLAUDE.md" "$repo_root/install/global-agents.md" "Claude mode installs instructions without Codex adapter sources"
+assert_path_absent "$claude_no_codex_target/.codex" "Claude-only mode creates no Codex adapter files"
+if [ "$tomllib_available" -eq 1 ]; then
+  expected_role_count=$(printf '%s\n' "$codex_role_files" | wc -l | tr -d ' ')
+  if [ "$expected_role_count" -ne 8 ]; then
+    fail "installer role manifest does not list exactly eight role profiles"
+  fi
+  pass "installer role manifest lists exactly eight role profiles"
+  role_names_seen=""
+  for role_file_name in $codex_role_files; do
+    role_base_name=${role_file_name%.toml}
+    expected_name_text=$(expected_role_name "$role_base_name")
+    if [ -z "$expected_name_text" ]; then
+      fail "unknown installer role profile: $role_file_name"
+    fi
+    toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "name" "$expected_name_text" "role name is exact for $role_file_name"
+    if printf '%s\n' "$role_names_seen" | grep -Fxq -- "$expected_name_text"; then
+      fail "role names must be unique; $expected_name_text is duplicated"
+    fi
+    role_names_seen="$role_names_seen
+$expected_name_text"
+    case "$role_base_name" in
+      scout)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Scout role profile keeps read-only sandbox policy"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-luna" "Scout role profile keeps the model contract"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Scout role profile keeps the scouting reasoning effort"
+        ;;
+      scout-routed)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Scout-routed profile keeps read-only sandbox policy"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Scout-routed profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Scout-routed profile omits model_reasoning_effort"
+        ;;
+      coder)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Coder profile keeps workspace-write policy"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.3-codex-spark" "Coder keeps the specialized Spark model"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Coder keeps the Spark reasoning effort"
+        ;;
+      coder-routed)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Coder-routed profile keeps workspace-write policy"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Coder-routed profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Coder-routed profile omits model_reasoning_effort"
+        ;;
+      builder)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Builder profile keeps workspace-write policy"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-terra" "Builder keeps the balanced Terra model"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "medium" "Builder keeps the Terra reasoning effort"
+        ;;
+      builder-routed)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "workspace-write" "Builder-routed profile keeps workspace-write policy"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Builder-routed profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Builder-routed profile omits model_reasoning_effort"
+        ;;
+      reviewer)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Reviewer profile keeps read-only policy"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model" "gpt-5.6-sol" "Reviewer keeps the strong Sol model"
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "high" "Reviewer keeps the Sol reasoning effort"
+        ;;
+      reviewer-routed)
+        toml_scalar_assert "$repo_root/.codex/agents/$role_file_name" "sandbox_mode" "read-only" "Reviewer-routed profile keeps read-only policy"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model" "Reviewer-routed profile omits model"
+        toml_key_absent "$repo_root/.codex/agents/$role_file_name" "model_reasoning_effort" "Reviewer-routed profile omits model_reasoning_effort"
+        ;;
+      *)
+        fail "unknown installer role profile: $role_file_name"
+        ;;
+    esac
+  done
+else
+  skip "python3 with tomllib is unavailable for role TOML semantic checks"
+fi
 assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
 assert_contains 'max_concurrent_threads_per_session = 2' "$repo_root/.codex/config.toml" "Codex keeps the two-worker concurrency ceiling"
 runtime_probe="$repo_root/.agents/skills/cost-efficient-orchestration/scripts/codex-runtime-metadata.sh"
@@ -185,7 +359,7 @@ SQL
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
   assert_contains '"scope":"child","role":"Coder","model":"gpt-5.3-codex-spark","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe reports the host-recorded child pair"
 else
-  echo "skip - sqlite3 is unavailable for runtime metadata regression coverage"
+  skip "sqlite3 is unavailable for runtime metadata regression coverage"
 fi
 assert_managed_source "$all_root/.codex/AGENTS.md" "$repo_root/install/global-agents.md" "Codex receives the complete managed instructions"
 assert_managed_source "$all_root/.codex/config.toml" "$repo_root/install/agents-config.toml" "Codex receives the complete managed configuration"
@@ -287,7 +461,14 @@ if [ ! -L "$role_foreign_root/.codex/agents/scout.toml" ]; then
 fi
 pass "foreign role link is preserved"
 assert_path_absent "$role_foreign_root/.agents" "foreign role conflict causes no portable installation"
-assert_path_absent "$role_foreign_root/.codex/agents/coder.toml" "foreign role conflict causes no preceding role mutation"
+assert_path_absent "$role_foreign_root/.codex/agents/coder.toml" "foreign role conflict causes no preceding role mutation for coder"
+for role_file_name in $codex_role_files; do
+  role_label=${role_file_name%.toml}
+  if [ "$role_label" = "scout" ] || [ "$role_label" = "coder" ]; then
+    continue
+  fi
+  assert_path_absent "$role_foreign_root/.codex/agents/$role_file_name" "foreign role conflict causes no preceding role mutation for $role_label"
+done
 
 role_unmanaged_root="$test_root/role-unmanaged-conflict"
 mkdir -p "$role_unmanaged_root/.codex/agents"
@@ -296,7 +477,30 @@ cp "$role_unmanaged_root/.codex/agents/coder.toml" "$test_root/role-unmanaged-be
 expect_exit 1 "$test_root/role-unmanaged-conflict.out" "$installer" --host codex --target-root "$role_unmanaged_root" --install
 assert_file_unchanged "$test_root/role-unmanaged-before" "$role_unmanaged_root/.codex/agents/coder.toml" "unmanaged role file is preserved"
 assert_path_absent "$role_unmanaged_root/.agents" "unmanaged role conflict causes no portable installation"
-assert_path_absent "$role_unmanaged_root/.codex/agents/scout.toml" "unmanaged role conflict causes no preceding role mutation"
+assert_path_absent "$role_unmanaged_root/.codex/agents/scout.toml" "unmanaged role conflict causes no preceding role mutation for scout"
+for role_file_name in $codex_role_files; do
+  role_label=${role_file_name%.toml}
+  if [ "$role_label" = "coder" ] || [ "$role_label" = "scout" ]; then
+    continue
+  fi
+  assert_path_absent "$role_unmanaged_root/.codex/agents/$role_file_name" "unmanaged role conflict causes no preceding role mutation for $role_label"
+done
+
+role_routed_conflict_root="$test_root/role-routed-conflict"
+mkdir -p "$role_routed_conflict_root/.codex/agents"
+printf 'name = "UserOwnedReviewer"\n' > "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml"
+cp "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml" "$test_root/role-routed-before"
+expect_exit 1 "$test_root/role-routed-conflict.out" "$installer" --host codex --target-root "$role_routed_conflict_root" --install
+assert_contains "Codex agent reviewer-routed" "$test_root/role-routed-conflict.out" "preflight checks the last Routed role destination"
+assert_file_unchanged "$test_root/role-routed-before" "$role_routed_conflict_root/.codex/agents/reviewer-routed.toml" "an unmanaged Routed role is preserved"
+assert_path_absent "$role_routed_conflict_root/.agents" "a late Routed role conflict creates no portable configuration"
+assert_path_absent "$role_routed_conflict_root/.codex/config.toml" "a late Routed role conflict creates no Codex configuration"
+for role_file_name in $codex_role_files; do
+  if [ "$role_file_name" = "reviewer-routed.toml" ]; then
+    continue
+  fi
+  assert_path_absent "$role_routed_conflict_root/.codex/agents/$role_file_name" "a late Routed role conflict creates no preceding $role_file_name"
+done
 
 role_modified_root="$test_root/role-modified-conflict"
 mkdir -p "$role_modified_root/.codex/agents"
@@ -306,6 +510,13 @@ cp "$role_modified_root/.codex/agents/reviewer.toml" "$test_root/role-modified-b
 expect_exit 1 "$test_root/role-modified-conflict.out" "$installer" --host codex --target-root "$role_modified_root" --update
 assert_file_unchanged "$test_root/role-modified-before" "$role_modified_root/.codex/agents/reviewer.toml" "modified managed role payload is preserved"
 assert_path_absent "$role_modified_root/.agents/skills/evidence-review" "modified role conflict causes no partial portable installation"
+for role_file_name in $codex_role_files; do
+  role_label=${role_file_name%.toml}
+  if [ "$role_label" = "reviewer" ]; then
+    continue
+  fi
+  assert_path_absent "$role_modified_root/.codex/agents/$role_file_name" "modified role conflict causes no partial role mutation for $role_label"
+done
 
 role_fixture_root="$test_root/role-source-fixture"
 mkdir -p "$role_fixture_root"
@@ -315,55 +526,129 @@ fixture_installer="$role_fixture_root/scripts/install-global.sh"
 role_refresh_root="$test_root/role-refresh"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --install > "$test_root/role-refresh-install.out"
 printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder.toml"
+printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder-routed.toml"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --update > "$test_root/role-refresh-update.out"
 assert_managed_role_payload "$role_refresh_root/.codex/agents/builder.toml" "$role_fixture_root/.codex/agents/builder.toml" "managed role refreshes when its isolated source changes"
+assert_managed_role_payload "$role_refresh_root/.codex/agents/builder-routed.toml" "$role_fixture_root/.codex/agents/builder-routed.toml" "managed routed role refreshes when its isolated source changes"
 
 if command -v python3 >/dev/null 2>&1; then
   secure_open_root="$test_root/secure-open"
   mkdir -p "$secure_open_root"
   printf 'fixture payload\n' > "$secure_open_root/source.toml"
   ln -s "$secure_open_root/source.toml" "$secure_open_root/legacy.toml"
-  if python3 - "$secure_open_root/legacy.toml" \
-      "$role_refresh_root/.codex/agents/scout.toml" \
-      "$role_refresh_root/.codex/agents/coder.toml" \
-      "$role_refresh_root/.codex/agents/builder.toml" \
-      "$role_refresh_root/.codex/agents/reviewer.toml" <<'PY'
+  if python3 - "$secure_open_root/legacy.toml" "$role_refresh_root/.codex/agents" "$codex_role_manifest" <<'PY'
 import errno
 import os
 import sys
+from pathlib import Path
 
-legacy, *installed_roles = sys.argv[1:]
+legacy, installed_directory, manifest = sys.argv[1:]
 with open(legacy, encoding="utf-8") as handle:
-    assert handle.read() == "fixture payload\n"
+  assert handle.read() == "fixture payload\n"
 if not hasattr(os, "O_NOFOLLOW"):
-    print("SKIP - O_NOFOLLOW is unavailable")
-    raise SystemExit(77)
+  raise SystemExit(77)
 flags = os.O_RDONLY | os.O_NOFOLLOW | getattr(os, "O_NONBLOCK", 0)
 try:
-    descriptor = os.open(legacy, flags)
+  descriptor = os.open(legacy, flags)
 except OSError as error:
-    if error.errno != errno.ELOOP:
-        raise
+  if error.errno != errno.ELOOP:
+    raise
 else:
-    os.close(descriptor)
-    raise AssertionError("secure open unexpectedly accepted a symlink")
-for installed in installed_roles:
-    descriptor = os.open(installed, flags)
+  os.close(descriptor)
+  raise AssertionError("secure open unexpectedly accepted a symlink")
+for entry in Path(manifest).read_text(encoding="utf-8").splitlines():
+  name = entry.partition("#")[0].strip()
+  if name:
+    descriptor = os.open(Path(installed_directory) / name, flags)
     os.close(descriptor)
 PY
   then
-    pass "secure open rejects a role symlink and accepts all four installer-produced regular role files when supported"
+    pass "secure open rejects a role symlink and accepts all installer-produced regular role files when supported"
   else
     secure_open_status=$?
     if [ "$secure_open_status" -eq 77 ]; then
-      echo "skip - O_NOFOLLOW is unavailable for secure-open regression coverage"
+      skip "O_NOFOLLOW is unavailable for secure-open regression coverage"
     else
       fail "secure-open regression failed"
     fi
   fi
 else
-  echo "skip - python3 is unavailable for O_NOFOLLOW regression coverage"
+  skip "python3 is unavailable for O_NOFOLLOW regression coverage"
 fi
+
+role_four_root="$test_root/role-four-upgrade"
+role_four_fixture_root="$test_root/role-four-fixture"
+mkdir -p "$role_four_fixture_root"
+cp -R "$repo_root/scripts" "$repo_root/.codex" "$repo_root/.agents" "$repo_root/install" "$repo_root/VERSION" "$role_four_fixture_root/"
+role_four_installer="$role_four_fixture_root/scripts/install-global.sh"
+old_manifest_file="$role_four_fixture_root/install/codex-role-files.txt"
+cat > "$old_manifest_file" <<'EOF_ROLES'
+scout.toml
+coder.toml
+builder.toml
+reviewer.toml
+EOF_ROLES
+"$role_four_installer" --host codex --target-root "$role_four_root" --install > "$test_root/role-four-upgrade-install.out"
+printf 'user-owned\n' > "$role_four_root/.codex/agents/user-owned.txt"
+cp "$repo_root/install/codex-role-files.txt" "$old_manifest_file"
+"$role_four_installer" --host codex --target-root "$role_four_root" --update > "$test_root/role-four-upgrade-update.out"
+for role_file_name in $codex_role_files; do
+  assert_managed_role_payload "$role_four_root/.codex/agents/$role_file_name" "$repo_root/.codex/agents/$role_file_name" "existing four-role installation upgrades to eight with managed $role_file_name"
+done
+assert_contains "user-owned" "$role_four_root/.codex/agents/user-owned.txt" "existing four-role upgrade preserves non-role user-owned files"
+
+manifest_error_root="$test_root/manifest-errors"
+mkdir -p "$manifest_error_root"
+manifest_error_fixture="$manifest_error_root/base"
+mkdir -p "$manifest_error_fixture"
+cp -R "$repo_root/scripts" "$repo_root/.codex" "$repo_root/.agents" "$repo_root/install" "$repo_root/VERSION" "$manifest_error_root/base/"
+manifest_invalid_path_root="$manifest_error_root/invalid-path"
+mkdir -p "$manifest_invalid_path_root"
+cp -R "$manifest_error_fixture/." "$manifest_invalid_path_root/"
+cat > "$manifest_invalid_path_root/install/codex-role-files.txt" <<'EOF_ROLES'
+scout.toml
+bad/name.toml
+EOF_ROLES
+expect_exit 1 "$test_root/manifest-invalid-path.out" "$manifest_invalid_path_root/scripts/install-global.sh" --host codex --target-root "$manifest_error_root/invalid-path-target" --install
+assert_contains "contains an invalid role entry" "$test_root/manifest-invalid-path.out" "invalid manifest rejection reaches role-entry validation"
+assert_not_contains "bad/name.toml" "$test_root/manifest-invalid-path.out" "manifest errors do not echo untrusted path entries"
+assert_path_absent "$manifest_error_root/invalid-path-target" "invalid manifest entries are rejected before writes"
+
+manifest_duplicate_root="$manifest_error_root/duplicate-entry"
+mkdir -p "$manifest_duplicate_root"
+cp -R "$manifest_error_fixture/." "$manifest_duplicate_root/"
+cat > "$manifest_duplicate_root/install/codex-role-files.txt" <<'EOF_ROLES'
+scout.toml
+scout.toml
+coder.toml
+builder.toml
+reviewer.toml
+EOF_ROLES
+expect_exit 1 "$test_root/manifest-duplicate.out" "$manifest_duplicate_root/scripts/install-global.sh" --host codex --target-root "$manifest_error_root/duplicate-target" --install
+assert_contains "contains duplicate role entries" "$test_root/manifest-duplicate.out" "duplicate manifest rejection reaches duplicate validation"
+assert_path_absent "$manifest_error_root/duplicate-target" "duplicate manifest entries are rejected before writes"
+
+manifest_missing_root="$manifest_error_root/missing-source"
+mkdir -p "$manifest_missing_root"
+cp -R "$manifest_error_fixture/." "$manifest_missing_root/"
+cat > "$manifest_missing_root/install/codex-role-files.txt" <<'EOF_ROLES'
+scout.toml
+coder.toml
+builder.toml
+reviewer.toml
+missing-profile.toml
+EOF_ROLES
+expect_exit 1 "$test_root/manifest-missing-source.out" "$manifest_missing_root/scripts/install-global.sh" --host codex --target-root "$manifest_error_root/missing-source-target" --install
+assert_contains "a Codex role source is not a regular file" "$test_root/manifest-missing-source.out" "missing source rejection reaches role-file validation"
+assert_path_absent "$manifest_error_root/missing-source-target" "missing manifest sources are rejected before writes"
+
+manifest_empty_root="$manifest_error_root/empty"
+mkdir -p "$manifest_empty_root"
+cp -R "$manifest_error_fixture/." "$manifest_empty_root/"
+printf '# no roles\n\n' > "$manifest_empty_root/install/codex-role-files.txt"
+expect_exit 1 "$test_root/manifest-empty.out" "$manifest_empty_root/scripts/install-global.sh" --host codex --target-root "$manifest_error_root/empty-target" --install
+assert_contains "install/codex-role-files.txt is empty" "$test_root/manifest-empty.out" "empty manifest rejection reaches role-list validation"
+assert_path_absent "$manifest_error_root/empty-target" "an empty manifest is rejected before writes"
 
 proxy_bin="$test_root/proxy-bin"
 mkdir -p "$proxy_bin"
@@ -479,3 +764,4 @@ assert_path_absent "$marker_root/.agents" "malformed markers create no portable 
 assert_contains "Codex AGENTS.md: invalid managed markers" "$test_root/malformed-status.out" "status identifies malformed managed markers"
 
 echo "installer regression tests passed: $test_count"
+echo "installer regression checks skipped: $skip_count"

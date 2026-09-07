@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.4.5 — Astra Edition**.
+Current package: **v0.5.0 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -61,26 +61,35 @@ planned capability lane, model, reasoning effort, runtime model, runtime
 reasoning effort, and metadata source before delegation or changes. Necessary
 instruction and host-discovery reads may come first. Emit `ROUTE CHANGE` only
 when the route materially changes and `ROUTE END` with the accepted result. When
-the host does not expose an authoritative value, the field says `inherited`,
-`UI-selected`, or `unknown` rather than disappearing or guessing. These
+the host does not expose authoritative runtime values, runtime fields stay
+`unknown`; configuration, inheritance, or UI values are labeled separately. These
 receipts show routing control, not private chain-of-thought.
 
-| Execution contract | Owns | Current Codex default |
+| Execution contract | Owns | Permission boundary |
 | --- | --- | --- |
-| Scout | Bounded read-only discovery | Luna / medium |
-| Coder | Narrow, frozen, code-specific edits | Codex-Spark / medium |
-| Builder | Coordinated implementation across logic or files | Terra / medium |
-| Reviewer | Independent read-only assessment | Sol / high |
+| Scout | Bounded discovery, code/evidence/system mapping, or stable synthesis | Read-only |
+| Coder | Narrow, frozen, code-specific edits and checks | Scoped workspace write |
+| Builder | Coordinated implementation across logic or files | Scoped workspace write |
+| Reviewer | Independent assessment of evidence and acceptance | Read-only |
 
-These are the reference adapter's configured pairs. In Codex, a named custom
-profile's model and effort take precedence over launch defaults; the current
-named-role interface fixes these pairs. To use another pair, Chief needs a
-supported unpinned route with the same ownership and permission contract.
-Profile or launch settings establish the configured pair, not proof of backend
-execution. Chief selects the least costly capable route within the host's
-actual controls. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+Chief first identifies the **task kind**, then selects a capable model and
+reasoning effort, and only then resolves a host launch profile. For example,
+code mapping can use a read-only Spark Scout; it does not need Coder's write
+permissions. General evidence and cross-module synthesis can use different
+Scout models, and routine engineering review is distinguished from consequential
+review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
+own these starting choices; they are policies to validate, not measured savings.
 
-The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write.
+The four original named profiles keep their fixed pairs for compatibility.
+`ScoutRouted`, `CoderRouted`, `BuilderRouted`, and `ReviewerRouted` retain the
+corresponding contracts and sandboxes without pinning model or effort. Chief
+must supply both through supported, advertised launch controls. A fixed
+profile's pair still wins over conflicting arguments; an unpinned profile
+does not silently become the intended pair from prose alone. The [launch adapter protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#codex-launch-adapters)
+covers precedence, missing controls, permission overrides, runtime receipts,
+and safe fallback. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
+
+The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write. The additional profiles are alternate adapters, not extra worker slots. Reserve required independent review before allocating discovery; there is no mandatory Scout → writer → Reviewer sequence, and closing a worker does not reset the total.
 
 GPT-6 Astra is the Codex adapter's on-demand frontier lane. Select it explicitly
 for the hardest end-to-end phase or a material documented shortfall. For a new
@@ -96,10 +105,10 @@ The Astra Edition routes phases rather than assigning one model to a whole task:
 deterministic preparation
         ↓
 Chief control phase
-        ├── Luna: bounded discovery and general mechanical work
+        ├── Luna: general evidence and mechanical work
         ├── Spark: frozen code mapping and narrow edit-test loops
-        ├── Terra: coordinated, reversible, objectively verifiable work
-        ├── Sol: ambiguous judgment and independent review
+        ├── Terra: system mapping, stable synthesis, coordinated work, routine review
+        ├── Sol: ambiguous judgment and consequential independent review
         └── Astra: exceptional cross-tool coherence or documented shortfall
                           ↓
                  compact accepted checkpoint
@@ -117,6 +126,12 @@ saving comes from retiring implementation context. A direct-work exception
 records the actual handoff, tool, or availability cost; merely labeling a phase
 "balanced" does not change its runtime model. General volume stays on Luna.
 There is no required model share or quota-draining target.
+
+Effort is selected per unit instead of copied from Chief: low for fixed-field
+work, medium for ordinary bounded units, high for a justified reasoning or
+review need. Higher supported settings require explicit user choice or evidence.
+Resolve conflicting inputs before handoff and verify the real production entry
+path early; a passing toy engine is not proof of a completed integration.
 
 Astra receives the smallest phase packet that preserves intent, accepted evidence, unresolved dependencies, verification, and the stop condition. Bulk discovery, completed logs, inactive Skills, predictable implementation, and routine testing stay outside its standing context. Cost evaluation uses accepted outcomes, rework, escalation, elapsed time, evidence coverage, and authoritative billing or quota data when available; stored model counts and incomplete token fields are not treated as savings.
 
@@ -197,7 +212,7 @@ If `codex doctor` reports that HTTPS works but the Responses WebSocket times out
 The proxy address is detected at installation time and is never stored in the repository or printed by the installer. Existing user-owned proxy variables cause a safe stop. Use `--codex-proxy remove` to remove only the managed block, and restart Codex after either change. The option is explicit because a local proxy may later stop or move; ordinary installations leave network settings unchanged. An HTTP-only custom provider was verified as a fallback but is intentionally not installed because changing provider identity is more invasive than repairing the existing WebSocket route.
 
 The installer links Skill directories back to this clone, installs Codex role
-TOMLs as managed regular files, and updates marked global blocks. `--update`
+TOMLs from the explicit [role manifest](install/codex-role-files.txt) as managed regular files, and updates marked global blocks. `--update`
 migrates the previous repository-owned role links: Codex can display symlinked
 profiles but its secure launch reader rejects them. Foreign links, unmanaged
 files, and locally modified managed role files are preserved as conflicts.
@@ -236,7 +251,9 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.4.5 provides the Astra-aware hierarchical control plane, six research
+Version 0.5.0 provides task-shaped model and effort selection with four compatible
+fixed profiles and four explicit-pair Routed adapters, plus the Astra-aware
+hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
 phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional
@@ -246,6 +263,12 @@ duplicated route banners, clarifies fixed-profile precedence and actual lane
 changes, and separates direct calculations from delegated implementation.
 The Codex adapter can now resolve host-recorded Chief and child model/effort,
 while code, configuration, workflow, and routing mutations start at S1.
+Source and isolated-install checks do not establish that a running host exposes
+the new Routed profiles. After an authorized update, use a newly loaded task
+and a suitable real work unit to verify advertised controls, the requested pair,
+effective permissions, and the observed runtime receipt. Linked Skill files may
+be read on a subsequent load before role files are refreshed; keep the missing-
+profile fallback explicit and do not describe that partial state as deployment.
 Required checks stop once accepted unless a new change or failure warrants more.
 Strict proof production and
 proof-assistant verification remain explicit Future Work: the mathematical
