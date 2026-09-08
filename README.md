@@ -12,6 +12,55 @@ BoundedFreedom is a small, constraint-first control layer for AI-assisted resear
 
 The model sets what may be possible, context sets what it can see, and the harness sets what it may do, what it must protect, how it gets feedback, and how its work is checked. Sources, evidence, claims, hypotheses, code, figures, and software remain linked so the work can be reviewed and recovered. BoundedFreedom does not replace scientific tools or project-owned rules.
 
+## Recommended: let each model work in its strongest context
+
+> **Use one context to act, and another to think again.**
+
+Model capability is used more fully when execution and interpretation do not
+compete for the same context.
+
+For research that moves from computation to scientific judgment, BoundedFreedom
+recommends an optional two-context loop. Use Codex close to the real repository,
+data, runtime, diffs, and tests; then pass a compact evidence packet to a fresh
+ChatGPT conversation for interpretation, competing explanations, challenge, and
+decision compression. After the human freezes a decision, return its bounded
+change request to Codex for implementation and re-verification.
+
+```text
+Codex: inspect -> run -> test -> retain evidence
+                         |
+                         v
+              compact Research Handoff Packet
+                         |
+                         v
+ChatGPT: interpret -> challenge -> compare -> decision memo
+                         |
+                         v
+Human: review the decision memo -> freeze the next action
+                         |
+                         v
+Codex: implement -> reproduce -> verify
+                         |
+                         v
+Human: accept the scientific claim
+```
+
+The handoff carries the question, source and data snapshot, method and parameters,
+positive and negative results, checks, evidence-linked claims, prohibited
+interpretations, and open decisions—not raw logs or the whole conversation. This
+separation keeps execution noise out of scientific reasoning and gives important
+judgments a fresh pass. It is cost-efficient only when the packet is compact;
+duplicating the full context spends more tokens rather than fewer.
+
+This remains one accountable chain, not two competing Chiefs. Codex owns the
+execution evidence, ChatGPT provides a bounded interpretation or review pass, and
+the human owns final scientific acceptance. Routine work should stay in Codex;
+use the cross-interface loop at high-value interpretation and decision points.
+The current pairing follows the tool-facing and evidence-synthesis patterns in
+the official [Codex use cases](https://developers.openai.com/codex/use-cases) and
+[ChatGPT research use cases](https://learn.chatgpt.com/use-cases?team=research);
+the same boundary can be adapted to other compatible hosts.
+
 ## Repository activity
 
 [![Commits in the generated main snapshot](https://raw.githubusercontent.com/Nat-Sci/bounded-freedom/repository-activity/repository-activity.svg?schema=2)](https://github.com/Nat-Sci/bounded-freedom/blob/repository-activity/repository-activity.svg)
