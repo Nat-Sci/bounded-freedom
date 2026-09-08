@@ -15,14 +15,20 @@ Track `planned -> running -> done | attention -> closed`. `done` means a return 
 Before task work, check the selected launch adapter and the worker's ticket:
 contract, task kind, requested model/effort, effective permission boundary,
 scope and acceptance must agree. Record configured and observed pairs
-separately; stop on an observed mismatch. An unknown runtime value stays
-unknown and cannot establish a successful runtime-routing test.
+separately; stop on an observed mismatch and never repair it by rewriting the
+planned pair. A fresh route may be declared before fresh work, but the
+mismatched attempt still consumes its worker/attempt budget and does not
+satisfy the original review. An unknown runtime value stays unknown and cannot
+establish a successful runtime-routing test.
 
-Apply the host reference's availability filter before launch. After a confirmed
-quota termination, inspect partial side effects and writer state before a real
-Luna/Terra handoff; unknown/time-out state never authorizes a replacement.
-Failed workers still consume the total budget. A reset time does not justify
-interrupting a healthy fallback or claiming the blocked model has recovered.
+Apply the host reference's availability filter before launch. When Spark is the
+candidate, require its immediately-pre-launch fresh quota preflight; a prior
+snapshot does not authorize a new Spark launch. After a confirmed quota
+termination or rejected launch, inspect partial side effects and writer state
+before a real Luna/Terra handoff; unknown/time-out state never authorizes a
+replacement. Failed workers still consume the total budget. A reset time does
+not justify interrupting a healthy fallback or claiming the blocked model has
+recovered.
 
 If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a genuinely new worker within the remaining budget; when a lower lane needs compact fresh context, make that handoff real.
 

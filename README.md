@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.0 — Astra Edition**.
+Current package: **v0.6.1 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -94,13 +94,26 @@ sessions. See the [official subagent configuration](https://learn.chatgpt.com/do
 
 The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write. Reserve required independent review before allocating discovery; there is no mandatory Scout → writer → Reviewer sequence, and closing or failing a worker does not reset the total.
 
-Known quota blocks are filtered before launch. When Spark is blocked,
-straightforward bounded code work uses Luna/medium; interacting state or
-constraints use Terra/medium. Other task kinds keep their own route. Quota
-exhaustion does not justify a Sol/Astra escalation, weaker scientific review,
-or another worker beyond budget. After a mid-task block, inspect partial writes
-and process state before a real handoff. Do not interrupt a healthy fallback
-merely because Spark's reset time passes. See [availability and fallback](.agents/skills/cost-efficient-orchestration/host-model-routing.md#availability-before-launch-and-quota-fallback).
+When task-kind selection makes Spark the candidate, the Codex adapter now runs
+a fresh Spark-only quota preflight immediately before each prospective launch,
+using the host's authoritative usage receipt when available. It retains only a
+normalized status and window summary. Missing telemetry remains `unknown`; it
+is never rewritten as available or exhausted. When Spark is blocked,
+straightforward bounded code work uses Luna/medium and interacting state or
+constraints use Terra/medium. Quota exhaustion does not justify a Sol/Astra
+escalation, weaker scientific review, or another worker beyond budget. After a
+mid-task block, inspect partial writes and process state before a real handoff.
+Do not interrupt a healthy fallback merely because Spark's reset time passes.
+See [Spark preflight and fallback](.agents/skills/cost-efficient-orchestration/host-model-routing.md#spark-quota-preflight-and-fallback).
+
+Reviewer is an independence contract, not a fixed intelligence tier. Routine
+engineering review starts at Terra/medium; consequential S3/S4 review starts at
+Sol/high. A narrow objective S1/S2 review may use a predeclared Luna/high
+exception, but an observed Luna runtime cannot retroactively replace a planned
+Sol review. Any mismatch stops that attempt and still consumes its budget.
+Astra remains an evidence-gated escalation inside the same Reviewer contract
+for exceptional cross-domain coherence or a documented Sol/high shortfall; it
+does not have a separate role. An Astra Chief's self-review is not independent.
 
 GPT-6 Astra is the Codex adapter's on-demand frontier lane. Select it explicitly
 for the hardest end-to-end phase or a material documented shortfall. For a new
@@ -266,7 +279,10 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.0 provides quota-aware task-shaped model and effort selection with
+Version 0.6.1 adds a mandatory immediately-prelaunch Spark quota preflight,
+privacy-minimized quota receipts, explicit `available`/`blocked`/`unknown`
+semantics, and a non-retroactive Reviewer mismatch rule. It retains the
+quota-aware task-shaped model and effort selection introduced in v0.6.0, with
 four unpinned canonical profiles and no fixed-model compatibility set, plus the Astra-aware
 hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand

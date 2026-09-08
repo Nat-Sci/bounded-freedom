@@ -78,10 +78,15 @@ a Scout. The four canonical profiles are explicit-pair host adapters, not new
 specialist Skills or additional worker slots. A launch ticket binds the task
 kind, contract, assurance, profile, requested pair, scope, checks, and remaining
 budget; actual controls and observed receipts establish whether it was honored.
-Reserve required review before discovery so a three-worker chain is not implied.
-Known Spark quota blocks select the matrix's fitting Luna/Terra alternative
-before launch. Confirm terminal state and inspect side effects before mid-task
-handoff; neither quota failure nor a passed reset time expands the worker budget.
+An observed mismatch stops the attempt; planned values are never rewritten to
+fit it. Reserve required review before discovery so a three-worker chain is not
+implied. Each prospective Spark launch receives a fresh authoritative preflight
+when the host exposes one, retaining only the normalized window summary and
+decision. A blocked result selects the matrix's fitting Luna/Terra alternative;
+missing telemetry remains `unknown`. Confirm terminal state and inspect side
+effects before mid-task handoff; neither quota failure nor a passed reset time
+expands the worker budget. Reviewer has no universal Sol floor: routine review
+defaults to Terra/medium, while consequential S3/S4 review requires Sol/high.
 
 ## Method ownership
 

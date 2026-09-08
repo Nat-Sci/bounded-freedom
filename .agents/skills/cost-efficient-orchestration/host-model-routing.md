@@ -48,13 +48,53 @@ invariants, or repeated failed checks starts Terra when Spark is unavailable;
 a truly trivial edit remains direct. Changing the model alone does not turn a
 narrow Coder into a broader Builder or grant write access to Scout.
 
-## Availability before launch and quota fallback
+Reviewer policy has no universal Sol floor. The maintained routine-review
+default is Reviewer / Terra / medium; consequential S3/S4 review is Reviewer /
+Sol / high. A narrowly bounded, objective S1/S2 review may use Reviewer / Luna
+/ high only as an explicitly justified exception selected before launch. It is
+not a maintained default and is never eligible for consequential review.
 
-1. Use known current availability before allocating a worker. A host quota error or an authoritative usage receipt can establish a block; the user's current report is labeled user-reported. Record the affected model/window and known reset time in the local task record, not a permanent repository setting. Unknown availability is not an invented block or unlimited allowance. Do not try Spark just to rediscover a known block, and do not poll quota before every unit.
-2. For blocked Spark, select the fitting Luna/Terra row above and its supported explicit model/effort. A short-window block still applies when weekly allowance remains. This is an availability change, not proof of weak reasoning; do not jump to Sol/Astra solely because Spark is out of quota. Normal scientific-review and evidence-based capability gates still apply.
-3. If quota interrupts a running worker, first distinguish a confirmed terminal failure from a timeout or unknown state. Inspect partial diffs, tests, processes, and other side effects; freeze the accepted checkpoint and outstanding unit before handing it over. Never run two writers on an uncertain former worker's files or replay a non-idempotent action blindly.
-4. Change the actual model/effort only with supported host controls or one fitting new worker inside the remaining two-distinct-worker budget, retaining ownership, permissions, assurance, and any reserved independent review. A confirmed failure still counts toward that budget. No slot means no third worker: finish only minimal safe direct work or report the needed budget/control decision for substantial remaining work. A follow-up prompt cannot relabel the same model into a fallback.
-5. Keep a healthy fallback on its unit even if Spark's reset time passes. Reconsider Spark for the next eligible unit only with fresh availability evidence; the timestamp alone is not proof of recovery. Never redeem a reset, buy quota, or wait/monitor indefinitely without the applicable user authorization.
+## Spark quota preflight and fallback
+
+Run this preflight only after task-kind selection makes Spark the candidate and
+immediately before every prospective Spark worker launch. Do not poll before
+unrelated work or during a healthy worker. On Codex, use the authoritative host
+quota read when available (`get_usage_limits` or app-server
+`account/rateLimits/read`). Match the Spark bucket through the host-reported
+stable label/model mapping, never a versioned opaque internal ID.
+
+Retain only the source, checked-at/freshness, status, each window's used
+percent/duration/reset time, and resulting decision. Do not retain raw payloads,
+account IDs, authentication fields, or credit/reset identifiers. Classify the
+result as follows:
+
+1. `blocked`: a limit-reached flag applies, or any applicable returned Spark
+   window has numeric usage at least 100%.
+2. `available`: the Spark bucket is found, every applicable window has numeric
+   usage below 100%, and no reached flag applies.
+3. `unknown`: the bucket or required fields are missing, or the read errors.
+
+For `available`, launch explicit Spark / medium. For `blocked`, do not waste a
+Spark attempt: launch the fitting explicit Luna / medium or Terra / medium
+fallback. A five-hour block remains blocking even when a weekly window is
+available. For `unknown`, never call the result quota-informed or invent a
+block: choose Spark only when the declared risk and attempt budget can absorb a
+quota rejection; otherwise conservatively choose the fitting Luna/Terra route
+and record that rationale. A preflight snapshot never authorizes a later launch;
+refresh it for each separate prospective Spark launch. If a launch is rejected
+or quota interrupts a worker, follow the partial-side-effect and timeout
+protocol below before any handoff.
+
+Change the actual model/effort only with supported host controls or one fitting
+new worker inside the remaining two-distinct-worker budget, retaining ownership,
+permissions, assurance, and any reserved independent review. A confirmed
+failure still counts toward that budget. No slot means no third worker: finish
+only minimal safe direct work or report the needed budget/control decision for
+substantial remaining work. A follow-up prompt cannot relabel the same model
+into a fallback. Keep a healthy fallback on its unit even if Spark's reset time
+passes; reconsider Spark only for a later eligible unit with fresh preflight
+evidence. Never redeem a reset, buy quota, or wait/monitor indefinitely without
+applicable user authorization.
 
 The target is low expected cost per accepted unit, including context, handoff,
 rework, and verification. Model counts, unused quota, and incomplete local token
@@ -107,7 +147,7 @@ Before launch:
 1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, and remaining worker/review budget.
 2. Inspect the current host's advertised controls and the model's supported efforts. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
-4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on a mismatch; missing runtime metadata stays unknown, not a fabricated match.
+4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on an observed mismatch; do not rewrite the planned model/effort to fit it. A fresh route may be declared before fresh work, but the mismatched attempt does not satisfy the original review and still counts toward worker/attempt budget. Missing runtime metadata stays unknown, not a fabricated match.
 5. If necessary controls are absent, distinguish unsupported launch capability from model quota. A different available model must still use enforceable permissions and actual controls. Otherwise continue only minimal direct work when appropriate or report the unsupported boundary. Never satisfy S3/S4 review with a cheap untyped fallback, and never claim source edits switched a running session.
 
 The untyped Luna/low default is a defensive cost limit for unspecified calls,
@@ -156,7 +196,9 @@ Use fast for clear reversible volume, balanced for stable synthesis or related-f
 
 ## GPT-6 Astra boundary
 
-Astra is a frontier lane, not another execution contract. Start newly planned Astra work at medium; raise effort only from evidence. Effort availability and semantics, including `ultra`, are host-dependent. Do not claim a universal automatic-delegation effect, or that API effort/configuration changes alter the active desktop Chief. Do not silently reset a user-selected effort.
+Astra is a frontier lane, not another execution contract. It may back the existing Reviewer contract only for an exceptional review whose limiting factor is cross-tool or cross-domain coherence, or after a documented Sol/high shortfall. This is an evidence-gated escalation from the consequential-review starting route, not an `AstraReviewer` role. The review is independent only when a separate Reviewer performs it; an Astra Chief's self-review does not satisfy the S3/S4 gate, and S4 still requires human acceptance.
+
+Start newly planned Astra work at medium; raise effort only from evidence. Effort availability and semantics, including `ultra`, are host-dependent. Do not claim a universal automatic-delegation effect, or that API effort/configuration changes alter the active desktop Chief. Do not silently reset a user-selected effort.
 
 Calibration is optional and bounded by actual accepted work. Compare eligible work started balanced, first-pass acceptance, rework, elapsed time, evidence coverage, and authoritative cost or quota data when available. Do not impose a unit quota, infer billing, or create work to consume allowance.
 
