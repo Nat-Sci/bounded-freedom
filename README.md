@@ -117,6 +117,15 @@ the host does not expose authoritative runtime values, runtime fields stay
 `unknown`; configuration, inheritance, or UI values are labeled separately. These
 receipts show routing control, not private chain-of-thought.
 
+At the end of routed Codex work, BoundedFreedom can also show a compact
+`TASK RESOURCE SNAPSHOT`: task wall time plus observed input, cached input,
+output, reasoning, and total tokens for each model/effort pair used by Chief
+and its direct workers. It reads local event telemetry without retaining prompts
+or identifiers. Because a Skill runs before its own final answer, the inline
+snapshot is labeled pre-final and excludes that answer; exact terminal accounting
+still belongs to a host-side receipt. Per-model elapsed times may overlap, and
+cached input is already part of input tokens.
+
 | Execution contract | Owns | Permission boundary |
 | --- | --- | --- |
 | Scout | Bounded discovery, code/evidence/system mapping, or stable synthesis | Read-only |

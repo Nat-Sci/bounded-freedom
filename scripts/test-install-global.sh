@@ -330,6 +330,18 @@ assert_contains 'Reviewer is planned Sol/high, but authoritative runtime metadat
 runtime_probe="$repo_root/.agents/skills/cost-efficient-orchestration/scripts/codex-runtime-metadata.sh"
 sh -n "$runtime_probe"
 pass "Codex runtime metadata probe has valid POSIX shell syntax"
+resource_snapshot_script="$repo_root/.agents/skills/cost-efficient-orchestration/scripts/codex-task-resource-snapshot.py"
+assert_contains 'TASK RESOURCE SNAPSHOT' "$orchestration_skill" "orchestration requires a compact task resource snapshot"
+assert_contains 'pre-final checkpoint' "$orchestration_skill" "orchestration labels Skill-time resource coverage honestly"
+assert_contains 'TASK RESOURCE SNAPSHOT' "$repo_root/install/global-agents.md" "installed instructions request the resource snapshot"
+if command -v python3 >/dev/null 2>&1; then
+  python3 -m py_compile "$resource_snapshot_script"
+  pass "Codex task resource snapshot script has valid Python syntax"
+  python3 "$repo_root/scripts/test-codex-task-resource-snapshot.py" > "$test_root/task-resource-snapshot.out" 2>&1
+  assert_contains "Ran 14 tests in" "$test_root/task-resource-snapshot.out" "focused task-resource snapshot tests pass"
+else
+  skip "python3 is unavailable for task-resource snapshot tests"
+fi
 CODEX_HOME="$test_root/runtime-missing" CODEX_THREAD_ID= CODEX_SESSION_ID= sh "$runtime_probe" > "$test_root/runtime-missing.out"
 assert_contains '"status":"unknown"' "$test_root/runtime-missing.out" "runtime probe fails closed without a thread identifier"
 if command -v sqlite3 >/dev/null 2>&1; then
