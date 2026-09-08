@@ -139,6 +139,9 @@ codex_agents_dir="$codex_dir/agents"
 codex_global_agents="$codex_dir/AGENTS.md"
 codex_global_config="$codex_dir/config.toml"
 codex_proxy_env="$codex_dir/.env"
+codex_policy_state="$codex_dir/bounded-freedom-policy.state"
+policy_state_marker="# BoundedFreedom managed policy state"
+policy_state_changed=0
 
 claude_dir="$target_root/.claude"
 claude_skills_dir="$claude_dir/skills"
@@ -233,6 +236,35 @@ load_codex_roles() {
 
 if [ "$use_codex" -eq 1 ]; then
   load_codex_roles
+fi
+
+compute_policy_fingerprint() {
+  (
+    CDPATH= cd -- "$repo_root"
+    {
+      for policy_source in VERSION install/global-agents.md install/agents-config.toml install/codex-role-files.txt; do
+        policy_checksum=$(cksum < "$policy_source")
+        printf '%s|%s\n' "$policy_source" "$policy_checksum"
+      done
+      find .agents/skills .codex/agents -type f \
+        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
+        ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
+          policy_checksum=$(cksum < "$policy_source")
+          printf '%s|%s\n' "$policy_source" "$policy_checksum"
+        done
+    } | cksum | awk '{ print $1 "-" $2 }'
+  )
+}
+
+policy_fingerprint=""
+if [ "$use_codex" -eq 1 ]; then
+  policy_fingerprint=$(compute_policy_fingerprint)
+  case "$policy_fingerprint" in
+    ''|*[!0-9-]*)
+      echo "Unable to compute a portable policy fingerprint" >&2
+      exit 1
+      ;;
+  esac
 fi
 
 check_directory_path() {
@@ -379,6 +411,39 @@ check_managed_destination() {
   fi
 }
 
+policy_state_is_managed() {
+  destination=$1
+  [ -f "$destination" ] || return 1
+  [ ! -L "$destination" ] || return 1
+  [ "$(sed -n '1p' "$destination")" = "$policy_state_marker" ] || return 1
+  [ "$(grep -c '^schema_version=1$' "$destination")" -eq 1 ] || return 1
+  [ "$(grep -Ec '^package_version=[0-9]+\.[0-9]+\.[0-9]+$' "$destination")" -eq 1 ] || return 1
+  [ "$(grep -Ec '^policy_fingerprint=[0-9]+-[0-9]+$' "$destination")" -eq 1 ] || return 1
+  [ "$(grep -Ec '^installed_at_epoch=[0-9]+$' "$destination")" -eq 1 ] || return 1
+}
+
+policy_state_value() {
+  key=$1
+  destination=$2
+  sed -n "s/^${key}=//p" "$destination"
+}
+
+check_policy_state_destination() {
+  destination=$1
+  if [ -L "$destination" ]; then
+    echo "conflict: Codex policy state is a symbolic link; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "conflict: Codex policy state is not a regular file; leaving it unchanged" >&2
+    return 1
+  fi
+  if [ -f "$destination" ] && ! policy_state_is_managed "$destination"; then
+    echo "conflict: Codex policy state is not an unmodified managed file; leaving it unchanged" >&2
+    return 1
+  fi
+}
+
 preflight_installation() {
   check_directory_path "$target_root" "target root"
   check_directory_path "$target_root/.agents" "portable configuration"
@@ -404,6 +469,7 @@ preflight_installation() {
     done
     check_managed_destination "$codex_global_agents" "Codex AGENTS.md"
     check_managed_destination "$codex_global_config" "Codex config.toml"
+    check_policy_state_destination "$codex_policy_state"
     if [ "$codex_proxy" != "unchanged" ]; then
       check_managed_destination "$codex_proxy_env" "Codex proxy .env"
     fi
@@ -487,6 +553,35 @@ install_role_file() {
   } > "$temporary"
   mv "$temporary" "$destination"
   echo "install managed role file: $label"
+}
+
+install_policy_state() {
+  destination=$1
+  if [ -f "$destination" ] && policy_state_is_managed "$destination"; then
+    installed_version=$(policy_state_value package_version "$destination")
+    installed_fingerprint=$(policy_state_value policy_fingerprint "$destination")
+    if [ "$installed_version" = "$package_version" ] && [ "$installed_fingerprint" = "$policy_fingerprint" ]; then
+      echo "policy state ok: v$package_version"
+      return
+    fi
+  fi
+  if [ "$apply" -ne 1 ]; then
+    echo "would install managed Codex policy state for v$package_version"
+    return
+  fi
+  parent_dir=$(dirname "$destination")
+  temporary=$(mktemp "$parent_dir/.bounded-freedom-policy.XXXXXX")
+  {
+    printf '%s\n' "$policy_state_marker"
+    printf 'schema_version=1\n'
+    printf 'package_version=%s\n' "$package_version"
+    printf 'policy_fingerprint=%s\n' "$policy_fingerprint"
+    printf 'installed_at_epoch=%s\n' "$(date +%s)"
+  } > "$temporary"
+  chmod 600 "$temporary"
+  mv "$temporary" "$destination"
+  policy_state_changed=1
+  echo "install managed Codex policy state: v$package_version"
 }
 
 retire_role_file() {
@@ -799,6 +894,27 @@ show_block_status() {
   fi
 }
 
+show_policy_state_status() {
+  destination=$1
+  if [ -L "$destination" ]; then
+    echo "Codex policy state: conflict (symbolic link)"
+  elif [ -e "$destination" ] && [ ! -f "$destination" ]; then
+    echo "Codex policy state: conflict (not a regular file)"
+  elif [ -f "$destination" ] && ! policy_state_is_managed "$destination"; then
+    echo "Codex policy state: conflict (not an unmodified managed file)"
+  elif [ -f "$destination" ]; then
+    installed_version=$(policy_state_value package_version "$destination")
+    installed_fingerprint=$(policy_state_value policy_fingerprint "$destination")
+    if [ "$installed_version" = "$package_version" ] && [ "$installed_fingerprint" = "$policy_fingerprint" ]; then
+      echo "Codex policy state: managed marker current for v$package_version"
+    else
+      echo "Codex policy state: managed marker source update available"
+    fi
+  else
+    echo "Codex policy state: not installed"
+  fi
+}
+
 show_status() {
   for skill_source in "$skills_source_dir"/*; do
     if [ ! -d "$skill_source" ]; then
@@ -819,6 +935,7 @@ show_status() {
     done
     show_block_status "$codex_global_agents" "Codex AGENTS.md"
     show_block_status "$codex_global_config" "Codex config.toml"
+    show_policy_state_status "$codex_policy_state"
     show_block_status "$codex_proxy_env" "Codex proxy .env"
   fi
   if [ "$use_claude" -eq 1 ]; then
@@ -834,6 +951,7 @@ show_status() {
   fi
   if [ "$use_codex" -eq 1 ]; then
     echo "Codex role file status is file-level only; it does not verify live role launch or model selection"
+    echo "Codex policy-state status is deployment evidence only; existing tasks may still be stale"
   fi
 }
 
@@ -881,6 +999,7 @@ if [ "$use_codex" -eq 1 ]; then
   done
   refresh_managed_block "$codex_global_agents" "$global_instructions_source" "Codex AGENTS.md"
   refresh_managed_block "$codex_global_config" "$agents_config_source" "Codex config.toml"
+  install_policy_state "$codex_policy_state"
   case "$codex_proxy" in
     system)
       refresh_proxy_block "$codex_proxy_env"
@@ -909,6 +1028,12 @@ fi
 if [ "$apply" -eq 0 ]; then
   echo "dry-run complete; no files were changed"
 else
-  echo "installation complete; start a new host session before using the updated adapter"
+  echo "installation complete"
+  if [ "$use_codex" -eq 1 ] && [ "$policy_state_changed" -eq 1 ]; then
+    echo "POLICY RELOAD REQUIRED: existing/open tasks do not adopt this deployment"
+    echo "start or fork a new task before claiming current-policy routing or usage"
+  elif [ "$use_codex" -eq 1 ]; then
+    echo "policy deployment is unchanged; existing tasks retain their original instruction chain"
+  fi
   echo "role file installation does not verify live role launch or model selection"
 fi

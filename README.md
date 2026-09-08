@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.1 — Astra Edition**.
+Current package: **v0.6.2 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -110,12 +110,21 @@ Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence le
 
 For nontrivial work, one combined `CHIEF DECISION / ROUTE START` shows the
 planned capability lane, model, reasoning effort, runtime model, runtime
-reasoning effort, and metadata source before delegation or changes. Necessary
+reasoning effort, metadata source, policy freshness, and freshness evidence
+before delegation or changes. Necessary
 instruction and host-discovery reads may come first. Emit `ROUTE CHANGE` only
 when the route materially changes and `ROUTE END` with the accepted result. When
 the host does not expose authoritative runtime values, runtime fields stay
 `unknown`; configuration, inheritance, or UI values are labeled separately. These
 receipts show routing control, not private chain-of-thought.
+
+Policy freshness is separate from file installation and model runtime. `current`
+means the task/run began after the accepted managed deployment or the host gave
+an authoritative reload receipt; an older task is `stale`, and missing evidence
+is `unknown`. A fresh worker launched by a stale Chief is recorded as real model
+activity but belongs to a `mixed` policy cohort. This prevents a current role
+file or one successful child launch from being misreported as adoption by every
+open task.
 
 At the end of routed Codex work, BoundedFreedom can also show a compact
 `TASK RESOURCE SNAPSHOT`: task wall time plus observed input, cached input,
@@ -284,6 +293,13 @@ Preview the default Codex installation:
 
 Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check. Installer output reports the package version and edition so linked Skills and managed host instructions can be checked against the repository revision.
 
+> **Policy reload required after an update.** Existing/open tasks do not become
+> current-policy tasks merely because files were installed or the application
+> restarted. Start or fork a new task after the update; its first nontrivial
+> route receipt should report `Chief policy freshness: current`. Until then,
+> classify older tasks as `stale` or `unknown`, and a new child of an old Chief
+> as `mixed`. Do not include those cohorts in a claimed post-policy comparison.
+
 If `codex doctor` reports that HTTPS works but the Responses WebSocket times out while macOS has an active manual HTTP(S) proxy, preview and then import that proxy into a marked Codex `.env` block:
 
 ```sh
@@ -313,8 +329,11 @@ profiles can otherwise hide a broken personal installation. A failed role launch
 must not silently become an expensive Chief route or a weaker independent review.
 On Codex, the orchestration Skill includes a read-only runtime probe that can
 record the current Chief and direct-child model/effort from host thread state
-without retaining local paths or thread IDs. Other harnesses keep these fields
-unknown unless they provide an equivalent receipt.
+without retaining local paths or thread IDs. A managed policy-state marker lets
+the same probe compare task start with accepted deployment and report
+`current`, `stale`, or `unknown`; it does not force an existing task to reload.
+Other harnesses keep these fields unknown unless they provide an equivalent
+receipt.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
@@ -337,7 +356,11 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.1 adds a mandatory immediately-prelaunch Spark quota preflight,
+Version 0.6.2 adds explicit policy-freshness receipts, a privacy-safe managed
+deployment marker, stale/current/mixed usage cohorts, and a mandatory installer
+warning that existing tasks do not automatically adopt an update. It also
+separates all-machine from project-filtered statistics, actual launches from
+planned routes, and launch counts from token consumption. Version 0.6.1 added a mandatory immediately-prelaunch Spark quota preflight,
 privacy-minimized quota receipts, explicit `available`/`blocked`/`unknown`
 semantics, and a non-retroactive Reviewer mismatch rule. It retains the
 quota-aware task-shaped model and effort selection introduced in v0.6.0, with

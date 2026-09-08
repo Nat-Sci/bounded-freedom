@@ -8,6 +8,8 @@ Report planned lane and configured model/effort separately from runtime-observed
 
 For Codex, the entry Skill's read-only runtime metadata probe may supply a host-recorded current-thread pair and direct-child pairs. Treat `status=observed` as runtime session evidence and `status=unknown` as no evidence. The probe is an optional Codex adapter: it must fail closed, emit no local path or thread identifier, and never be required by another harness. Use `codex debug models` separately to validate that configured model IDs and effort values exist in the current catalog; catalog presence is availability evidence, not a launch or runtime receipt.
 
+The same probe may compare a managed deployment marker with the current task start and report policy freshness. This is separate from model runtime evidence. A fresh child of a stale Chief can prove its own observed model/effort while the route remains a `mixed` policy cohort; never use that child to claim the parent loaded the latest Skill or global instructions.
+
 For Codex custom agents, a file's `model` or `model_reasoning_effort` takes precedence over explicit launch values, which take precedence over configured defaults and parent inheritance. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). The current package therefore omits both keys from all four role files and requires both explicit launch controls. A loaded host that still fixes a pair is not made dynamic by editing a source file; do not send conflicting overrides or claim the new adapter is active.
 
 ## Canonical task-kind matrix

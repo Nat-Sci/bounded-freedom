@@ -20,6 +20,8 @@
 - Chief runtime model: exact authoritative value or unknown
 - Chief runtime reasoning effort: exact authoritative value or unknown
 - Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
+- Chief policy freshness: current, stale, or unknown
+- Chief policy evidence: managed install marker plus task/run start, authoritative host reload receipt, or unknown; a fresh child of a stale Chief is a mixed cohort rather than proof of current parent policy
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Selection reason: limiting factor, why the cheaper/simpler route is inadequate when escalating, and why the chosen effort is sufficient
 - Host launch adapter: one current unpinned role; actual explicit model/effort controls, effective permissions, and unsupported/stale-session boundary
@@ -44,6 +46,7 @@
 - Retries: operation class, state check, count, and final disposition
 - Elapsed time:
 - Cost or quota evidence: authoritative normalized source, freshness, applicable windows and decision, or unknown; never retain raw account telemetry or infer billing from incomplete token fields
+- Usage-comparison scope when applicable: machine/host, project filter, deployment boundary, current/mixed/stale-or-unknown cohort, actual-launch evidence, internal auto-review treatment, and token coverage
 - Deviations:
 
 ## Verification and review

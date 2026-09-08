@@ -202,6 +202,14 @@ assert_contains "dry-run complete; no files were changed" "$test_root/dry-run.ou
 
 all_root="$test_root/all-hosts"
 "$installer" --host all --target-root "$all_root" --install > "$test_root/all-install.out"
+assert_contains "POLICY RELOAD REQUIRED: existing/open tasks do not adopt this deployment" "$test_root/all-install.out" "installation warns that existing tasks remain stale"
+assert_contains "start or fork a new task before claiming current-policy routing or usage" "$test_root/all-install.out" "installation gives an actionable current-policy boundary"
+assert_contains "package_version=$package_version" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy version"
+assert_contains "policy_fingerprint=" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy fingerprint"
+if [ "$(file_mode "$all_root/.codex/bounded-freedom-policy.state")" != "600" ]; then
+  fail "managed policy state is not private to its owner"
+fi
+pass "managed policy state is private to its owner"
 for skill_source in "$repo_root/.agents/skills"/*; do
   skill_name=${skill_source##*/}
   portable_link="$all_root/.agents/skills/$skill_name"
@@ -234,6 +242,8 @@ for role_file_name in $codex_role_files; do
   assert_contains "Codex agent $role_label: managed regular file (current)" "$test_root/all-status.out" "status reports current managed role $role_label"
 done
 assert_contains "Codex role file status is file-level only; it does not verify live role launch or model selection" "$test_root/all-status.out" "status states that role files are not live runtime verification"
+assert_contains "Codex policy state: managed marker current for v$package_version" "$test_root/all-status.out" "status reports the current managed policy marker"
+assert_contains "Codex policy-state status is deployment evidence only; existing tasks may still be stale" "$test_root/all-status.out" "status distinguishes deployment from task adoption"
 assert_contains "Codex proxy .env: managed block absent" "$test_root/all-status.out" "ordinary installation leaves Codex proxy settings unchanged"
 assert_contains "Claude CLAUDE.md: managed block present" "$test_root/all-status.out" "status reports the Claude managed block"
 
@@ -352,10 +362,22 @@ CREATE TABLE threads (id TEXT PRIMARY KEY, model TEXT, reasoning_effort TEXT, ag
 CREATE TABLE thread_spawn_edges (parent_thread_id TEXT, child_thread_id TEXT, status TEXT);
 INSERT INTO threads VALUES ('11111111-1111-1111-1111-111111111111', 'gpt-5.6-sol', 'high', NULL, 1);
 INSERT INTO threads VALUES ('22222222-2222-2222-2222-222222222222', 'gpt-5.3-codex-spark', 'medium', 'Coder', 2);
+INSERT INTO threads VALUES ('33333333-3333-3333-3333-333333333333', 'gpt-5.6-terra', 'medium', NULL, 3);
 INSERT INTO thread_spawn_edges VALUES ('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222', 'open');
 SQL
+  {
+    printf '%s\n' '# BoundedFreedom managed policy state'
+    printf 'schema_version=1\n'
+    printf 'package_version=%s\n' "$package_version"
+    policy_fingerprint=$(sed -n 's/^policy_fingerprint=//p' "$all_root/.codex/bounded-freedom-policy.state")
+    printf 'policy_fingerprint=%s\n' "$policy_fingerprint"
+    printf 'installed_at_epoch=2\n'
+  } > "$runtime_root/bounded-freedom-policy.state"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-chief.out"
   assert_contains '"scope":"chief","model":"gpt-5.6-sol","reasoning_effort":"high"' "$test_root/runtime-chief.out" "runtime probe reports the host-recorded Chief pair"
+  assert_contains '"policy_freshness":"stale"' "$test_root/runtime-chief.out" "runtime probe marks a pre-deployment Chief stale"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$runtime_probe" > "$test_root/runtime-current.out"
+  assert_contains '"policy_freshness":"current"' "$test_root/runtime-current.out" "runtime probe marks a post-deployment Chief current"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
   assert_contains '"scope":"child","role":"Coder","model":"gpt-5.3-codex-spark","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe reports the host-recorded child pair"
 else
@@ -422,9 +444,12 @@ cp "$test_root/user-config" "$idempotent_root/.codex/config.toml"
 "$installer" --host codex --target-root "$idempotent_root" --install > "$test_root/idempotent-install.out"
 cp "$idempotent_root/.codex/AGENTS.md" "$test_root/agents-installed"
 cp "$idempotent_root/.codex/config.toml" "$test_root/config-installed"
+cp "$idempotent_root/.codex/bounded-freedom-policy.state" "$test_root/policy-state-installed"
 "$installer" --host codex --target-root "$idempotent_root" --update > "$test_root/idempotent-update.out"
 assert_file_unchanged "$test_root/agents-installed" "$idempotent_root/.codex/AGENTS.md" "AGENTS.md update is byte-idempotent"
 assert_file_unchanged "$test_root/config-installed" "$idempotent_root/.codex/config.toml" "config.toml update is byte-idempotent"
+assert_file_unchanged "$test_root/policy-state-installed" "$idempotent_root/.codex/bounded-freedom-policy.state" "same-version policy-state update preserves its deployment boundary"
+assert_contains "policy deployment is unchanged; existing tasks retain their original instruction chain" "$test_root/idempotent-update.out" "same-version update reports that existing task freshness is unchanged"
 sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/AGENTS.md" > "$test_root/agents-prefix"
 sed "/^$begin_marker\$/,\$d" "$idempotent_root/.codex/config.toml" > "$test_root/config-prefix"
 assert_file_unchanged "$test_root/user-agents" "$test_root/agents-prefix" "AGENTS.md preserves user-owned content"
@@ -568,9 +593,15 @@ cp "$repo_root/VERSION" "$role_fixture_root/VERSION"
 fixture_installer="$role_fixture_root/scripts/install-global.sh"
 role_refresh_root="$test_root/role-refresh"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --install > "$test_root/role-refresh-install.out"
+cp "$role_refresh_root/.codex/bounded-freedom-policy.state" "$test_root/role-refresh-policy-before"
 printf '\n# fixture source refresh\n' >> "$role_fixture_root/.codex/agents/builder.toml"
 "$fixture_installer" --host codex --target-root "$role_refresh_root" --update > "$test_root/role-refresh-update.out"
 assert_managed_role_payload "$role_refresh_root/.codex/agents/builder.toml" "$role_fixture_root/.codex/agents/builder.toml" "managed role refreshes when its isolated source changes"
+if cmp -s "$test_root/role-refresh-policy-before" "$role_refresh_root/.codex/bounded-freedom-policy.state"; then
+  fail "same-version policy source change did not refresh the deployment fingerprint"
+fi
+pass "same-version policy source change refreshes the deployment fingerprint"
+assert_contains "POLICY RELOAD REQUIRED: existing/open tasks do not adopt this deployment" "$test_root/role-refresh-update.out" "policy source change warns that existing tasks remain stale"
 
 role_fixed_payload_root="$test_root/role-fixed-payload-update"
 cp "$role_fixture_root/.codex/agents/builder.toml" "$test_root/builder-unpinned-source"
@@ -775,6 +806,15 @@ expect_exit 3 "$test_root/config-conflict.out" "$installer" --host codex --targe
 assert_file_unchanged "$test_root/config-conflict-before" "$config_conflict_root/.codex/config.toml" "user-owned agents table is preserved"
 assert_path_absent "$config_conflict_root/.agents" "agents-table conflict creates no portable configuration"
 assert_path_absent "$config_conflict_root/.codex/agents" "agents-table conflict creates no Codex agent links"
+
+policy_state_conflict_root="$test_root/policy-state-conflict"
+mkdir -p "$policy_state_conflict_root/.codex"
+printf 'user-owned policy note\n' > "$policy_state_conflict_root/.codex/bounded-freedom-policy.state"
+cp "$policy_state_conflict_root/.codex/bounded-freedom-policy.state" "$test_root/policy-state-conflict-before"
+expect_exit 1 "$test_root/policy-state-conflict.out" "$installer" --host codex --target-root "$policy_state_conflict_root" --install
+assert_file_unchanged "$test_root/policy-state-conflict-before" "$policy_state_conflict_root/.codex/bounded-freedom-policy.state" "unmanaged policy-state file is preserved"
+assert_path_absent "$policy_state_conflict_root/.agents" "policy-state conflict creates no portable configuration"
+assert_path_absent "$policy_state_conflict_root/.codex/agents" "policy-state conflict creates no Codex agent files"
 
 symlink_root="$test_root/managed-symlink"
 mkdir -p "$symlink_root/.codex"

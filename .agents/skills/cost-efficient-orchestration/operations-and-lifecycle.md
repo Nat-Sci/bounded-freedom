@@ -14,6 +14,19 @@ Close routed nontrivial work with a compact host-telemetry snapshot when an adap
 
 Report task wall elapsed time separately from each model/effort row. A row's active elapsed time is end-to-end turn time, including its tool and wait activity; it is not pure inference latency, and concurrent rows may overlap. Report input, cached input, output, reasoning output, and total tokens only when observed. Cached input is a subset of input, not an additional quantity. Missing coverage remains unknown. Never retain raw rollout events or expose paths, IDs, prompts, account data, or billing metadata; never convert telemetry into an unverified cost or savings claim. Skip the extra snapshot call for trivial direct answers.
 
+## Policy freshness and usage cohorts
+
+After installing or updating routing policy, existing tasks keep the instruction chain loaded for their run. Treat policy adoption separately from file deployment:
+
+- `current`: the task/run began after the accepted managed deployment, or the host provides an authoritative reload receipt;
+- `stale`: available timestamps prove the task/run predates deployment;
+- `unknown`: deployment or task-start evidence is unavailable;
+- `mixed`: a child was launched after deployment by a stale or unknown Chief. Its observed model/effort is real runtime activity, but it does not prove that the parent used the current routing policy.
+
+For portable verification, start or fork a new task after deployment. Restarting an application, updating linked Skill files, seeing a current file-status result, or observing a child launch is not alone an authoritative reload receipt for an existing task. Surface freshness and evidence in the first nontrivial route receipt; stop calling a stale or unknown task a current-policy test.
+
+When comparing usage, declare machine/host scope, any project filter, the policy deployment boundary, cohort, actual-launch evidence, and token coverage. Keep internal auto-review separate. A planned, attempted, rejected, or quota-blocked route is not an actual model launch. Launch counts are not token use; historical token or cost totals remain unavailable unless a privacy-safe authoritative event ledger covers the full cohort.
+
 ## Worker lifecycle
 
 Track `planned -> running -> done | attention -> closed`. `done` means a return arrived, not that it was accepted. Inspect current observable worker state, consume and verify completed returns, and close only completed work through a supported host control. Do not edit host state, archive a user task, or treat a stored relationship as a live process.
