@@ -881,6 +881,7 @@ show_retired_role_status() {
 show_block_status() {
   destination=$1
   label=$2
+  source=${3-}
   if [ -L "$destination" ]; then
     echo "$label: conflict (symbolic link)"
   elif [ -e "$destination" ] && [ ! -f "$destination" ]; then
@@ -888,7 +889,18 @@ show_block_status() {
   elif [ -f "$destination" ] && ! has_valid_managed_markers "$destination"; then
     echo "$label: invalid managed markers"
   elif [ -f "$destination" ] && grep -Fq "$begin_marker" "$destination"; then
-    echo "$label: managed block present"
+    if [ -n "$source" ] && awk -v begin="$begin_marker" -v end="$end_marker" '
+      $0 == begin { inside = 1; separator = 1; next }
+      $0 == end { exit }
+      inside && separator { separator = 0; if ($0 == "") next }
+      inside { print }
+    ' "$destination" | cmp -s "$source" -; then
+      echo "$label: managed block present (current)"
+    elif [ -n "$source" ]; then
+      echo "$label: managed block present (source update available)"
+    else
+      echo "$label: managed block present"
+    fi
   else
     echo "$label: managed block absent"
   fi
@@ -933,8 +945,8 @@ show_status() {
       retired_role_label=${retired_role_file%.toml}
       show_retired_role_status "$codex_agents_dir/$retired_role_file" "$retired_role_file" "Retired Codex agent $retired_role_label"
     done
-    show_block_status "$codex_global_agents" "Codex AGENTS.md"
-    show_block_status "$codex_global_config" "Codex config.toml"
+    show_block_status "$codex_global_agents" "Codex AGENTS.md" "$global_instructions_source"
+    show_block_status "$codex_global_config" "Codex config.toml" "$agents_config_source"
     show_policy_state_status "$codex_policy_state"
     show_block_status "$codex_proxy_env" "Codex proxy .env"
   fi
@@ -947,7 +959,7 @@ show_status() {
       show_link_status "$skill_source" "$claude_skills_dir/$skill_name" "Claude Skill $skill_name"
     done
     show_legacy_link_status "$claude_skills_dir" "Claude Skill"
-    show_block_status "$claude_global_instructions" "Claude CLAUDE.md"
+    show_block_status "$claude_global_instructions" "Claude CLAUDE.md" "$global_instructions_source"
   fi
   if [ "$use_codex" -eq 1 ]; then
     echo "Codex role file status is file-level only; it does not verify live role launch or model selection"

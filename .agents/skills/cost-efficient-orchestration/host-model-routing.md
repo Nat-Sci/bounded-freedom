@@ -60,9 +60,7 @@ independent Reviewer or satisfy an S3/S4 gate.
 
 ## Spark quota preflight and fallback
 
-Run this preflight only after task-kind selection makes Spark the candidate and
-immediately before every prospective Spark worker launch. Do not poll before
-unrelated work or during a healthy worker. On Codex, use the authoritative host
+Run this preflight only after task-kind selection and launch-capability filtering make Spark the candidate and immediately before every prospective Spark worker launch. First verify the current worker API can supply the exact Spark model, medium effort, required permissions, and any needed fork control. An app catalog or account quota can include Spark while the actual worker API cannot launch it; classify that result as `unsupported`, not quota exhausted, and choose the fitting Luna/Terra boundary. Do not poll before unrelated work or during a healthy worker. On Codex, use the authoritative host
 quota read when available (`get_usage_limits` or app-server
 `account/rateLimits/read`). Match the Spark bucket through the host-reported
 stable label/model mapping, never a versioned opaque internal ID.
@@ -78,8 +76,7 @@ result as follows:
    usage below 100%, and no reached flag applies.
 3. `unknown`: the bucket or required fields are missing, or the read errors.
 
-For `available`, launch explicit Spark / medium. For `blocked`, do not waste a
-Spark attempt: launch the fitting explicit Luna / medium or Terra / medium
+For `available`, launch explicit Spark / medium. For `blocked` or `unsupported`, do not waste a Spark attempt: launch the fitting explicit Luna / medium or Terra / medium
 fallback. A five-hour block remains blocking even when a weekly window is
 available. For `unknown`, never call the result quota-informed or invent a
 block: choose Spark only when the declared risk and attempt budget can absorb a
@@ -118,12 +115,16 @@ criteria, not automatic upgrades or a substitute for checking host support:
 
 More files, a long history, model novelty, or unused quota do not by themselves
 justify higher effort. First reduce the work packet and resolve specification
-conflicts. Do not raise model and effort together without identifying what each
-change addresses. On a difficult return, distinguish missing context, a broken
-tool/launch, incomplete production integration, and a reasoning shortfall.
-Fix the first three at the appropriate boundary instead of treating every
-failure as proof that the whole model family is inadequate. After the hard
-decision is accepted, re-evaluate the next unit for a lower adequate pair.
+conflicts. Ordinary `BLOCK`, a code defect, missing evidence, profile mismatch,
+missing context, broken tool/launch, or incomplete production integration is
+not model inadequacy: fix that boundary first. For an actual unresolved
+reasoning limitation, record the narrow question, evidence already checked,
+missing capability, and expected extra check. Do not raise model and effort
+together without saying which limitation each addresses. When depth is limiting
+after a documented Sol/high shortfall, raise to a supported higher Sol effort;
+when cross-domain or cross-tool coherence is limiting after that shortfall, use
+Astra/medium. This is not a mandatory full ladder. After the hard decision is
+accepted, re-evaluate the next unit for a lower adequate pair.
 
 Chief's actual model/effort is not changed by this table. Preserve a user-selected
 Chief; recommend or use a supported explicit control only within authority.
@@ -151,7 +152,7 @@ second supported routing system; modified or foreign files remain protected.
 Before launch:
 
 1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, role-roster state, writing owner, and remaining initial/replacement attempt budget.
-2. Inspect the current host's advertised controls and the model's supported efforts. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
+2. Inspect the current host's advertised exact model IDs, supported efforts, effective permissions, and fork controls before quota preflight. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
 4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on an observed mismatch; do not rewrite the planned model/effort to fit it. A fresh route may be declared before fresh work, but the mismatched attempt does not satisfy the original review and still counts toward worker/attempt budget. Missing runtime metadata stays unknown, not a fabricated match.
 5. If necessary controls are absent, distinguish unsupported launch capability from model quota. A different available model must still use enforceable permissions and actual controls. Otherwise continue only minimal direct work when appropriate or report the unsupported boundary. Never satisfy S3/S4 review with a cheap untyped fallback, and never claim source edits switched a running session.
@@ -202,9 +203,9 @@ Use fast for clear reversible volume, balanced for stable synthesis or related-f
 
 ## GPT-6 Astra boundary
 
-Astra is a frontier lane, not another execution contract. It may back the existing Reviewer contract only for an exceptional review whose limiting factor is cross-tool or cross-domain coherence, or after a documented Sol/high shortfall. This is an evidence-gated escalation from the consequential-review starting route, not an `AstraReviewer` role. The review is independent only when a separate Reviewer performs it; an Astra Chief's self-review does not satisfy the S3/S4 gate, and S4 still requires human acceptance.
+Astra is a frontier lane, not another execution contract. Reviewer work always starts at Sol/high. Astra may back the existing Reviewer contract only when a documented Sol/high shortfall identifies cross-tool or cross-domain coherence as the limiting factor; ordinary defects, missing evidence, profile mismatch, or a generic `BLOCK` return to input, implementation, or control repair. This is an evidence-gated escalation from the consequential-review starting route, not an `AstraReviewer` role. The review is independent only when a separate Reviewer performs it; an Astra Chief's self-review does not satisfy the S3/S4 gate, and S4 still requires human acceptance.
 
-Start newly planned Astra work at medium; raise effort only from evidence. Effort availability and semantics, including `ultra`, are host-dependent. Do not claim a universal automatic-delegation effect, or that API effort/configuration changes alter the active desktop Chief. Do not silently reset a user-selected effort.
+Start newly planned Astra work at medium; `xhigh`, `max`, and `ultra` require explicit user choice or the documented insufficiency above and host support. Effort availability and semantics, including `ultra`, are host-dependent. A Skill guides Chief decisions but cannot switch the active Chief; planned ideal lane is separate from actual runtime. Do not claim a hard automatic scheduler or that API effort/configuration changes alter the active desktop Chief. Do not silently reset a user-selected effort.
 
 Calibration is optional and bounded by actual accepted work. Compare eligible work started balanced, first-pass acceptance, rework, elapsed time, evidence coverage, and authoritative cost or quota data when available. Do not impose a unit quota, infer billing, or create work to consume allowance.
 

@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.3 — Astra Edition**.
+Current package: **v0.6.4 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -164,7 +164,9 @@ per canonical role: Scout, Builder, Coder, and Reviewer. `Coder` is the
 implementation Writer; there is no fifth Writer profile. This is a capacity
 ceiling, not a requirement to launch a full team: most bounded tasks still use
 one or two roles, and deterministic commands or micro-edits remain direct.
-The host setting enforces only the total ceiling; one-thread-per-role and
+Effective capacity is the policy maximum reduced by the actual host limit when
+known (otherwise unknown); queue dependent roles and reserve feasible review
+rather than moving substantive work into Chief. The host setting enforces only the total ceiling; one-thread-per-role and
 single-writer ownership are orchestration-policy checks recorded in launch
 tickets and route receipts, not separate host locks.
 Builder and Coder may both exist in the roster, but only one has active writing
@@ -182,11 +184,15 @@ to accepted evidence, current artifacts, remaining choices, verification, and
 the next safe action. This reduces Chief context pressure without transferring
 its accountability.
 
-When task-kind selection makes Spark the candidate, the Codex adapter now runs
-a fresh Spark-only quota preflight immediately before each prospective launch,
+When task-kind selection makes Spark the candidate, the Codex adapter first
+checks whether the actual worker API can launch its exact model/effort with the
+needed permission and fork controls, then runs a fresh Spark-only quota
+preflight immediately before each supported prospective launch,
 using the host's authoritative usage receipt when available. It retains only a
 normalized status and window summary. Missing telemetry remains `unknown`; it
-is never rewritten as available or exhausted. When Spark is blocked,
+is never rewritten as available or exhausted. A catalog/account Spark option
+without worker-launch support is `unsupported`, not quota exhaustion. When
+Spark is blocked or unsupported,
 straightforward bounded code work uses Luna/medium and interacting state or
 constraints use Terra/medium. Quota exhaustion does not justify a Sol/Astra
 escalation, weaker scientific review, or an undeclared same-role replacement. After a
@@ -200,7 +206,9 @@ run directly rather than create a cheaper pseudo-reviewer. An observed Luna or
 Terra runtime cannot retroactively replace a planned Sol review. Any mismatch
 stops that attempt and still consumes its attempt budget.
 Astra remains an evidence-gated escalation inside the same Reviewer contract
-for exceptional cross-domain coherence or a documented Sol/high shortfall; it
+only after a documented Sol/high cross-domain or cross-tool coherence shortfall;
+ordinary defects, missing evidence, profile mismatch, and a generic `BLOCK`
+return to repair first. It
 does not have a separate role. An Astra Chief's self-review is not independent.
 
 GPT-6 Astra is the Codex adapter's on-demand frontier lane. Select it explicitly
@@ -379,7 +387,14 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.3 replaces the two-worker bottleneck with a needs-based four-role
+Version 0.6.4 checks actual worker-launch capabilities before quota, schedules
+the four-role roster within the live host limit, and separates Chief goal
+definition from Builder decomposition. It distinguishes deeper Sol reasoning
+from evidence-gated Astra escalation and reports installed instruction/config
+payload drift directly in `--status`. These are Chief routing instructions and
+deployment checks; they do not switch an active Chief or expand host capacity.
+
+Version 0.6.3 introduced a needs-based four-role
 roster, one open thread per Scout, Builder, Coder/Writer, and Reviewer. It keeps
 one active writing owner, starts Codex Reviewer work at Sol/high, and makes
 Chief-minimal offloading an explicit contract without forcing every task to

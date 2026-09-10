@@ -24,17 +24,21 @@
 - Chief policy evidence: managed install marker plus task/run start, authoritative host reload receipt, or unknown; a fresh child of a stale Chief is a mixed cohort rather than proof of current parent policy
 - Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
 - Selection reason: limiting factor, why the cheaper/simpler route is inadequate when escalating, and why the chosen effort is sufficient
+- Escalation evidence: narrow unresolved question, evidence already checked, missing capability, expected extra check, and whether depth supports higher Sol effort or coherence supports Astra/medium
 - Host launch adapter: one current unpinned role; actual explicit model/effort controls, effective permissions, and unsupported/stale-session boundary
+- Host capability check: exact model IDs, supported efforts, effective permissions, fork controls, actual host capacity or `unknown`; classify unavailable Spark launch control as `unsupported`, separate from quota
 - Availability and fallback: for a Spark candidate, fresh authoritative preflight source/check time/status, every applicable window's used percent/duration/reset time, normalized decision, or `unknown`; selected Luna/Terra alternative, side-effect checkpoint, and remaining worker/review budget; never retain raw quota payloads or account/auth/reset-credit identifiers
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
 - Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch and never rewrite planned values to fit an observed mismatch
 - User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
 - Balanced opportunity: eligible, excluded with reason, or not applicable
 - Planned role roster: needed or omitted Scout, Builder, Coder/Writer, and Reviewer; at most one open thread per role and four total
+- Effective worker capacity and queue: `min(policy maximum, actual host limit)` when known, otherwise `unknown`; dependency order and feasible mandatory-review reservation
 - Planned workers: one initial launch per selected role, at most four initial attempts, and normally zero or one declared same-role replacement attempt
 - Actual workers: per-role thread, configured and observed pair, spawn attempts, retries, accepted/rejected returns, and host close status (confirmed, unsupported, or unknown)
 - Current writing owner and handoff checkpoint: Chief, Builder, Coder/Writer, or none; Builder/Coder write turns must not overlap
 - Chief-retained responsibilities: intent, non-goals, unresolved scientific or architectural decisions, assurance, acceptance, and final synthesis
+- Goal contract: objective meaning, non-goals, decision constraints, unresolved choices, and observable acceptance; Scout supplies existing facts and Builder decomposes the accepted goal into interfaces, dependencies, packets, and checks
 - Chief-offloaded responsibilities: discovery, coordination, bounded implementation, routine test/log work, and independent review assigned to named roles
 - Worker-budget rationale: why each role is needed and why omitted roles are unnecessary; do not fill the roster for completeness
 - Independent-review plan: coherent evidence checkpoint, acceptance claim, Reviewer Sol/high route, and any documented Astra escalation condition

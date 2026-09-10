@@ -68,7 +68,11 @@ Builder. Chief accepts the result in either case. A method's "direct" row
 does not bypass the orchestration balanced gate or change Chief's runtime
 model. The current four profiles are unpinned and require explicit model/effort
 controls while preserving their permissions; stale loaded settings are not a
-second supported configuration.
+second supported configuration. Chief owns objective meaning, non-goals,
+decision constraints, unresolved choices, and observable acceptance; Scout
+supplies existing facts, while Builder decomposes an accepted goal into
+interfaces, dependencies, bounded packets, and checks without redefining
+science.
 
 The task-kind matrix in the [host routing adapter](../.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 is the single model/effort starting policy. Code mapping, general evidence, and
@@ -82,13 +86,20 @@ task kind, contract, assurance, profile, requested pair, scope, checks, roster
 state, writing owner, and attempt budget; actual controls and observed receipts
 establish whether it was honored. An observed mismatch stops the attempt;
 planned values are never rewritten to fit it. Each prospective Spark launch
+first verifies that the worker API can honor the exact model, effort,
+permissions, and fork controls: catalog/account presence without launch support
+is `unsupported`, not quota exhaustion. Each supported prospective Spark launch
 receives a fresh authoritative preflight when the host exposes one, retaining
 only the normalized window summary and decision. A blocked result selects the
 matrix's fitting Luna/Terra alternative; missing telemetry remains `unknown`.
 Confirm terminal state and inspect side effects before a same-role replacement;
 neither quota failure nor a passed reset time creates another simultaneous
 slot. The maintained Codex Reviewer route starts at Sol/high for routine and
-consequential review, with Astra reserved for a documented Sol/high shortfall.
+consequential review, with Astra reserved for a documented Sol/high coherence
+shortfall; ordinary defects, missing evidence, profile mismatch, or `BLOCK`
+return to repair first. The four-role policy maximum is reduced to the actual
+host worker limit when known; queue dependencies and reserve feasible review
+rather than moving substantive work into Chief.
 
 Chief is a thin control plane rather than a fifth general-purpose worker. It
 retains intent, non-goals, unresolved scientific or architectural choices,
