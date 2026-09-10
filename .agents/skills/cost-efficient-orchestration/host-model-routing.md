@@ -27,8 +27,8 @@ Direct deterministic commands and trivial micro-edits still need no worker.
 | `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward flow; Terra / medium for interacting state or constraints |
 | `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium | Unchanged |
 | `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium | Unchanged |
-| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward tested edits; Terra / medium for coupled logic within the frozen boundary |
-| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | `gpt-5.6-terra` / medium | Unchanged |
+| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | See Coder subtypes below | See Coder subtypes below |
+| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | See Builder subtypes below | See Builder subtypes below |
 | `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-sol` / high | Unchanged |
 | `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high | Unchanged; never weaken this gate for quota |
 
@@ -50,6 +50,28 @@ invariants, or repeated failed checks starts Terra when Spark is unavailable;
 a truly trivial edit remains direct. Changing the model alone does not turn a
 narrow Coder into a broader Builder or grant write access to Scout.
 
+## Coder and Builder subtypes
+
+Keep `code-edit` and `coordinated-build` as the parent task kinds. Choose one
+of these starting policies from the frozen ownership and integration boundary,
+not file count. Known deterministic commands and truly trivial changes remain
+direct. These are starting policies, not a model-trial ladder, automatic
+upgrade, or measured cost guarantee; unresolved scientific or architectural
+choices return to Chief.
+
+| Parent kind | Subtype | Frozen boundary | Starting model / effort | Spark blocked or unsupported |
+| --- | --- | --- | --- | --- |
+| `code-edit` | Coder template/fixed-transform | Repeated template or fixed transform with targeted checks | Spark / low | Luna / low |
+| `code-edit` | Coder local implementation | Narrow local implementation with straightforward logic | Spark / medium | Luna / medium |
+| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | Terra / medium; high only for explicit multiple interacting state/gradient/numerical constraints | Unchanged |
+| `coordinated-build` | Builder template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | Luna / medium | Unchanged |
+| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled implementation boundary | Terra / medium | Unchanged |
+| `coordinated-build` | Builder stateful integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | Terra / high | Unchanged |
+
+Coder versus Builder depends on narrow editing versus ownership and integration,
+not the number of files. Template integration does not invent interfaces; it
+uses those already accepted by Chief.
+
 The maintained Codex Reviewer route starts at Reviewer / Sol / high for both
 routine and consequential review. This is a local quality preference, not a
 claim that every host must map Reviewer to Sol or that every task needs a
@@ -60,7 +82,7 @@ independent Reviewer or satisfy an S3/S4 gate.
 
 ## Spark quota preflight and fallback
 
-Run this preflight only after task-kind selection and launch-capability filtering make Spark the candidate and immediately before every prospective Spark worker launch. First verify the current worker API can supply the exact Spark model, medium effort, required permissions, and any needed fork control. An app catalog or account quota can include Spark while the actual worker API cannot launch it; classify that result as `unsupported`, not quota exhausted, and choose the fitting Luna/Terra boundary. Do not poll before unrelated work or during a healthy worker. On Codex, use the authoritative host
+Run this preflight only after task-kind selection and launch-capability filtering make Spark the candidate and immediately before every prospective Spark worker launch. First verify the current worker API can supply the exact Spark model, selected task-pair effort, required permissions, and any needed fork control. An app catalog or account quota can include Spark while the actual worker API cannot launch it; classify that result as `unsupported`, not quota exhausted, and choose the fitting Luna/Terra boundary. Do not poll before unrelated work or during a healthy worker. On Codex, use the authoritative host
 quota read when available (`get_usage_limits` or app-server
 `account/rateLimits/read`). Match the Spark bucket through the host-reported
 stable label/model mapping, never a versioned opaque internal ID.
@@ -76,8 +98,10 @@ result as follows:
    usage below 100%, and no reached flag applies.
 3. `unknown`: the bucket or required fields are missing, or the read errors.
 
-For `available`, launch explicit Spark / medium. For `blocked` or `unsupported`, do not waste a Spark attempt: launch the fitting explicit Luna / medium or Terra / medium
-fallback. A five-hour block remains blocking even when a weekly window is
+For `available`, launch the explicit Spark pair selected by the task or subtype.
+For `blocked` or `unsupported`, do not waste a Spark attempt: use the selected
+Coder subtype's fallback, or the unchanged Scout `code-map` fallback in the
+canonical matrix. A five-hour block remains blocking even when a weekly window is
 available. For `unknown`, never call the result quota-informed or invent a
 block: choose Spark only when the declared risk and attempt budget can absorb a
 quota rejection; otherwise conservatively choose the fitting Luna/Terra route

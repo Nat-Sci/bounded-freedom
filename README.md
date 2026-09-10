@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.4 — Astra Edition**.
+Current package: **v0.6.5 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -149,6 +149,11 @@ permissions. General evidence and cross-module synthesis can use different
 Scout models, and routine engineering review is distinguished from consequential
 review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 own these starting choices; they are policies to validate, not measured savings.
+Within its parent `code-edit` and `coordinated-build` rows, that table also
+defines the Coder and Builder subtypes: template/fixed transforms, local or
+invariant-sensitive edits, and template, ordinary, or stateful integration.
+The subtype follows the frozen ownership and integration boundary, not file
+count.
 
 Only four canonical profiles remain: `Scout`, `Coder`, `Builder`, and `Reviewer`.
 All preserve their permission boundary without pinning model or effort; there
@@ -192,9 +197,8 @@ using the host's authoritative usage receipt when available. It retains only a
 normalized status and window summary. Missing telemetry remains `unknown`; it
 is never rewritten as available or exhausted. A catalog/account Spark option
 without worker-launch support is `unsupported`, not quota exhaustion. When
-Spark is blocked or unsupported,
-straightforward bounded code work uses Luna/medium and interacting state or
-constraints use Terra/medium. Quota exhaustion does not justify a Sol/Astra
+Spark is blocked or unsupported, use the selected Coder subtype's fallback or
+the Scout code-map fallback in the canonical matrix. Quota exhaustion does not justify a Sol/Astra
 escalation, weaker scientific review, or an undeclared same-role replacement. After a
 mid-task block, inspect partial writes and process state before a real handoff.
 Do not interrupt a healthy fallback merely because Spark's reset time passes.
@@ -387,7 +391,9 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.4 checks actual worker-launch capabilities before quota, schedules
+Version 0.6.5 adds finer Coder and Builder starting policies under their
+existing parent task kinds without changing role, assurance, escalation, or
+lifecycle rules. Version 0.6.4 checks actual worker-launch capabilities before quota, schedules
 the four-role roster within the live host limit, and separates Chief goal
 definition from Builder decomposition. It distinguishes deeper Sol reasoning
 from evidence-gated Astra escalation and reports installed instruction/config
