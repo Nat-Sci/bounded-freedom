@@ -1,6 +1,8 @@
 [agents]
 enabled = true
-max_concurrent_threads_per_session = 2
+# Host-enforced total ceiling. Per-role uniqueness and writing ownership are
+# enforced by the orchestration contract and launch receipts.
+max_concurrent_threads_per_session = 4
 max_depth = 1
 # Defensive fallback for untyped calls only. Every typed role launch must
 # select and pass an explicit model and reasoning effort; these defaults do

@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.2 — Astra Edition**.
+Current package: **v0.6.3 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -138,7 +138,7 @@ cached input is already part of input tokens.
 | Execution contract | Owns | Permission boundary |
 | --- | --- | --- |
 | Scout | Bounded discovery, code/evidence/system mapping, or stable synthesis | Read-only |
-| Coder | Narrow, frozen, code-specific edits and checks | Scoped workspace write |
+| Coder (Writer) | Narrow, frozen, code-specific edits and checks | Scoped workspace write |
 | Builder | Coordinated implementation across logic or files | Scoped workspace write |
 | Reviewer | Independent assessment of evidence and acceptance | Read-only |
 
@@ -159,7 +159,28 @@ model. The [launch adapter protocol](.agents/skills/cost-efficient-orchestration
 covers current controls, permission overrides, runtime receipts and unsupported
 sessions. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
 
-The Codex adapter keeps at most two spawned worker threads open at once, and the orchestration contract separately caps the default total task budget at two distinct workers. Most tasks still use zero or one; only one worker may write. Reserve required independent review before allocating discovery; there is no mandatory Scout → writer → Reviewer sequence, and closing or failing a worker does not reset the total.
+The Codex adapter permits at most four concurrently open worker threads, one
+per canonical role: Scout, Builder, Coder, and Reviewer. `Coder` is the
+implementation Writer; there is no fifth Writer profile. This is a capacity
+ceiling, not a requirement to launch a full team: most bounded tasks still use
+one or two roles, and deterministic commands or micro-edits remain direct.
+The host setting enforces only the total ceiling; one-thread-per-role and
+single-writer ownership are orchestration-policy checks recorded in launch
+tickets and route receipts, not separate host locks.
+Builder and Coder may both exist in the roster, but only one has active writing
+ownership at a time and their write turns never overlap. A confirmed terminal
+failure can use the single declared same-role replacement allowance only after
+partial effects and predecessor state are checked; a timeout does not free a
+slot.
+
+Chief is intentionally thin. It retains the research or product intent,
+non-goals, unresolved scientific or architectural decisions, assurance,
+acceptance, and final synthesis. Substantive discovery goes to Scout,
+cross-file organization or integration to Builder, a frozen edit-test loop to
+Coder/Writer, and independent acceptance to Reviewer. Each return is compressed
+to accepted evidence, current artifacts, remaining choices, verification, and
+the next safe action. This reduces Chief context pressure without transferring
+its accountability.
 
 When task-kind selection makes Spark the candidate, the Codex adapter now runs
 a fresh Spark-only quota preflight immediately before each prospective launch,
@@ -168,16 +189,16 @@ normalized status and window summary. Missing telemetry remains `unknown`; it
 is never rewritten as available or exhausted. When Spark is blocked,
 straightforward bounded code work uses Luna/medium and interacting state or
 constraints use Terra/medium. Quota exhaustion does not justify a Sol/Astra
-escalation, weaker scientific review, or another worker beyond budget. After a
+escalation, weaker scientific review, or an undeclared same-role replacement. After a
 mid-task block, inspect partial writes and process state before a real handoff.
 Do not interrupt a healthy fallback merely because Spark's reset time passes.
 See [Spark preflight and fallback](.agents/skills/cost-efficient-orchestration/host-model-routing.md#spark-quota-preflight-and-fallback).
 
-Reviewer is an independence contract, not a fixed intelligence tier. Routine
-engineering review starts at Terra/medium; consequential S3/S4 review starts at
-Sol/high. A narrow objective S1/S2 review may use a predeclared Luna/high
-exception, but an observed Luna runtime cannot retroactively replace a planned
-Sol review. Any mismatch stops that attempt and still consumes its budget.
+Reviewer is an independence contract. In this Codex package, both routine and
+consequential Reviewer work starts at Sol/high; trivial objective checks should
+run directly rather than create a cheaper pseudo-reviewer. An observed Luna or
+Terra runtime cannot retroactively replace a planned Sol review. Any mismatch
+stops that attempt and still consumes its attempt budget.
 Astra remains an evidence-gated escalation inside the same Reviewer contract
 for exceptional cross-domain coherence or a documented Sol/high shortfall; it
 does not have a separate role. An Astra Chief's self-review is not independent.
@@ -198,8 +219,8 @@ deterministic preparation
 Chief control phase
         ├── Luna: general evidence and mechanical work
         ├── Spark: frozen code mapping and narrow edit-test loops
-        ├── Terra: system mapping, stable synthesis, coordinated work, routine review
-        ├── Sol: ambiguous judgment and consequential independent review
+        ├── Terra: system mapping, stable synthesis, coordinated implementation
+        ├── Sol: ambiguous judgment and independent review
         └── Astra: exceptional cross-tool coherence or documented shortfall
                           ↓
                  compact accepted checkpoint
@@ -209,8 +230,10 @@ Chief control phase
 
 Before non-review work starts on Sol or Astra, the dispatcher checks whether
 stable scope and objective verification make Terra sufficient. If Astra remains
-Chief, substantial independent implementation can run on one Terra worker while
-Chief handles a separate decision or acceptance check. Known commands and
+Chief, substantial independent implementation can run on a Terra Builder while
+Scout and Reviewer retain their own slots and Coder remains available for a
+frozen edit-test unit. Chief handles only the unresolved decision or acceptance
+check. Known commands and
 obvious micro-edits run directly. A frozen, separable edit-test loop leaves a
 Sol or Astra Chief for Coder/Spark even when Chief has no parallel work; the
 saving comes from retiring implementation context. A direct-work exception
@@ -356,7 +379,11 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.2 adds explicit policy-freshness receipts, a privacy-safe managed
+Version 0.6.3 replaces the two-worker bottleneck with a needs-based four-role
+roster, one open thread per Scout, Builder, Coder/Writer, and Reviewer. It keeps
+one active writing owner, starts Codex Reviewer work at Sol/high, and makes
+Chief-minimal offloading an explicit contract without forcing every task to
+launch all four roles. Version 0.6.2 added explicit policy-freshness receipts, a privacy-safe managed
 deployment marker, stale/current/mixed usage cohorts, and a mandatory installer
 warning that existing tasks do not automatically adopt an update. It also
 separates all-machine from project-filtered statistics, actual launches from

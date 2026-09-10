@@ -29,7 +29,7 @@ Direct deterministic commands and trivial micro-edits still need no worker.
 | `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium | Unchanged |
 | `code-edit` | Narrow frozen implementation and its targeted checks | Coder | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward tested edits; Terra / medium for coupled logic within the frozen boundary |
 | `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | `gpt-5.6-terra` / medium | Unchanged |
-| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-terra` / medium | Unchanged |
+| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-sol` / high | Unchanged |
 | `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high | Unchanged; never weaken this gate for quota |
 
 Task method remains separate: for example, a mathematical Skill can request a
@@ -50,11 +50,13 @@ invariants, or repeated failed checks starts Terra when Spark is unavailable;
 a truly trivial edit remains direct. Changing the model alone does not turn a
 narrow Coder into a broader Builder or grant write access to Scout.
 
-Reviewer policy has no universal Sol floor. The maintained routine-review
-default is Reviewer / Terra / medium; consequential S3/S4 review is Reviewer /
-Sol / high. A narrowly bounded, objective S1/S2 review may use Reviewer / Luna
-/ high only as an explicitly justified exception selected before launch. It is
-not a maintained default and is never eligible for consequential review.
+The maintained Codex Reviewer route starts at Reviewer / Sol / high for both
+routine and consequential review. This is a local quality preference, not a
+claim that every host must map Reviewer to Sol or that every task needs a
+Reviewer. Astra remains an evidence-gated escalation inside the same contract
+after a documented Sol/high coherence or judgment shortfall; it is not a fifth
+role. A cheaper executor may run objective checks, but it does not become the
+independent Reviewer or satisfy an S3/S4 gate.
 
 ## Spark quota preflight and fallback
 
@@ -87,13 +89,15 @@ refresh it for each separate prospective Spark launch. If a launch is rejected
 or quota interrupts a worker, follow the partial-side-effect and timeout
 protocol below before any handoff.
 
-Change the actual model/effort only with supported host controls or one fitting
-new worker inside the remaining two-distinct-worker budget, retaining ownership,
-permissions, assurance, and any reserved independent review. A confirmed
-failure still counts toward that budget. No slot means no third worker: finish
-only minimal safe direct work or report the needed budget/control decision for
-substantial remaining work. A follow-up prompt cannot relabel the same model
-into a fallback. Keep a healthy fallback on its unit even if Spark's reset time
+Change the actual model/effort only with supported host controls or one declared
+same-role replacement attempt inside the four-role roster, retaining ownership,
+permissions, assurance, and independent review. A confirmed failure consumes
+an attempt; inspect partial effects and confirm that the predecessor no longer
+runs before replacement. A timeout does not free the role. Without host capacity
+or remaining retry allowance, finish only minimal safe direct work or report the
+needed control decision for substantial remaining work; never occupy another
+role under a false label. A follow-up prompt cannot relabel the same model into
+a fallback. Keep a healthy fallback on its unit even if Spark's reset time
 passes; reconsider Spark only for a later eligible unit with fresh preflight
 evidence. Never redeem a reset, buy quota, or wait/monitor indefinitely without
 applicable user authorization.
@@ -146,7 +150,7 @@ second supported routing system; modified or foreign files remain protected.
 
 Before launch:
 
-1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, and remaining worker/review budget.
+1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, role-roster state, writing owner, and remaining initial/replacement attempt budget.
 2. Inspect the current host's advertised controls and the model's supported efforts. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
 4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on an observed mismatch; do not rewrite the planned model/effort to fit it. A fresh route may be declared before fresh work, but the mismatched attempt does not satisfy the original review and still counts toward worker/attempt budget. Missing runtime metadata stays unknown, not a fabricated match.
@@ -156,8 +160,8 @@ The untyped Luna/low default is a defensive cost limit for unspecified calls,
 not a valid typed route or a compatibility profile. Calling a role without explicit model
 **and** effort is a routing error even if an inherited pair happens to work.
 Changing model, effort, permission, or ownership after launch requires supported
-host controls or a new fitting worker within the same total budget; a follow-up
-message or role label alone does not perform that change.
+host controls or a declared fitting same-role replacement within the attempt
+budget; a follow-up message or role label alone does not perform that change.
 
 ### Fast-code gate
 
@@ -179,7 +183,7 @@ do not disable safe file loading. Skill directory links are a separate mechanism
 
 If repair is outside the authorized scope, a host-supported unpinned route may
 carry the same frozen unit only with explicit model/effort, preserved ownership,
-required permissions and independence, and remaining launch/worker budget. Do not
+required permissions and independence, and remaining same-role attempt budget. Do not
 treat default Luna/low as Terra execution or consequential Reviewer evidence. If
 the required boundary or review capability is unavailable, report that gate as
 unmet. Direct continuation may do already authorized safe work, but must disclose

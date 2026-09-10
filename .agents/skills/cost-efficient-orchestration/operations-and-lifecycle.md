@@ -4,7 +4,7 @@ Use this reference when work may spawn, retry, mutate external state, compact, o
 
 ## Freeze and budget
 
-Before a substantial phase, state objective, task kind, accepted inputs, active rules, files/evidence in scope, expected verification, and next safe action. Resolve conflicts between old and current specifications before delegation. Record planned distinct workers (normally zero or one, at most two), initial spawn attempts (at most two), and retry allowance (normally zero; one only for a known safe transient retry). Reserve mandatory review before allocating a Scout. Concurrency, profile variants, and closure do not expand or reset the total budget. A second worker needs independent review or non-overlapping evidence. Allow one writing owner and no nested delegation.
+Before a substantial phase, state objective, task kind, accepted inputs, active rules, files/evidence in scope, expected verification, and next safe action. Resolve conflicts between old and current specifications before delegation. Record a needs-based role roster: normally one or two roles, at most four concurrently open threads, and at most one Scout, Builder, Coder (Writer), and Reviewer. Plan one initial launch per selected role, at most four initial attempts, plus normally zero and at most one declared same-role replacement attempt for the whole task. Do not fill unused slots merely because they exist. Plan mandatory review in its own slot. Allow one active writing owner, prohibit overlapping Builder/Coder write turns, and prohibit nested delegation.
 
 Update the existing task record after scope freeze and each meaningful phase with the compact decision/route evidence, accepted inputs, worker state, changed artifacts, checks, unresolved uncertainty, and next safe action. Keep retained evidence portable and concise; omit raw logs and local identifiers.
 
@@ -33,7 +33,7 @@ Track `planned -> running -> done | attention -> closed`. `done` means a return 
 
 Before task work, check the selected launch adapter and the worker's ticket:
 contract, task kind, requested model/effort, effective permission boundary,
-scope and acceptance must agree. Record configured and observed pairs
+scope, role-roster state, writing owner, and acceptance must agree. Record configured and observed pairs
 separately; stop on an observed mismatch and never repair it by rewriting the
 planned pair. A fresh route may be declared before fresh work, but the
 mismatched attempt still consumes its worker/attempt budget and does not
@@ -45,11 +45,12 @@ candidate, require its immediately-pre-launch fresh quota preflight; a prior
 snapshot does not authorize a new Spark launch. After a confirmed quota
 termination or rejected launch, inspect partial side effects and writer state
 before a real Luna/Terra handoff; unknown/time-out state never authorizes a
-replacement. Failed workers still consume the total budget. A reset time does
+replacement. Failed workers still consume the attempt budget; a replacement
+uses the declared same-role allowance and never overlaps its predecessor. A reset time does
 not justify interrupting a healthy fallback or claiming the blocked model has
 recovered.
 
-If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a genuinely new worker within the remaining budget; when a lower lane needs compact fresh context, make that handoff real.
+If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a declared same-role replacement within the remaining attempt budget; when a lower lane needs compact fresh context, make that handoff real.
 
 Stop a worker after two materially different failed attempts and return the
 evidence to Chief. Reuse does not grant unlimited retries or broaden ownership.

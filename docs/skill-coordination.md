@@ -74,19 +74,29 @@ The task-kind matrix in the [host routing adapter](../.agents/skills/cost-effici
 is the single model/effort starting policy. Code mapping, general evidence, and
 system mapping can all use Scout with different models; changing to code edits
 changes the execution contract and cannot silently grant write permissions to
-a Scout. The four canonical profiles are explicit-pair host adapters, not new
-specialist Skills or additional worker slots. A launch ticket binds the task
-kind, contract, assurance, profile, requested pair, scope, checks, and remaining
-budget; actual controls and observed receipts establish whether it was honored.
-An observed mismatch stops the attempt; planned values are never rewritten to
-fit it. Reserve required review before discovery so a three-worker chain is not
-implied. Each prospective Spark launch receives a fresh authoritative preflight
-when the host exposes one, retaining only the normalized window summary and
-decision. A blocked result selects the matrix's fitting Luna/Terra alternative;
-missing telemetry remains `unknown`. Confirm terminal state and inspect side
-effects before mid-task handoff; neither quota failure nor a passed reset time
-expands the worker budget. Reviewer has no universal Sol floor: routine review
-defaults to Terra/medium, while consequential S3/S4 review requires Sol/high.
+a Scout. The four canonical profiles form four role slots: Scout, Builder,
+Coder (the implementation Writer), and Reviewer. At most one thread per role is
+open, roles are launched only for genuine bounded work, and Builder/Coder write
+turns are serialized under one named writing owner. A launch ticket binds the
+task kind, contract, assurance, profile, requested pair, scope, checks, roster
+state, writing owner, and attempt budget; actual controls and observed receipts
+establish whether it was honored. An observed mismatch stops the attempt;
+planned values are never rewritten to fit it. Each prospective Spark launch
+receives a fresh authoritative preflight when the host exposes one, retaining
+only the normalized window summary and decision. A blocked result selects the
+matrix's fitting Luna/Terra alternative; missing telemetry remains `unknown`.
+Confirm terminal state and inspect side effects before a same-role replacement;
+neither quota failure nor a passed reset time creates another simultaneous
+slot. The maintained Codex Reviewer route starts at Sol/high for routine and
+consequential review, with Astra reserved for a documented Sol/high shortfall.
+
+Chief is a thin control plane rather than a fifth general-purpose worker. It
+retains intent, non-goals, unresolved scientific or architectural choices,
+assurance, acceptance, and final synthesis. Substantive discovery, system
+organization, frozen implementation, repetitive test/log work, and independent
+review leave Chief when their role is available. After each return, only the
+accepted evidence, current artifacts, unresolved choices, verification, and
+next safe action remain in Chief context.
 
 ## Method ownership
 

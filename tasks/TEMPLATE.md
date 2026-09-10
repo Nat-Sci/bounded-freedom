@@ -13,7 +13,7 @@
 - Task kind and expected output: select from the canonical host matrix or name the concrete unit and justify a different shape
 - Assurance: S0–S4, classified by the highest plausible consequence
 - Current phase and active context slice:
-- Execution contract: direct, Scout, Coder, Builder, or Reviewer; identify each planned worker separately
+- Execution contract: direct, Scout, Builder, Coder (implementation Writer), or Reviewer; identify each planned worker separately
 - Chief planned capability lane: fast, balanced, strong, frontier, UI-selected, or unknown
 - Chief planned model: exact value, current UI selection, inherited, or unknown
 - Chief planned reasoning effort: exact value, current UI selection, inherited, or unknown
@@ -30,10 +30,14 @@
 - Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch and never rewrite planned values to fit an observed mismatch
 - User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
 - Balanced opportunity: eligible, excluded with reason, or not applicable
-- Planned workers: distinct workers, initial spawn attempts, and retry allowance
-- Actual workers: distinct workers, spawn attempts, retries, accepted/rejected returns, and host close status (confirmed, unsupported, or unknown)
-- Worker-budget rationale:
-- Reserved independent-review slot and discovery plan: do not require a three-worker Scout/writer/Reviewer chain
+- Planned role roster: needed or omitted Scout, Builder, Coder/Writer, and Reviewer; at most one open thread per role and four total
+- Planned workers: one initial launch per selected role, at most four initial attempts, and normally zero or one declared same-role replacement attempt
+- Actual workers: per-role thread, configured and observed pair, spawn attempts, retries, accepted/rejected returns, and host close status (confirmed, unsupported, or unknown)
+- Current writing owner and handoff checkpoint: Chief, Builder, Coder/Writer, or none; Builder/Coder write turns must not overlap
+- Chief-retained responsibilities: intent, non-goals, unresolved scientific or architectural decisions, assurance, acceptance, and final synthesis
+- Chief-offloaded responsibilities: discovery, coordination, bounded implementation, routine test/log work, and independent review assigned to named roles
+- Worker-budget rationale: why each role is needed and why omitted roles are unnecessary; do not fill the roster for completeness
+- Independent-review plan: coherent evidence checkpoint, acceptance claim, Reviewer Sol/high route, and any documented Astra escalation condition
 - Owned scope:
 - Verification:
 - Stop conditions:
