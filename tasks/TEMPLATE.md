@@ -57,6 +57,18 @@
 - Usage-comparison scope when applicable: machine/host, project filter, deployment boundary, current/mixed/stale-or-unknown cohort, actual-launch evidence, internal auto-review treatment, and token coverage
 - Deviations:
 
+### Milestone consolidation (substantial milestones only)
+
+- Milestone scope and status: `incomplete` for missing checks/review or scope-blocking questions; `verified` after checks and applicable review pass; `accepted` only with the authorized decision below
+- Acceptance decision and authority: supporting evidence, accepting role, and explicit human acceptance for S4; seal only the accepted boundary
+- Artifact/code/data/configuration version or fingerprint when available:
+- Checks, acceptance evidence, and compact relative evidence index:
+- Frozen decision or promoted rule and its scope:
+- Negative evidence, unresolved questions, and deferred items:
+- Tooling decision: `reuse`, `extract`, `defer`, or `not-needed`; for extraction, input/output contract, errors/limits, and verification
+- Reopen record when new evidence/version invalidates a premise: affected boundary, preserved historical acceptance, and bounded re-check
+- Next bounded handoff and writing owner: objective/current rules, accepted facts with pointers, active artifact version, validation, unresolved decisions, next safe action; retired bulky context is not deleted data or proof of host compaction
+
 ## Verification and review
 
 - Checks and comparisons:

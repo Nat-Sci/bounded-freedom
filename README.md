@@ -263,6 +263,23 @@ Astra receives the smallest phase packet that preserves intent, accepted evidenc
 
 The full portable protocol is in [hierarchical routing and cost evaluation](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md). Current model IDs and availability handling remain in the [host mapping](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
 
+## Seal milestones: turn history into reusable assets
+
+Consolidate a bounded research or engineering outcome before its next dependent
+phase, or before changing the active goal, method, or artifact/interface
+contract—not after every command. Summarize the result, verify it, record the
+authorized acceptance, and seal its evidence before opening a wider boundary.
+Missing checks or scope-blocking questions stay visible; unrelated questions can
+be deferred. S4 still requires explicit human acceptance.
+
+Keep one compact task-record index of source artifacts, scoped decisions and
+rules, checks, and the next bounded handoff. Reuse or extract tested tools for
+stable repeated work when authorized; do not turn each milestone into a tooling
+project. Carry those assets and their evidence pointers forward, not duplicate
+logs or whole code snapshots. A summary does not itself clear live host context.
+The [milestone-consolidation protocol](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md#milestone-consolidation)
+defines retention, reopening, and conditional tooling decisions.
+
 ## General, six research Skills, and one mathematical entry
 
 | Task method | Chief | Scout, usually fast | Coder, usually fast | Builder, usually balanced | Reviewer, usually strong |
