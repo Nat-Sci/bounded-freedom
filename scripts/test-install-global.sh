@@ -328,11 +328,11 @@ assert_contains 'max_concurrent_threads_per_session = 4' "$repo_root/.codex/conf
 orchestration_skill="$repo_root/.agents/skills/cost-efficient-orchestration/SKILL.md"
 host_routing="$repo_root/.agents/skills/cost-efficient-orchestration/host-model-routing.md"
 route_evals="$repo_root/.agents/skills/cost-efficient-orchestration/routing-evals.md"
-assert_contains 'run the host adapter' "$orchestration_skill" "orchestration requires the Spark candidate preflight"
-assert_contains 'immediately before every prospective Spark worker launch' "$host_routing" "host routing refreshes quota before each Spark launch"
-assert_contains '`available`:' "$host_routing" "Spark preflight defines available status"
-assert_contains '`blocked`:' "$host_routing" "Spark preflight defines blocked status"
-assert_contains '`unknown`:' "$host_routing" "Spark preflight defines unknown status"
+assert_contains 'Luna / medium for straightforward flow; Terra / medium for interacting state or cross-module constraints' "$host_routing" "production task matrix routes simple and coupled code maps"
+assert_contains 'Coder ordinary bounded implementation' "$host_routing" "production task matrix covers ordinary code reasoning"
+assert_contains 'Terra / medium' "$host_routing" "production task matrix retains Terra medium route"
+assert_contains 'telemetry is `unknown`, not blocked' "$host_routing" "production routing keeps missing quota unknown"
+assert_contains 'Do not preflight a nonexistent' "$host_routing" "production routing skips retired-candidate preflight"
 assert_contains 'The maintained Codex Reviewer route starts at Reviewer / Sol / high' "$host_routing" "Reviewer policy starts independent review at Sol/high"
 assert_contains 'do not rewrite the planned model/effort to fit it' "$host_routing" "runtime mismatch cannot rewrite the route ticket"
 assert_contains 'not an `AstraReviewer` role' "$host_routing" "Astra review remains an evidence-gated Reviewer escalation"
@@ -363,7 +363,7 @@ if command -v sqlite3 >/dev/null 2>&1; then
 CREATE TABLE threads (id TEXT PRIMARY KEY, model TEXT, reasoning_effort TEXT, agent_role TEXT, created_at INTEGER);
 CREATE TABLE thread_spawn_edges (parent_thread_id TEXT, child_thread_id TEXT, status TEXT);
 INSERT INTO threads VALUES ('11111111-1111-1111-1111-111111111111', 'gpt-5.6-sol', 'high', NULL, 1);
-INSERT INTO threads VALUES ('22222222-2222-2222-2222-222222222222', 'gpt-5.3-codex-spark', 'medium', 'Coder', 2);
+INSERT INTO threads VALUES ('22222222-2222-2222-2222-222222222222', 'historical-test-model', 'medium', 'Coder', 2);
 INSERT INTO threads VALUES ('33333333-3333-3333-3333-333333333333', 'gpt-5.6-terra', 'medium', NULL, 3);
 INSERT INTO thread_spawn_edges VALUES ('11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222', 'open');
 SQL
@@ -381,7 +381,7 @@ SQL
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$runtime_probe" > "$test_root/runtime-current.out"
   assert_contains '"policy_freshness":"current"' "$test_root/runtime-current.out" "runtime probe marks a post-deployment Chief current"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
-  assert_contains '"scope":"child","role":"Coder","model":"gpt-5.3-codex-spark","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe reports the host-recorded child pair"
+  assert_contains '"scope":"child","role":"Coder","model":"historical-test-model","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe preserves a historical host-recorded child pair"
 else
   skip "sqlite3 is unavailable for runtime metadata regression coverage"
 fi

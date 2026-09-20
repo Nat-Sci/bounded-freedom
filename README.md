@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.5 — Astra Edition**.
+Current package: **v0.6.6 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -144,8 +144,8 @@ cached input is already part of input tokens.
 
 Chief first identifies the **task kind**, then selects a capable model and
 reasoning effort, and only then resolves a host launch profile. For example,
-code mapping can use a read-only Spark Scout; it does not need Coder's write
-permissions. General evidence and cross-module synthesis can use different
+code mapping uses a read-only Luna or Terra Scout; it does not need Coder's
+write permissions. General evidence and cross-module synthesis can use different
 Scout models, and routine engineering review is distinguished from consequential
 review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 own these starting choices; they are policies to validate, not measured savings.
@@ -189,20 +189,14 @@ to accepted evidence, current artifacts, remaining choices, verification, and
 the next safe action. This reduces Chief context pressure without transferring
 its accountability.
 
-When task-kind selection makes Spark the candidate, the Codex adapter first
-checks whether the actual worker API can launch its exact model/effort with the
-needed permission and fork controls, then runs a fresh Spark-only quota
-preflight immediately before each supported prospective launch,
-using the host's authoritative usage receipt when available. It retains only a
-normalized status and window summary. Missing telemetry remains `unknown`; it
-is never rewritten as available or exhausted. A catalog/account Spark option
-without worker-launch support is `unsupported`, not quota exhaustion. When
-Spark is blocked or unsupported, use the selected Coder subtype's fallback or
-the Scout code-map fallback in the canonical matrix. Quota exhaustion does not justify a Sol/Astra
-escalation, weaker scientific review, or an undeclared same-role replacement. After a
-mid-task block, inspect partial writes and process state before a real handoff.
-Do not interrupt a healthy fallback merely because Spark's reset time passes.
-See [Spark preflight and fallback](.agents/skills/cost-efficient-orchestration/host-model-routing.md#spark-quota-preflight-and-fallback).
+The Codex adapter checks whether the actual worker API can launch the selected
+exact model/effort with the needed permission and fork controls. A catalog or
+account entry without worker-launch support is `unsupported`, not quota
+exhaustion. Authoritative quota evidence is used only when available for a
+supported candidate: a known applicable limit blocks it, while missing telemetry
+remains `unknown` and does not block it. Quota does not justify a Sol/Astra
+escalation, weaker scientific review, or an undeclared same-role replacement.
+See [launch capability and quota evidence](.agents/skills/cost-efficient-orchestration/host-model-routing.md#launch-capability-and-quota-evidence).
 
 Reviewer is an independence contract. In this Codex package, both routine and
 consequential Reviewer work starts at Sol/high; trivial objective checks should
@@ -229,15 +223,14 @@ The Astra Edition routes phases rather than assigning one model to a whole task:
 deterministic preparation
         ↓
 Chief control phase
-        ├── Luna: general evidence and mechanical work
-        ├── Spark: frozen code mapping and narrow edit-test loops
-        ├── Terra: system mapping, stable synthesis, coordinated implementation
+        ├── Luna: inventory, evidence maps, fixed transforms, and straightforward local code
+        ├── Terra: system mapping, ordinary code reasoning, stable synthesis, coordinated implementation
         ├── Sol: ambiguous judgment and independent review
         └── Astra: exceptional cross-tool coherence or documented shortfall
                           ↓
                  compact accepted checkpoint
                           ↓
-                 return to Terra, Spark, or Luna
+                 return to Terra or Luna
 ```
 
 Before non-review work starts on Sol or Astra, the dispatcher checks whether
@@ -247,7 +240,7 @@ Scout and Reviewer retain their own slots and Coder remains available for a
 frozen edit-test unit. Chief handles only the unresolved decision or acceptance
 check. Known commands and
 obvious micro-edits run directly. A frozen, separable edit-test loop leaves a
-Sol or Astra Chief for Coder/Spark even when Chief has no parallel work; the
+Sol or Astra Chief for the fitting Coder pair even when Chief has no parallel work; the
 saving comes from retiring implementation context. A direct-work exception
 records the actual handoff, tool, or availability cost; merely labeling a phase
 "balanced" does not change its runtime model. General volume stays on Luna.
@@ -408,7 +401,11 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.5 adds finer Coder and Builder starting policies under their
+Version 0.6.6 refreshes the current launch matrix for Luna, Terra, Sol, and
+Astra guidance, removes retired-model routes and candidate-specific polling, and
+keeps explicit model/effort, reviewer Sol/high, runtime mismatch, and stale-host
+rules unchanged. Source edits do not make an already running host adopt this
+policy. Version 0.6.5 adds finer Coder and Builder starting policies under their
 existing parent task kinds without changing role, assurance, escalation, or
 lifecycle rules. Version 0.6.4 checks actual worker-launch capabilities before quota, schedules
 the four-role roster within the live host limit, and separates Chief goal
@@ -425,7 +422,7 @@ launch all four roles. Version 0.6.2 added explicit policy-freshness receipts, a
 deployment marker, stale/current/mixed usage cohorts, and a mandatory installer
 warning that existing tasks do not automatically adopt an update. It also
 separates all-machine from project-filtered statistics, actual launches from
-planned routes, and launch counts from token consumption. Version 0.6.1 added a mandatory immediately-prelaunch Spark quota preflight,
+planned routes, and launch counts from token consumption. Version 0.6.1 added
 privacy-minimized quota receipts, explicit `available`/`blocked`/`unknown`
 semantics, and a non-retroactive Reviewer mismatch rule. It retains the
 quota-aware task-shaped model and effort selection introduced in v0.6.0, with
@@ -433,7 +430,7 @@ four unpinned canonical profiles and no fixed-model compatibility set, plus the 
 hierarchical control plane, six research
 method contracts, one discoverable mathematical entry with three on-demand
 method modules, model and effort fields directly in `CHIEF DECISION`, compact
-phase handoffs, a Terra opportunity gate, a Spark fast-code route, an optional
+phase handoffs, a Terra opportunity gate, bounded code execution, an optional
 reversible Codex system-proxy adapter, thin host adapters, and a tested
 installer with safe legacy-link migration and secure-readable role copies. The efficiency audit removes
 duplicated route banners, clarifies fixed-profile precedence and actual lane

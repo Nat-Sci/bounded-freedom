@@ -85,16 +85,14 @@ turns are serialized under one named writing owner. A launch ticket binds the
 task kind, contract, assurance, profile, requested pair, scope, checks, roster
 state, writing owner, and attempt budget; actual controls and observed receipts
 establish whether it was honored. An observed mismatch stops the attempt;
-planned values are never rewritten to fit it. Each prospective Spark launch
-first verifies that the worker API can honor the exact model, effort,
-permissions, and fork controls: catalog/account presence without launch support
-is `unsupported`, not quota exhaustion. Each supported prospective Spark launch
-receives a fresh authoritative preflight when the host exposes one, retaining
-only the normalized window summary and decision. A blocked result selects the
-matrix's fitting Luna/Terra alternative; missing telemetry remains `unknown`.
-Confirm terminal state and inspect side effects before a same-role replacement;
-neither quota failure nor a passed reset time creates another simultaneous
-slot. The maintained Codex Reviewer route starts at Sol/high for routine and
+planned values are never rewritten to fit it. Before launch, the worker API must
+honor the exact model, effort, permissions, and fork controls: catalog/account
+presence without launch support is `unsupported`, not quota exhaustion. Use
+authoritative quota evidence only when available for a supported candidate; a
+known applicable limit blocks it, while missing telemetry remains `unknown` and
+does not preemptively block it. Confirm terminal state and inspect side effects
+before a same-role replacement; neither quota evidence nor a timeout creates
+another simultaneous slot. The maintained Codex Reviewer route starts at Sol/high for routine and
 consequential review, with Astra reserved for a documented Sol/high coherence
 shortfall; ordinary defects, missing evidence, profile mismatch, or `BLOCK`
 return to repair first. The four-role policy maximum is reduced to the actual

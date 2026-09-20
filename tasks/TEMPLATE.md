@@ -26,8 +26,8 @@
 - Selection reason: limiting factor, why the cheaper/simpler route is inadequate when escalating, and why the chosen effort is sufficient
 - Escalation evidence: narrow unresolved question, evidence already checked, missing capability, expected extra check, and whether depth supports higher Sol effort or coherence supports Astra/medium
 - Host launch adapter: one current unpinned role; actual explicit model/effort controls, effective permissions, and unsupported/stale-session boundary
-- Host capability check: exact model IDs, supported efforts, effective permissions, fork controls, actual host capacity or `unknown`; classify unavailable Spark launch control as `unsupported`, separate from quota
-- Availability and fallback: for a Spark candidate, fresh authoritative preflight source/check time/status, every applicable window's used percent/duration/reset time, normalized decision, or `unknown`; selected Luna/Terra alternative, side-effect checkpoint, and remaining worker/review budget; never retain raw quota payloads or account/auth/reset-credit identifiers
+- Host capability check: exact model IDs, supported efforts, effective permissions, fork controls, actual host capacity or `unknown`; classify an unavailable selected pair as `unsupported`, separate from quota
+- Availability and fallback: authoritative quota source/freshness, applicable windows and decision when available, or `unknown`; a known applicable limit is blocked, while unknown is not blocked; record any separately selected supported route, side-effect checkpoint, and remaining worker/review budget without raw quota payloads or account/auth/reset-credit identifiers
 - Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
 - Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch and never rewrite planned values to fit an observed mismatch
 - User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`

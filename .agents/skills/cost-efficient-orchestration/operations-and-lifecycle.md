@@ -52,15 +52,15 @@ mismatched attempt still consumes its worker/attempt budget and does not
 satisfy the original review. An unknown runtime value stays unknown and cannot
 establish a successful runtime-routing test.
 
-Apply the host reference's availability filter before launch. When Spark is the
-candidate, require its immediately-pre-launch fresh quota preflight; a prior
-snapshot does not authorize a new Spark launch. After a confirmed quota
-termination or rejected launch, inspect partial side effects and writer state
-before a real Luna/Terra handoff; unknown/time-out state never authorizes a
-replacement. Failed workers still consume the attempt budget; a replacement
-uses the declared same-role allowance and never overlaps its predecessor. A reset time does
-not justify interrupting a healthy fallback or claiming the blocked model has
-recovered.
+Apply the host reference's exact launch-capability filter before launch. A
+selected pair the worker API cannot honor is `unsupported`, not quota
+exhaustion. Use authoritative quota evidence only when available for a supported
+candidate: a known applicable limit is blocked, and absent telemetry is unknown
+without blocking the pair. After a confirmed termination or rejected launch,
+inspect partial side effects and writer state before a real handoff;
+unknown/time-out state never authorizes a replacement. Failed workers still
+consume the attempt budget; a replacement uses the declared same-role allowance
+and never overlaps its predecessor.
 
 If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a declared same-role replacement within the remaining attempt budget; when a lower lane needs compact fresh context, make that handoff real.
 

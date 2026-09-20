@@ -419,7 +419,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
             home / "state_6.sqlite",
             "chief-f",
             chief_rollout.name,
-            [("child", child_rollout.name, "gpt-5.3-codex-spark", "medium", "Coder")],
+            [("child", child_rollout.name, "historical-test-model", "medium", "Coder")],
         )
         output = run_snapshot(home, "chief-f", "2026-01-06T00:35:00Z")
         self.assertEqual("partial", output["status"])
@@ -452,7 +452,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
             home / "state_7.sqlite",
             "chief-text",
             chief_rollout.name,
-            [("child-text", child_rollout.name, "gpt-5.3-codex-spark", "medium", "Coder")],
+            [("child-text", child_rollout.name, "historical-test-model", "medium", "Coder")],
         )
         output = run_snapshot(home, "chief-text", "2026-01-07T00:10:00Z", output_format="text")
         lines = output.splitlines()

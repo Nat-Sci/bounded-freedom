@@ -12,6 +12,14 @@ The same probe may compare a managed deployment marker with the current task sta
 
 For Codex custom agents, a file's `model` or `model_reasoning_effort` takes precedence over explicit launch values, which take precedence over configured defaults and parent inheritance. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). The current package therefore omits both keys from all four role files and requires both explicit launch controls. A loaded host that still fixes a pair is not made dynamic by editing a source file; do not send conflicting overrides or claim the new adapter is active.
 
+Checked 2026-09-20 against [Models](https://learn.chatgpt.com/docs/models) and
+[Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents):
+Luna is the starting lane for clear repeatable work, Terra for everyday
+reasoning and tool use, Sol for complex open-ended judgment, and Astra for the
+hardest end-to-end work. This is current guidance and capability availability,
+not a measured performance change or saving guarantee. Revalidate exact model
+IDs, efforts, and launch controls when the host or documentation changes.
+
 ## Canonical task-kind matrix
 
 Choose the task kind from the requested output, not a keyword such as "code"
@@ -20,17 +28,17 @@ the contracts and link here instead of defining competing model tables. The
 pairs are local starting policies, not measured quality or price guarantees.
 Direct deterministic commands and trivial micro-edits still need no worker.
 
-| Task kind | Bounded output | Contract | Starting model / effort | When Spark is blocked |
-| --- | --- | --- | --- | --- |
-| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-5.6-luna` / low | Unchanged |
-| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-5.6-luna` / medium | Unchanged |
-| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-5.3-codex-spark` / medium | Luna / medium for straightforward flow; Terra / medium for interacting state or constraints |
-| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium | Unchanged |
-| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium | Unchanged |
-| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | See Coder subtypes below | See Coder subtypes below |
-| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | See Builder subtypes below | See Builder subtypes below |
-| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-sol` / high | Unchanged |
-| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high | Unchanged; never weaken this gate for quota |
+| Task kind | Bounded output | Contract | Starting model / effort |
+| --- | --- | --- | --- |
+| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-5.6-luna` / low |
+| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-5.6-luna` / medium |
+| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | Luna / medium for straightforward flow; Terra / medium for interacting state or cross-module constraints |
+| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium |
+| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium |
+| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | See Coder subtypes below |
+| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | See Builder subtypes below |
+| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-sol` / high |
+| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high |
 
 Task method remains separate: for example, a mathematical Skill can request a
 code map, a bounded analysis, or a later frozen edit. Ordinary source mapping
@@ -42,12 +50,11 @@ cannot substitute for consequential review because the changed diff is small.
 The same task kind can justify another pair when evidence identifies a limiting
 factor: simple repeated structure may need less effort; coupled logic may need
 balanced capability; a documented reasoning shortfall may need strong or
-frontier capability. Keep the contract and authority unchanged. A read-only
-Spark assignment uses Scout, never a writable Coder merely to reach Spark.
-Luna and Terra alternatives are selected by the same work-unit boundary, not
-by trying every model in sequence. Code with state transitions, interacting
-invariants, or repeated failed checks starts Terra when Spark is unavailable;
-a truly trivial edit remains direct. Changing the model alone does not turn a
+frontier capability. Keep the contract and authority unchanged. Luna and Terra
+are selected by the same work-unit boundary, not by trying every model in
+sequence. Code with state transitions, interacting invariants, or repeated
+failed checks starts Terra; a truly trivial edit remains direct. Changing the
+model alone does not turn a
 narrow Coder into a broader Builder or grant write access to Scout.
 
 ## Coder and Builder subtypes
@@ -59,14 +66,15 @@ direct. These are starting policies, not a model-trial ladder, automatic
 upgrade, or measured cost guarantee; unresolved scientific or architectural
 choices return to Chief.
 
-| Parent kind | Subtype | Frozen boundary | Starting model / effort | Spark blocked or unsupported |
-| --- | --- | --- | --- | --- |
-| `code-edit` | Coder template/fixed-transform | Repeated template or fixed transform with targeted checks | Spark / low | Luna / low |
-| `code-edit` | Coder local implementation | Narrow local implementation with straightforward logic | Spark / medium | Luna / medium |
-| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | Terra / medium; high only for explicit multiple interacting state/gradient/numerical constraints | Unchanged |
-| `coordinated-build` | Builder template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | Luna / medium | Unchanged |
-| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled implementation boundary | Terra / medium | Unchanged |
-| `coordinated-build` | Builder stateful integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | Terra / high | Unchanged |
+| Parent kind | Subtype | Frozen boundary | Starting model / effort |
+| --- | --- | --- | --- |
+| `code-edit` | Coder fixed transform | Repeated fixed transform with targeted checks | Luna / low |
+| `code-edit` | Coder straightforward local implementation | Completely specified local implementation with straightforward logic | Luna / medium |
+| `code-edit` | Coder ordinary bounded implementation | Branches or API semantics require ordinary implementation reasoning | Terra / medium |
+| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | Terra / medium; high only for justified multiple interacting invariants |
+| `coordinated-build` | Builder frozen template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | Luna / medium |
+| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled implementation boundary | Terra / medium |
+| `coordinated-build` | Builder stateful recovery integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | Terra / high |
 
 Coder versus Builder depends on narrow editing versus ownership and integration,
 not the number of files. Template integration does not invent interfaces; it
@@ -76,39 +84,25 @@ The maintained Codex Reviewer route starts at Reviewer / Sol / high for both
 routine and consequential review. This is a local quality preference, not a
 claim that every host must map Reviewer to Sol or that every task needs a
 Reviewer. Astra remains an evidence-gated escalation inside the same contract
-after a documented Sol/high coherence or judgment shortfall; it is not a fifth
-role. A cheaper executor may run objective checks, but it does not become the
+after a documented Sol/high cross-domain or cross-tool coherence shortfall; it
+is not a fifth role. A cheaper executor may run objective checks, but it does not become the
 independent Reviewer or satisfy an S3/S4 gate.
 
-## Spark quota preflight and fallback
+## Launch capability and quota evidence
 
-Run this preflight only after task-kind selection and launch-capability filtering make Spark the candidate and immediately before every prospective Spark worker launch. First verify the current worker API can supply the exact Spark model, selected task-pair effort, required permissions, and any needed fork control. An app catalog or account quota can include Spark while the actual worker API cannot launch it; classify that result as `unsupported`, not quota exhausted, and choose the fitting Luna/Terra boundary. Do not poll before unrelated work or during a healthy worker. On Codex, use the authoritative host
-quota read when available (`get_usage_limits` or app-server
-`account/rateLimits/read`). Match the Spark bucket through the host-reported
-stable label/model mapping, never a versioned opaque internal ID.
+After choosing the task pair, verify that the current worker API can supply its
+exact model and effort, required permissions, and any needed fork control. A
+catalog or account entry is not worker-launch authority: inability to honor the
+pair is `unsupported`, not quota exhaustion. Do not preflight a nonexistent
+candidate or poll merely because a task is starting.
 
-Retain only the source, checked-at/freshness, status, each window's used
-percent/duration/reset time, and resulting decision. Do not retain raw payloads,
-account IDs, authentication fields, or credit/reset identifiers. Classify the
-result as follows:
-
-1. `blocked`: a limit-reached flag applies, or any applicable returned Spark
-   window has numeric usage at least 100%.
-2. `available`: the Spark bucket is found, every applicable window has numeric
-   usage below 100%, and no reached flag applies.
-3. `unknown`: the bucket or required fields are missing, or the read errors.
-
-For `available`, launch the explicit Spark pair selected by the task or subtype.
-For `blocked` or `unsupported`, do not waste a Spark attempt: use the selected
-Coder subtype's fallback, or the unchanged Scout `code-map` fallback in the
-canonical matrix. A five-hour block remains blocking even when a weekly window is
-available. For `unknown`, never call the result quota-informed or invent a
-block: choose Spark only when the declared risk and attempt budget can absorb a
-quota rejection; otherwise conservatively choose the fitting Luna/Terra route
-and record that rationale. A preflight snapshot never authorizes a later launch;
-refresh it for each separate prospective Spark launch. If a launch is rejected
-or quota interrupts a worker, follow the partial-side-effect and timeout
-protocol below before any handoff.
+When authoritative quota data is available for a supported candidate, retain
+only source, freshness, applicable windows, and the decision. A known applicable
+limit is `blocked` only when an applicable reached flag is explicit or any
+applicable numeric usage is at least 100%; absent, incomplete, or failed quota
+telemetry is `unknown`, not blocked. Unknown quota must not prevent an otherwise
+supported selected pair. Do not redeem resets, purchase capacity, or start
+monitoring without separate authorization.
 
 Change the actual model/effort only with supported host controls or one declared
 same-role replacement attempt inside the four-role roster, retaining ownership,
@@ -118,10 +112,7 @@ runs before replacement. A timeout does not free the role. Without host capacity
 or remaining retry allowance, finish only minimal safe direct work or report the
 needed control decision for substantial remaining work; never occupy another
 role under a false label. A follow-up prompt cannot relabel the same model into
-a fallback. Keep a healthy fallback on its unit even if Spark's reset time
-passes; reconsider Spark only for a later eligible unit with fresh preflight
-evidence. Never redeem a reset, buy quota, or wait/monitor indefinitely without
-applicable user authorization.
+another route.
 
 The target is low expected cost per accepted unit, including context, handoff,
 rework, and verification. Model counts, unused quota, and incomplete local token
@@ -135,7 +126,7 @@ criteria, not automatic upgrades or a substitute for checking host support:
 - `low`: fixed fields or genuinely mechanical work with immediate checks.
 - `medium`: ordinary bounded mapping, implementation, or stable synthesis.
 - `high`: multiple interacting constraints, difficult diagnosis, or consequential independent review with a stated need.
-- `xhigh`, `max`, or `ultra`: an explicit user choice or documented unresolved difficulty after a lower-effort/lower-lane attempt; only if that model and host support it. Do not copy Chief's setting into all workers.
+- `xhigh`, `max`, or `ultra`: an explicit user choice or documented unresolved difficulty after a lower-effort/lower-lane attempt; only if that model and host support it. Max and Ultra are not normal defaults. Do not copy Chief's setting into all workers.
 
 More files, a long history, model novelty, or unused quota do not by themselves
 justify higher effort. First reduce the work packet and resolve specification
@@ -176,7 +167,7 @@ second supported routing system; modified or foreign files remain protected.
 Before launch:
 
 1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, role-roster state, writing owner, and remaining initial/replacement attempt budget.
-2. Inspect the current host's advertised exact model IDs, supported efforts, effective permissions, and fork controls before quota preflight. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
+2. Inspect the current host's advertised exact model IDs, supported efforts, effective permissions, and fork controls before launch. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
 4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on an observed mismatch; do not rewrite the planned model/effort to fit it. A fresh route may be declared before fresh work, but the mismatched attempt does not satisfy the original review and still counts toward worker/attempt budget. Missing runtime metadata stays unknown, not a fabricated match.
 5. If necessary controls are absent, distinguish unsupported launch capability from model quota. A different available model must still use enforceable permissions and actual controls. Otherwise continue only minimal direct work when appropriate or report the unsupported boundary. Never satisfy S3/S4 review with a cheap untyped fallback, and never claim source edits switched a running session.
@@ -223,7 +214,7 @@ existing sessions. See the [installer](../../../scripts/install-global.sh) and
 
 ## Capability gates
 
-Use fast for clear reversible volume, balanced for stable synthesis or related-file coordination, strong for unresolved judgment or consequential independent review, and frontier only for exceptional end-to-end work or a documented lower-lane shortfall. S3/S4 adds review and human acceptance as applicable; it does not choose Astra. Before non-review strong or frontier work, apply the balanced gate. After the hard boundary is frozen, return predictable work to Terra, Spark, or Luna.
+Use Luna for clear reversible volume, Terra for stable synthesis or related-file coordination, Sol for unresolved judgment or consequential independent review, and Astra only for exceptional end-to-end work or a documented lower-lane shortfall. S3/S4 adds review and human acceptance as applicable; it does not choose Astra. Before non-review Sol or Astra work, apply the balanced gate. After the hard boundary is frozen, return predictable work to Terra or Luna.
 
 ## GPT-6 Astra boundary
 
