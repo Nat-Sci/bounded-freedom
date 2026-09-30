@@ -323,14 +323,20 @@ $expected_name_text"
 else
   skip "python3 with tomllib is unavailable for role TOML semantic checks"
 fi
-assert_contains 'default_subagent_model = "gpt-5.6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
+assert_contains 'default_subagent_model = "gpt-6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
 assert_contains 'max_concurrent_threads_per_session = 4' "$repo_root/.codex/config.toml" "Codex permits the four-role concurrency ceiling"
 orchestration_skill="$repo_root/.agents/skills/cost-efficient-orchestration/SKILL.md"
 host_routing="$repo_root/.agents/skills/cost-efficient-orchestration/host-model-routing.md"
 route_evals="$repo_root/.agents/skills/cost-efficient-orchestration/routing-evals.md"
-assert_contains 'Luna / medium for straightforward flow; Terra / medium for interacting state or cross-module constraints' "$host_routing" "production task matrix routes simple and coupled code maps"
-assert_contains 'Coder ordinary bounded implementation' "$host_routing" "production task matrix covers ordinary code reasoning"
-assert_contains 'Terra / medium' "$host_routing" "production task matrix retains Terra medium route"
+if command -v python3 >/dev/null 2>&1 && python3 -c 'import tomllib' >/dev/null 2>&1; then
+  python3 "$repo_root/scripts/test-model-routing.py" > "$test_root/model-routing.out" 2>&1 || {
+    cat "$test_root/model-routing.out" >&2
+    fail "canonical route and managed configuration checks"
+  }
+  pass "canonical route and managed configuration checks"
+else
+  skip "python3 with tomllib is unavailable for route semantic checks"
+fi
 assert_contains 'telemetry is `unknown`, not blocked' "$host_routing" "production routing keeps missing quota unknown"
 assert_contains 'Do not preflight a nonexistent' "$host_routing" "production routing skips retired-candidate preflight"
 assert_contains 'The maintained Codex Reviewer route starts at Reviewer / Sol / high' "$host_routing" "Reviewer policy starts independent review at Sol/high"

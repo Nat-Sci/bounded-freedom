@@ -7,5 +7,5 @@ max_depth = 1
 # Defensive fallback for untyped calls only. Every typed role launch must
 # select and pass an explicit model and reasoning effort; these defaults do
 # not define intended typed routing or consequential independent review.
-default_subagent_model = "gpt-5.6-luna"
+default_subagent_model = "gpt-6-luna"
 default_subagent_reasoning_effort = "low"

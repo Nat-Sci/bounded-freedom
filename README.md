@@ -2,7 +2,7 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.6.6 — Astra Edition**.
+Current package: **v0.7.0 — Astra Edition**.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -144,7 +144,7 @@ cached input is already part of input tokens.
 
 Chief first identifies the **task kind**, then selects a capable model and
 reasoning effort, and only then resolves a host launch profile. For example,
-code mapping uses a read-only Luna or Terra Scout; it does not need Coder's
+code mapping uses a read-only Luna or GPT-6.1 Sol Scout; it does not need Coder's
 write permissions. General evidence and cross-module synthesis can use different
 Scout models, and routine engineering review is distinguished from consequential
 review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
@@ -201,7 +201,7 @@ See [launch capability and quota evidence](.agents/skills/cost-efficient-orchest
 Reviewer is an independence contract. In this Codex package, both routine and
 consequential Reviewer work starts at Sol/high; trivial objective checks should
 run directly rather than create a cheaper pseudo-reviewer. An observed Luna or
-Terra runtime cannot retroactively replace a planned Sol review. Any mismatch
+Sol/medium runtime cannot retroactively replace a planned Sol/high review. Any mismatch
 stops that attempt and still consumes its attempt budget.
 Astra remains an evidence-gated escalation inside the same Reviewer contract
 only after a documented Sol/high cross-domain or cross-tool coherence shortfall;
@@ -224,18 +224,20 @@ deterministic preparation
         ↓
 Chief control phase
         ├── Luna: inventory, evidence maps, fixed transforms, and straightforward local code
-        ├── Terra: system mapping, ordinary code reasoning, stable synthesis, coordinated implementation
-        ├── Sol: ambiguous judgment and independent review
+        ├── Sol/medium: coupled mapping, ordinary code reasoning, stable synthesis, coordinated implementation
+        ├── Sol/high: justified interacting invariants, stateful integration, independent review
         └── Astra: exceptional cross-tool coherence or documented shortfall
                           ↓
                  compact accepted checkpoint
                           ↓
-                 return to Terra or Luna
+                 return to balanced Sol/medium or fast Luna
 ```
 
-Before non-review work starts on Sol or Astra, the dispatcher checks whether
-stable scope and objective verification make Terra sufficient. If Astra remains
-Chief, substantial independent implementation can run on a Terra Builder while
+Before non-review strong or frontier work, the dispatcher checks whether
+stable scope and objective verification make balanced Sol/medium sufficient.
+GPT-6.1 Sol spans both lanes; balanced Sol/medium does not trigger a recursive
+strong-lane gate or require a retired-model trial. If Astra remains
+Chief, substantial independent implementation can run on a balanced Builder while
 Scout and Reviewer retain their own slots and Coder remains available for a
 frozen edit-test unit. Chief handles only the unresolved decision or acceptance
 check. Known commands and
@@ -401,9 +403,20 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.6.6 refreshes the current launch matrix for Luna, Terra, Sol, and
-Astra guidance, removes retired-model routes and candidate-specific polling, and
-keeps explicit model/effort, reviewer Sol/high, runtime mismatch, and stale-host
+Version 0.7.0 moves balanced mapping, ordinary code reasoning, synthesis, and
+integration to GPT-6.1 Sol/medium, with Sol/high for justified strong work and
+all independent Reviewer starts. GPT-6 Luna handles mechanical and fully
+specified local work; GPT-6 Astra/medium remains exceptional and evidence-gated.
+The [canonical matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
+owns exact pairs. Four unpinned roles, explicit launch controls, one writer,
+review authority, and user-selected Chief settings stay intact. Historical
+fixtures and usage retain their recorded models. API effort support is separate
+from host support, and these starting choices make no measured cost or performance
+claim.
+
+Version 0.6.6 refreshed the then-current launch matrix for Luna, Terra, Sol, and
+Astra guidance, removed retired-model routes and candidate-specific polling, and
+kept explicit model/effort, reviewer Sol/high, runtime mismatch, and stale-host
 rules unchanged. Source edits do not make an already running host adopt this
 policy. Version 0.6.5 adds finer Coder and Builder starting policies under their
 existing parent task kinds without changing role, assurance, escalation, or

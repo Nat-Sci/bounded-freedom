@@ -12,13 +12,14 @@ The same probe may compare a managed deployment marker with the current task sta
 
 For Codex custom agents, a file's `model` or `model_reasoning_effort` takes precedence over explicit launch values, which take precedence over configured defaults and parent inheritance. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). The current package therefore omits both keys from all four role files and requires both explicit launch controls. A loaded host that still fixes a pair is not made dynamic by editing a source file; do not send conflicting overrides or claim the new adapter is active.
 
-Checked 2026-09-20 against [Models](https://learn.chatgpt.com/docs/models) and
-[Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents):
-Luna is the starting lane for clear repeatable work, Terra for everyday
-reasoning and tool use, Sol for complex open-ended judgment, and Astra for the
-hardest end-to-end work. This is current guidance and capability availability,
-not a measured performance change or saving guarantee. Revalidate exact model
-IDs, efforts, and launch controls when the host or documentation changes.
+Checked 2026-09-30 against [GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol)
+and [model selection](https://learn.chatgpt.com/docs/model-selection), with
+explicit host catalog support for `gpt-6.1-sol` at medium and high. Official
+guidance describes near-Astra complex work at lower cost and calls for evaluating
+one's own tasks; this package makes no measured performance or savings claim.
+Luna handles clear repeatable work; GPT-6.1 Sol spans balanced and strong lanes
+through task-specific effort; Astra remains frontier. Revalidate exact IDs,
+efforts, and launch controls when the host or documentation changes.
 
 ## Canonical task-kind matrix
 
@@ -28,17 +29,21 @@ the contracts and link here instead of defining competing model tables. The
 pairs are local starting policies, not measured quality or price guarantees.
 Direct deterministic commands and trivial micro-edits still need no worker.
 
+In this current Codex adapter, Luna means `gpt-6-luna`, Sol means
+`gpt-6.1-sol`, and Astra means `gpt-6-astra`. Historical fixtures and usage
+retain their recorded model IDs; these aliases do not rewrite them.
+
 | Task kind | Bounded output | Contract | Starting model / effort |
 | --- | --- | --- | --- |
-| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-5.6-luna` / low |
-| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-5.6-luna` / medium |
-| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | Luna / medium for straightforward flow; Terra / medium for interacting state or cross-module constraints |
-| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-5.6-terra` / medium |
-| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-5.6-terra` / medium |
+| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-6-luna` / low |
+| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-6-luna` / medium |
+| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-6-luna` / medium for straightforward flow; `gpt-6.1-sol` / medium for interacting state or cross-module constraints |
+| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-6.1-sol` / medium |
+| `bounded-synthesis` | Reconcile an accepted evidence set without making the final scientific decision | Scout | `gpt-6.1-sol` / medium |
 | `code-edit` | Narrow frozen implementation and its targeted checks | Coder | See Coder subtypes below |
 | `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | See Builder subtypes below |
-| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-5.6-sol` / high |
-| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-5.6-sol` / high |
+| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-6.1-sol` / high |
+| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-6.1-sol` / high |
 
 Task method remains separate: for example, a mathematical Skill can request a
 code map, a bounded analysis, or a later frozen edit. Ordinary source mapping
@@ -50,11 +55,12 @@ cannot substitute for consequential review because the changed diff is small.
 The same task kind can justify another pair when evidence identifies a limiting
 factor: simple repeated structure may need less effort; coupled logic may need
 balanced capability; a documented reasoning shortfall may need strong or
-frontier capability. Keep the contract and authority unchanged. Luna and Terra
-are selected by the same work-unit boundary, not by trying every model in
-sequence. Code with state transitions, interacting invariants, or repeated
-failed checks starts Terra; a truly trivial edit remains direct. Changing the
-model alone does not turn a
+frontier capability. Keep the contract and authority unchanged. Select Luna or
+Sol/medium by the work-unit boundary without trying every model in sequence.
+Coupled state or API semantics start balanced; justified multiple interacting
+invariants or stateful integration can start Sol/high. Failed checks require
+diagnosis and repair before they establish a capability shortfall. A truly
+trivial edit remains direct. Changing the model alone does not turn a
 narrow Coder into a broader Builder or grant write access to Scout.
 
 ## Coder and Builder subtypes
@@ -68,13 +74,13 @@ choices return to Chief.
 
 | Parent kind | Subtype | Frozen boundary | Starting model / effort |
 | --- | --- | --- | --- |
-| `code-edit` | Coder fixed transform | Repeated fixed transform with targeted checks | Luna / low |
-| `code-edit` | Coder straightforward local implementation | Completely specified local implementation with straightforward logic | Luna / medium |
-| `code-edit` | Coder ordinary bounded implementation | Branches or API semantics require ordinary implementation reasoning | Terra / medium |
-| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | Terra / medium; high only for justified multiple interacting invariants |
-| `coordinated-build` | Builder frozen template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | Luna / medium |
-| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled implementation boundary | Terra / medium |
-| `coordinated-build` | Builder stateful recovery integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | Terra / high |
+| `code-edit` | Coder fixed transform | Repeated fixed transform with targeted checks | `gpt-6-luna` / low |
+| `code-edit` | Coder straightforward local implementation | Completely specified local implementation with straightforward logic | `gpt-6-luna` / medium |
+| `code-edit` | Coder ordinary bounded implementation | Branches or API semantics require ordinary implementation reasoning | `gpt-6.1-sol` / medium |
+| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | `gpt-6.1-sol` / medium; high only for justified multiple interacting invariants |
+| `coordinated-build` | Builder frozen template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | `gpt-6-luna` / medium |
+| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled implementation boundary | `gpt-6.1-sol` / medium |
+| `coordinated-build` | Builder stateful recovery integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | `gpt-6.1-sol` / high |
 
 Coder versus Builder depends on narrow editing versus ownership and integration,
 not the number of files. Template integration does not invent interfaces; it
@@ -122,6 +128,11 @@ counters are not evidence of measured savings or a globally optimal routing.
 
 Select effort explicitly after selecting a capable model. These are starting
 criteria, not automatic upgrades or a substitute for checking host support:
+
+The GPT-6.1 Sol API supports `low`, `medium`, `high`, `xhigh`, and `max`, not
+`none` or `minimal`. Do not translate those unsupported values implicitly.
+Host `ultra` is a distinct host option, not evidence of API support; verify the
+exact selected pair through the actual launch control.
 
 - `low`: fixed fields or genuinely mechanical work with immediate checks.
 - `medium`: ordinary bounded mapping, implementation, or stable synthesis.
@@ -200,7 +211,7 @@ do not disable safe file loading. Skill directory links are a separate mechanism
 If repair is outside the authorized scope, a host-supported unpinned route may
 carry the same frozen unit only with explicit model/effort, preserved ownership,
 required permissions and independence, and remaining same-role attempt budget. Do not
-treat default Luna/low as Terra execution or consequential Reviewer evidence. If
+treat default Luna/low as balanced Sol execution or consequential Reviewer evidence. If
 the required boundary or review capability is unavailable, report that gate as
 unmet. Direct continuation may do already authorized safe work, but must disclose
 the actual Chief route rather than claim a lower-model handoff.
@@ -214,7 +225,14 @@ existing sessions. See the [installer](../../../scripts/install-global.sh) and
 
 ## Capability gates
 
-Use Luna for clear reversible volume, Terra for stable synthesis or related-file coordination, Sol for unresolved judgment or consequential independent review, and Astra only for exceptional end-to-end work or a documented lower-lane shortfall. S3/S4 adds review and human acceptance as applicable; it does not choose Astra. Before non-review Sol or Astra work, apply the balanced gate. After the hard boundary is frozen, return predictable work to Terra or Luna.
+Use the canonical matrix above to choose the work-unit pair. A model family can
+span lanes: Sol/medium is balanced, while justified Sol/high work is strong.
+Before non-review strong or frontier execution, apply the balanced opportunity
+gate; it does not recursively reject balanced Sol/medium or require a Terra
+trial. After the hard boundary is frozen, return predictable work to balanced
+Sol/medium or fast Luna as appropriate. S3/S4 adds independent review and human
+acceptance as applicable; it does not select Astra. These are starting decisions,
+not an automatic escalation framework.
 
 ## GPT-6 Astra boundary
 
