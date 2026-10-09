@@ -2,7 +2,9 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.7.0 — Astra Edition**.
+Current package: **v0.8.0 — Astra Edition**.
+
+Version 0.8.0 consolidates routing through conditional references, records service-tier provenance, shares the portable fingerprint helper, and selects the newest numeric runtime-state generation without older fallback. These changes reduce the common instruction surface; they do not establish token or cost savings.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 

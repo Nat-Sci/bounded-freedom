@@ -14,19 +14,7 @@ Chief retains objective meaning, non-goals, decision constraints, assurance, acc
 
 Start from the least costly adequate available lane using the canonical matrix: fast for repeated fields and mechanical transformation, balanced for ordinary code reasoning or coordinated bounded implementation, strong for justified interacting constraints and independent review, and frontier for exceptional cross-tool coherence or a documented lower-lane shortfall. A model family may span lanes; balanced Sol/medium does not trigger the strong-lane gate. A quota block removes an option; it does not establish a reasoning shortfall. Escalate capability from observable difficulty, then return stable work down. A frontier phase must produce a frozen decision, interface, evidence boundary, or implementation contract rather than absorb routine edits or testing.
 
-These are phase options, not a required Scout → Builder → Coder → Reviewer
-chain. Form a needs-based roster with at most one open thread per canonical
-role. The four slots prevent discovery, implementation, coordination, and
-review from excluding one another, but dependencies still control execution:
-Scout freezes evidence, Builder freezes or integrates a coherent boundary,
-Coder writes a narrow accepted unit, and Reviewer inspects a coherent
-checkpoint. Builder and Coder never execute overlapping write turns. Select an
-early minimal test through the actual entry point; a toy engine, scaffold, or
-successful helper test is not evidence that the production path is integrated.
-Resolve old-versus-current specification conflicts before handoff. Reuse is
-allowed only while contract, permissions, model, and effort remain fitting;
-changing them needs a real supported host action or a declared same-role
-replacement and does not create a fifth simultaneous role.
+Select an early minimal check through the actual production entry point; a toy engine, scaffold, or helper-only success does not establish integration. Roster, ownership, budget, and handoff rules belong to [operations](operations-and-lifecycle.md); the entry owns visible receipts.
 
 ## Balanced gate and direct work
 
@@ -43,12 +31,6 @@ are available. After every worker return or material phase change, Chief keeps
 only accepted evidence, current artifacts, unresolved choices, verification,
 and the next safe action; it does not reopen the worker's full context without
 a concrete evidence gap.
-
-## Route receipt and user-visible events
-
-Show one combined `CHIEF DECISION / ROUTE START` before mutation or delegation, including all eight named Chief fields, method, assurance, execution, role roster, current writing owner, and attempt budget. Preserve detailed scope, evidence, checkpoint, and rationale in the task record; do not emit a second start banner. `ROUTE CHANGE` records only material changes. `ROUTE END` records accepted route, verification outcome, retries, worker terminal state, and unknowns. Do not repeat full durable tables or retain raw prompts, command bodies, private paths, row-level data, or inferred billing.
-
-An exact configured pair comes from explicit launch or host profile. A UI-supplied value is labeled `UI-selected` separately. Exact runtime values require a host receipt; otherwise they remain `unknown`. A model/effort downgrade needs a real host control or a declared same-role replacement within the attempt budget; it is not a label applied to an existing context. Reuse an existing worker only if its ownership and capability fit. Compact fresh context is an actual handoff action when a lower lane needs it.
 
 ## Calibration
 

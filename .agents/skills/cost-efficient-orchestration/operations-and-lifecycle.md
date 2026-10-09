@@ -22,9 +22,7 @@ When new evidence or an artifact version changes a premise, explicitly reopen on
 
 ## Resource snapshot
 
-Close routed nontrivial work with a compact host-telemetry snapshot when an adapter is available. On Codex, run `scripts/codex-task-resource-snapshot.py --format text` relative to this Skill as the final tool call, then place the result after `ROUTE END`. The inline snapshot is intentionally read-only and pre-final: it does not include the response that presents it. Exact terminal accounting requires a host-side post-turn hook or later reconciliation.
-
-Report task wall elapsed time separately from each model/effort row. A row's active elapsed time is end-to-end turn time, including its tool and wait activity; it is not pure inference latency, and concurrent rows may overlap. Report input, cached input, output, reasoning output, and total tokens only when observed. Cached input is a subset of input, not an additional quantity. Missing coverage remains unknown. Never retain raw rollout events or expose paths, IDs, prompts, account data, or billing metadata; never convert telemetry into an unverified cost or savings claim. Skip the extra snapshot call for trivial direct answers.
+The [entry Skill](SKILL.md#pre-final-resource-receipt) owns the final adapter call, receipt format, coverage, and privacy rules. Do not add a second telemetry pass or estimate missing fields.
 
 ## Policy freshness and usage cohorts
 

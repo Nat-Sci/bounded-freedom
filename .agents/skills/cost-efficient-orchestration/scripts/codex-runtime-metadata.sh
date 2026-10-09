@@ -15,25 +15,9 @@ unknown() {
   exit 0
 }
 
-compute_policy_fingerprint() {
-  policy_repo_root=$1
-  (
-    CDPATH= cd -- "$policy_repo_root"
-    {
-      for policy_source in VERSION install/global-agents.md install/agents-config.toml install/codex-role-files.txt; do
-        [ -f "$policy_source" ] || exit 1
-        policy_checksum=$(cksum < "$policy_source")
-        printf '%s|%s\n' "$policy_source" "$policy_checksum"
-      done
-      find .agents/skills .codex/agents -type f \
-        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
-        ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
-          policy_checksum=$(cksum < "$policy_source")
-          printf '%s|%s\n' "$policy_source" "$policy_checksum"
-        done
-    } | cksum | awk '{ print $1 "-" $2 }'
-  )
-}
+script_directory=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+[ -r "$script_directory/policy-fingerprint.sh" ] || unknown "policy-helper-unavailable"
+. "$script_directory/policy-fingerprint.sh"
 
 thread_id=${CODEX_THREAD_ID:-${CODEX_SESSION_ID:-}}
 case "$thread_id" in
@@ -52,21 +36,31 @@ else
   unknown "codex-state-root-unavailable"
 fi
 
-rows=
-for state_db in "$codex_state_root"/state_*.sqlite; do
-  [ -f "$state_db" ] || continue
-  if [ "$scope" = "chief" ]; then
-    rows=$(sqlite3 -readonly -separator '|' "$state_db" \
-      "SELECT model, reasoning_effort, created_at FROM threads WHERE id = '$thread_id' LIMIT 1;" \
-      2>/dev/null) || rows=
-  else
-    rows=$(sqlite3 -readonly -separator '|' "$state_db" \
-      "SELECT t.agent_role, t.model, t.reasoning_effort, e.status FROM thread_spawn_edges e JOIN threads t ON t.id = e.child_thread_id WHERE e.parent_thread_id = '$thread_id' ORDER BY t.created_at ASC;" \
-      2>/dev/null) || rows=
-  fi
-  [ -n "$rows" ] && break
-done
-
+# Pick exactly one highest numeric generation. Never fall back after a failed query.
+state_selection=$(
+  for candidate in "$codex_state_root"/state_*.sqlite; do
+    [ -f "$candidate" ] || continue
+    generation=${candidate##*/state_}
+    generation=${generation%.sqlite}
+    case "$generation" in (''|*[!0-9]*) continue ;; esac
+    printf '%s|%s\n' "$generation" "$candidate"
+  done | LC_ALL=C sort -t '|' -k1,1n | tail -n 1
+)
+[ -n "$state_selection" ] || unknown "thread-metadata-unavailable"
+state_db=${state_selection#*|}
+if [ "$scope" = "chief" ]; then
+  rows=$(sqlite3 -readonly -separator '|' "$state_db" \
+    "SELECT model, reasoning_effort, created_at FROM threads WHERE id = '$thread_id' LIMIT 1;" \
+    2>/dev/null) || rows=
+else
+  parent_rows=$(sqlite3 -readonly -separator '|' "$state_db" \
+    "SELECT model, reasoning_effort, created_at FROM threads WHERE id = '$thread_id' LIMIT 1;" \
+    2>/dev/null) || parent_rows=
+  [ -n "$parent_rows" ] || unknown "thread-metadata-unavailable"
+  rows=$(sqlite3 -readonly -separator '|' "$state_db" \
+    "SELECT t.agent_role, t.model, t.reasoning_effort, e.status FROM thread_spawn_edges e JOIN threads t ON t.id = e.child_thread_id WHERE e.parent_thread_id = '$thread_id' ORDER BY t.created_at ASC;" \
+    2>/dev/null) || rows=
+fi
 [ -n "$rows" ] || unknown "thread-metadata-unavailable"
 
 if [ "$scope" = "chief" ]; then

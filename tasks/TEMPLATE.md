@@ -19,6 +19,8 @@
 - Chief planned reasoning effort: exact value, current UI selection, inherited, or unknown
 - Chief runtime model: exact authoritative value or unknown
 - Chief runtime reasoning effort: exact authoritative value or unknown
+- Service tier: planned / configured / observed, each with evidence source or `unknown`; configured is not runtime or billed
+- Speed decision: Standard for cost-focused nonurgent work; Fast/Ultrafast latency tradeoff, preserving user-selected settings
 - Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
 - Chief policy freshness: current, stale, or unknown
 - Chief policy evidence: managed install marker plus task/run start, authoritative host reload receipt, or unknown; a fresh child of a stale Chief is a mixed cohort rather than proof of current parent policy

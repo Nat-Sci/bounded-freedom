@@ -4,11 +4,7 @@ This adapter maps portable execution contracts to a host. Re-check availability,
 
 ## Metadata and precedence
 
-Report planned lane and configured model/effort separately from runtime-observed model/effort. An explicit launch or loaded profile establishes only configuration. A UI-provided value is `UI-selected`, not backend-confirmed. Without an authoritative host receipt, exact Chief runtime model and effort are `unknown`; never infer them from behavior, latency, prose, or a configuration update. After observing the current pair, Chief may explicitly plan to continue the bounded phase on that pair and record it in both planned and runtime fields with source `runtime`; this is a current route decision, not evidence of the launcher's original intent.
-
-For Codex, the entry Skill's read-only runtime metadata probe may supply a host-recorded current-thread pair and direct-child pairs. Treat `status=observed` as runtime session evidence and `status=unknown` as no evidence. The probe is an optional Codex adapter: it must fail closed, emit no local path or thread identifier, and never be required by another harness. Use `codex debug models` separately to validate that configured model IDs and effort values exist in the current catalog; catalog presence is availability evidence, not a launch or runtime receipt.
-
-The same probe may compare a managed deployment marker with the current task start and report policy freshness. This is separate from model runtime evidence. A fresh child of a stale Chief can prove its own observed model/effort while the route remains a `mixed` policy cohort; never use that child to claim the parent loaded the latest Skill or global instructions.
+The [entry Skill](SKILL.md#one-visible-start-receipt) owns planned/configured/runtime provenance and freshness receipts; [operations](operations-and-lifecycle.md#policy-freshness-and-usage-cohorts) owns cohort interpretation. The Codex probe supplies host-recorded session selection, not backend attestation or billing. It selects only the highest numeric state generation and fails closed instead of using older conflicting metadata; output omits paths and thread IDs. Catalog validation (for example, `codex debug models`) proves availability, not launch or runtime.
 
 For Codex custom agents, a file's `model` or `model_reasoning_effort` takes precedence over explicit launch values, which take precedence over configured defaults and parent inheritance. See [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents). The current package therefore omits both keys from all four role files and requires both explicit launch controls. A loaded host that still fixes a pair is not made dynamic by editing a source file; do not send conflicting overrides or claim the new adapter is active.
 
@@ -20,6 +16,12 @@ one's own tasks; this package makes no measured performance or savings claim.
 Luna handles clear repeatable work; GPT-6.1 Sol spans balanced and strong lanes
 through task-specific effort; Astra remains frontier. Revalidate exact IDs,
 efforts, and launch controls when the host or documentation changes.
+
+## Speed and cost provenance
+
+Checked 2026-10-09: [Codex pricing](https://learn.chatgpt.com/docs/pricing), [speed](https://learn.chatgpt.com/docs/agent-configuration/speed), and [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference). Recommend Standard for cost-focused nonurgent work. Fast/Ultrafast needs a stated latency tradeoff, while preserving user-selected settings. Speed is separate from model family and reasoning effort: Fast consumes 2.5× included allowance or 2× purchased credits; Ultrafast consumes 8× or 6× respectively. API pricing is separate. Do not duplicate pricing tables or infer costs from local counters.
+
+Record planned, configured, and observed service tier with evidence or `unknown`. The configuration reference maps `fast` to request priority and prefers `service_tier` for new turns; configured tier does not establish runtime or billed tier. Use only real host controls: no invented CLI arguments, automatic speed changes, quota polling, or capability-blocking gate when speed controls or telemetry are absent. This guidance leaves the task-kind matrix and explicit role profiles unchanged.
 
 ## Canonical task-kind matrix
 
@@ -177,7 +179,7 @@ second supported routing system; modified or foreign files remain protected.
 
 Before launch:
 
-1. Freeze task kind, contract, assurance, scope, expected output/checks, intended model/effort, reason, role-roster state, writing owner, and remaining initial/replacement attempt budget.
+1. Freeze the launch ticket using [operations](operations-and-lifecycle.md#freeze-and-budget) and the entry's worker contract.
 2. Inspect the current host's advertised exact model IDs, supported efforts, effective permissions, and fork controls before launch. Use the canonical profile only when the host can honor the selected pair and permissions. Supply both actual launch arguments, never just a prompt or an inherited setting. A stale loaded profile that fixes the pair despite an unpinned source cannot honor conflicting values; report that deployment/session limitation instead of reinstating the old adapter.
 3. Preserve the profile's actual sandbox and ownership. Check applicable runtime permission overrides; a read-only sentence is not a read-only sandbox. Shared/full-history spawning may forbid model overrides; use a supported compact fresh launch, not conflicting arguments.
 4. Include the launch ticket in the worker's small context. Require a startup receipt with contract, task kind, profile, configured model/effort and source; add runtime values from a host receipt when available. Stop on an observed mismatch; do not rewrite the planned model/effort to fit it. A fresh route may be declared before fresh work, but the mismatched attempt does not satisfy the original review and still counts toward worker/attempt budget. Missing runtime metadata stays unknown, not a fabricated match.
@@ -240,7 +242,7 @@ Astra is a frontier lane, not another execution contract. Reviewer work always s
 
 Start newly planned Astra work at medium; `xhigh`, `max`, and `ultra` require explicit user choice or the documented insufficiency above and host support. Effort availability and semantics, including `ultra`, are host-dependent. A Skill guides Chief decisions but cannot switch the active Chief; planned ideal lane is separate from actual runtime. Do not claim a hard automatic scheduler or that API effort/configuration changes alter the active desktop Chief. Do not silently reset a user-selected effort.
 
-Calibration is optional and bounded by actual accepted work. Compare eligible work started balanced, first-pass acceptance, rework, elapsed time, evidence coverage, and authoritative cost or quota data when available. Do not impose a unit quota, infer billing, or create work to consume allowance.
+Optional calibration belongs to [hierarchical routing](hierarchical-routing.md#calibration); it never requires model shares, extra work, quota consumption, or inferred billing.
 
 ## Other hosts
 

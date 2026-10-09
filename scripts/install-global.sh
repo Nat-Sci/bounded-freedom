@@ -238,27 +238,10 @@ if [ "$use_codex" -eq 1 ]; then
   load_codex_roles
 fi
 
-compute_policy_fingerprint() {
-  (
-    CDPATH= cd -- "$repo_root"
-    {
-      for policy_source in VERSION install/global-agents.md install/agents-config.toml install/codex-role-files.txt; do
-        policy_checksum=$(cksum < "$policy_source")
-        printf '%s|%s\n' "$policy_source" "$policy_checksum"
-      done
-      find .agents/skills .codex/agents -type f \
-        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
-        ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
-          policy_checksum=$(cksum < "$policy_source")
-          printf '%s|%s\n' "$policy_source" "$policy_checksum"
-        done
-    } | cksum | awk '{ print $1 "-" $2 }'
-  )
-}
-
 policy_fingerprint=""
 if [ "$use_codex" -eq 1 ]; then
-  policy_fingerprint=$(compute_policy_fingerprint)
+  . "$repo_root/.agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh"
+  policy_fingerprint=$(compute_policy_fingerprint "$repo_root")
   case "$policy_fingerprint" in
     ''|*[!0-9-]*)
       echo "Unable to compute a portable policy fingerprint" >&2

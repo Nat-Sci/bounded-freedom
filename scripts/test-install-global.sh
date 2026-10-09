@@ -206,6 +206,30 @@ assert_contains "POLICY RELOAD REQUIRED: existing/open tasks do not adopt this d
 assert_contains "start or fork a new task before claiming current-policy routing or usage" "$test_root/all-install.out" "installation gives an actionable current-policy boundary"
 assert_contains "package_version=$package_version" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy version"
 assert_contains "policy_fingerprint=" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy fingerprint"
+# Frozen pre-extraction reference: verifies dependency/order/hash compatibility.
+legacy_policy_fingerprint() {
+  (
+    CDPATH= cd -- "$repo_root"
+    {
+      for policy_source in VERSION install/global-agents.md install/agents-config.toml install/codex-role-files.txt; do
+        policy_checksum=$(cksum < "$policy_source")
+        printf '%s|%s\n' "$policy_source" "$policy_checksum"
+      done
+      find .agents/skills .codex/agents -type f \
+        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
+        ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
+          policy_checksum=$(cksum < "$policy_source")
+          printf '%s|%s\n' "$policy_source" "$policy_checksum"
+        done
+    } | cksum | awk '{ print $1 "-" $2 }'
+  )
+}
+. "$repo_root/.agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh"
+legacy_fingerprint=$(legacy_policy_fingerprint)
+shared_fingerprint=$(compute_policy_fingerprint "$repo_root")
+[ "$legacy_fingerprint" = "$shared_fingerprint" ] || fail "shared fingerprint changed legacy dependency/order/hash semantics"
+pass "shared fingerprint preserves legacy dependency/order/hash semantics"
+assert_contains "policy_fingerprint=$shared_fingerprint" "$all_root/.codex/bounded-freedom-policy.state" "production installer uses the shared fingerprint"
 if [ "$(file_mode "$all_root/.codex/bounded-freedom-policy.state")" != "600" ]; then
   fail "managed policy state is not private to its owner"
 fi
@@ -388,6 +412,47 @@ SQL
   assert_contains '"policy_freshness":"current"' "$test_root/runtime-current.out" "runtime probe marks a post-deployment Chief current"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
   assert_contains '"scope":"child","role":"Coder","model":"historical-test-model","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe preserves a historical host-recorded child pair"
+  cp "$runtime_root/state_5.sqlite" "$runtime_root/state_2.sqlite"
+  cp "$runtime_root/state_5.sqlite" "$runtime_root/state_1.sqlite"
+  cp "$runtime_root/state_5.sqlite" "$runtime_root/state_10.sqlite"
+  sqlite3 "$runtime_root/state_10.sqlite" "UPDATE threads SET model='newest-test-model', reasoning_effort='medium' WHERE id='11111111-1111-1111-1111-111111111111'; UPDATE threads SET model='newest-child-model' WHERE agent_role='Coder';"
+  cp "$runtime_root/state_10.sqlite" "$test_root/runtime-db-before"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-numeric.out"
+  assert_contains '"model":"newest-test-model","reasoning_effort":"medium"' "$test_root/runtime-numeric.out" "numeric generation 10 wins over conflicting generation 2"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-numeric-child.out"
+  assert_contains '"model":"newest-child-model"' "$test_root/runtime-numeric-child.out" "children also use the newest numeric generation"
+  assert_file_unchanged "$test_root/runtime-db-before" "$runtime_root/state_10.sqlite" "runtime metadata queries leave database bytes unchanged"
+  assert_not_contains "$runtime_root" "$test_root/runtime-numeric.out" "observed runtime output omits private state path"
+  assert_not_contains '11111111-1111-1111-1111-111111111111' "$test_root/runtime-numeric.out" "observed runtime output omits thread identity"
+  sqlite3 "$runtime_root/state_10.sqlite" "DELETE FROM threads WHERE id='11111111-1111-1111-1111-111111111111';"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-no-new-thread.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-no-new-thread.out" "missing newest-generation thread does not fall back"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-no-new-parent.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-no-new-parent.out" "children require a parent thread in the newest generation"
+  rm "$runtime_root/state_10.sqlite"
+  sqlite3 "$runtime_root/state_10.sqlite" "CREATE TABLE threads (id TEXT, model TEXT); INSERT INTO threads VALUES ('11111111-1111-1111-1111-111111111111','bad-columns-model');"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-no-columns.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-no-columns.out" "missing newest-generation required columns does not fall back"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-no-child-columns.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-no-child-columns.out" "missing newest-generation child schema does not fall back"
+  printf 'invalid database\n' > "$runtime_root/state_10.sqlite"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-invalid-db.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-invalid-db.out" "invalid newest-generation database does not fall back"
+  assert_not_contains "$runtime_root" "$test_root/runtime-invalid-db.out" "failed runtime output omits private state path"
+  assert_not_contains '11111111-1111-1111-1111-111111111111' "$test_root/runtime-invalid-db.out" "failed runtime output omits thread identity"
+  cp "$test_root/runtime-db-before" "$runtime_root/state_10.sqlite"
+  sqlite3 "$runtime_root/state_10.sqlite" "UPDATE threads SET model='invalid/model' WHERE id='11111111-1111-1111-1111-111111111111';"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-invalid-model.out"
+  assert_contains '"status":"unknown"' "$test_root/runtime-invalid-model.out" "invalid newest-generation metadata does not fall back"
+  cp "$test_root/runtime-db-before" "$runtime_root/state_10.sqlite"
+  cp "$runtime_root/state_2.sqlite" "$runtime_root/state_notnumeric.sqlite"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" > "$test_root/runtime-nonnumeric.out"
+  assert_contains '"model":"newest-test-model"' "$test_root/runtime-nonnumeric.out" "nonnumeric state names are ignored"
+  sed 's/^policy_fingerprint=.*/policy_fingerprint=0-0/' "$runtime_root/bounded-freedom-policy.state" > "$test_root/drifted-policy"
+  cp "$test_root/drifted-policy" "$runtime_root/bounded-freedom-policy.state"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$runtime_probe" > "$test_root/runtime-source-drift.out"
+  assert_contains '"policy_freshness":"stale"' "$test_root/runtime-source-drift.out" "post-deployment task with source drift is stale"
+  assert_contains '"policy_evidence":"managed-install-marker+source-mismatch"' "$test_root/runtime-source-drift.out" "source drift retains distinct freshness provenance"
 else
   skip "sqlite3 is unavailable for runtime metadata regression coverage"
 fi
@@ -473,7 +538,7 @@ cp "$idempotent_root/.codex/AGENTS.md" "$test_root/status-before"
 "$installer" --host codex --target-root "$idempotent_root" --status > "$test_root/status-current.out"
 assert_contains "Codex AGENTS.md: managed block present (current)" "$test_root/status-current.out" "status identifies a current managed instruction block"
 assert_file_unchanged "$test_root/status-before" "$idempotent_root/.codex/AGENTS.md" "status does not mutate a current managed block"
-sed -i.bounded-freedom 's/^## BoundedFreedom global workflow$/## changed managed payload/' "$idempotent_root/.codex/AGENTS.md"
+sed -i.bounded-freedom 's/^## BoundedFreedom bootstrap$/## changed managed payload/' "$idempotent_root/.codex/AGENTS.md"
 rm -f "$idempotent_root/.codex/AGENTS.md.bounded-freedom"
 cp "$idempotent_root/.codex/AGENTS.md" "$test_root/drift-before-status"
 "$installer" --host codex --target-root "$idempotent_root" --status > "$test_root/status-prefix.out"
