@@ -173,9 +173,8 @@ There is one current adapter, with exactly four canonical profiles. All omit
 
 No fixed-model counterpart or Routed alias remains in the active package. The
 installer's [role manifest](../../../install/codex-role-files.txt) keeps install,
-update, conflict preflight, and status on the same four-file inventory. Cleanup
-of provably unmodified retired managed copies is migration hygiene, not a
-second supported routing system; modified or foreign files remain protected.
+update, conflict preflight, and status on the same four-file inventory. Files
+outside that manifest are left untouched.
 
 Before launch:
 

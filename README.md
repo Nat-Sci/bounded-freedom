@@ -363,10 +363,8 @@ TOMLs from the explicit [role manifest](install/codex-role-files.txt) as managed
 migrates the previous repository-owned role links: Codex can display symlinked
 profiles but its secure launch reader rejects them. Foreign links, unmanaged
 files, and locally modified managed role files are preserved as conflicts.
-The active adapter no longer supports the old dual profile set. An update
-retires only provably unmodified managed Routed copies or exact repository-owned
-links; foreign or modified aliases cause a safe stop rather than silent deletion.
-Dry-run and status distinguish this cleanup from a current installed role.
+Only the current four roles are managed; files outside the role manifest are
+left untouched.
 Refresh the installation after changing role profiles; Skill links still follow
 the checkout. The installer does not copy the repository into every project and
 does not require Python.

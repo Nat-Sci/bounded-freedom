@@ -606,64 +606,22 @@ for role_file_name in $codex_role_files; do
   assert_path_absent "$role_unmanaged_root/.codex/agents/$role_file_name" "unmanaged role conflict causes no preceding role mutation for $role_label"
 done
 
-retired_roles="scout-routed.toml coder-routed.toml builder-routed.toml reviewer-routed.toml"
-retired_role_fixture_dir="$repo_root/scripts/fixtures/retired-codex-roles"
-role_retirement_root="$test_root/role-retirement"
-mkdir -p "$role_retirement_root/.codex/agents"
-for retired_role in $retired_roles; do
-  cp "$retired_role_fixture_dir/$retired_role" "$test_root/retired-role-payload"
-  payload_checksum=$(cksum < "$test_root/retired-role-payload" | awk '{ print $1 " " $2 }')
-  { printf '%s\n' '# BoundedFreedom managed role file'; printf '%s%s\n' '# payload cksum: ' "$payload_checksum"; cat "$test_root/retired-role-payload"; } > "$role_retirement_root/.codex/agents/$retired_role.next"
-  mv "$role_retirement_root/.codex/agents/$retired_role.next" "$role_retirement_root/.codex/agents/$retired_role"
+role_extra_root="$test_root/role-extra-files"
+mkdir -p "$role_extra_root/.codex/agents"
+printf 'user-owned extra profile\n' > "$role_extra_root/.codex/agents/user-extra.toml"
+printf 'user-owned link target\n' > "$role_extra_root/link-target"
+ln -s "$role_extra_root/link-target" "$role_extra_root/.codex/agents/user-link.toml"
+cp "$role_extra_root/.codex/agents/user-extra.toml" "$test_root/role-extra-before"
+cp "$role_extra_root/link-target" "$test_root/role-extra-link-before"
+for extra_action in dry-run install status update; do
+  "$installer" --host codex --target-root "$role_extra_root" "--$extra_action" > "$test_root/role-extra-$extra_action.out"
+  assert_file_unchanged "$test_root/role-extra-before" "$role_extra_root/.codex/agents/user-extra.toml" "$extra_action preserves files outside the role manifest"
+  if [ ! -L "$role_extra_root/.codex/agents/user-link.toml" ] || [ "$(readlink "$role_extra_root/.codex/agents/user-link.toml")" != "$role_extra_root/link-target" ]; then
+    fail "$extra_action changed a link outside the role manifest"
+  fi
+  pass "$extra_action preserves links outside the role manifest"
+  assert_file_unchanged "$test_root/role-extra-link-before" "$role_extra_root/link-target" "$extra_action preserves the extra link target"
 done
-"$installer" --host codex --target-root "$role_retirement_root" --dry-run > "$test_root/role-retirement-dry-run.out"
-assert_contains "would retire managed role file: Retired Codex agent scout-routed" "$test_root/role-retirement-dry-run.out" "dry-run reports managed retired-role cleanup"
-"$installer" --host codex --target-root "$role_retirement_root" --status > "$test_root/role-retirement-status.out"
-assert_contains "Retired Codex agent reviewer-routed: retirement required (managed regular file)" "$test_root/role-retirement-status.out" "status distinguishes retired managed role cleanup"
-"$installer" --host codex --target-root "$role_retirement_root" --update > "$test_root/role-retirement-update.out"
-for retired_role in $retired_roles; do
-  assert_path_absent "$role_retirement_root/.codex/agents/$retired_role" "update retires managed $retired_role"
-done
-"$installer" --host codex --target-root "$role_retirement_root" --update > "$test_root/role-retirement-idempotent.out"
-assert_not_contains "retire managed role file" "$test_root/role-retirement-idempotent.out" "retired-role cleanup is idempotent"
-
-role_retired_foreign_root="$test_root/role-retired-foreign-conflict"
-mkdir -p "$role_retired_foreign_root/.codex/agents"
-printf 'user-owned\n' > "$role_retired_foreign_root/foreign-role"
-ln -s "$role_retired_foreign_root/foreign-role" "$role_retired_foreign_root/.codex/agents/reviewer-routed.toml"
-expect_exit 1 "$test_root/role-retired-foreign-conflict.out" "$installer" --host codex --target-root "$role_retired_foreign_root" --install
-assert_contains "retired Codex agent reviewer-routed" "$test_root/role-retired-foreign-conflict.out" "preflight checks retired alias conflicts"
-if [ ! -L "$role_retired_foreign_root/.codex/agents/reviewer-routed.toml" ]; then
-  fail "foreign retired alias link was replaced"
-fi
-pass "foreign retired alias is preserved"
-assert_path_absent "$role_retired_foreign_root/.agents" "foreign retired alias conflict causes no portable installation"
-assert_path_absent "$role_retired_foreign_root/.codex/agents/scout.toml" "foreign retired alias conflict causes no canonical role mutation"
-
-role_retired_matching_link_root="$test_root/role-retired-matching-link-conflict"
-mkdir -p "$role_retired_matching_link_root/.codex/agents"
-cp "$retired_role_fixture_dir/builder-routed.toml" "$role_retired_matching_link_root/foreign-managed-role"
-payload_checksum=$(cksum < "$role_retired_matching_link_root/foreign-managed-role" | awk '{ print $1 " " $2 }')
-{ printf '%s\n' '# BoundedFreedom managed role file'; printf '%s%s\n' '# payload cksum: ' "$payload_checksum"; cat "$role_retired_matching_link_root/foreign-managed-role"; } > "$role_retired_matching_link_root/foreign-managed-role.next"
-mv "$role_retired_matching_link_root/foreign-managed-role.next" "$role_retired_matching_link_root/foreign-managed-role"
-cp "$role_retired_matching_link_root/foreign-managed-role" "$test_root/role-retired-matching-link-target-before"
-ln -s "$role_retired_matching_link_root/foreign-managed-role" "$role_retired_matching_link_root/.codex/agents/builder-routed.toml"
-expect_exit 1 "$test_root/role-retired-matching-link-conflict.out" "$installer" --host codex --target-root "$role_retired_matching_link_root" --install
-if [ ! -L "$role_retired_matching_link_root/.codex/agents/builder-routed.toml" ]; then
-  fail "foreign checksum-matched retired alias link was replaced"
-fi
-pass "foreign checksum-matched retired alias link is preserved"
-assert_file_unchanged "$test_root/role-retired-matching-link-target-before" "$role_retired_matching_link_root/foreign-managed-role" "foreign checksum-matched retired alias target is unchanged"
-assert_path_absent "$role_retired_matching_link_root/.agents" "foreign checksum-matched retired alias conflict causes no portable installation"
-assert_path_absent "$role_retired_matching_link_root/.codex/agents/scout.toml" "foreign checksum-matched retired alias conflict causes no canonical role mutation"
-
-role_retired_modified_root="$test_root/role-retired-modified-conflict"
-mkdir -p "$role_retired_modified_root/.codex/agents"
-printf '%s\n%s\nlegacy role payload\n# local modification\n' '# BoundedFreedom managed role file' '# payload cksum: 0 0' > "$role_retired_modified_root/.codex/agents/builder-routed.toml"
-cp "$role_retired_modified_root/.codex/agents/builder-routed.toml" "$test_root/role-retired-modified-before"
-expect_exit 1 "$test_root/role-retired-modified-conflict.out" "$installer" --host codex --target-root "$role_retired_modified_root" --update
-assert_file_unchanged "$test_root/role-retired-modified-before" "$role_retired_modified_root/.codex/agents/builder-routed.toml" "modified retired managed role payload is preserved"
-assert_path_absent "$role_retired_modified_root/.agents" "modified retired alias conflict causes no partial portable installation"
 
 role_modified_root="$test_root/role-modified-conflict"
 mkdir -p "$role_modified_root/.codex/agents"
