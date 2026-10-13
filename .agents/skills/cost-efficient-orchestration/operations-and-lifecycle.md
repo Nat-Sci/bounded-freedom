@@ -57,6 +57,8 @@ Timeout means unknown. Classify operation and inspect observable state; continue
 
 ## Resume and completion
 
+Routine already-reviewed deployment uses one [deploy-verify.py](../../../scripts/deploy-verify.py) batch (`--check` by default, explicit `--apply`) and compact result. Chief inspects changed/failed evidence and sufficient worker checks without repeating them. Unchanged S1 deployment requires neither an obligatory Reviewer nor another whole-policy/model smoke cycle; preserve S3/S4 gates. Only changed launch behavior or unknown discovery requiring live evidence calls for a necessary fresh-context live-route check, scoped independently from static file consistency. File checks never establish loaded-policy/runtime match.
+
 After interruption/compaction re-read applicable instructions/record; inspect actual diffs, artifacts, external status, worker state, and retry counters. Resume only recorded next safe action. Authorized commits may anchor recovery but cannot substitute for evidence.
 
 Use [targeted acceptance/rechecks](hierarchical-routing.md#balanced-gate-and-direct-work). Finish when meaningful planned verification answers the claim; no wording-mirror checks or unchanged reruns without evidence need. Authorized in-scope work needs no fresh conversational permission; sandbox escalation still applies.

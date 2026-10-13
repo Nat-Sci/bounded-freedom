@@ -4,6 +4,9 @@ After policy/description/host-mapping changes, use a bounded representative inde
 
 | Prompt | Expected route |
 | --- | --- |
+| Already-reviewed unchanged S1 deployment needs verification; worker returns one compact deploy-verify receipt. | Accept sufficient static evidence, inspect changed/failed results only; no repeated worker checks, mandatory Reviewer, whole-policy review, or model smoke cycle. live_route remains not_run. |
+| Deployment command reports stale files or unmanaged-content change during explicit apply. | Nonzero compact failure; fitting writer repairs within ownership. Preserve user content/proxy and installer authority; no automatic restart or model call. |
+| Launch behavior changed or discovery is unknown after a successful static deployment check. | Scope only the necessary independent fresh-context live-route check; static consistency never proves runtime/profile or loaded-policy match. Retain S3/S4 independent gates. |
 | Run a known formatter; fix one obvious typo. | Direct command/micro-edit, no workers. |
 | Extract fixed fields without a ready parser; summarize stable documents. | Scout inventory Luna/low; evidence-map Luna/medium. Known parser stays direct. |
 | Explain bounded existing calls/branches/tests; map interacting state across modules. | Read-only code-map Luna/medium or Sol/medium for interactions; system-map Sol/medium, no redesign. |

@@ -51,6 +51,8 @@ This pre-final checkpoint excludes the final response/later telemetry; it is not
 
 ## Evidence and privacy
 
+For routine already-reviewed deployment use [deploy-verify.py](../../../scripts/deploy-verify.py) once for a compact batch receipt; its static file check always reports `live_route=not_run`. Chief reads changed/failed evidence and sufficient worker checks rather than repeating them. [Lifecycle rules](operations-and-lifecycle.md#resume-and-completion) scope any necessary independent live-route check.
+
 Use production evidence proportional to the claim; command success alone is not scientific validity. Keep relative paths/neutral placeholders; exclude local accounts, absolute paths, hostnames, environment/workspace/checkout/mount names, IDs, raw histories/logs without explicit human authorization. Retain compact evidence and uncertainty.
 
 ## Credits

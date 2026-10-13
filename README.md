@@ -2,9 +2,9 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.8.0 — Astra Edition**.
+Current package: **v0.8.1 — Astra Edition**.
 
-Version 0.8.0 consolidates routing through conditional references, records service-tier provenance, shares the portable fingerprint helper, and selects the newest numeric runtime-state generation without older fallback. These changes reduce the common instruction surface; they do not establish token or cost savings.
+Version 0.8.1 adds a compact deterministic deployment check and explicit apply command, with isolated regression coverage and targeted routine-deployment evidence. File consistency remains separate from live routing; these changes do not establish token or cost savings.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -175,6 +175,31 @@ Preview the default Codex installation:
 ```
 
 Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check. Installer output reports the package version and edition so linked Skills and managed host instructions can be checked against the repository revision.
+
+For routine deployment verification, use one compact batch:
+
+```sh
+python3 scripts/deploy-verify.py --check
+python3 scripts/deploy-verify.py --apply --format json
+# Isolated target; the default target is the user's home directory.
+python3 scripts/deploy-verify.py --apply --target-root <temporary-target>
+```
+
+[deploy-verify.py](scripts/deploy-verify.py) defaults to read-only checking and
+uses the existing installer for explicit `--apply`; `--host` has the same choices.
+It captures installer logs in memory and returns a compact text or JSON receipt
+with source version/commit (or `unknown`), deployment file consistency,
+unmanaged-content preservation on apply, and `live_route=not_run`. Missing,
+stale, conflicting, failed, or unexpected results return nonzero. Apply compares
+unmanaged instruction/configuration bytes, the entire Codex proxy file, and
+unmanaged entries directly in installer-facing Skill/role directories; it never
+reads personal histories. It neither rolls back partial installer failures nor
+changes proxy settings, calls models, polls quotas, or restarts applications.
+The commit identifies source HEAD; it does not certify a clean working tree.
+Chief inspects changed/failed evidence and sufficient returned checks. An
+unchanged, already-reviewed S1 deployment needs no mandatory Reviewer or model
+smoke cycle; changed launch behavior or unknown discovery may need a separately
+scoped fresh-context live-route check. S3/S4 review gates still apply.
 
 > **Policy reload required after an update.** Installed files do not reload open tasks. Start/fork a new task after deployment; [freshness/cohort rules](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md#policy-freshness-and-usage-cohorts) distinguish current, stale, unknown, and mixed usage.
 
