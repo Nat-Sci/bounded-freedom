@@ -95,187 +95,21 @@ The Constitution and Skills are portable. Host files stay thin, and project fact
 
 ## One dispatcher, four separate decisions
 
-```text
-request -> admission and phase boundary -> Chief -> General or one Skill
-        -> execution contract and capability -> verification -> compact checkpoint
-        -> lower-cost next phase, evidence-gated escalation, or decision
-```
+The [orchestration dispatcher](.agents/skills/cost-efficient-orchestration/SKILL.md) separates task method, execution contract, model/effort, and S0–S4 assurance. Chief retains intent and acceptance; Scout supplies facts, Builder coordinates accepted boundaries, Coder owns narrow edit-test-repair, and Reviewer supplies independent evidence.
 
-| Decision | Question |
-| --- | --- |
-| Task method | Is General enough, or does this unit need one specialist Skill? |
-| Execution contract | Who owns the unit, what may it change, and must it be independent? |
-| Model and effort | How much context, coding ability, and reasoning does this unit need? |
-| Assurance | What evidence, review, or human acceptance does the consequence require? |
-
-Scout, Coder, Builder, and Reviewer are execution contracts, not intelligence levels. S0–S4 controls assurance, not task type or model choice.
-
-For nontrivial work, one combined `CHIEF DECISION / ROUTE START` shows the
-planned capability lane, model, reasoning effort, runtime model, runtime
-reasoning effort, metadata source, policy freshness, and freshness evidence
-before delegation or changes. Necessary
-instruction and host-discovery reads may come first. Emit `ROUTE CHANGE` only
-when the route materially changes and `ROUTE END` with the accepted result. When
-the host does not expose authoritative runtime values, runtime fields stay
-`unknown`; configuration, inheritance, or UI values are labeled separately. These
-receipts show routing control, not private chain-of-thought.
-
-Policy freshness is separate from file installation and model runtime. `current`
-means the task/run began after the accepted managed deployment or the host gave
-an authoritative reload receipt; an older task is `stale`, and missing evidence
-is `unknown`. A fresh worker launched by a stale Chief is recorded as real model
-activity but belongs to a `mixed` policy cohort. This prevents a current role
-file or one successful child launch from being misreported as adoption by every
-open task.
-
-At the end of routed Codex work, BoundedFreedom can also show a compact
-`TASK RESOURCE SNAPSHOT`: task wall time plus observed input, cached input,
-output, reasoning, and total tokens for each model/effort pair used by Chief
-and its direct workers. It reads local event telemetry without retaining prompts
-or identifiers. Because a Skill runs before its own final answer, the inline
-snapshot is labeled pre-final and excludes that answer; exact terminal accounting
-still belongs to a host-side receipt. Per-model elapsed times may overlap, and
-cached input is already part of input tokens.
-
-| Execution contract | Owns | Permission boundary |
-| --- | --- | --- |
-| Scout | Bounded discovery, code/evidence/system mapping, or stable synthesis | Read-only |
-| Coder (Writer) | Narrow, frozen, code-specific edits and checks | Scoped workspace write |
-| Builder | Coordinated implementation across logic or files | Scoped workspace write |
-| Reviewer | Independent assessment of evidence and acceptance | Read-only |
-
-Chief first identifies the **task kind**, then selects a capable model and
-reasoning effort, and only then resolves a host launch profile. For example,
-code mapping uses a read-only Luna or GPT-6.1 Sol Scout; it does not need Coder's
-write permissions. General evidence and cross-module synthesis can use different
-Scout models, and routine engineering review is distinguished from consequential
-review. The [canonical task-kind matrix and effort rules](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
-own these starting choices; they are policies to validate, not measured savings.
-Within its parent `code-edit` and `coordinated-build` rows, that table also
-defines the Coder and Builder subtypes: template/fixed transforms, local or
-invariant-sensitive edits, and template, ordinary, or stateful integration.
-The subtype follows the frozen ownership and integration boundary, not file
-count.
-
-Only four canonical profiles remain: `Scout`, `Coder`, `Builder`, and `Reviewer`.
-All preserve their permission boundary without pinning model or effort; there
-are no fixed-model counterparts or duplicate Routed aliases. Chief supplies
-both values through supported, advertised launch controls. A stale loaded
-profile can still override those values, and prose cannot switch a running
-model. The [launch adapter protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#codex-launch-adapters)
-covers current controls, permission overrides, runtime receipts and unsupported
-sessions. See the [official subagent configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents).
-
-The Codex adapter permits at most four concurrently open worker threads, one
-per canonical role: Scout, Builder, Coder, and Reviewer. `Coder` is the
-implementation Writer; there is no fifth Writer profile. This is a capacity
-ceiling, not a requirement to launch a full team: most bounded tasks still use
-one or two roles, and deterministic commands or micro-edits remain direct.
-Effective capacity is the policy maximum reduced by the actual host limit when
-known (otherwise unknown); queue dependent roles and reserve feasible review
-rather than moving substantive work into Chief. The host setting enforces only the total ceiling; one-thread-per-role and
-single-writer ownership are orchestration-policy checks recorded in launch
-tickets and route receipts, not separate host locks.
-Builder and Coder may both exist in the roster, but only one has active writing
-ownership at a time and their write turns never overlap. A confirmed terminal
-failure can use the single declared same-role replacement allowance only after
-partial effects and predecessor state are checked; a timeout does not free a
-slot.
-
-Chief is intentionally thin. It retains the research or product intent,
-non-goals, unresolved scientific or architectural decisions, assurance,
-acceptance, and final synthesis. Substantive discovery goes to Scout,
-cross-file organization or integration to Builder, a frozen edit-test loop to
-Coder/Writer, and independent acceptance to Reviewer. Each return is compressed
-to accepted evidence, current artifacts, remaining choices, verification, and
-the next safe action. This reduces Chief context pressure without transferring
-its accountability.
-
-The Codex adapter checks whether the actual worker API can launch the selected
-exact model/effort with the needed permission and fork controls. A catalog or
-account entry without worker-launch support is `unsupported`, not quota
-exhaustion. Authoritative quota evidence is used only when available for a
-supported candidate: a known applicable limit blocks it, while missing telemetry
-remains `unknown` and does not block it. Quota does not justify a Sol/Astra
-escalation, weaker scientific review, or an undeclared same-role replacement.
-See [launch capability and quota evidence](.agents/skills/cost-efficient-orchestration/host-model-routing.md#launch-capability-and-quota-evidence).
-
-Reviewer is an independence contract. In this Codex package, both routine and
-consequential Reviewer work starts at Sol/high; trivial objective checks should
-run directly rather than create a cheaper pseudo-reviewer. An observed Luna or
-Sol/medium runtime cannot retroactively replace a planned Sol/high review. Any mismatch
-stops that attempt and still consumes its attempt budget.
-Astra remains an evidence-gated escalation inside the same Reviewer contract
-only after a documented Sol/high cross-domain or cross-tool coherence shortfall;
-ordinary defects, missing evidence, profile mismatch, and a generic `BLOCK`
-return to repair first. It
-does not have a separate role. An Astra Chief's self-review is not independent.
-
-GPT-6 Astra is the Codex adapter's on-demand frontier lane. Select it explicitly
-for the hardest end-to-end phase or a material documented shortfall. For a new
-route, medium effort is a local starting policy; existing user-selected effort
-is preserved. Supported effort values and delegation behavior must be checked
-against the active host. See the [host model routing boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary).
+It owns the visible START/CHANGE/END and pre-final resource receipts, with conditional references for:
+- [Canonical task kinds, subtypes, pairs, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).
+- [Roster, single-writer budgets, recovery, policy freshness and usage cohorts](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md).
+- [Implementation ownership, direct exceptions, targeted production verification and artifact-state review](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md#balanced-gate-and-direct-work).
+- [Scientific assurance](.agents/skills/cost-efficient-orchestration/scientific-risk.md).
 
 ## Astra Edition: a thin frontier and a strong middle
 
-The Astra Edition routes phases rather than assigning one model to a whole task:
-
-```text
-deterministic preparation
-        ↓
-Chief control phase
-        ├── Luna: inventory, evidence maps, fixed transforms, and straightforward local code
-        ├── Sol/medium: coupled mapping, ordinary code reasoning, stable synthesis, coordinated implementation
-        ├── Sol/high: justified interacting invariants, stateful integration, independent review
-        └── Astra: exceptional cross-tool coherence or documented shortfall
-                          ↓
-                 compact accepted checkpoint
-                          ↓
-                 return to balanced Sol/medium or fast Luna
-```
-
-Before non-review strong or frontier work, the dispatcher checks whether
-stable scope and objective verification make balanced Sol/medium sufficient.
-GPT-6.1 Sol spans both lanes; balanced Sol/medium does not trigger a recursive
-strong-lane gate or require a retired-model trial. If Astra remains
-Chief, substantial independent implementation can run on a balanced Builder while
-Scout and Reviewer retain their own slots and Coder remains available for a
-frozen edit-test unit. Chief handles only the unresolved decision or acceptance
-check. Known commands and
-obvious micro-edits run directly. A frozen, separable edit-test loop leaves a
-Sol or Astra Chief for the fitting Coder pair even when Chief has no parallel work; the
-saving comes from retiring implementation context. A direct-work exception
-records the actual handoff, tool, or availability cost; merely labeling a phase
-"balanced" does not change its runtime model. General volume stays on Luna.
-There is no required model share or quota-draining target.
-
-Effort is selected per unit instead of copied from Chief: low for fixed-field
-work, medium for ordinary bounded units, high for a justified reasoning or
-review need. Higher supported settings require explicit user choice or evidence.
-Resolve conflicting inputs before handoff and verify the real production entry
-path early; a passing toy engine is not proof of a completed integration.
-
-Astra receives the smallest phase packet that preserves intent, accepted evidence, unresolved dependencies, verification, and the stop condition. Bulk discovery, completed logs, inactive Skills, predictable implementation, and routine testing stay outside its standing context. Cost evaluation uses accepted outcomes, rework, escalation, elapsed time, evidence coverage, and authoritative billing or quota data when available; stored model counts and incomplete token fields are not treated as savings.
-
-The full portable protocol is in [hierarchical routing and cost evaluation](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md). Current model IDs and availability handling remain in the [host mapping](.agents/skills/cost-efficient-orchestration/host-model-routing.md).
+Route phases by their bounded output and least adequate capability, then return stable work down. The [host matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md) owns current model policies and the [frontier boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary); these starting policies make no measured savings or quality claim. Host controls cannot be replaced by routing prose.
 
 ## Seal milestones: turn history into reusable assets
 
-Consolidate a bounded research or engineering outcome before its next dependent
-phase, or before changing the active goal, method, or artifact/interface
-contract—not after every command. Summarize the result, verify it, record the
-authorized acceptance, and seal its evidence before opening a wider boundary.
-Missing checks or scope-blocking questions stay visible; unrelated questions can
-be deferred. S4 still requires explicit human acceptance.
-
-Keep one compact task-record index of source artifacts, scoped decisions and
-rules, checks, and the next bounded handoff. Reuse or extract tested tools for
-stable repeated work when authorized; do not turn each milestone into a tooling
-project. Carry those assets and their evidence pointers forward, not duplicate
-logs or whole code snapshots. A summary does not itself clear live host context.
-The [milestone-consolidation protocol](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md#milestone-consolidation)
-defines retention, reopening, and conditional tooling decisions.
+Before expansion, seal the prior boundary with acceptance evidence or record blockers. Carry a compact artifact/evidence index, scoped decisions, and next handoff instead of raw histories. The [milestone protocol](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md#milestone-consolidation) owns retention, reopening, and conditional tool extraction.
 
 ## General, six research Skills, and one mathematical entry
 
@@ -342,12 +176,7 @@ Preview the default Codex installation:
 
 Select `--host portable`, `claude`, or `all` when needed, then replace `--dry-run` with `--install`. After pulling updates, use `--update`; use `--status` for a read-only check. Installer output reports the package version and edition so linked Skills and managed host instructions can be checked against the repository revision.
 
-> **Policy reload required after an update.** Existing/open tasks do not become
-> current-policy tasks merely because files were installed or the application
-> restarted. Start or fork a new task after the update; its first nontrivial
-> route receipt should report `Chief policy freshness: current`. Until then,
-> classify older tasks as `stale` or `unknown`, and a new child of an old Chief
-> as `mixed`. Do not include those cohorts in a claimed post-policy comparison.
+> **Policy reload required after an update.** Installed files do not reload open tasks. Start/fork a new task after deployment; [freshness/cohort rules](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md#policy-freshness-and-usage-cohorts) distinguish current, stale, unknown, and mixed usage.
 
 If `codex doctor` reports that HTTPS works but the Responses WebSocket times out while macOS has an active manual HTTP(S) proxy, preview and then import that proxy into a marked Codex `.env` block:
 
@@ -369,18 +198,7 @@ Refresh the installation after changing role profiles; Skill links still follow
 the checkout. The installer does not copy the repository into every project and
 does not require Python.
 
-`--status` checks files, not live routing. A successful child launch and separate
-model/effort evidence are required before calling a route verified. Validate the
-next suitable bounded task outside this source repository, whose project-local
-profiles can otherwise hide a broken personal installation. A failed role launch
-must not silently become an expensive Chief route or a weaker independent review.
-On Codex, the orchestration Skill includes a read-only runtime probe that can
-record the current Chief and direct-child model/effort from host thread state
-without retaining local paths or thread IDs. A managed policy-state marker lets
-the same probe compare task start with accepted deployment and report
-`current`, `stale`, or `unknown`; it does not force an existing task to reload.
-Other harnesses keep these fields unknown unless they provide an equivalent
-receipt.
+`--status` checks files, not live routing. Verify the next suitable real task outside this source repository, where local profiles cannot mask a broken personal installation. [Launch verification](.agents/skills/cost-efficient-orchestration/host-model-routing.md#a-named-role-is-visible-but-cannot-start) covers effective permissions, pair evidence, and failed launches; [entry receipts](.agents/skills/cost-efficient-orchestration/SKILL.md#one-visible-start-receipt) govern Codex runtime/freshness probes and other-host unknowns.
 
 A working project normally keeps only its local instruction file, one `tasks/` record for consequential work, and truly necessary host overrides. The user starts a normal task; Chief performs the routing.
 
@@ -403,60 +221,10 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Version 0.7.0 moves balanced mapping, ordinary code reasoning, synthesis, and
-integration to GPT-6.1 Sol/medium, with Sol/high for justified strong work and
-all independent Reviewer starts. GPT-6 Luna handles mechanical and fully
-specified local work; GPT-6 Astra/medium remains exceptional and evidence-gated.
-The [canonical matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
-owns exact pairs. Four unpinned roles, explicit launch controls, one writer,
-review authority, and user-selected Chief settings stay intact. Historical
-fixtures and usage retain their recorded models. API effort support is separate
-from host support, and these starting choices make no measured cost or performance
-claim.
+Current routing policies live in the [canonical host matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix). Earlier releases introduced the four unpinned roles, task-kind/subtype selection, explicit launch controls, freshness/cohort receipts, quota distinctions, secure-readable role copies, optional proxy adapter, and conditional method/hierarchical routing. Historical fixtures and usage retain their recorded models.
 
-Version 0.6.6 refreshed the then-current launch matrix for Luna, Terra, Sol, and
-Astra guidance, removed retired-model routes and candidate-specific polling, and
-kept explicit model/effort, reviewer Sol/high, runtime mismatch, and stale-host
-rules unchanged. Source edits do not make an already running host adopt this
-policy. Version 0.6.5 adds finer Coder and Builder starting policies under their
-existing parent task kinds without changing role, assurance, escalation, or
-lifecycle rules. Version 0.6.4 checks actual worker-launch capabilities before quota, schedules
-the four-role roster within the live host limit, and separates Chief goal
-definition from Builder decomposition. It distinguishes deeper Sol reasoning
-from evidence-gated Astra escalation and reports installed instruction/config
-payload drift directly in `--status`. These are Chief routing instructions and
-deployment checks; they do not switch an active Chief or expand host capacity.
+Installation, successful child launch, and configured/runtime pair verification remain distinct. Use a newly loaded task and suitable real unit outside this source repository after updates; linked Skills without refreshed profiles are partial deployment. See [launch adapter verification](.agents/skills/cost-efficient-orchestration/host-model-routing.md#a-named-role-is-visible-but-cannot-start).
 
-Version 0.6.3 introduced a needs-based four-role
-roster, one open thread per Scout, Builder, Coder/Writer, and Reviewer. It keeps
-one active writing owner, starts Codex Reviewer work at Sol/high, and makes
-Chief-minimal offloading an explicit contract without forcing every task to
-launch all four roles. Version 0.6.2 added explicit policy-freshness receipts, a privacy-safe managed
-deployment marker, stale/current/mixed usage cohorts, and a mandatory installer
-warning that existing tasks do not automatically adopt an update. It also
-separates all-machine from project-filtered statistics, actual launches from
-planned routes, and launch counts from token consumption. Version 0.6.1 added
-privacy-minimized quota receipts, explicit `available`/`blocked`/`unknown`
-semantics, and a non-retroactive Reviewer mismatch rule. It retains the
-quota-aware task-shaped model and effort selection introduced in v0.6.0, with
-four unpinned canonical profiles and no fixed-model compatibility set, plus the Astra-aware
-hierarchical control plane, six research
-method contracts, one discoverable mathematical entry with three on-demand
-method modules, model and effort fields directly in `CHIEF DECISION`, compact
-phase handoffs, a Terra opportunity gate, bounded code execution, an optional
-reversible Codex system-proxy adapter, thin host adapters, and a tested
-installer with safe legacy-link migration and secure-readable role copies. The efficiency audit removes
-duplicated route banners, clarifies fixed-profile precedence and actual lane
-changes, and separates direct calculations from delegated implementation.
-The Codex adapter can now resolve host-recorded Chief and child model/effort,
-while code, configuration, workflow, and routing mutations start at S1.
-Source and isolated-install checks do not establish that a running host exposes
-the current unpinned profiles. After an authorized update, use a newly loaded task
-and a suitable real work unit to verify advertised controls, the requested pair,
-effective permissions, and the observed runtime receipt. Linked Skill files may
-be read on a subsequent load before role files are refreshed; keep the missing-
-profile fallback explicit and do not describe that partial state as deployment.
-Required checks stop once accepted unless a new change or failure warrants more.
 Strict proof production and
 proof-assistant verification remain explicit Future Work: the mathematical
 entry can record proof obligations but must not certify them. Databases,

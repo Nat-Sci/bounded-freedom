@@ -1,74 +1,62 @@
 # Operations, lifecycle, and recovery
 
-Use this reference when work may spawn, retry, mutate external state, compact, or outlive the current context. It supplements one task record; it does not create another.
+Read for spawning, retries, external mutation, compaction, or closure. Use one task record, not another brief/log.
 
 ## Freeze and budget
 
-Before a substantial phase, state objective, task kind, accepted inputs, active rules, files/evidence in scope, expected verification, and next safe action. Resolve conflicts between old and current specifications before delegation. Record a needs-based role roster: normally one or two roles, at most four concurrently open threads, and at most one Scout, Builder, Coder (Writer), and Reviewer. The effective capacity is the minimum of that policy maximum and an actual host limit when known; otherwise record it as unknown. Queue by dependency, reserve feasible mandatory review, and do not make Chief absorb substantive work because capacity is lower. Plan one initial launch per selected role, at most four initial attempts, plus normally zero and at most one declared same-role replacement attempt for the whole task. Do not fill unused slots merely because they exist. Plan mandatory review in its own slot. Allow one active writing owner, prohibit overlapping Builder/Coder write turns, and prohibit nested delegation.
+Before substantial work freeze objective, task kind/output, accepted inputs, active rules, scope, permissions/prohibitions, observable acceptance/checks, stop conditions, unresolved choices, and next safe action. Resolve specification conflicts before delegation.
 
-Update the existing task record after scope freeze and each meaningful phase with the compact decision/route evidence, accepted inputs, worker state, changed artifacts, checks, unresolved uncertainty, and next safe action. Keep retained evidence portable and concise; omit raw logs and local identifiers.
+Select only needed Scout (facts), Builder (accepted-boundary integration), Coder (implementation Writer), and Reviewer (independent evidence). Normally one/two roles; at most four open threads, one per canonical role. Effective capacity is `min(policy maximum, actual host limit)`, or unknown. Queue dependencies and reserve feasible mandatory review; lower capacity does not assign substantive overflow to Chief. No nested delegation, duplicate units, or overlapping writer turns; one active writing owner.
+
+Budget one initial launch per selected role, at most four initial attempts, normally zero and at most one declared same-role replacement for the whole task. Do not fill unused slots.
+
+Each ticket names contract, task kind/assurance, requested model AND effort/reason, effective permissions, exact owned files/interfaces, accepted integration boundary/inputs, roster/current writer, observable checks, return boundary, stop conditions, and remaining budget. Workers receive only the bounded context. Update the existing evidence index after freeze and meaningful phases with worker state, changed artifacts/version or fingerprint when practical, checks/outcomes, gaps, repair owner, next action. [Host routing](host-model-routing.md#codex-launch-adapters) owns launch support, configured/runtime comparison, and mismatch handling.
 
 ## Milestone consolidation
 
-Before opening the next substantial milestone or expanding scope, close the prior boundary in its existing task record. Consolidation is due when a bounded research or engineering outcome is ready for a dependent phase, or before changing the active goal, method, or artifact/interface contract; it is not a ceremony for each trivial command. Mark missing checks, required review, or scope-blocking questions as `incomplete`. Mark a boundary `verified` once its declared checks and applicable review pass, and `accepted` only with a recorded acceptance decision within the decision-maker's authority; S4 requires explicit human acceptance. Seal the accepted boundary with its evidence. Retain failed or negative evidence, and defer unrelated open questions without treating them as blockers to this boundary. A successful command alone is never acceptance.
+Before the next substantial milestone, scope expansion, or goal/method/artifact-interface change, seal the prior boundary or mark it `incomplete` with missing checks/review/blocking questions. `verified` requires declared checks and applicable review; `accepted` requires an authorized recorded decision, explicit human acceptance for S4. A successful command alone is not acceptance. Retain failed/negative evidence; defer unrelated questions.
 
-Use the one task record as a compact index, not as a second brief, QA diary, or log archive. For each substantial milestone, retain its scope and status; artifact, code, data, or configuration version/fingerprint when available; checks and acceptance evidence; relative pointers to the source artifacts; the frozen decision or promoted rule and its scope; deferred items; a tooling decision; and the next bounded handoff with its writing owner. Existing code/configuration/tests/data/artifacts remain the source of truth. Do not paste whole logs, code, raw host histories, or command transcripts. Keep sensitive or incidental run logs local and ignored, and redact them before any retention.
+Keep a compact index: milestone scope/status; artifact/code/data/configuration version/fingerprint; checks and acceptance evidence; relative source pointers; frozen decision/promoted rule and its scope; deferred items; tooling decision; next bounded handoff/writer. Source artifacts stay authoritative. Do not paste logs/code/host histories/transcripts; keep incidental sensitive logs local/ignored or redact before retention.
 
-Promote a rule only when the evidence supports its stated scope. One project result does not establish a universal scientific rule. For a repeated stable transformation, decide explicitly: `reuse`, `extract`, `defer`, or `not-needed`. Extraction is justified only when it is in authorized scope and can state an input/output contract, errors or limits, and verification; it may be a small extension to an existing tool or a tested script. No milestone requires a new tool or framework.
+Promote rules only within evidence-supported scope, never universalize one project's scientific result. For repeated stable transformations choose `reuse`, `extract`, `defer`, or `not-needed`. Extract only within authorization, with input/output contract, errors/limits, and verification; an existing-tool extension or tested script may suffice. No mandatory new tool/framework.
 
-The next packet carries only the frozen objective and current rules, accepted bounded facts with pointers, active artifact version, validation, unresolved decisions, and next safe action. Retire bulky prior logs and inactive context from future packets, not from user data. Writing a summary does not clear an already loaded host context or reload a stale session; use actual host compaction or an authorized compact fresh handoff when needed.
+Next packets carry frozen objective/current rules, accepted facts/pointers, active artifact version, validation, unresolved decisions, next action. Retire bulky logs/inactive context from packets, not user data. Summaries neither compact host context nor reload stale policy; use actual host compaction or an authorized compact fresh handoff.
 
-When new evidence or an artifact version changes a premise, explicitly reopen only the affected accepted boundary, identify what was invalidated, and retain the historical acceptance and its evidence. Do not silently overwrite it or rerun unrelated completed work by default. Preserve authorization boundaries: never delete or overwrite user data, archive user tasks, force-add ignored records, auto-commit, or publish as part of consolidation. Shared documentation must not link ignored personal task records.
+When new evidence/version invalidates a premise, explicitly reopen only the affected boundary, identify invalidated conclusions, and preserve historical acceptance/evidence. Do not rerun unrelated completed work by default. Consolidation never authorizes deletion/overwrite of user data, auto-archive, force-add of ignored records, auto-commit, or publishing. Shared documentation must not link ignored personal records.
 
 ## Resource snapshot
 
-The [entry Skill](SKILL.md#pre-final-resource-receipt) owns the final adapter call, receipt format, coverage, and privacy rules. Do not add a second telemetry pass or estimate missing fields.
+[The entry](SKILL.md#pre-final-resource-receipt) owns adapter/receipt coverage; no second telemetry pass or estimated fields.
 
 ## Policy freshness and usage cohorts
 
-After installing or updating routing policy, existing tasks keep the instruction chain loaded for their run. Treat policy adoption separately from file deployment:
+File deployment and loaded policy differ:
 
-- `current`: the task/run began after the accepted managed deployment, or the host provides an authoritative reload receipt;
-- `stale`: available timestamps prove the task/run predates deployment;
-- `unknown`: deployment or task-start evidence is unavailable;
-- `mixed`: a child was launched after deployment by a stale or unknown Chief. Its observed model/effort is real runtime activity, but it does not prove that the parent used the current routing policy.
+- `current`: task/run started after accepted managed deployment, or authoritative host reload receipt.
+- `stale`: timestamps prove task/run predates deployment.
+- `unknown`: deployment/start evidence unavailable.
+- `mixed`: post-deployment child of stale or unknown Chief; observed runtime activity does not prove parent-policy adoption.
 
-For portable verification, start or fork a new task after deployment. Restarting an application, updating linked Skill files, seeing a current file-status result, or observing a child launch is not alone an authoritative reload receipt for an existing task. Surface freshness and evidence in the first nontrivial route receipt; stop calling a stale or unknown task a current-policy test.
+Surface freshness/evidence in the first nontrivial receipt. Current files/status, application restart, linked Skill update, planned routing, or child launch alone do not prove reload. Start/fork a new task after deployment for portable current-policy verification; do not call stale/unknown work a current-policy test.
 
-When comparing usage, declare machine/host scope, any project filter, the policy deployment boundary, cohort, actual-launch evidence, and token coverage. Keep internal auto-review separate. A planned, attempted, rejected, or quota-blocked route is not an actual model launch. Launch counts are not token use; historical token or cost totals remain unavailable unless a privacy-safe authoritative event ledger covers the full cohort.
+Usage comparisons declare machine/host scope, project filter, deployment boundary, cohort, actual-launch evidence, internal auto-review separately, and token coverage. Planned/attempted/rejected/blocked routes are not actual launches; launch counts are not token use. Historical tokens/cost stay unavailable without full privacy-safe authoritative ledger coverage.
 
 ## Worker lifecycle
 
-Track `planned -> running -> done | attention -> closed`. `done` means a return arrived, not that it was accepted. Inspect current observable worker state, consume and verify completed returns, and close only completed work through a supported host control. Do not edit host state, archive a user task, or treat a stored relationship as a live process.
+Track `planned -> running -> done | attention -> closed`; a return (`done`) is not acceptance. Inspect observable state, verify returns, close only completed work through supported controls. Do not edit host state or equate stored relationships with live processes. Without close support record `host_close=unsupported`, separating acceptance/completion from closure; never archive user tasks.
 
-Before task work, check the selected launch adapter and the worker's ticket:
-contract, task kind, requested model/effort, effective permission boundary,
-scope, role-roster state, writing owner, and acceptance must agree. Record configured and observed pairs
-separately; stop on an observed mismatch and never repair it by rewriting the
-planned pair. A fresh route may be declared before fresh work, but the
-mismatched attempt still consumes its worker/attempt budget and does not
-satisfy the original review. An unknown runtime value stays unknown and cannot
-establish a successful runtime-routing test.
+Before work, launch adapter and ticket must agree on contract, kind, model/effort, permissions, scope, roster/writer, and acceptance. Unknown runtime cannot prove routing success. Reuse only within fitting capability, ownership, and evidence boundaries. Model/effort change needs real supported control or a declared same-role replacement; compact fresh context must be a real handoff.
 
-Apply the host reference's exact launch-capability filter before launch. A
-selected pair the worker API cannot honor is `unsupported`, not quota
-exhaustion. Use authoritative quota evidence only when available for a supported
-candidate: a known applicable limit is blocked, and absent telemetry is unknown
-without blocking the pair. After a confirmed termination or rejected launch,
-inspect partial side effects and writer state before a real handoff;
-unknown/time-out state never authorizes a replacement. Failed workers still
-consume the attempt budget; a replacement uses the declared same-role allowance
-and never overlaps its predecessor.
+Confirmed termination or rejected launch requires partial-side-effect and writer-state inspection before handoff. Confirm predecessor stopped; timeout/unknown never permits replacement. Failed attempts consume budget; replacements cannot overlap or hide in another role.
 
-If the host cannot close a completed worker, record acceptance/completion separately from `host_close=unsupported`; do not say its process was closed. Reuse a worker only inside its ownership and evidence boundary and only when its capability still fits. A model or effort change requires host-supported control or a declared same-role replacement within the remaining attempt budget; when a lower lane needs compact fresh context, make that handoff real.
-
-Stop a worker after two materially different failed attempts and return the
-evidence to Chief. Reuse does not grant unlimited retries or broaden ownership.
+Ordinary repair stays with the fitting writer under scope, availability, sandbox, attempt, and timeout controls. Transfer only by explicit handoff, not failure alone. Stop after two materially different failed attempts and return evidence to Chief; reuse grants neither unlimited retries nor broader ownership.
 
 ## Timeout and retry
 
-A timeout means the result is unknown. Classify the operation, inspect observable state, and continue when the effect is visible. Under the declared allowance, retry only read-only or proven-idempotent work once (reuse an idempotency key when provided). Never retry ambiguous mutation. On a worker wait timeout, poll the same worker/status; do not spawn a replacement. Record operation class, state check, retries, and final disposition.
+Timeout means unknown. Classify operation and inspect observable state; continue when effect is visible. Within allowance, retry read-only or proven-idempotent work once, reusing an idempotency key if provided. Never retry ambiguous mutation. For worker wait timeout poll the same worker/status; no replacement. Record operation class, state check, retries, disposition.
 
 ## Resume and completion
 
-After interruption or compaction, re-read applicable instructions and the task record; inspect actual diffs, artifacts, external status, worker lifecycle, and retry counters; then resume only the recorded next safe action. A commit may be a recovery anchor when authorized, but never substitutes for evidence. Run meaningful planned verification and finish once it answers the claim; do not add wording-mirror checks or repeat unchanged successful runs. Already authorized in-scope work needs no fresh conversational permission, though required sandbox escalation still applies.
+After interruption/compaction re-read applicable instructions/record; inspect actual diffs, artifacts, external status, worker state, and retry counters. Resume only recorded next safe action. Authorized commits may anchor recovery but cannot substitute for evidence.
+
+Use [targeted acceptance/rechecks](hierarchical-routing.md#balanced-gate-and-direct-work). Finish when meaningful planned verification answers the claim; no wording-mirror checks or unchanged reruns without evidence need. Authorized in-scope work needs no fresh conversational permission; sandbox escalation still applies.

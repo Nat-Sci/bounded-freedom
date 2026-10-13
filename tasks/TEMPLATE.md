@@ -1,88 +1,67 @@
 # Task record: concise title
 
+Local-only evidence index; source artifacts remain authoritative. Follow the [dispatcher](../.agents/skills/cost-efficient-orchestration/SKILL.md), [host matrix/launch rules](../.agents/skills/cost-efficient-orchestration/host-model-routing.md), [lifecycle/milestones](../.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md), and [implementation/acceptance rules](../.agents/skills/cost-efficient-orchestration/hierarchical-routing.md) when applicable. Record decisions/evidence, not duplicated policy or raw logs.
+
 ## Intent
 
-- Objective:
-- Non-goals:
-- Assumptions and uncertainty:
+- Objective, non-goals, decision constraints:
+- Assumptions, unresolved science/architecture, uncertainty:
+- Accepted inputs and relative source pointers:
 
 ## Chief decision
 
-- Package version and edition:
-- Task method: general or one matching Skill
-- Task kind and expected output: select from the canonical host matrix or name the concrete unit and justify a different shape
-- Assurance: S0–S4, classified by the highest plausible consequence
-- Current phase and active context slice:
-- Execution contract: direct, Scout, Builder, Coder (implementation Writer), or Reviewer; identify each planned worker separately
-- Chief planned capability lane: fast, balanced, strong, frontier, UI-selected, or unknown
-- Chief planned model: exact value, current UI selection, inherited, or unknown
-- Chief planned reasoning effort: exact value, current UI selection, inherited, or unknown
-- Chief runtime model: exact authoritative value or unknown
-- Chief runtime reasoning effort: exact authoritative value or unknown
-- Service tier: planned / configured / observed, each with evidence source or `unknown`; configured is not runtime or billed
-- Speed decision: Standard for cost-focused nonurgent work; Fast/Ultrafast latency tradeoff, preserving user-selected settings
-- Chief metadata source: explicit launch, loaded host profile, authoritative runtime, supplied UI, inherited, UI-selected, or unknown
-- Chief policy freshness: current, stale, or unknown
-- Chief policy evidence: managed install marker plus task/run start, authoritative host reload receipt, or unknown; a fresh child of a stale Chief is a mixed cohort rather than proof of current parent policy
-- Planned route: capability lane, host model, effort, and lower-lane decision for each bounded unit
-- Selection reason: limiting factor, why the cheaper/simpler route is inadequate when escalating, and why the chosen effort is sufficient
-- Escalation evidence: narrow unresolved question, evidence already checked, missing capability, expected extra check, and whether depth supports higher Sol effort or coherence supports Astra/medium
-- Host launch adapter: one current unpinned role; actual explicit model/effort controls, effective permissions, and unsupported/stale-session boundary
-- Host capability check: exact model IDs, supported efforts, effective permissions, fork controls, actual host capacity or `unknown`; classify an unavailable selected pair as `unsupported`, separate from quota
-- Availability and fallback: authoritative quota source/freshness, applicable windows and decision when available, or `unknown`; a known applicable limit is blocked, while unknown is not blocked; record any separately selected supported route, side-effect checkpoint, and remaining worker/review budget without raw quota payloads or account/auth/reset-credit identifiers
-- Actual route: capability lane, host model, effort, and any escalation or return to a lower lane
-- Worker configured model/effort and source; separately, runtime-observed model/effort or unknown; resolve profile precedence before launch and never rewrite planned values to fit an observed mismatch
-- User-visible route receipts: one combined `CHIEF DECISION / ROUTE START`, material `ROUTE CHANGE` events, and `ROUTE END`
-- Balanced opportunity: eligible, excluded with reason, or not applicable
-- Planned role roster: needed or omitted Scout, Builder, Coder/Writer, and Reviewer; at most one open thread per role and four total
-- Effective worker capacity and queue: `min(policy maximum, actual host limit)` when known, otherwise `unknown`; dependency order and feasible mandatory-review reservation
-- Planned workers: one initial launch per selected role, at most four initial attempts, and normally zero or one declared same-role replacement attempt
-- Actual workers: per-role thread, configured and observed pair, spawn attempts, retries, accepted/rejected returns, and host close status (confirmed, unsupported, or unknown)
-- Current writing owner and handoff checkpoint: Chief, Builder, Coder/Writer, or none; Builder/Coder write turns must not overlap
-- Chief-retained responsibilities: intent, non-goals, unresolved scientific or architectural decisions, assurance, acceptance, and final synthesis
-- Goal contract: objective meaning, non-goals, decision constraints, unresolved choices, and observable acceptance; Scout supplies existing facts and Builder decomposes the accepted goal into interfaces, dependencies, packets, and checks
-- Chief-offloaded responsibilities: discovery, coordination, bounded implementation, routine test/log work, and independent review assigned to named roles
-- Worker-budget rationale: why each role is needed and why omitted roles are unnecessary; do not fill the roster for completeness
-- Independent-review plan: coherent evidence checkpoint, acceptance claim, Reviewer Sol/high route, and any documented Astra escalation condition
-- Owned scope:
-- Verification:
-- Stop conditions:
+- Package version/edition; task method; task kind/subtype and output:
+- Assurance and consequence rationale:
+- Phase/context slice; execution contract; owned scope/permissions/prohibitions:
+- Chief planned capability lane:
+- Chief planned model:
+- Chief planned reasoning effort:
+- Chief runtime model:
+- Chief runtime reasoning effort:
+- Chief metadata source:
+- Chief policy freshness:
+- Chief policy evidence:
+- Service tier: planned/configured/observed, sources or unknown; speed decision/tradeoff:
+- Unit routes: selection reason, lower-lane/balanced opportunity, escalation evidence (question, checked evidence, limiting capability, expected check):
+- Host/profile/control availability: exact model/effort, effective sandbox, fork support, quota source/freshness/windows/decision or unknown:
+- Planned roster, effective capacity, dependency queue, reserved review:
+- Initial/replacement attempt budget and rationale:
+- Current writing owner; actual edit-test-repair owner; author/applicator if distinct:
+- Direct unit exception: concrete handoff/tool/control/availability cost and reassessment boundary:
+- Observable acceptance, checks, stop conditions, next safe action:
+- Visible START / material CHANGE / END receipt evidence:
 
 ## Evidence and execution
 
-- Relevant evidence:
-- Changes or artifacts:
-- Checkpoint: accepted inputs, active and retired context, current artifact or repository identity, completed checks, route outcome, unresolved items, and next safe action
-- Retries: operation class, state check, count, and final disposition
-- Elapsed time:
-- Cost or quota evidence: authoritative normalized source, freshness, applicable windows and decision, or unknown; never retain raw account telemetry or infer billing from incomplete token fields
-- Usage-comparison scope when applicable: machine/host, project filter, deployment boundary, current/mixed/stale-or-unknown cohort, actual-launch evidence, internal auto-review treatment, and token coverage
+- Per-role configured pair/source and separate runtime pair/receipt or unknown; actual launches, lifecycle, retries, accepted/rejected returns, close status:
+- Changed artifacts/version or fingerprint; checks/outcomes; gaps; repair owner:
+- Checkpoint: accepted inputs, active/retired context, route changes, unresolved choices, next action:
+- Retry operation class, observable-state/side-effect inspection, count, disposition:
+- Wall time; authoritative cost/quota evidence or unknown:
+- Usage comparison if applicable: host/machine scope, project filter, deployment boundary/cohort, actual-launch evidence, internal auto-review treatment, token coverage:
 - Deviations:
 
 ### Milestone consolidation (substantial milestones only)
 
-- Milestone scope and status: `incomplete` for missing checks/review or scope-blocking questions; `verified` after checks and applicable review pass; `accepted` only with the authorized decision below
-- Acceptance decision and authority: supporting evidence, accepting role, and explicit human acceptance for S4; seal only the accepted boundary
-- Artifact/code/data/configuration version or fingerprint when available:
-- Checks, acceptance evidence, and compact relative evidence index:
-- Frozen decision or promoted rule and its scope:
-- Negative evidence, unresolved questions, and deferred items:
-- Tooling decision: `reuse`, `extract`, `defer`, or `not-needed`; for extraction, input/output contract, errors/limits, and verification
-- Reopen record when new evidence/version invalidates a premise: affected boundary, preserved historical acceptance, and bounded re-check
-- Next bounded handoff and writing owner: objective/current rules, accepted facts with pointers, active artifact version, validation, unresolved decisions, next safe action; retired bulky context is not deleted data or proof of host compaction
+- Scope/status; checks/review blockers:
+- Acceptance decision, authority, supporting evidence; S4 human acceptance:
+- Artifact/code/data/configuration version/fingerprint; compact relative evidence index:
+- Frozen decision/promoted rule and supported scope:
+- Failed/negative evidence, deferred questions:
+- Tooling: reuse/extract/defer/not-needed; extraction contract/errors/limits/verification:
+- Reopened boundary/invalidated premise; preserved historical acceptance; bounded recheck:
+- Next handoff: objective/current rules, facts/pointers, artifact version, validation, unresolved decisions, safe action, writer:
 
 ## Verification and review
 
-- Checks and comparisons:
-- Production-path coverage: observable entry point, smallest integrated check, and any scaffold/toy-only evidence that does not establish completion
-- Evidence coverage: verified acceptance checks divided by all declared acceptance checks, with any unknown checks named
-- Route evidence: actual host action when changing model/effort, first-pass acceptance, rework, escalation, elapsed time, and balanced-opportunity capture when measured; distinguish planned scenarios from executed tests
-- Privacy and portability check:
-- Reviewer verdict when required:
-- Human acceptance when required:
+- Production entry and smallest integrated check; toy/scaffold limitations:
+- Checks/comparisons; repeat-check rationale; verified/declared coverage and unknown checks:
+- Targeted diff/artifact inspection; coherent state/version; advisory/final review; affected reopened scope:
+- Route evidence: actual host controls, first-pass acceptance, rework/escalation, elapsed time, balanced opportunity when measured:
+- Privacy/portability scan:
+- Reviewer verdict; human acceptance where required:
 
 ## Decision
 
-- Outcome:
-- Alternatives rejected:
-- Remaining uncertainty:
+- Outcome, rejected alternatives, remaining uncertainty, next handoff:
+- ROUTE END and pre-final resource receipt pointer/unknowns:
