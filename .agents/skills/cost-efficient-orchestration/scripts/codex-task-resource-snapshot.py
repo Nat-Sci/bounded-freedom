@@ -17,6 +17,7 @@ UTC = dt.timezone.utc
 TEXT_PREFIX = "TASK RESOURCE SNAPSHOT"
 METADATA_SOURCE = "local-codex-event-telemetry"
 COVERAGE = "pre-final-checkpoint"
+CHILD_COVERAGE_REASON = "child coverage unavailable"
 
 TOKEN_FIELDS = (
     "input_tokens",
@@ -93,11 +94,28 @@ def format_int(value: int) -> str:
     return f"{int(value):,}"
 
 
-def aggregate_tokens(rows: Sequence[Dict[str, object]]) -> Dict[str, int]:
-    return {
+def aggregate_tokens(rows: Sequence[Dict[str, object]]) -> Dict[str, object]:
+    result = {
         field: sum(int(row.get(field) or 0) for row in rows)
         for field in TOKEN_FIELDS
     }
+    result["uncached_input_tokens"] = (
+        sum(int(row["uncached_input_tokens"]) for row in rows)
+        if rows and all(row.get("uncached_input_tokens") is not None for row in rows)
+        else None
+    )
+    return result
+
+
+def format_optional_int(value: object) -> str:
+    return "unknown" if value is None else format_int(int(value))
+
+
+def valid_pair(values: object) -> bool:
+    if not isinstance(values, dict):
+        return False
+    a, b = values.get("input_tokens"), values.get("cached_input_tokens")
+    return type(a) is int and type(b) is int and 0 <= b <= a
 
 
 def add_reason(reasons: List[str], reason: str) -> None:
@@ -207,25 +225,22 @@ def fetch_chief_thread(cursor: sqlite3.Cursor, thread_id: str) -> Optional[Dict[
 
 
 def fetch_direct_children(cursor: sqlite3.Cursor, parent_id: str) -> List[Dict[str, object]]:
-    try:
-        cursor.execute(
+    cursor.execute(
             """
             SELECT
-              child.id AS child_id,
+              edges.child_thread_id AS child_id,
               child.rollout_path,
               child.model,
               child.reasoning_effort,
               child.agent_role
             FROM thread_spawn_edges AS edges
-            JOIN threads AS child
+            LEFT JOIN threads AS child
             ON child.id = edges.child_thread_id
             WHERE edges.parent_thread_id = ?
             """,
             (parent_id,),
         )
-        rows = cursor.fetchall()
-    except sqlite3.OperationalError:
-        return []
+    rows = cursor.fetchall()
 
     return [
         {
@@ -282,6 +297,9 @@ def parse_rollout_turns(
             "start_ms": None,
             "complete_ms": None,
             "added": {field: 0 for field in TOKEN_FIELDS},
+            "uncached": 0,
+            "uncached_seen": False,
+            "uncached_valid": True,
         }
         for turn_id in selected_turns
     }
@@ -289,6 +307,7 @@ def parse_rollout_turns(
     owner: Optional[str] = None
     file_totals: Dict[str, Optional[int]] = {field: None for field in TOKEN_FIELDS}
     active_turn: Optional[str] = None
+    previous_pair_valid = True
 
     for record in read_jsonl(path):
         record_type = record.get("type")
@@ -347,8 +366,25 @@ def parse_rollout_turns(
 
         totals = extract_token_totals(payload, "total_token_usage")
         if totals is None:
+            if payload.get("info") is None:
+                continue
+            if active_turn in states:
+                states[active_turn]["uncached_valid"] = False
+            previous_pair_valid = False
             continue
         last_usage = extract_token_totals(payload, "last_token_usage")
+        info = payload.get("info", {})
+        raw_totals = info.get("total_token_usage") if isinstance(info, dict) else None
+        raw_last = info.get("last_token_usage") if isinstance(info, dict) else None
+        pair_valid = valid_pair(raw_totals)
+        deltas = {}
+        uses_last = False
+        pair_fields = ("input_tokens", "cached_input_tokens")
+        reset_fields = [field for field in pair_fields if totals.get(field) is not None
+                        and file_totals.get(field) is not None
+                        and totals[field] < file_totals[field]]
+        pair_reset = bool(reset_fields)
+        ambiguous_reset = pair_reset and len(reset_fields) != 2 and not valid_pair(raw_last)
 
         for field in TOKEN_FIELDS:
             current_total = totals.get(field)
@@ -360,22 +396,45 @@ def parse_rollout_turns(
             if isinstance(last_usage, dict):
                 reset_last = last_usage.get(field)
 
-            if prior_total is None:
+            if field in pair_fields and pair_reset:
+                delta = reset_last if valid_pair(raw_last) else current_total
+                uses_last = valid_pair(raw_last)
+            elif prior_total is None:
                 delta = reset_last if reset_last is not None else current_total
+                if field in ("input_tokens", "cached_input_tokens") and reset_last is not None:
+                    uses_last = True
             elif current_total >= prior_total:
                 delta = current_total - prior_total
             elif reset_last is not None:
                 delta = reset_last
+                if field in ("input_tokens", "cached_input_tokens"):
+                    uses_last = True
             else:
                 delta = current_total
 
             file_totals[field] = current_total
+            deltas[field] = delta
 
             if active_turn is None or active_turn not in states:
                 continue
             state = states[active_turn]
             if delta > 0:
                 state["added"][field] += delta
+
+        if active_turn in states:
+            state = states[active_turn]
+            input_delta = deltas.get("input_tokens")
+            cached_delta = deltas.get("cached_input_tokens")
+            valid = (pair_valid and previous_pair_valid and not ambiguous_reset and
+                     (not uses_last or valid_pair(raw_last)) and
+                     input_delta is not None and cached_delta is not None and
+                     0 <= cached_delta <= input_delta)
+            state["uncached_seen"] = True
+            if valid:
+                state["uncached"] += input_delta - cached_delta
+            else:
+                state["uncached_valid"] = False
+        previous_pair_valid = pair_valid
 
     if owner is None:
         add_reason(reasons, "missing rollout owner")
@@ -400,6 +459,7 @@ def parse_rollout_turns(
                 "start_ms": state["start_ms"],
                 "complete_ms": state["complete_ms"],
                 "added": state["added"],
+                "uncached_input_tokens": state["uncached"] if state["uncached_seen"] and state["uncached_valid"] else None,
             }
         )
     return parsed
@@ -423,7 +483,12 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
                 add_reason(reasons, "chief thread record unavailable")
                 return "unknown", None, [], reasons
 
-            children = fetch_direct_children(cursor, thread_id)
+            try:
+                children = fetch_direct_children(cursor, thread_id)
+                child_coverage_unknown = False
+            except sqlite3.OperationalError:
+                children = []
+                child_coverage_unknown = True
     except sqlite3.OperationalError:
         add_reason(reasons, "state database unreadable")
         return "unknown", None, [], reasons
@@ -440,7 +505,11 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
         add_reason(reasons, "chief rollout file missing")
         return "unknown", None, [], reasons
 
-    owner_id, chief_turn_contexts = load_rollout_owner_and_turns(chief_rollout)
+    try:
+        owner_id, chief_turn_contexts = load_rollout_owner_and_turns(chief_rollout)
+    except OSError:
+        add_reason(reasons, "chief rollout unreadable")
+        return "unknown", None, [], reasons
     if owner_id is None:
         add_reason(reasons, "chief rollout ownership unreadable")
         return "unknown", None, [], reasons
@@ -458,9 +527,8 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
         return "unknown", None, [], reasons
 
     selected_turns: List[Dict[str, object]] = []
-
-    selected_turns.extend(
-        parse_rollout_turns(
+    try:
+        selected_turns.extend(parse_rollout_turns(
             path=chief_rollout,
             thread_id=thread_id,
             model=str(chief.get("model") or "unknown"),
@@ -468,22 +536,31 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
             role=str(chief.get("agent_role") or "Chief"),
             selected_turns=[latest_turn_id],
             reasons=reasons,
-        )
-    )
+        ))
+    except OSError:
+        add_reason(reasons, "chief rollout unreadable")
+        return "unknown", now_ms - latest_turn_start_ms, [], reasons
 
     for child in children:
         child_id = child.get("id")
         rollout_value = child.get("rollout_path")
         if not isinstance(child_id, str) or not isinstance(rollout_value, str):
+            child_coverage_unknown = True
             continue
         child_rollout = Path(rollout_value)
         if not child_rollout.is_absolute():
             child_rollout = codex_home / child_rollout
         if not child_rollout.is_file():
+            child_coverage_unknown = True
             continue
 
-        child_owner, child_turn_contexts = load_rollout_owner_and_turns(child_rollout)
-        if child_owner != child_id:
+        try:
+            child_owner, child_turn_contexts = load_rollout_owner_and_turns(child_rollout)
+        except OSError:
+            child_coverage_unknown = True
+            continue
+        if child_owner != child_id or not child_turn_contexts:
+            child_coverage_unknown = True
             continue
         eligible: List[str] = [
             turn_id
@@ -492,8 +569,8 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
         ]
         if not eligible:
             continue
-        selected_turns.extend(
-            parse_rollout_turns(
+        try:
+            selected_turns.extend(parse_rollout_turns(
                 path=child_rollout,
                 thread_id=child_id,
                 model=str(child.get("model") or "unknown"),
@@ -501,15 +578,19 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
                 role=str(child.get("agent_role") or "Worker"),
                 selected_turns=eligible,
                 reasons=reasons,
-            )
-        )
+            ))
+        except OSError:
+            child_coverage_unknown = True
+
+    if child_coverage_unknown:
+        add_reason(reasons, CHILD_COVERAGE_REASON)
 
     if not selected_turns:
         add_reason(reasons, "no selected turns in checkpoint window")
         return "unknown", now_ms - latest_turn_start_ms, [], reasons
 
     groups: Dict[Tuple[str, str], Dict[str, object]] = {}
-    incomplete = False
+    incomplete = child_coverage_unknown
 
     for turn in selected_turns:
         model = str(turn.get("model") or "unknown")
@@ -530,6 +611,7 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
                 "output_tokens": 0,
                 "reasoning_output_tokens": 0,
                 "total_tokens": 0,
+                "uncached_input_tokens": 0,
                 "elapsed_complete": True,
             },
         )
@@ -548,6 +630,11 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
                 has_tokens = True
         if has_tokens:
             group["observed_token_turn_count"] = int(group["observed_token_turn_count"]) + 1
+        uncached = turn.get("uncached_input_tokens")
+        if uncached is None:
+            group["uncached_input_tokens"] = None
+        elif group["uncached_input_tokens"] is not None:
+            group["uncached_input_tokens"] += int(uncached)
 
         if complete_ms is None:
             elapsed = now_ms - int(start_ms)
@@ -574,12 +661,15 @@ def snapshot(codex_home: Path, thread_id: str, now: dt.datetime) -> Tuple[str, O
 def format_text(rows: List[Dict[str, object]], wall_time_ms: Optional[int], status: str, reason_lines: List[str]) -> str:
     lines = [TEXT_PREFIX, f"Wall time: {format_ms(wall_time_ms)}", f"Status: {status}"]
     observed = aggregate_tokens(rows)
+    if CHILD_COVERAGE_REASON in reason_lines:
+        observed["uncached_input_tokens"] = None
     if any(int(row.get("observed_token_turn_count") or 0) for row in rows):
         lines.append(
             "Observed tokens: "
             f"total={format_int(observed['total_tokens'])} "
             f"input={format_int(observed['input_tokens'])} "
             f"cached={format_int(observed['cached_input_tokens'])} "
+            f"uncached={format_optional_int(observed['uncached_input_tokens'])} "
             f"output={format_int(observed['output_tokens'])} "
             f"reasoning={format_int(observed['reasoning_output_tokens'])}"
         )
@@ -595,6 +685,7 @@ def format_text(rows: List[Dict[str, object]], wall_time_ms: Optional[int], stat
             f"observed_token_turns={row['observed_token_turn_count']} "
             f"input={format_int(int(row['input_tokens']))} "
             f"cached={format_int(int(row['cached_input_tokens']))} "
+            f"uncached={format_optional_int(row['uncached_input_tokens'])} "
             f"output={format_int(int(row['output_tokens']))} "
             f"reasoning={format_int(int(row['reasoning_output_tokens']))} "
             f"total={format_int(int(row['total_tokens']))} "
@@ -605,18 +696,21 @@ def format_text(rows: List[Dict[str, object]], wall_time_ms: Optional[int], stat
         for index, reason in enumerate(reason_lines, start=1):
             lines.append(f"Reason {index}: {reason}")
 
-    lines.append("cached_input_tokens are included in input_tokens")
+    lines.append("cached_input_tokens and uncached_input_tokens decompose input_tokens when observed; neither is added to total")
     lines.append("per-model active_elapsed_ms may exceed task wall time and may overlap")
     return "\n".join(lines)
 
 
 def format_json(rows: List[Dict[str, object]], wall_time_ms: Optional[int], status: str, reason_lines: List[str]) -> str:
+    observed = aggregate_tokens(rows)
+    if CHILD_COVERAGE_REASON in reason_lines:
+        observed["uncached_input_tokens"] = None
     payload = {
         "status": status,
         "wall_time_ms": wall_time_ms,
         "metadata_source": METADATA_SOURCE,
         "coverage": COVERAGE,
-        "observed_tokens": aggregate_tokens(rows),
+        "observed_tokens": observed,
         "results": rows,
     }
     if reason_lines:

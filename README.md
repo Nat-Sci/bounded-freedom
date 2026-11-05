@@ -97,6 +97,25 @@ The Constitution and Skills are portable. Host files stay thin, and project fact
 
 The [orchestration dispatcher](.agents/skills/cost-efficient-orchestration/SKILL.md) separates task method, execution contract, model/effort, and S0–S4 assurance. Chief retains intent and acceptance; Scout supplies facts, Builder coordinates accepted boundaries, Coder owns narrow edit-test-repair, and Reviewer supplies independent evidence.
 
+For a new task, the Chief preference is Sol/max, selected by the human in the [desktop composer model controls](https://learn.chatgpt.com/docs/models?surface=app); preserve any existing or explicitly selected model and effort. Worker routes remain independent; use the [capability decision gate](.agents/skills/cost-efficient-orchestration/host-model-routing.md#capability-gates). Use compact handoffs and batch independent checks. When repeated large cached prefixes dominate, start a fresh task at an accepted milestone with a compact handoff rather than copying full history.
+
+For example: “请先帮我规划；我确认交接后，请在这个项目新建 Sol/max 主任务并执行。” A new task and its model require explicit authorization; a planning consultation is not a second Chief. The [single-Chief protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#single-chief-cross-entry) also documents the human-invoked CLI entry. Copy a short handoff, not full history:
+
+After installation, from the target project directory, a human can start the purpose-built fresh interactive entry with:
+
+```sh
+sh "$HOME/.agents/skills/cost-efficient-orchestration/scripts/start-sol-chief.sh"
+```
+
+Use `--handoff FILE` for a frozen brief; this is an explicit entry, not an automatic scheduler.
+
+```text
+Goal / non-goals / human-frozen decisions:
+Accepted evidence pointers:
+Constraints and permissions:
+First deliverable / check / stop:
+```
+
 It owns the visible START/CHANGE/END and pre-final resource receipts, with conditional references for:
 - [Canonical task kinds, subtypes, pairs, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).
 - [Roster, single-writer budgets, recovery, policy freshness and usage cohorts](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md).

@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import os
 import sqlite3
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 
@@ -150,6 +152,82 @@ def task_complete(timestamp: str, turn_id: str, duration_ms: int):
 
 
 class TaskResourceSnapshotTest(unittest.TestCase):
+    def test_quota_heartbeat_and_asymmetric_reset(self):
+        home = mk_home()
+        rollout = home / "rollout-heartbeat.jsonl"
+        heartbeat = {"type": "event_msg", "payload": {"type": "token_count", "info": None}}
+        last = {"input_tokens": 80, "cached_input_tokens": 30, "output_tokens": 1,
+                "reasoning_output_tokens": 1, "total_tokens": 81}
+        write_rollout(rollout, [session_meta("chief-hb", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "old"),
+            token_count("2026-01-01T00:01:00Z", 100, 20, 1, 1, 101),
+            turn_context("2026-01-01T00:02:00Z", "current"), heartbeat,
+            token_count("2026-01-01T00:03:00Z", 80, 30, 1, 1, 81, last=last)])
+        write_sqlite(home / "state_1.sqlite", "chief-hb", rollout.name, [])
+        row = run_snapshot(home, "chief-hb", "2026-01-01T00:10:00Z")["results"][0]
+        self.assertEqual((80, 30, 50), (row["input_tokens"], row["cached_input_tokens"], row["uncached_input_tokens"]))
+        write_rollout(rollout, [session_meta("chief-hb", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "old"),
+            token_count("2026-01-01T00:01:00Z", 100, 20, 1, 1, 101),
+            turn_context("2026-01-01T00:02:00Z", "current"),
+            token_count("2026-01-01T00:03:00Z", 80, 30, 1, 1, 81)])
+        self.assertIsNone(run_snapshot(home, "chief-hb", "2026-01-01T00:10:00Z")["results"][0]["uncached_input_tokens"])
+        write_rollout(rollout, [session_meta("chief-hb", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:02:00Z", "current"), heartbeat,
+            token_count("2026-01-01T00:03:00Z", 30, 2, 1, 1, 31)])
+        self.assertEqual(28, run_snapshot(home, "chief-hb", "2026-01-01T00:10:00Z")["results"][0]["uncached_input_tokens"])
+
+    def test_child_coverage_failures_preserve_chief_row(self):
+        for case in ("missing_table", "missing_thread", "missing_file", "wrong_owner", "no_context", "old_only"):
+            with self.subTest(case=case):
+                home = mk_home()
+                chief, child = home / "chief.jsonl", home / "child.jsonl"
+                write_rollout(chief, [session_meta("chief", "2026-01-01T00:00:00Z"),
+                    turn_context("2026-01-01T00:20:00Z", "current"),
+                    token_count("2026-01-01T00:21:00Z", 30, 2, 1, 1, 31),
+                    task_complete("2026-01-01T00:22:00Z", "current", 1000)])
+                child_records = [session_meta("other" if case == "wrong_owner" else "child", "2026-01-01T00:00:00Z")]
+                if case != "no_context":
+                    child_records.append(turn_context("2026-01-01T00:10:00Z", "old"))
+                if case != "missing_file":
+                    write_rollout(child, child_records)
+                db = home / "state_1.sqlite"
+                write_sqlite(db, "chief", chief.name, [("child", child.name, "gpt-6-luna", "low", "Scout")])
+                if case == "missing_table":
+                    with sqlite3.connect(db) as conn:
+                        conn.execute("DROP TABLE thread_spawn_edges")
+                if case == "missing_thread":
+                    with sqlite3.connect(db) as conn:
+                        conn.execute("DELETE FROM threads WHERE id = ?", ("child",))
+                output = run_snapshot(home, "chief", "2026-01-01T00:30:00Z")
+                self.assertEqual(28, output["results"][0]["uncached_input_tokens"])
+                self.assertEqual(28 if case == "old_only" else None, output["observed_tokens"]["uncached_input_tokens"])
+                self.assertEqual("observed" if case == "old_only" else "partial", output["status"])
+
+    def test_unreadable_rollouts_are_sanitized(self):
+        spec = importlib.util.spec_from_file_location("snapshot_adapter", SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        home = mk_home()
+        chief, child = home / "chief.jsonl", home / "child.jsonl"
+        write_rollout(chief, [session_meta("chief", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:20:00Z", "current"),
+            token_count("2026-01-01T00:21:00Z", 30, 2, 1, 1, 31)])
+        write_rollout(child, [session_meta("child", "2026-01-01T00:00:00Z")])
+        write_sqlite(home / "state_1.sqlite", "chief", chief.name, [("child", child.name, "gpt-6-luna", "low", "Scout")])
+        original = module.read_jsonl
+        def unreadable(path):
+            if path == target:
+                raise PermissionError("private path")
+            yield from original(path)
+        for target in (chief, child):
+            with self.subTest(target=target.name), patch.object(module, "read_jsonl", unreadable):
+                status, wall, rows, reasons = module.snapshot(home, "chief", module.parse_utc_timestamp("2026-01-01T00:30:00Z"))
+                self.assertNotIn("private path", str(reasons))
+                self.assertEqual("unknown" if target == chief else "partial", status)
+                if target == child:
+                    self.assertEqual(28, rows[0]["uncached_input_tokens"])
+                    self.assertIsNone(json.loads(module.format_json(rows, wall, status, reasons))["observed_tokens"]["uncached_input_tokens"])
     def test_selects_latest_chief_turn_only(self):
         home = mk_home()
         chief_rollout = home / "rollout-chief.jsonl"
@@ -310,8 +388,37 @@ class TaskResourceSnapshotTest(unittest.TestCase):
         self.assertEqual("observed", output["status"])
         self.assertLessEqual(row["cached_input_tokens"], row["input_tokens"])
         self.assertEqual(80, row["input_tokens"])
+        self.assertEqual(50, row["uncached_input_tokens"])
+        self.assertEqual(50, output["observed_tokens"]["uncached_input_tokens"])
         self.assertEqual(112, row["total_tokens"])
         self.assertEqual(112, output["observed_tokens"]["total_tokens"])
+
+    def test_uncached_pair_coverage(self):
+        for cached, expected in [(0, 80), (80, 0), (81, None), (None, None), ("bad", None), (-1, None)]:
+            with self.subTest(cached=cached):
+                home = mk_home()
+                rollout = home / "rollout-pair.jsonl"
+                event = token_count("2026-01-03T00:00:05Z", 80, cached, 8, 4, 112)
+                if cached is None:
+                    del event["payload"]["info"]["total_token_usage"]["cached_input_tokens"]
+                write_rollout(rollout, [session_meta("chief-pair", "2026-01-03T00:00:00Z"),
+                    turn_context("2026-01-03T00:00:00Z", "pair-turn"), event,
+                    task_complete("2026-01-03T00:00:20Z", "pair-turn", 30_000)])
+                write_sqlite(home / "state_3.sqlite", "chief-pair", rollout.name, [])
+                output = run_snapshot(home, "chief-pair", "2026-01-03T00:10:00Z")
+                self.assertEqual(expected, output["results"][0]["uncached_input_tokens"])
+                self.assertEqual(expected, output["observed_tokens"]["uncached_input_tokens"])
+
+    def test_uncached_uncovered_turn_makes_aggregate_unknown(self):
+        home = mk_home()
+        rollout = home / "rollout-empty.jsonl"
+        write_rollout(rollout, [session_meta("chief-empty", "2026-01-03T00:00:00Z"),
+            turn_context("2026-01-03T00:00:00Z", "empty-turn"),
+            task_complete("2026-01-03T00:00:20Z", "empty-turn", 30_000)])
+        write_sqlite(home / "state_3.sqlite", "chief-empty", rollout.name, [])
+        output = run_snapshot(home, "chief-empty", "2026-01-03T00:10:00Z")
+        self.assertIsNone(output["results"][0]["uncached_input_tokens"])
+        self.assertIsNone(output["observed_tokens"]["uncached_input_tokens"])
 
     def test_direct_child_in_window_and_old_child_excluded(self):
         home = mk_home()
@@ -360,6 +467,25 @@ class TaskResourceSnapshotTest(unittest.TestCase):
         self.assertIn("Chief", row["roles"])
         self.assertIn("Coder", row["roles"])
         self.assertEqual(50, row["input_tokens"])
+        self.assertEqual(46, row["uncached_input_tokens"])
+        self.assertEqual(46, output["observed_tokens"]["uncached_input_tokens"])
+        self.assertIn("uncached=46", run_snapshot(home, "chief-d", "2026-01-04T00:40:00Z", "text"))
+
+    def test_uncached_unknown_child_invalidates_aggregate(self):
+        home = mk_home()
+        chief = home / "rollout-chief.jsonl"
+        child = home / "rollout-child.jsonl"
+        write_rollout(chief, [session_meta("chief-aggregate", "2026-01-04T00:00:00Z"),
+            turn_context("2026-01-04T00:20:00Z", "chief-turn"),
+            token_count("2026-01-04T00:21:00Z", 30, 2, 1, 3, 36)])
+        write_rollout(child, [session_meta("child-aggregate", "2026-01-04T00:00:00Z"),
+            turn_context("2026-01-04T00:25:00Z", "child-turn")])
+        write_sqlite(home / "state_4.sqlite", "chief-aggregate", chief.name,
+            [("child-aggregate", child.name, "gpt-6-luna", "low", "Scout")])
+        output = run_snapshot(home, "chief-aggregate", "2026-01-04T00:40:00Z")
+        self.assertEqual({28, None}, {row["uncached_input_tokens"] for row in output["results"]})
+        self.assertIsNone(output["observed_tokens"]["uncached_input_tokens"])
+        self.assertIn("uncached=unknown", run_snapshot(home, "chief-aggregate", "2026-01-04T00:40:00Z", "text"))
 
     def test_child_and_chief_elapsed_sum_can_exceed_wall_time(self):
         home = mk_home()

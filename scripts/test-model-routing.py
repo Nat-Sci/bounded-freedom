@@ -42,7 +42,7 @@ class CurrentRoutingTests(unittest.TestCase):
             "evidence-map": ("Scout", [("gpt-6-luna", "medium")]),
             "code-map": ("Scout", [("gpt-6-luna", "medium"), ("gpt-6.1-sol", "medium")]),
             "system-map": ("Scout", [("gpt-6.1-sol", "medium")]),
-            "bounded-synthesis": ("Scout", [("gpt-6.1-sol", "medium")]),
+            "bounded-synthesis": ("Scout", [("gpt-6.1-terra", "medium"), ("gpt-6.1-sol", "medium")]),
             "routine-review": ("Reviewer", [("gpt-6.1-sol", "high")]),
             "consequential-review": ("Reviewer", [("gpt-6.1-sol", "high")]),
         }
@@ -56,17 +56,17 @@ class CurrentRoutingTests(unittest.TestCase):
         expected = {
             ("code-edit", "Coder fixed transform"): ("gpt-6-luna", "low"),
             ("code-edit", "Coder straightforward local implementation"): ("gpt-6-luna", "medium"),
-            ("code-edit", "Coder ordinary bounded implementation"): ("gpt-6.1-sol", "medium"),
+            ("code-edit", "Coder ordinary bounded implementation"): [("gpt-6.1-terra", "medium"), ("gpt-6.1-sol", "medium")],
             ("code-edit", "Coder invariant-sensitive bounded edit"): ("gpt-6.1-sol", "medium"),
             ("coordinated-build", "Builder frozen template integration"): ("gpt-6-luna", "medium"),
-            ("coordinated-build", "Builder ordinary coordinated integration"): ("gpt-6.1-sol", "medium"),
+            ("coordinated-build", "Builder ordinary coordinated integration"): [("gpt-6.1-terra", "medium"), ("gpt-6.1-sol", "medium")],
             ("coordinated-build", "Builder stateful recovery integration"): ("gpt-6.1-sol", "high"),
         }
         actual_subtypes = {key for key in self.rows if isinstance(key, tuple)}
         self.assertEqual(set(expected), actual_subtypes)
         for kind, route in expected.items():
             with self.subTest(kind=kind):
-                self.assertEqual([route], pairs(self.rows[kind][-1]))
+                self.assertEqual(route if isinstance(route, list) else [route], pairs(self.rows[kind][-1]))
         invariant_route = self.rows[("code-edit", "Coder invariant-sensitive bounded edit")][-1]
         self.assertRegex(invariant_route, r"high only for justified multiple interacting invariants")
 

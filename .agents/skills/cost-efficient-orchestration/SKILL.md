@@ -9,6 +9,16 @@ Chief owns intent, non-goals, decision constraints, unresolved scientific/archit
 
 Separate task method, execution contract, model/effort, and S0–S4 assurance. Select task kind and acceptance output before model. Use one matching specialized Skill; freeze or close its handoff before changing methods. Run known deterministic commands and genuine micro-edits directly.
 
+For cross-entry planning and formal execution, use the [single-Chief entry protocol](host-model-routing.md#single-chief-cross-entry); it does not replace the receipt, freshness, or review gates below.
+
+After minimal bootstrap, define meaningful, independently verifiable units before substantive investigation, implementation, or repair. Show each ready unit in the existing START receipt: output | owner + explicit least-adequate model/effort pair | check | dependency/readiness.
+
+Launch the first ready eligible unit through real host controls, even if work is sequential and Chief has no concurrent task. Do not do its bulk reading or writing first. If later edits need discovery before they can be frozen, dispatch bounded read-only Scout work. Follow the existing role matrix, normal permissions, and case-specific scope.
+
+After each worker return or newly unblocked handoff, decide again which unit is next before Chief takes over substantive work.
+
+For substantive direct exceptions, record the concrete handoff, tool, access, or capacity reason. Queue blocked work with its reason when applicable, and reassess if scope grows. Confirm launches with host evidence, not role labels or proposed routes. Send ordinary in-scope verification failures and their evidence to the available original writer. Change owners only for an explicit reason.
+
 ## Dispatch only the needed rules
 
 - Above clear S0, read [scientific-risk.md](scientific-risk.md). Code, configuration, executable-workflow, and routing mutations are at least S1; S3/S4 needs independent Reviewer evidence, S4 human acceptance.
@@ -36,12 +46,13 @@ Chief runtime reasoning effort: authoritative host value | unknown
 Chief metadata source: explicit launch | host profile | runtime | supplied UI | inherited | UI-selected | unknown
 Chief policy freshness: current | stale | unknown
 Chief policy evidence: managed install marker plus task start | authoritative host reload | unknown
+ready unit(s): output | owner + explicit model/effort pair | check | dependency/readiness
 scope; verification; checkpoint/next safe action; rationale
 ```
 
 Label configuration, supplied UI, inheritance, and runtime separately. Only authoritative host metadata establishes runtime, not backend attestation or billing. An observed pair may explicitly become the planned continuation without claiming original launch intent. [Freshness/cohort rules](operations-and-lifecycle.md#policy-freshness-and-usage-cohorts) govern policy evidence; source installation does not reload live sessions.
 
-No second start banner. Emit `ROUTE CHANGE` for material method, role, worker, pair, assurance, or scope changes. Finish with `ROUTE END`: outcome, route, evidence, retries, lifecycle, unknowns, next handoff.
+Do not add another start banner. Emit `ROUTE CHANGE` for material method, role, worker, pair, assurance, or scope changes. The existing `ROUTE END` records the outcome, route, evidence, retries, lifecycle, unknowns, and next handoff. For each unit, record the planned and actual producer, returned artifact/check, disposition, and Chief acceptance. Explain any direct, blocked, unlaunched, or unverified work.
 
 ## Pre-final resource receipt
 

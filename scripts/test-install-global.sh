@@ -361,11 +361,27 @@ if command -v python3 >/dev/null 2>&1 && python3 -c 'import tomllib' >/dev/null 
 else
   skip "python3 with tomllib is unavailable for route semantic checks"
 fi
+installed_sol_helper="$all_root/.agents/skills/cost-efficient-orchestration/scripts/start-sol-chief.sh"
+if [ ! -f "$installed_sol_helper" ] || [ ! -x "$installed_sol_helper" ]; then
+  fail "installed Sol Chief helper is available and executable"
+fi
+pass "installed Sol Chief helper is available and executable"
+if command -v python3 >/dev/null 2>&1; then
+  SOL_CHIEF_HELPER="$installed_sol_helper" python3 "$repo_root/scripts/test-start-sol-chief.py" > "$test_root/sol-chief.out" 2>&1 || {
+    cat "$test_root/sol-chief.out" >&2
+    fail "installed Sol Chief helper regression"
+  }
+  if ! grep -Eq 'Ran [1-9][0-9]* tests? in' "$test_root/sol-chief.out" || grep -Eq 'skipped=[1-9][0-9]*' "$test_root/sol-chief.out"; then
+    fail "installed Sol Chief helper regression has tests and no skips"
+  fi
+  pass "installed Sol Chief helper regression has tests and no skips"
+else
+  skip "python3 is unavailable for Sol Chief helper regression"
+fi
 assert_contains 'telemetry is `unknown`, not blocked' "$host_routing" "production routing keeps missing quota unknown"
 assert_contains 'Do not preflight a nonexistent' "$host_routing" "production routing skips retired-candidate preflight"
 assert_contains 'The maintained Codex Reviewer route starts at Reviewer / Sol / high' "$host_routing" "Reviewer policy starts independent review at Sol/high"
 assert_contains 'do not rewrite the planned model/effort to fit it' "$host_routing" "runtime mismatch cannot rewrite the route ticket"
-assert_contains 'not an `AstraReviewer` role' "$host_routing" "Astra review remains an evidence-gated Reviewer escalation"
 assert_contains 'Reviewer is planned Sol/high, but authoritative runtime metadata reports Luna/high' "$route_evals" "routing evaluations cover Reviewer runtime mismatch"
 assert_contains 'Builder and Coder do not execute overlapping write turns' "$orchestration_skill" "orchestration serializes write ownership"
 assert_contains 'the old two-worker ceiling must not push discovery or implementation back into Chief' "$route_evals" "routing evaluations protect Chief offload with occupied Builder and Reviewer slots"
@@ -380,7 +396,10 @@ if command -v python3 >/dev/null 2>&1; then
   python3 -m py_compile "$resource_snapshot_script"
   pass "Codex task resource snapshot script has valid Python syntax"
   python3 "$repo_root/scripts/test-codex-task-resource-snapshot.py" > "$test_root/task-resource-snapshot.out" 2>&1
-  assert_contains "Ran 14 tests in" "$test_root/task-resource-snapshot.out" "focused task-resource snapshot tests pass"
+  if ! grep -Eq 'Ran [1-9][0-9]* tests? in' "$test_root/task-resource-snapshot.out" || grep -Eq 'skipped=[1-9][0-9]*' "$test_root/task-resource-snapshot.out"; then
+    fail "focused task-resource snapshot tests pass without skips"
+  fi
+  pass "focused task-resource snapshot tests pass without skips"
 else
   skip "python3 is unavailable for task-resource snapshot tests"
 fi

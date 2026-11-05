@@ -22,7 +22,7 @@ Local-only evidence index; source artifacts remain authoritative. Follow the [di
 - Chief policy freshness:
 - Chief policy evidence:
 - Service tier: planned/configured/observed, sources or unknown; speed decision/tradeoff:
-- Unit routes: selection reason, lower-lane/balanced opportunity, escalation evidence (question, checked evidence, limiting capability, expected check):
+- Planned unit routes: unit → planned owner/pair → deliverable, dependency/readiness, acceptance check; selection reason, lower-lane/balanced opportunity, escalation evidence (question, checked evidence, limiting capability, expected check):
 - Host/profile/control availability: exact model/effort, effective sandbox, fork support, quota source/freshness/windows/decision or unknown:
 - Planned roster, effective capacity, dependency queue, reserved review:
 - Initial/replacement attempt budget and rationale:
@@ -33,7 +33,7 @@ Local-only evidence index; source artifacts remain authoritative. Follow the [di
 
 ## Evidence and execution
 
-- Per-role configured pair/source and separate runtime pair/receipt or unknown; actual launches, lifecycle, retries, accepted/rejected returns, close status:
+- Per-role configured pair/source and separate runtime pair/receipt or unknown; host-evidenced launches, actual producing role, returned artifact/check, disposition and reason; lifecycle, retries, accepted/rejected returns, close status:
 - Changed artifacts/version or fingerprint; checks/outcomes; gaps; repair owner:
 - Checkpoint: accepted inputs, active/retired context, route changes, unresolved choices, next action:
 - Retry operation class, observable-state/side-effect inspection, count, disposition:
