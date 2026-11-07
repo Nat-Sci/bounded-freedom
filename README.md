@@ -97,9 +97,11 @@ The Constitution and Skills are portable. Host files stay thin, and project fact
 
 The [orchestration dispatcher](.agents/skills/cost-efficient-orchestration/SKILL.md) separates task method, execution contract, model/effort, and S0–S4 assurance. Chief retains intent and acceptance; Scout supplies facts, Builder coordinates accepted boundaries, Coder owns narrow edit-test-repair, and Reviewer supplies independent evidence.
 
-For a new task, the Chief preference is Sol/max, selected by the human in the [desktop composer model controls](https://learn.chatgpt.com/docs/models?surface=app); preserve any existing or explicitly selected model and effort. Worker routes remain independent; use the [capability decision gate](.agents/skills/cost-efficient-orchestration/host-model-routing.md#capability-gates). Use compact handoffs and batch independent checks. When repeated large cached prefixes dominate, start a fresh task at an accepted milestone with a compact handoff rather than copying full history.
+For a new task, the Chief preference is Sol/max, selected by the human in the [desktop composer model controls](https://learn.chatgpt.com/docs/models?surface=app); preserve any existing or explicitly selected model and effort. Worker routes remain independent; use the [capability decision gate](.agents/skills/cost-efficient-orchestration/host-model-routing.md#capability-gates). Batch independent checks. When repeated large cached prefixes dominate, a fresh task at an accepted milestone may be recommended; start one only on explicit request and model authorization, with Chief synthesizing minimal context rather than copying full history.
 
-For example: “请先帮我规划；我确认交接后，请在这个项目新建 Sol/max 主任务并执行。” A new task and its model require explicit authorization; a planning consultation is not a second Chief. The [single-Chief protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#single-chief-cross-entry) also documents the human-invoked CLI entry. Copy a short handoff, not full history:
+例如：“按刚才定好的范围继续。”范围清楚时，直接沿用本对话，无需手写交接或再次确认。若明确要求 Sol/max 但当前实际配置不匹配或未知，先暂停依赖该配置的工作，在当前窗口选择模型和推理强度，下一轮再核实。另例：“请在这个项目新建 Sol/max 任务并继续。”只有明确要求新任务并授权模型时才创建；Chief 直接整理最少必要上下文。规划咨询不是第二个 Chief。[Single-Chief protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#single-chief-cross-entry) 保留科学与人工确认边界。
+
+只核实时，可问：“当前实际模型和推理强度是什么？本轮有哪些有证据的真实工作代理？安装版本和已加载策略分别是什么状态？”仅据本轮证据报告，历史或无法核实的状态标为未知；核实本身不创建代理、不更改设置。安装文件不等于已加载策略。
 
 After installation, from the target project directory, a human can start the purpose-built fresh interactive entry with:
 
@@ -107,14 +109,7 @@ After installation, from the target project directory, a human can start the pur
 sh "$HOME/.agents/skills/cost-efficient-orchestration/scripts/start-sol-chief.sh"
 ```
 
-Use `--handoff FILE` for a frozen brief; this is an explicit entry, not an automatic scheduler.
-
-```text
-Goal / non-goals / human-frozen decisions:
-Accepted evidence pointers:
-Constraints and permissions:
-First deliverable / check / stop:
-```
+Optional `--handoff FILE` remains available for an existing brief; ordinary continuation needs no file. This is an explicit entry, not an automatic scheduler.
 
 It owns the visible START/CHANGE/END and pre-final resource receipts, with conditional references for:
 - [Canonical task kinds, subtypes, pairs, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).

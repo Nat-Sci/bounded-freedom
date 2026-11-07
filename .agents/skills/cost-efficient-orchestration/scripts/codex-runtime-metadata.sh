@@ -85,7 +85,7 @@ if [ "$scope" = "chief" ]; then
     policy_version=$(sed -n 's/^package_version=//p' "$policy_state")
     installed_fingerprint=$(sed -n 's/^policy_fingerprint=//p' "$policy_state")
     policy_installed_at=$(sed -n 's/^installed_at_epoch=//p' "$policy_state")
-    script_repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/../../../.." 2>/dev/null && pwd -P) || script_repo_root=
+    script_repo_root=$(CDPATH= cd -- "$script_directory/../../../.." 2>/dev/null && pwd -P) || script_repo_root=
     source_version=
     if [ -n "$script_repo_root" ] && [ -f "$script_repo_root/VERSION" ]; then
       source_version=$(sed -n '1p' "$script_repo_root/VERSION")

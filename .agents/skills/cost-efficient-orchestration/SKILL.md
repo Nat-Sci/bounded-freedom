@@ -9,7 +9,7 @@ Chief owns intent, non-goals, decision constraints, unresolved scientific/archit
 
 Separate task method, execution contract, model/effort, and S0–S4 assurance. Select task kind and acceptance output before model. Use one matching specialized Skill; freeze or close its handoff before changing methods. Run known deterministic commands and genuine micro-edits directly.
 
-For cross-entry planning and formal execution, use the [single-Chief entry protocol](host-model-routing.md#single-chief-cross-entry); it does not replace the receipt, freshness, or review gates below.
+For cross-entry planning and formal execution, use the [single-Chief entry protocol](host-model-routing.md#single-chief-cross-entry); agreed routine continuation uses this conversation directly, without a required brief. It does not replace the receipt, freshness, or review gates below.
 
 After minimal bootstrap, define meaningful, independently verifiable units before substantive investigation, implementation, or repair. Show each ready unit in the existing START receipt: output | owner + explicit least-adequate model/effort pair | check | dependency/readiness.
 

@@ -429,6 +429,12 @@ SQL
   assert_contains '"policy_freshness":"stale"' "$test_root/runtime-chief.out" "runtime probe marks a pre-deployment Chief stale"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$runtime_probe" > "$test_root/runtime-current.out"
   assert_contains '"policy_freshness":"current"' "$test_root/runtime-current.out" "runtime probe marks a post-deployment Chief current"
+  installed_runtime_probe="$all_root/.agents/skills/cost-efficient-orchestration/scripts/codex-runtime-metadata.sh"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$installed_runtime_probe" > "$test_root/runtime-installed-current.out"
+  assert_file_unchanged "$test_root/runtime-current.out" "$test_root/runtime-installed-current.out" "installed Skill symlink reports current source and task start"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$installed_runtime_probe" > "$test_root/runtime-installed-stale.out"
+  assert_file_unchanged "$test_root/runtime-chief.out" "$test_root/runtime-installed-stale.out" "installed Skill symlink reports pre-deployment stale task"
+  assert_contains '"policy_evidence":"managed-install-marker+task-start"' "$test_root/runtime-installed-stale.out" "installed stale task retains task-start provenance"
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='11111111-1111-1111-1111-111111111111' sh "$runtime_probe" --children > "$test_root/runtime-child.out"
   assert_contains '"scope":"child","role":"Coder","model":"historical-test-model","reasoning_effort":"medium","lifecycle":"open"' "$test_root/runtime-child.out" "runtime probe preserves a historical host-recorded child pair"
   cp "$runtime_root/state_5.sqlite" "$runtime_root/state_2.sqlite"
@@ -472,6 +478,9 @@ SQL
   CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$runtime_probe" > "$test_root/runtime-source-drift.out"
   assert_contains '"policy_freshness":"stale"' "$test_root/runtime-source-drift.out" "post-deployment task with source drift is stale"
   assert_contains '"policy_evidence":"managed-install-marker+source-mismatch"' "$test_root/runtime-source-drift.out" "source drift retains distinct freshness provenance"
+  CODEX_HOME="$runtime_root" CODEX_THREAD_ID='33333333-3333-3333-3333-333333333333' sh "$installed_runtime_probe" > "$test_root/runtime-installed-drift.out"
+  assert_file_unchanged "$test_root/runtime-source-drift.out" "$test_root/runtime-installed-drift.out" "installed Skill symlink detects genuine source mismatch"
+  assert_not_contains "$runtime_root" "$test_root/runtime-installed-drift.out" "installed probe output omits private state path"
 else
   skip "sqlite3 is unavailable for runtime metadata regression coverage"
 fi
