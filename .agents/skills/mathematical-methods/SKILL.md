@@ -5,6 +5,8 @@ description: Map and analyze the mathematics already present in scientific paper
 
 # Mathematical methods
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Recover the mathematical problem defined by existing artifacts, then apply one bounded mathematical method. Keep source statements, executable behavior, analyst derivation, and proposed changes distinguishable.
 
 This is the only discoverable entry to the mathematical-method layer. The files below are on-demand references, not independently discoverable Skills and not recursive agents.

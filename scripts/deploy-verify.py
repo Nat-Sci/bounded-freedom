@@ -179,8 +179,19 @@ def error_format(arguments):
     return args.format if args.format in ("text", "json") else "text"
 
 
+def policy_fingerprint():
+    script = REPO / ".agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh"
+    result = subprocess.run(["sh", "-c", '. "$1" && compute_policy_fingerprint "$2"',
+                             "fingerprint", str(script), str(REPO)], capture_output=True)
+    value = result.stdout.decode("ascii").strip()
+    if result.returncode or result.stderr or not re.fullmatch(r"[0-9]+-[0-9]+", value):
+        raise CheckError("policy_fingerprint_unavailable")
+    return value
+
+
 def main():
     receipt = {"source_version": "unknown", "source_commit": "unknown",
+               "policy_fingerprint": "unknown",
                "deployment_files": "failed", "unmanaged_preservation": "not_run",
                "live_route": "not_run", "status": "failed"}
     fmt = error_format(sys.argv[1:])
@@ -188,6 +199,7 @@ def main():
         parser = SafeParser(description=__doc__)
         parser.add_argument("--apply", action="store_true", help="invoke the existing installer before checking")
         parser.add_argument("--check", action="store_true", help="read-only check (default)")
+        parser.add_argument("--expect-policy-fingerprint")
         parser.add_argument("--target-root", type=Path, default=Path.home())
         parser.add_argument("--host", choices=("codex", "claude", "portable", "all"), default="codex")
         parser.add_argument("--format", choices=("text", "json"), default="text")
@@ -206,6 +218,12 @@ def main():
                 receipt["source_commit"] = commit
         except OSError:
             pass  # Source archives or hosts without Git retain unknown provenance.
+        if args.expect_policy_fingerprint is not None and not re.fullmatch(r"[0-9]+-[0-9]+", args.expect_policy_fingerprint):
+            raise CheckError("invalid_arguments")
+        fingerprint = policy_fingerprint()
+        receipt["policy_fingerprint"] = fingerprint
+        if args.expect_policy_fingerprint is not None and args.expect_policy_fingerprint != fingerprint:
+            raise CheckError("policy_fingerprint_mismatch")
         skills, roles = inventory(args.host)
         required, optional, apply_lines = contract(args.host, skills, roles, version)
         if args.apply:
@@ -223,6 +241,8 @@ def main():
             if "installation complete" not in output or set(output) - apply_lines:
                 raise CheckError("output_contract_failed")
         verify(run_installer(args.target_root, args.host, "--status"), required, optional, args.host)
+        if policy_fingerprint() != fingerprint:
+            raise CheckError("policy_fingerprint_changed")
         receipt.update(status="ok", deployment_files="verified")
     except CheckError as error:
         receipt["error"] = str(error)

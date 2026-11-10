@@ -5,6 +5,8 @@ description: Grow research analyses into an evolving software container through 
 
 # Research software lifecycle
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Treat research software as a living container for validated capabilities, not as a package created only after the research is finished. Start with the smallest useful frame, extend it one accepted increment at a time, and reshape the frame only through an explicit migration.
 
 This Skill owns the software-evolution method. Chief remains the only dispatcher and retains the final execution contract, model, delegation, assurance, and acceptance decisions.

@@ -5,6 +5,8 @@ description: Inspect and document scientific data intake, schema, missingness, v
 
 # Scientific data quality
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Establish whether scientific data are structurally understood and safe to hand into a frozen analysis. Preserve observations, rules, and decisions as separate objects so that a plausible-looking cleaned dataset is never mistaken for validated evidence.
 
 This Skill owns data-intake and pre-analysis quality method. Chief retains routing, model, delegation, S0–S4 assurance, and acceptance. The project owns scientific meaning, cohort rules, instruments, privacy policy, and the authoritative analysis plan.

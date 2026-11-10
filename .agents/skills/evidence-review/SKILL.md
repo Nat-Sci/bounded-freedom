@@ -5,6 +5,8 @@ description: Search, screen, read, and synthesize scientific literature for rapi
 
 # Evidence review
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Produce a review whose conclusion is no broader than its search and evidence.
 
 ## Choose the review mode

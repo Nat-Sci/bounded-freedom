@@ -111,6 +111,8 @@ sh "$HOME/.agents/skills/cost-efficient-orchestration/scripts/start-sol-chief.sh
 
 Optional `--handoff FILE` remains available for an existing brief; ordinary continuation needs no file. This is an explicit entry, not an automatic scheduler.
 
+The [per-turn resource receipt contract](.agents/skills/cost-efficient-orchestration/resource-receipt.md) also applies to tool-using and worker turns without orchestration. Installed Codex and Claude global instructions apply across projects; Gemini imports project `AGENTS.md`. Other apps and portable-only hosts must bind the contract into an always-loaded instruction layer for turns without a selected skill. Existing sessions and apps cannot be forced to reload it.
+
 It owns the visible START/CHANGE/END and pre-final resource receipts, with conditional references for:
 - [Canonical task kinds, subtypes, pairs, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).
 - [Roster, single-writer budgets, recovery, policy freshness and usage cohorts](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md).

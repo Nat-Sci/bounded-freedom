@@ -5,6 +5,8 @@ description: Generate competing scientific hypotheses and turn them into falsifi
 
 # Hypothesis and study design
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Turn observations into competing explanations and tests that could distinguish them.
 
 ## Entry conditions

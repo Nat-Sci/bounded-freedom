@@ -5,6 +5,8 @@ description: Map scientific paper claims to code, identify the implementation so
 
 # Paper-code reproduction
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 Trace a claim from paper text to executable behavior and report the strongest status actually demonstrated.
 
 ## Choose two axes

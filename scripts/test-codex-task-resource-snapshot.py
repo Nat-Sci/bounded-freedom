@@ -23,6 +23,7 @@ def run_snapshot(
     now: str,
     output_format: str = "json",
     env=None,
+    workers=None,
 ):
     command_env = os.environ.copy()
     if env:
@@ -40,6 +41,8 @@ def run_snapshot(
         "--now",
         now,
     ]
+    if workers is not None:
+        cmd += ["--workers", str(workers)]
     proc = subprocess.run(cmd, text=True, capture_output=True, check=True, env=command_env)
     stdout = proc.stdout.strip()
     if output_format == "json":
@@ -202,7 +205,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
                 output = run_snapshot(home, "chief", "2026-01-01T00:30:00Z")
                 self.assertEqual(28, output["results"][0]["uncached_input_tokens"])
                 self.assertEqual(28 if case == "old_only" else None, output["observed_tokens"]["uncached_input_tokens"])
-                self.assertEqual("observed" if case == "old_only" else "partial", output["status"])
+                self.assertEqual("partial", output["status"])
 
     def test_unreadable_rollouts_are_sanitized(self):
         spec = importlib.util.spec_from_file_location("snapshot_adapter", SCRIPT)
@@ -266,7 +269,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
         )
         write_sqlite(home / "state_1.sqlite", "chief-a", chief_rollout.name, [])
         output = run_snapshot(home, "chief-a", "2026-01-01T00:30:00Z")
-        self.assertEqual("observed", output["status"])
+        self.assertEqual("partial", output["status"])
         self.assertEqual("gpt-5.6-sol", output["results"][0]["model"])
         self.assertEqual("high", output["results"][0]["reasoning_effort"])
         self.assertEqual(40, output["results"][0]["input_tokens"])
@@ -291,7 +294,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
         )
         write_sqlite(home / "state_2.sqlite", "chief-b", chief_rollout.name, [])
         output = run_snapshot(home, "chief-b", "2026-01-02T00:10:00Z")
-        self.assertEqual("observed", output["status"])
+        self.assertEqual("partial", output["status"])
         self.assertEqual(60, output["results"][0]["input_tokens"])
         self.assertEqual(5, output["results"][0]["cached_input_tokens"])
         self.assertEqual(65, output["results"][0]["total_tokens"])
@@ -385,7 +388,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
         write_sqlite(home / "state_3.sqlite", "chief-c", chief_rollout.name, [])
         output = run_snapshot(home, "chief-c", "2026-01-03T00:10:00Z")
         row = output["results"][0]
-        self.assertEqual("observed", output["status"])
+        self.assertEqual("partial", output["status"])
         self.assertLessEqual(row["cached_input_tokens"], row["input_tokens"])
         self.assertEqual(80, row["input_tokens"])
         self.assertEqual(50, row["uncached_input_tokens"])
@@ -461,7 +464,7 @@ class TaskResourceSnapshotTest(unittest.TestCase):
             ],
         )
         output = run_snapshot(home, "chief-d", "2026-01-04T00:40:00Z")
-        self.assertEqual("observed", output["status"])
+        self.assertEqual("partial", output["status"])
         row = output["results"][0]
         self.assertEqual(2, row["turn_count"])
         self.assertIn("Chief", row["roles"])
@@ -692,6 +695,127 @@ class TaskResourceSnapshotTest(unittest.TestCase):
             self.assertGreater(output["results"][0]["input_tokens"], 0)
             self.assertEqual("gpt-5.6-sol", output["results"][0]["model"])
 
+
+class ReceiptContractTest(unittest.TestCase):
+    def test_worker_confirmation_and_missing_host(self):
+        home = mk_home()
+        unknown = run_snapshot(home, "missing", "2026-01-01T00:10:00Z")
+        zero = run_snapshot(home, "missing", "2026-01-01T00:10:00Z", workers=0)
+        worker = run_snapshot(home, "missing", "2026-01-01T00:10:00Z", workers=1)
+        self.assertIsNone(unknown["workers"])
+        self.assertEqual(0, zero["workers"])
+        self.assertEqual(1, worker["workers"])
+        self.assertIsNone(worker["observed_tokens"]["input_tokens"])
+        self.assertIn("worker usage coverage unknown", " ".join(worker["reasons"]))
+        text = run_snapshot(home, "missing", "2026-01-01T00:10:00Z", "text", workers=1)
+        self.assertIn("worker=1", text)
+        self.assertIn("coverage unknown", text)
+        self.assertIn("worker=0", run_snapshot(home, "missing", "2026-01-01T00:10:00Z", "text", workers=0))
+        self.assertIn("worker=unknown", run_snapshot(home, "missing", "2026-01-01T00:10:00Z", "text"))
+
+    def test_worker_missing_usage_and_observed_zero(self):
+        home = mk_home()
+        chief, child = home / "chief.jsonl", home / "child.jsonl"
+        write_rollout(chief, [session_meta("chief", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "c"),
+            token_count("2026-01-01T00:01:00Z", 0, 0, 0, 0, 0),
+            task_complete("2026-01-01T00:02:00Z", "c", 1000)])
+        write_rollout(child, [session_meta("child", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:03:00Z", "w"),
+            task_complete("2026-01-01T00:04:00Z", "w", 1000)])
+        write_sqlite(home / "state_1.sqlite", "chief", chief.name,
+                     [("child", child.name, "other", "low", "Coder")])
+        output = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=1)
+        rows = {r["model"]: r for r in output["results"]}
+        self.assertEqual(0, rows["gpt-5.6-sol"]["input_tokens"])
+        self.assertEqual(1, rows["gpt-5.6-sol"]["observed_token_turn_count"])
+        self.assertIsNone(rows["other"]["input_tokens"])
+        self.assertEqual("unknown", rows["other"]["token_coverage"])
+        self.assertEqual(1, rows["other"]["observed_workers"])
+        self.assertIsNone(output["observed_tokens"]["input_tokens"])
+        self.assertEqual("partial", output["status"])
+        text = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", "text", workers=1)
+        self.assertIn("input=unknown", text)
+        self.assertIn("input=0", text)
+
+    def test_partial_fields_preserve_known_values(self):
+        home = mk_home()
+        rollout = home / "chief.jsonl"
+        event = token_count("2026-01-01T00:01:00Z", 10, 2, 3, 1, 13)
+        del event["payload"]["info"]["total_token_usage"]["output_tokens"]
+        write_rollout(rollout, [session_meta("chief", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "c"), event,
+            task_complete("2026-01-01T00:02:00Z", "c", 1000)])
+        write_sqlite(home / "state_1.sqlite", "chief", rollout.name, [])
+        output = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=0)
+        self.assertEqual(10, output["results"][0]["input_tokens"])
+        self.assertIsNone(output["results"][0]["output_tokens"])
+        self.assertEqual("partial", output["status"])
+
+    def test_shared_pair_retains_known_contributions(self):
+        home = mk_home()
+        chief, child = home / "chief.jsonl", home / "child.jsonl"
+        write_rollout(chief, [session_meta("chief", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "c"),
+            token_count("2026-01-01T00:01:00Z", 10, 2, 3, 1, 13),
+            task_complete("2026-01-01T00:02:00Z", "c", 1000)])
+        write_rollout(child, [session_meta("child", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:03:00Z", "w"),
+            task_complete("2026-01-01T00:04:00Z", "w", 1000)])
+        write_sqlite(home / "state_1.sqlite", "chief", chief.name,
+                     [("child", child.name, "gpt-5.6-sol", "high", "Coder")])
+        output = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=1)
+        row = output["results"][0]
+        self.assertIsNone(row["input_tokens"])
+        self.assertEqual(10, row["known_tokens"]["input_tokens"])
+        self.assertEqual("partial", output["status"])
+        self.assertIn("known contributions (partial; additional usage unknown)",
+                      run_snapshot(home, "chief", "2026-01-01T00:10:00Z", "text", workers=1))
+
+    def test_reused_worker_counted_once_across_pairs(self):
+        home = mk_home()
+        chief, child = home / "chief.jsonl", home / "child.jsonl"
+        write_rollout(chief, [session_meta("chief", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:00:00Z", "c"),
+            token_count("2026-01-01T00:01:00Z", 10, 2, 3, 1, 13),
+            task_complete("2026-01-01T00:02:00Z", "c", 1000)])
+        write_rollout(child, [session_meta("child", "2026-01-01T00:00:00Z"),
+            turn_context("2026-01-01T00:03:00Z", "w1", "model-a", "low"),
+            token_count("2026-01-01T00:04:00Z", 5, 1, 1, 0, 6),
+            task_complete("2026-01-01T00:05:00Z", "w1", 1000),
+            turn_context("2026-01-01T00:06:00Z", "w2", "model-b", "high"),
+            token_count("2026-01-01T00:07:00Z", 8, 2, 2, 0, 10),
+            task_complete("2026-01-01T00:08:00Z", "w2", 1000)])
+        write_sqlite(home / "state_1.sqlite", "chief", chief.name,
+                     [("child", child.name, "model-a", "low", "Coder")])
+        output = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=1)
+        self.assertEqual("observed", output["status"])
+        rows = {r["model"]: r for r in output["results"]}
+        self.assertEqual(1, rows["model-a"]["observed_workers"])
+        self.assertEqual(1, rows["model-b"]["observed_workers"])
+        self.assertNotIn("child", json.dumps(output))
+
+    def test_complete_zero_and_unknown_identity_elapsed(self):
+        home = mk_home()
+        chief = home / "chief.jsonl"
+        records = [session_meta("chief", "2026-01-01T00:00:00Z"),
+                   turn_context("2026-01-01T00:00:00Z", "c"),
+                   token_count("2026-01-01T00:01:00Z", 0, 0, 0, 0, 0),
+                   task_complete("2026-01-01T00:02:00Z", "c", 1000)]
+        write_rollout(chief, records)
+        db = home / "state_1.sqlite"
+        write_sqlite(db, "chief", chief.name, [])
+        complete = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=0)
+        self.assertEqual("observed", complete["status"])
+        self.assertEqual(0, complete["results"][0]["total_tokens"])
+        self.assertEqual("observed", complete["results"][0]["token_coverage"])
+        with sqlite3.connect(db) as conn:
+            conn.execute("UPDATE threads SET reasoning_effort = NULL WHERE id = ?", ("chief",))
+        write_rollout(chief, records[:-1])
+        partial = run_snapshot(home, "chief", "2026-01-01T00:10:00Z", workers=0)
+        self.assertEqual("partial", partial["status"])
+        self.assertEqual("unknown", partial["results"][0]["identity_coverage"])
+        self.assertIn("pre-final checkpoint", " ".join(partial["reasons"]))
 
 if __name__ == "__main__":
     unittest.main()

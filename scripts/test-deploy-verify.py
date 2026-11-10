@@ -82,6 +82,39 @@ class DeploymentTests(unittest.TestCase):
             actual = (self.target / name).read_bytes()
             self.assertTrue(actual.startswith(data) if name.endswith(("AGENTS.md", "config.toml")) else actual == data)
 
+    def test_frozen_policy_ticket_and_dirty_change(self):
+        subprocess.run(["git", "init", "-q", str(self.source)], check=True)
+        subprocess.run(["git", "-C", str(self.source), "-c", "user.name=fixture",
+                        "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture"], check=True)
+        first = self.command("--apply")
+        fingerprint, commit = first["policy_fingerprint"], first["source_commit"]
+        self.command("--check", "--expect-policy-fingerprint", fingerprint)
+        source = self.source / ".agents/skills/cost-efficient-orchestration/SKILL.md"
+        source.write_bytes(source.read_bytes() + b"\nDirty policy change\n")
+        before = tree(self.target)
+        stale = self.command("--apply", "--expect-policy-fingerprint", fingerprint, ok=False)
+        self.assertEqual(stale["error"], "policy_fingerprint_mismatch")
+        self.assertEqual(stale["source_commit"], commit)
+        self.assertNotEqual(stale["policy_fingerprint"], fingerprint)
+        self.assertEqual(before, tree(self.target))
+        self.command("--apply", "--expect-policy-fingerprint", stale["policy_fingerprint"])
+
+    def test_fingerprint_failure_and_change(self):
+        helper = self.source / ".agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh"
+        helper.write_text("compute_policy_fingerprint() { return 1; }\n")
+        self.assertEqual(self.command("--apply", ok=False)["error"], "policy_fingerprint_unavailable")
+        self.assertFalse(self.target.exists())
+        self.setUp_original_helper_for_change(helper)
+        result = self.command("--apply", ok=False)
+        self.assertEqual(result["error"], "policy_fingerprint_changed")
+
+    def setUp_original_helper_for_change(self, helper):
+        original = (REPO / ".agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh").read_text()
+        helper.write_text(original)
+        installer = self.source / "scripts/install-global.sh"
+        installer.write_text(installer.read_text().replace('show_status\n  exit 0',
+            'show_status\n  echo "# changed during check" >> "$repo_root/.agents/skills/cost-efficient-orchestration/SKILL.md"\n  exit 0'))
+
     def test_stale_source_and_repair(self):
         self.command("--apply")
         source = self.source / "install/global-agents.md"

@@ -28,13 +28,13 @@ Local-only evidence index; source artifacts remain authoritative. Follow the [di
 - Initial/replacement attempt budget and rationale:
 - Current writing owner; actual edit-test-repair owner; author/applicator if distinct:
 - Direct unit exception: concrete handoff/tool/control/availability cost and reassessment boundary:
-- Observable acceptance, checks, stop conditions, next safe action:
+- Frozen unit: objective/non-goals; bounded input pointers and candidate version (including dirty state); ownership/write scope; dependencies; observable acceptance, checks, stop/escalation conditions, next safe action:
 - Visible START / material CHANGE / END receipt evidence:
 
 ## Evidence and execution
 
 - Per-role configured pair/source and separate runtime pair/receipt or unknown; host-evidenced launches, actual producing role, returned artifact/check, disposition and reason; lifecycle, retries, accepted/rejected returns, close status:
-- Changed artifacts/version or fingerprint; checks/outcomes; gaps; repair owner:
+- Worker outcome READY / REPAIR / DECISION; artifact/version or fingerprint; checks/outcomes; gaps and repair owner, or question/options/evidence; Chief disposition:
 - Checkpoint: accepted inputs, active/retired context, route changes, unresolved choices, next action:
 - Retry operation class, observable-state/side-effect inspection, count, disposition:
 - Wall time; authoritative cost/quota evidence or unknown:
@@ -64,4 +64,4 @@ Local-only evidence index; source artifacts remain authoritative. Follow the [di
 ## Decision
 
 - Outcome, rejected alternatives, remaining uncertainty, next handoff:
-- ROUTE END and pre-final resource receipt pointer/unknowns:
+- ROUTE END (when routed) and per-turn pre-final resource receipt pointer/unknowns:

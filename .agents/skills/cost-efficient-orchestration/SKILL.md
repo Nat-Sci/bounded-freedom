@@ -27,6 +27,8 @@ For substantive direct exceptions, record the concrete handoff, tool, access, or
 - For substantial implementation, multi-phase/delegated work, strong/frontier execution, or calibration, read [hierarchical-routing.md](hierarchical-routing.md): implementation ownership, direct exceptions, production verification, targeted acceptance.
 - For research claim/method boundaries read [research-lineage.md](research-lineage.md); for policy changes use [routing-evals.md](routing-evals.md).
 
+Use the [portable handoff interface](hierarchical-routing.md#portable-chiefworker-handoff) for bounded nontrivial delegation.
+
 Builder and Coder do not execute overlapping write turns. Preserve sandbox boundaries and unrelated edits; continue authorized reversible work without repeated permission requests.
 
 ## One visible start receipt
@@ -56,7 +58,7 @@ Do not add another start banner. Emit `ROUTE CHANGE` for material method, role, 
 
 ## Pre-final resource receipt
 
-For routed nontrivial Codex work, run [the read-only resource adapter](scripts/codex-task-resource-snapshot.py) with `--format text` as the last tool call when Python/local event telemetry is available. Append `TASK RESOURCE SNAPSHOT` after `ROUTE END`. Other hosts use authoritative equivalents or unknown; skip trivial answers.
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](resource-receipt.md). Run the read-only adapter with `--format text` as the last tool call when available.
 
 This pre-final checkpoint excludes the final response/later telemetry; it is not terminal accounting or an invoice. Coverage is this Chief turn and direct-child turns started within it: input, cached input, output, reasoning, and total tokens per model/effort. Keep task wall time separate from overlapping per-model active elapsed time, including tools/waits. Cached input is included in input. Missing fields stay unknown; counters establish neither cost/savings nor quality/scientific validity. A host post-turn receipt may supersede it.
 

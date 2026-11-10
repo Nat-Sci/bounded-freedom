@@ -16,6 +16,18 @@ Choose the least costly adequate available lane: fast mechanical/repeated work; 
 
 Select an early minimal check through the actual production entry point. Toy-engine, scaffold, or helper-only success is not integration evidence. [Operations](operations-and-lifecycle.md) owns roster/ownership/budgets; entry owns receipts.
 
+## Portable Chief–worker handoff
+
+Freeze one decision/work unit in the existing task record or message: objective and non-goals, bounded input pointers and candidate version (including dirty state), ownership and write scope, observable acceptance predicates, dependencies, and stop/escalation conditions. If evidence is not ready, request bounded read-only facts; Chief retains inseparable or human-owned decisions.
+
+For independently launched CLI workers, use their existing `codex-runtime-metadata.sh` probe or a launcher-provided authoritative receipt tied to that worker, alongside the actual model and effort controls. Pending is unknown: do not launch a duplicate or require parent reconfirmation of observed data. Stop on an actual mismatch; do not perform work gated on unavailable identity proof.
+
+- **READY:** Matching artifact/version and sufficient claim-specific evidence go to Chief once for scoped acceptance; the worker cannot self-accept.
+- **REPAIR:** Send ordinary failure, stale/missing evidence, or ambiguity resolvable against frozen predicates directly to the original owner for affected checks only, when the host can dispatch it. If Chief must relay, relay only the failing predicate and evidence pointer. A pre-apply `policy_fingerprint_mismatch` is REPAIR.
+- **DECISION:** No permitted next step, contradictory premises, or an actual scope, risk, or authority shift; give explicit alternatives and evidence. A real change to the approved interface or scope found during recheck can become DECISION.
+
+Chief binds evidence to actual scope and version, inspects a consequential slice or failed evidence, and accepts, requests targeted repair, or decides/escalates. Changed artifacts invalidate affected checks. Chief retains the approved clinical or primary endpoint; redefining a primary claim or endpoint requires independent review and explicit human acceptance. Preserve independent review and human gates, material changes, and scientific evidence without a hard output cap. Aggregate intermediate output locally; signal Chief on readiness, decision/blocker, or scope/risk change. Use clean worker context and an explicitly fresh Chief at accepted milestones when appropriate; a handoff cannot erase existing parent history.
+
 ## Balanced gate and direct work
 
 Before non-review strong or frontier execution, start balanced when work is reversible/bounded, interfaces/evidence stable, acceptance observable, failure detectable before consequential use, and unresolved science/architecture stays with Chief. Keep mechanical volume fast; no model-share target or separate allowance consumption.

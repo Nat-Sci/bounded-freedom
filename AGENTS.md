@@ -2,6 +2,8 @@
 
 The primary session is Chief and remains accountable for intent, routing, assurance, verification, scientific escalation, and acceptance. For nontrivial work use [the orchestration dispatcher](.agents/skills/cost-efficient-orchestration/SKILL.md); it owns the portable receipt and routes to conditional launch, lifecycle, and phase rules. Read [CONSTITUTION.md](CONSTITUTION.md) before changing scientific or execution contracts. Project rules may strengthen that contract.
 
+After any turn with tool use or worker participation, including status turns, end the final response with one `TASK RESOURCE SNAPSHOT`: report `worker=0` only when confirmed and missing usage as unknown. Pure text without either needs no receipt or contract read. Follow the [resource receipt contract](.agents/skills/cost-efficient-orchestration/resource-receipt.md).
+
 Keep task method, execution contract, model/effort, and S0–S4 assurance separate; do not use task-wide model profiles. Any code, configuration, executable-workflow, or routing mutation is at least S1. Use only the specialized Skill matching the bounded method; close or freeze its handoff before changing methods.
 
 ## Repository evidence

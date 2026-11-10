@@ -5,6 +5,8 @@ description: Design, create, revise, rebuild, or audit scientific figures and fi
 
 # Scientific figure
 
+Tool use or worker participation, including status, requires one final `TASK RESOURCE SNAPSHOT`; `worker=0` requires confirmation, missing usage is unknown. Pure text without either needs no receipt or contract read. Follow the [per-turn resource receipt contract](../cost-efficient-orchestration/resource-receipt.md).
+
 A scientific figure is a visual argument. Freeze what the figure must communicate before choosing how to draw it.
 
 ## Select the entry
