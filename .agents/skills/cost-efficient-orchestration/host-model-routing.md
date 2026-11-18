@@ -26,9 +26,9 @@ For a human-initiated CLI entry, invoke `sh scripts/start-sol-chief.sh` relative
 
 ## Speed and cost provenance
 
-Plan for Standard by default, subject to actual user and host controls. Omit a speed override unless requested and supported by the launch surface. Standard Codex rates apply to purchased credits per token volume. Included allowance and API charges have their own terms. Use current published rates and speed multipliers. [Pricing](https://learn.chatgpt.com/docs/pricing), [speed](https://learn.chatgpt.com/docs/agent-configuration/speed), [configuration](https://learn.chatgpt.com/docs/config-file/config-reference).
+Choose speed separately after selecting the model and sufficient reasoning effort. A deep decision can use Sol/max with [depth approval](#capability-gates). Astra/max also needs frontier admission. Use Standard when selecting speed without a different user preference. For time-sensitive, bounded execution, use `medium` when adequate. Request Fast when model response time is the bottleneck, the user has authorized the higher usage, and the launcher can bind the tier. Run known commands directly and apply the required review and acceptance checks. Consult the current rates for included allowance, purchased credits, or API billing as applicable. [Pricing](https://learn.chatgpt.com/docs/pricing), [speed](https://learn.chatgpt.com/docs/agent-configuration/speed).
 
-Record planned, configured and observed service tier and their sources, or unknown. Configuration maps `fast` to request priority and prefers `service_tier` for new turns. Runtime and billing need separate evidence.
+The CLI can set `service_tier="fast"` for a single invocation. It maps to the request value `priority`. The desktop composer can select the primary session's speed. When the worker launcher exposes only model and effort, use the host's speed if acceptable and report a missing control if a specific tier is required. Record planned, configured, and observed service tiers with their sources, using `unknown` where evidence is absent. [Configuration](https://learn.chatgpt.com/docs/config-file/config-reference).
 
 ## Canonical task-kind matrix
 
