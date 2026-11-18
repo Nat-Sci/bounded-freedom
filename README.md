@@ -182,6 +182,30 @@ data source -> contract / QC / leakage gate -> model -> run -> finding
 
 The [research-lineage contract](.agents/skills/cost-efficient-orchestration/research-lineage.md) preserves traceability without loading an entire project history into every task.
 
+## Staged package release
+
+From the BoundedFreedom checkout, stage the reviewed files with Git, including new files. Run the verifier with Python 3.11+ on macOS or Linux:
+
+```sh
+python3 scripts/release.py
+```
+
+For an authorized commit and push, run the same checks and publish in one invocation:
+
+```sh
+python3 scripts/release.py --commit --message "Describe the reviewed change" --push
+```
+
+Add `--deploy-target "$HOME" --host all` when local installation is also authorized. To bind an existing review to its exact candidate, pass `--expect-tree` with the full `tree` from the earlier receipt. Other projects use their own release commands.
+
+The verifier tests the staged tree in an isolated checkout and preserves unstaged work. Its default suites are `installer`, `routing`, `deployment`, `launch`, `resources`, and `release`. Select a narrower scope with repeated `--check NAME` options. Passing evidence lives in this checkout’s Git metadata and is reusable only for the same tree, check, runner and execution context. Use `--fresh` when external inputs or assurance requirements change.
+
+Before publication, the verifier checks added text and changed paths for account-specific home paths and runs Git’s whitespace checks on the staged change. Before a push it also inspects the commits that would leave for the observed remote ref, including changes reverted later in the range. At a new destination, historical commits receive the home-path check and the staged change receives the whitespace check. Failures report a reason without reproducing private text.
+
+One JSON receipt reports the commit, remote match, checks executed or reused, elapsed time, and each requested action. `READY` goes to Chief for acceptance. `REPAIR` returns a failing check to its writer. `DECISION` identifies scope changes, ambiguous state or ref conflicts. A retry recognizes a completed commit or a matching remote ref. An ambiguous push is checked against the actual push destination before returning. Git hooks and non-fast-forward protection remain active. Independent external Git operations can still change state between checks, so the receipt records observed side effects.
+
+Deployment uses the durable source checkout and the existing fingerprint-guarded `deploy-verify.py`. A matching target is reported as already complete. If deployment fails after a push, the receipt preserves the push result. File verification reports `live_route=not_run`.
+
 ## Install and use
 
 Preview the default Codex installation:

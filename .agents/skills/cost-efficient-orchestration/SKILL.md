@@ -64,6 +64,8 @@ This pre-final checkpoint excludes the final response/later telemetry; it is not
 
 ## Evidence and privacy
 
+For this package's reviewed, staged release, use the [release entry](../../../README.md#staged-package-release) once with the authorized commit, push or deployment actions. It binds checks to the staged tree, reuses matching evidence and reports observed side effects. Other projects use their own native release entry. Send READY to Chief, REPAIR to the original writer and DECISION to the owner of the disputed scope or authority. Existing scientific and human review gates apply.
+
 For routine already-reviewed deployment use [deploy-verify.py](../../../scripts/deploy-verify.py) once for a compact batch receipt; its static file check always reports `live_route=not_run`. Chief reads changed/failed evidence and sufficient worker checks rather than repeating them. [Lifecycle rules](operations-and-lifecycle.md#resume-and-completion) scope any necessary independent live-route check.
 
 Use production evidence proportional to the claim; command success alone is not scientific validity. Keep relative paths/neutral placeholders; exclude local accounts, absolute paths, hostnames, environment/workspace/checkout/mount names, IDs, raw histories/logs without explicit human authorization. Retain compact evidence and uncertainty.
