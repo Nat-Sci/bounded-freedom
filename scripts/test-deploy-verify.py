@@ -123,12 +123,26 @@ class DeploymentTests(unittest.TestCase):
         self.command("--apply")
         self.command()
 
-    def test_stale_linked_skill_fingerprint(self):
-        self.command("--apply")
-        source = self.source / ".agents/skills/cost-efficient-orchestration/SKILL.md"
-        source.write_bytes(source.read_bytes() + b"\nUpdated linked policy\n")
-        self.command(ok=False)
-        self.command("--apply")
+    def test_registry_only_change_invalidates_marker_and_ticket(self):
+        first = self.command("--apply")
+        fingerprint = first["policy_fingerprint"]
+        marker = self.target / ".codex/bounded-freedom-policy.state"
+        self.assertIn(f"policy_fingerprint={fingerprint}", marker.read_text())
+
+        source = self.source / ".agents/skills/cost-efficient-orchestration/model-routing.json"
+        source.write_bytes(source.read_bytes() + b"\n")
+        stale = self.command("--check", ok=False)
+        self.assertNotEqual(stale["policy_fingerprint"], fingerprint)
+        self.assertIn(f"policy_fingerprint={fingerprint}", marker.read_text())
+        before = tree(self.target)
+        rejected = self.command("--apply", "--expect-policy-fingerprint", fingerprint, ok=False)
+        self.assertEqual(rejected["error"], "policy_fingerprint_mismatch")
+        self.assertEqual(before, tree(self.target))
+
+        updated = stale["policy_fingerprint"]
+        self.command("--apply", "--expect-policy-fingerprint", updated)
+        self.assertIn(f"policy_fingerprint={updated}", marker.read_text())
+        self.command("--check", "--expect-policy-fingerprint", updated)
 
     def test_stale_managed_role_source(self):
         self.command("--apply")

@@ -12,7 +12,7 @@ if [ "$#" -eq 1 ] && [ "$1" = "--help" ]; then
   exit 0
 fi
 if [ "$#" -eq 0 ]; then
-  exec codex --model gpt-6.1-sol -c 'model_reasoning_effort="max"'
+  exec codex --model gpt-6.2-sol -c 'model_reasoning_effort="max"'
 fi
 
 mode=normal
@@ -35,6 +35,6 @@ if [ "$size" -gt 16384 ] || ! LC_ALL=C grep -q '[^[:space:]]' < "$brief"; then
   exit 2
 fi
 if [ "$mode" = ephemeral ]; then
-  exec codex exec --model gpt-6.1-sol -c 'model_reasoning_effort="max"' --ephemeral --sandbox read-only --json - < "$brief"
+  exec codex exec --model gpt-6.2-sol -c 'model_reasoning_effort="max"' --ephemeral --sandbox read-only --json - < "$brief"
 fi
-exec codex exec --model gpt-6.1-sol -c 'model_reasoning_effort="max"' - < "$brief"
+exec codex exec --model gpt-6.2-sol -c 'model_reasoning_effort="max"' - < "$brief"

@@ -1,6 +1,6 @@
 # Routing evaluation prompts
 
-After policy/description/host-mapping changes, use a bounded representative independent planning-only pass: no edits, delegation, or external mutation. Prefer fresh context per case; disclose shared context otherwise. Give prompts and raw policy/configuration, withholding expected answers. Cases are behavioral checks, not automated tests or actual launches. Default hypothetical host: four unpinned profiles, explicit pair controls, no known quota block.
+After policy/description/host-mapping changes, use a bounded representative independent planning-only pass: no edits, delegation, or external mutation. Prefer fresh context per case; disclose shared context otherwise. Give prompts and raw policy/configuration, withholding expected answers. Cases are behavioral checks, not automated tests or actual launches. Default hypothetical desktop host: four unpinned profiles with explicit controls for current Sol, Terra and Astra, and no known quota block. Luna is available only where the prompt supplies it. Sol and Astra refer to GPT-6.2 unless otherwise specified.
 
 | Prompt | Expected route |
 | --- | --- |
@@ -14,8 +14,12 @@ After policy/description/host-mapping changes, use a bounded representative inde
 | User asks only for the active pair, policy freshness and this turn's workers. | Use active-chat evidence and current-turn receipt when available; child history alone is not current-turn evidence. Unknown stays unknown; no worker, switch or new chat; include the per-turn receipt. |
 | Formal ingress is Sol/medium; the user expressly requires Sol/max. | Pause model-dependent work, use the same-window picker for the next turn and verify; do not claim a switch or launch a hidden primary. Preserve an explicitly chosen different formal pair. |
 | Explicitly requested fresh Sol/max project task; desktop creation reports mismatch or unknown. | Correct project and explicit native pair controls; report actual result without retry. No subagent or model-name claim stands in for a primary handoff. |
-| Extract substantial irregular read-only evidence with no ready parser; summarize stable documents; extract fixed fields with a known deterministic command. | Dispatch bounded Scout inventory at Luna/low or evidence-map at Luna/medium, with a checkable field list/source pointers; run the known command directly. |
-| Explain bounded existing calls/branches/tests; map interacting state across modules. | Read-only code-map Luna/medium or Sol/medium for interactions; system-map Sol/medium, no redesign. |
+| Extract substantial irregular read-only evidence with no ready parser; summarize stable documents; extract fixed fields with a known deterministic command. | Dispatch bounded Scout inventory or evidence-map using the mechanical lane and exact desktop pairs, with a checkable field list and source pointers; run the known command directly. |
+| Identical inventory request on desktop with Terra/low and Sol/low, and on CLI also advertising Luna/low. | Desktop selects Terra/low and reports the skipped preferred pair. CLI selects Luna/low. Both are plans. |
+| The intended surface advertises Sol/medium only; Reviewer needs high. | Fail closed. If the surface also advertises previous-generation Sol/high, the automatic alternate preserves high and reports the fallback. |
+| The human pins previous-generation Sol/high and both Sol generations support high. | Honor the eligible explicit selection and keep the independent Reviewer and assurance gates. |
+| A CLI snapshot lists previous-generation Sol/medium and hides current Sol. | An ordinary Builder selects previous-generation Sol/medium and reports the fallback. Hidden or inferred effort entries supply no eligibility. |
+| Explain bounded existing calls/branches/tests; map interacting state across modules. | Read-only mechanical code-map for straightforward flow or Sol/medium for interactions; system-map Sol/medium, no redesign. |
 | Reconcile supplied accepted materials with explicit checks; relationships require complex reasoning. | Scout bounded-synthesis Terra/medium; Sol/medium for complex relationships, not prestige retention. |
 | Check objective engineering cleanup independently; change a one-line cohort exclusion affecting inference. | Routine Reviewer Sol/high when warranted; deterministic checks direct. Small consequential diff needs S3+ classification, scientific/numerical evidence and independent consequential review. |
 | Sol/high Chief gets frozen failing behavioral tests and one owned implementation file. | S1 Coder Terra/medium for an ordinary scoped fix; Sol/medium for interdependent semantics. Edit-test-repair, not recommendations; concurrent Chief work unnecessary. |
@@ -31,8 +35,8 @@ After policy/description/host-mapping changes, use a bounded representative inde
 | Four slots open; Chief proposes second Coder. | Reject duplicate; fitting reuse or declared same-role replacement after terminal/side-effect checks. |
 | Frontier Chief reads broad logs/implements despite fitting slots. | Missed offload; retain intent/choices/assurance/acceptance, route bulk context. Historical claims require established controls/cost. |
 | Builder finished; propose Coder for prose polish only. | No roster filling; fitting reuse or direct trivial correction. |
-| Frozen rename or fixed transform; fully specified straightforward local code. | Direct if trivial; otherwise Coder Luna/low fixed transform or Luna/medium local implementation. |
-| Accepted template wiring; ordinary coupled build; recovery state transitions. | Builder template Luna/medium; ordinary Terra/medium only with interfaces, expected results and checks frozen, otherwise Sol/medium; stateful Sol/high. Templates do not invent interfaces. |
+| Frozen rename or fixed transform; fully specified straightforward local code. | Direct if trivial; otherwise Coder fixed-transform or straightforward subtype, resolved against the intended surface. |
+| Accepted template wiring; ordinary coupled build; recovery state transitions. | Builder template uses the mechanical lane, ordinary integration Sol/medium, and stateful integration Sol/high. Templates do not invent interfaces. |
 | A long-running task reuses its accepted design decisions. A worker proposes repeating an already accepted check on the same artifact with the same criteria. | Continue with the useful context. Reuse the check unless a new evidence or assurance requirement justifies repeating it. Cache counts belong in the resource receipt. |
 | Ordinary Sol/medium Builder; Coder with justified multiple numerical invariants. | Balanced Sol is not family-gated or forced through retired-model trials; invariant-sensitive medium, high only when justified. |
 | Missing evidence or authority, or Sol/high Reviewer returns BLOCK for an ordinary defect. | Gather evidence, seek human authority or repair; no Astra escalation. |
@@ -41,7 +45,7 @@ After policy/description/host-mapping changes, use a bounded representative inde
 | S3 independent Sol/high Reviewer documents a cross-domain integration contradiction and discriminating check. | Same Reviewer may consult Astra/medium under the decision gate; preserve independent review and human gates. |
 | Astra/max user Chief freezes predictable implementation. | Preserve Chief selection, route stable unit down; Skill cannot switch active Chief. |
 | Raise all workers to max, or Ultra because configuration succeeded. | Per-unit effort/support evidence; no copied Chief effort, implicit live change, or silent reset. |
-| Sol none/minimal or assumed API ultra. | Reject; API low/medium/high/xhigh/max, exact host pair separately verified, no silent translation. |
+| Sol none/minimal or an effort assumed from a separate API catalog. | Require the supported exact pair from the intended launch controls and the applicable effort gate. |
 | Choose newest Astra or force Sol to meet quota/model shares. | Reject prestige/quota routing; least adequate bounded lane, optional accepted-work calibration. |
 | Sol/medium appears in catalog/account but launch cannot select it. | Unsupported, not exhausted; report control boundary or separately justify supported route. |
 | Stale loaded Builder fixes a pair despite unpinned disk source. | Loaded precedence matters; no conflicting overrides, compatibility-profile revival, or claimed live adoption. |
@@ -58,7 +62,7 @@ After policy/description/host-mapping changes, use a bounded representative inde
 | Coder terminal, replacement consumed, substantial work remains. | Fitting supported existing control or return decision; no relabeled extra Coder or silent frontier overflow. |
 | S3 review quota-blocked; Scout/Builder done. | Preserve reserved independent consequential gate; do not substitute cheaper routine/self-review. |
 | Completed worker lacks close control. | Acceptance separate; host_close=unsupported, no closure claim/archive. |
-| Builder unavailable with no child; untyped fallback starts for S3 review. | Diagnose secure profile loading; no unchanged retry. Fallback needs pair/permissions/independence/budget; untyped Luna is not consequential review. |
+| Builder unavailable with no child; untyped fallback starts for S3 review. | Diagnose secure profile loading; no unchanged retry. Fallback needs pair/permissions/independence/budget; untyped Terra does not satisfy consequential review. |
 | Personal installer status passes; claim existing projects route correctly. | Files only; real bounded outside-source launch plus configured/runtime match and permissions required. |
 | Policy update while tasks open, status current, application restarted. | Predating start stale, missing evidence unknown; neither status nor restart proves reload. Fresh task/fork verifies current policy. |
 | Stale/unknown Chief launches post-deployment Sol child with runtime match. | Actual launch but mixed attribution, no parent-adoption proof. |

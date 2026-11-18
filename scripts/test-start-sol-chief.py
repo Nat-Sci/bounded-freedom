@@ -34,7 +34,7 @@ class StartSolChiefTests(unittest.TestCase):
         result = self.run_helper(stdin="interactive input", status=17)
         self.assertEqual(17, result.returncode)
         record = json.loads(self.record.read_text())
-        self.assertEqual(["--model", "gpt-6.1-sol", "-c", 'model_reasoning_effort="max"'], record["argv"])
+        self.assertEqual(["--model", "gpt-6.2-sol", "-c", 'model_reasoning_effort="max"'], record["argv"])
         self.assertEqual(str(self.root.resolve()), record["cwd"])
         self.assertEqual("interactive input", record["stdin"])
 
@@ -46,7 +46,7 @@ class StartSolChiefTests(unittest.TestCase):
                 result = self.run_helper(*prefix, "--handoff", brief, status=7)
                 self.assertEqual(7, result.returncode)
                 record = json.loads(self.record.read_text())
-                self.assertEqual(["exec", "--model", "gpt-6.1-sol", "-c", 'model_reasoning_effort="max"', *extra, "-"], record["argv"])
+                self.assertEqual(["exec", "--model", "gpt-6.2-sol", "-c", 'model_reasoning_effort="max"', *extra, "-"], record["argv"])
                 self.assertEqual("private handoff\n", record["stdin"])
                 self.assertEqual(str(self.root.resolve()), record["cwd"])
                 self.assertNotIn("private handoff", result.stdout + result.stderr)

@@ -8,11 +8,9 @@ Map portable contracts to real host controls; re-check availability, price, perm
 
 Codex custom-agent file `model`/`model_reasoning_effort` overrides explicit launch, then defaults/inheritance ([official configuration](https://learn.chatgpt.com/docs/agent-configuration/subagents)). All four current role files omit these keys; both launch controls are mandatory. Source edits do not unpin a stale loaded profile: report the session boundary, never send conflicting overrides or claim adoption.
 
-Checked 2026-11-05: [selection guide](https://learn.chatgpt.com/docs/model-selection), [models](https://learn.chatgpt.com/docs/models), and [pricing](https://learn.chatgpt.com/docs/pricing). CLI 0.166.0-alpha.6 and worker controls support `gpt-6.1-terra` / medium. The guide identifies supplied-material writing, visual understanding, and scoped fixes as suitable; Standard Codex input, cached-input, and output credit rates are half those of GPT-6.1 Sol. These are starting-policy inputs, not measured local savings or quality guarantees. Revalidate IDs, efforts, controls, and rates when host/docs change.
+Checked 2026-11-18. GPT-6.2 Sol is the ordinary coding and PR model. GPT-6.2 Astra is for the hardest work across boundaries. GPT-6.1 Terra suits supplied material, visual and computer-use work, and scoped fixes. Revalidate the exact launch controls on the intended surface. The desktop worker catalog at intake omitted Luna, while CLI 0.169.0-alpha.11.1 advertised it with efforts through max. Only desktop GPT-6.2 Sol advertised Ultrafast at intake. Historical records keep their recorded values. [GPT-6.2 release](https://learn.chatgpt.com/docs/whats-new/gpt-62-astra-sol), [model selection](https://learn.chatgpt.com/docs/models?surface=app).
 
-For a new task, prefer human-selected `gpt-6.1-sol` / max as Chief. Preserve the current Chief and any user-selected model or effort, including Astra/max; this recommendation never switches a live session. Worker starting pairs remain independent and are not inherited from Chief.
-
-Current generation routing uses 6.1 Sol/Terra and 6 Astra/Luna; 6 Sol is a legacy comparison. Use 5.6 only for explicitly requested reproduction or a verified advantage on a surface that can actually bind it. Historical records remain unchanged.
+For a new task, prefer human-selected `gpt-6.2-sol` / max as Chief. Preserve the current Chief and any user-selected model or effort, including Astra/max. Worker starting pairs remain independent.
 
 ## Single-Chief cross-entry
 
@@ -20,7 +18,7 @@ Small local tasks stay direct at the actual entry. Planning may begin with human
 
 For formal execution prefer one actual Sol/max primary, while honoring an explicitly chosen different formal model or effort. If the current primary can continue, dispatch in place and give one concise status within the existing receipts. Astra chosen only for opening/planning is not a choice of formal executor. If Sol/max is expressly required but the actual pair is nonmatching or unknown, pause model-dependent work; use the same-window desktop model/effort picker for the next turn, then verify. Do not claim a switch or use a hidden extra primary. A model-name claim or subagent is not a primary handoff. Create a fresh visible project task only when the human explicitly requests it and authorizes its model; Chief synthesizes the minimal accepted context directly, without a form, file, full history, or extra approval. After authorized transfer the planning entry stops competing execution. Report failure, mismatch or unknown without blind retries. Planning-only requests, irreversible actions, S3/S4 review and human gates remain unchanged.
 
-Desktop native adapter: use `list_projects` to identify the correct project. For an explicitly requested fresh Sol/max project task with authorized selection, call `create_thread` with `model: gpt-6.1-sol`, `thinking: max`, a short synthesized context prompt and the correct local project target; do not copy full history. If unavailable, offer manual new task plus composer selection or the CLI below. No automatic setting changes.
+Desktop native adapter: use `list_projects` to identify the correct project. For an explicitly requested fresh Sol/max project task with authorized selection, call `create_thread` with `model: gpt-6.2-sol`, `thinking: max`, a short synthesized context prompt and the correct local project target; do not copy full history. If unavailable, offer manual new task plus composer selection or the CLI below. No automatic setting changes.
 
 For status only, use the active chat's runtime probe and current-turn receipt when available. Report the observed primary pair, policy freshness and evidenced workers for this turn; `--children` is thread history, not proof of current-turn activity. Distinguish installed files from loaded policy and leave unavailable evidence unknown. Status alone never starts a worker, switches a model or creates a chat; follow the per-turn resource receipt contract.
 
@@ -28,45 +26,41 @@ For a human-initiated CLI entry, invoke `sh scripts/start-sol-chief.sh` relative
 
 ## Speed and cost provenance
 
-Checked 2026-10-09: [pricing](https://learn.chatgpt.com/docs/pricing), [speed](https://learn.chatgpt.com/docs/agent-configuration/speed), [configuration](https://learn.chatgpt.com/docs/config-file/config-reference). Recommend Standard for cost-focused nonurgent work; Fast/Ultrafast needs a latency tradeoff while preserving user selections. Speed differs from family/effort: Fast uses 2.5× included allowance or 2× purchased credits; Ultrafast 8×/6×. API pricing is separate; no copied pricing tables or inferred local-counter costs.
+Plan for Standard by default, subject to actual user and host controls. Omit a speed override unless requested and supported by the launch surface. Standard Codex rates apply to purchased credits per token volume. Included allowance and API charges have their own terms. Use current published rates and speed multipliers. [Pricing](https://learn.chatgpt.com/docs/pricing), [speed](https://learn.chatgpt.com/docs/agent-configuration/speed), [configuration](https://learn.chatgpt.com/docs/config-file/config-reference).
 
-Record planned/configured/observed service tier and sources or unknown. Configuration maps `fast` to request priority and prefers `service_tier` for new turns; configuration proves neither runtime nor billed tier. No invented arguments, automatic speed changes, quota polling, or capability block for absent speed controls/telemetry.
+Record planned, configured and observed service tier and their sources, or unknown. Configuration maps `fast` to request priority and prefers `service_tier` for new turns. Runtime and billing need separate evidence.
 
 ## Canonical task-kind matrix
 
-Choose from bounded output, not “code”/“review” keywords. These local starting policies are not guarantees or a trial ladder; known commands/trivial micro-edits stay direct. Luna = `gpt-6-luna`, Terra = `gpt-6.1-terra`, Sol = `gpt-6.1-sol`, Astra = `gpt-6-astra`; historical IDs remain unchanged.
+[model-routing.json](model-routing.json) defines task and subtype → contract, lane and effort → ordered candidate models. Classify by bounded output. Known commands and trivial micro-edits stay direct.
 
-| Task kind | Bounded output | Contract | Starting model / effort |
-| --- | --- | --- | --- |
-| `inventory` | Fixed-field extraction, file/configuration inventory | Scout | `gpt-6-luna` / low |
-| `evidence-map` | Source/document evidence with stable concepts | Scout | `gpt-6-luna` / medium |
-| `code-map` | Existing calls, branches, parameter flow, or test locations in a bounded source slice | Scout | `gpt-6-luna` / medium for straightforward flow; `gpt-6.1-sol` / medium for interacting state or cross-module constraints |
-| `system-map` | Related interfaces, state flow, or cross-module dependencies | Scout | `gpt-6.1-sol` / medium |
-| `bounded-synthesis` | Reconcile supplied accepted materials with explicit checks, without making the final scientific decision | Scout | `gpt-6.1-terra` / medium; `gpt-6.1-sol` / medium where relationships demand complex reasoning |
-| `code-edit` | Narrow frozen implementation and its targeted checks | Coder | See Coder subtypes below |
-| `coordinated-build` | One coherent implementation boundary across coupled files/interfaces | Builder | See Builder subtypes below |
-| `routine-review` | Independent bounded engineering check with objective acceptance, no consequential inference or primary-claim decision | Reviewer | `gpt-6.1-sol` / high |
-| `consequential-review` | Independent S3/S4 or similarly demanding judgment | Reviewer | `gpt-6.1-sol` / high |
+- Scout uses `inventory`, `evidence-map`, `code-map` or `system-map` for discovery. Use `code-map --subtype interacting` for interacting state. Use `bounded-synthesis` for supplied materials, `--subtype visual` for visual work, and `--subtype interdependent` when relationships require complex reasoning. Office and application visual work stays within read access and the authorized scope.
+- Coder uses `code-edit` for scoped frozen fixes. Use `fixed-transform` or `straightforward` for fully specified mechanical/local edits, `interdependent` or `invariant-sensitive` for edits requiring coordinated reasoning, and `interacting-invariants` for justified high effort.
+- Builder uses `coordinated-build` for ordinary coupled work. Use `frozen-template` only with accepted interface mappings, dependencies, steps and checks. Use `stateful-recovery` for agreed interacting state, checkpoints or recovery.
+- Reviewer uses `routine-review` for objective independent engineering checks and `consequential-review` for S3/S4 or similarly demanding judgments. High is the starting floor. GPT-6.1 Sol/high is the automatic same-family alternate when the current pair is absent or explicitly blocked. An explicit GPT-6.1 Sol/high selection is valid when the host can bind it and the pair is eligible.
 
-Method stays separate: mathematical work may request mapping, analysis, or later frozen editing; model ability does not change method. Unresolved design/science/specification conflicts return to Chief. Small diffs do not turn consequential review into routine review.
+For ordinary balanced and strong work, GPT-6.1 Sol is the automatic fallback when the current Sol pair is absent or explicitly blocked at the required effort. In mechanical and grounded work, the previous Sol generation is the last eligible substitute after the preferred capability choices.
 
-Choose another pair only with bounded limiting-factor evidence: simple repetition may need less effort; coupled state/API starts balanced; justified multiple interacting invariants/stateful integration may start Sol/high. Diagnose/repair failed checks before claiming capability shortfall. Pair changes never broaden contract or give Scout write access.
+Method stays separate. Unresolved design, science and specification conflicts return to Chief. Small diffs can still require consequential review.
 
-## Coder and Builder subtypes
+### Resolve on the intended launch surface
 
-Keep parent kinds; subtype follows frozen ownership/integration, not file count. Template integration uses accepted mappings/dependencies/steps/checks rather than inventing interfaces.
+From this Skill directory, run the [resolver](scripts/resolve-model-route.py) with Python 3.9 or newer. For an app worker, supply exact pairs that its launch controls advertise and can bind. For CLI, pass exact pairs or reuse an existing `codex debug models` JSON snapshot for that surface.
 
-| Parent kind | Subtype | Frozen boundary | Starting model / effort |
-| --- | --- | --- | --- |
-| `code-edit` | Coder fixed transform | Repeated fixed transform with targeted checks | `gpt-6-luna` / low |
-| `code-edit` | Coder straightforward local implementation | Completely specified local implementation with straightforward logic | `gpt-6-luna` / medium |
-| `code-edit` | Coder ordinary bounded implementation | Scoped fixes with frozen interfaces and checks | `gpt-6.1-terra` / medium; `gpt-6.1-sol` / medium for interdependent semantics |
-| `code-edit` | Coder invariant-sensitive bounded edit | Interacting state, gradient, numerical, or other invariants within the frozen edit | `gpt-6.1-sol` / medium; high only for justified multiple interacting invariants |
-| `coordinated-build` | Builder frozen template integration | Template wiring across responsibilities, only when interface mappings, dependencies, steps, and checks are already frozen | `gpt-6-luna` / medium |
-| `coordinated-build` | Builder ordinary coordinated integration | One ordinary coupled boundary; interfaces, expected results, and checks frozen | `gpt-6.1-terra` / medium; `gpt-6.1-sol` / medium if not frozen |
-| `coordinated-build` | Builder stateful recovery integration | Agreed checkpoint, recovery, resource, or state transitions that must remain coherent | `gpt-6.1-sol` / high |
+```sh
+python3 scripts/resolve-model-route.py inventory --surface app-worker \
+  --available gpt-6.1-terra/low gpt-6.2-sol/low
+python3 scripts/resolve-model-route.py coordinated-build --surface cli \
+  --cli-catalog cli-models.json
+```
 
-The maintained Codex Reviewer route starts at Reviewer / Sol / high for routine and consequential review; a local preference, not mandatory review for every task/host. Cheaper objective-check executors are not independent Reviewer evidence.
+Use `--cli-catalog -` to read a snapshot from stdin. CLI catalog ingestion requires a `models` array and uses rows with `visibility: "list"`, a slug, and explicit `supported_reasoning_levels` efforts. Ignore hidden rows and unbindable entries. Reuse a snapshot for the applicable CLI context. The resolver reads local evidence and performs no model lookup. `--cli-catalog` and `--available` are mutually exclusive, and the app worker takes exact pairs from its own controls.
+
+Omit the catalog argument when evidence is missing. An explicitly empty catalog is unavailable. Use `--exclude MODEL/EFFORT ...` for explicit applicable blocks, or omit blocked pairs when supplying exact pairs.
+
+The compact JSON is a plan. A selected pair exits 0. Unknown or unavailable exits 1 with the reason. An automatic fallback names the preferred model and why earlier candidates were skipped. Preserve an explicit user pair with `--model` and `--effort`. A supported, eligible in-lane model selection reports `explicit_model` and carries no automatic fallback. If the request falls outside the approved route or its exact pair is unavailable, report the boundary to Chief.
+
+A raised effort requires `--depth-approved` under the applicable gate. Frontier requires `--frontier-approved` and, for Reviewer, `--review-shortfall`. These flags record Chief's prior decisions. Before launch, verify the planned exact pair, permissions and role with the actual controls.
 
 ## Launch capability and quota evidence
 
@@ -84,7 +78,7 @@ Select explicit effort after capable model:
 - `high`: justified interacting constraints, difficult diagnosis, consequential review.
 - `xhigh`/`max`/`ultra`: explicit user choice or specifically demonstrated depth need, with model AND host support; not ordinary worker defaults or copied Chief settings. The new-task Chief preference is separate.
 
-The [Terra](https://developers.openai.com/api/docs/models/gpt-6.1-terra) and [Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) APIs support max; the local launch catalog also supports it. Sol API supports low/medium/high/xhigh/max, not none/minimal; never translate silently. Host ultra is distinct, not API support.
+Check each exact effort on the selected launch surface. API effort names, including API max, do not establish desktop or CLI support. Never silently translate an effort.
 
 Use the [decision gate](#capability-gates) for depth and frontier admission. File count, history length, novelty, unused quota, S level, or simple failure does not justify escalation. Re-evaluate stable next work down.
 
@@ -101,10 +95,10 @@ Exactly four unpinned canonical profiles; no fixed counterparts/Routed aliases:
 | Builder | workspace-write |
 | Reviewer | read-only |
 
-The [role manifest](../../../install/codex-role-files.txt) defines install/update/conflict/status inventory; outside files remain untouched. Untyped Luna/low is defensive fallback, never a valid typed route.
+The [role manifest](../../../install/codex-role-files.txt) defines install/update/conflict/status inventory; outside files remain untouched. Terra/low is the defensive default for untyped calls only.
 
 1. Freeze the [ticket](operations-and-lifecycle.md#freeze-and-budget).
-2. Inspect advertised exact IDs, efforts, effective permission overrides, fork controls; supply both actual launch arguments, never prose/inheritance alone. Stale fixed profiles cannot honor conflicting values.
+2. Resolve the plan using [exact advertised pairs](#resolve-on-the-intended-launch-surface). Verify effective permission overrides and fork controls, then pass both actual launch arguments. Stale fixed profiles cannot honor conflicting values.
 3. Enforce actual sandbox/ownership; read-only prose is insufficient. Full-history may forbid overrides; use a supported compact fresh launch, never unsupported arguments.
 4. Require startup contract/kind/profile, configured pair/source, runtime receipt or unknown. Stop on observed mismatch; do not rewrite the planned model/effort to fit it. A fresh declared route needs fresh work; mismatched attempts consume budget and fail original review. Unknown is not a verified match.
 5. Absent controls are unsupported, distinct from quota. A separately justified supported pair still needs enforceable permissions/independence; otherwise report the boundary or do minimal safe direct work. No cheap untyped S3/S4 review or claimed live switch from source edits.
@@ -132,11 +126,11 @@ After freezing the unit and checking inputs, apply these in order:
 3. Deep reasoning means coherent assumptions need more reasoning within the same well-defined unit; it is distinct from the verified joint contradiction in step 4. For demonstrated depth use supported Terra/max for a suitable scoped unit or Sol/max for interdependent reasoning, within the fitting role. Explicit user requests may select supported max for a unit; do not exhaust a trial ladder. Starting matrix pairs still fit ordinary work.
 4. Astra admission requires documented, verified constraints from different tools or domains that are inseparable, plus a concrete integration contradiction or failed end-to-end check/counterexample, one bounded question, and a discriminating check and stop. Existing Sol/max Chief evidence or verified comparable Sol evidence at intake can qualify without a duplicate worker or trial launch. Reviewer additionally requires documented independent Sol/high coherence shortfall.
 
-Use an available fitting existing role and real pair controls with remaining budget for one compact Astra/medium consult by default; higher effort needs separate evidence. If unavailable or occupied without suitable control, queue or report. Ticket: `role/pair | verified inputs and contradiction | question | check/stop | scope/budget`. Example: a durable checkpoint and external event log each pass locally, but a verified crash/retry counterexample shows each local-only repair double-counts or loses a confirmed event; one shared replay checks both. By contrast, fixed 80 input and 30 cached is directly checkable. On pass, return verifiable evidence to the same accountable primary session (normally the preferred Sol/max Chief), which verifies it and assigns implementation down; no second Chief or silent switch. On failure or unknown, stop or surface the human choice. No expanded permissions or acceptance authority.
+Use a fitting existing role and real pair controls with remaining budget for one compact Astra/medium consult by default. The previous Astra generation is an explicitly reported same-family alternate. Higher effort needs separate evidence. If unavailable or occupied without suitable control, queue or report. Ticket: `role/pair | verified inputs and contradiction | question | check/stop | scope/budget`. Example: a durable checkpoint and external event log each pass locally, but a verified crash/retry counterexample shows each local-only repair double-counts or loses a confirmed event; one shared replay checks both. By contrast, fixed 80 input and 30 cached is directly checkable. On pass, return verifiable evidence to the same accountable primary session (normally the preferred Sol/max Chief), which verifies it and assigns implementation down; no second Chief or silent switch. On failure or unknown, stop or surface the human choice. No expanded permissions or acceptance authority.
 
 Sol/medium is balanced; justified Sol/high is strong. Before non-review strong or frontier execution apply the [balanced gate](hierarchical-routing.md#balanced-gate-and-direct-work) to eligible work, without mandatory trial launches. S3/S4 retain review/human gates and do not themselves select Astra.
 
-## GPT-6 Astra boundary
+## Frontier boundary
 
 Frontier is not a fifth contract and expands no scope, authority, permissions, roster, assurance, or acceptance. Apply the [decision gate](#capability-gates). Reviewer starts Sol/high and remains independent; no `AstraReviewer` role. Astra Chief self-review is not independent; S3/S4 review and S4 human acceptance remain required.
 

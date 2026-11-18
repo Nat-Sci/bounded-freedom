@@ -11,7 +11,8 @@ compute_policy_fingerprint() {
         printf '%s|%s\n' "$policy_source" "$policy_checksum"
       done
       find .agents/skills .codex/agents -type f \
-        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
+        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \
+          -o -path '.agents/skills/cost-efficient-orchestration/model-routing.json' \) \
         ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
           policy_checksum=$(cksum < "$policy_source")
           printf '%s|%s\n' "$policy_source" "$policy_checksum"

@@ -22,7 +22,7 @@ For substantive direct exceptions, record the concrete handoff, tool, access, or
 ## Dispatch only the needed rules
 
 - Above clear S0, read [scientific-risk.md](scientific-risk.md). Code, configuration, executable-workflow, and routing mutations are at least S1; S3/S4 needs independent Reviewer evidence, S4 human acceptance.
-- For pair selection or host changes, read [host-model-routing.md](host-model-routing.md): canonical matrix, launch controls, effective permissions, quota, effort, escalation, and mismatch rules.
+- For pair selection or host changes, read [host-model-routing.md](host-model-routing.md): classify the bounded task, then use the [offline resolver](host-model-routing.md#resolve-on-the-intended-launch-surface) with exact pairs from the intended launch surface. Verify launch permissions, escalation gates, and runtime match.
 - For spawning, retries, external mutation, compaction, or closure, read [operations-and-lifecycle.md](operations-and-lifecycle.md): freeze/tickets, roster, budgets, recovery, milestones, and freshness.
 - For substantial implementation, multi-phase/delegated work, strong/frontier execution, or calibration, read [hierarchical-routing.md](hierarchical-routing.md): implementation ownership, direct exceptions, production verification, targeted acceptance.
 - For research claim/method boundaries read [research-lineage.md](research-lineage.md); for policy changes use [routing-evals.md](routing-evals.md).

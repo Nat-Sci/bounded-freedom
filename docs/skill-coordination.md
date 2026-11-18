@@ -74,7 +74,7 @@ supplies existing facts, while Builder decomposes an accepted goal into
 interfaces, dependencies, bounded packets, and checks without redefining
 science.
 
-The task-kind matrix in the [host routing adapter](../.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
+The task and capability policy in the [host routing adapter](../.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix)
 is the single model/effort starting policy. Code mapping, general evidence, and
 system mapping can all use Scout with different models; changing to code edits
 changes the execution contract and cannot silently grant write permissions to
@@ -92,8 +92,8 @@ authoritative quota evidence only when available for a supported candidate; a
 known applicable limit blocks it, while missing telemetry remains `unknown` and
 does not preemptively block it. Confirm terminal state and inspect side effects
 before a same-role replacement; neither quota evidence nor a timeout creates
-another simultaneous slot. The maintained Codex Reviewer route starts at Sol/high for routine and
-consequential review, with Astra reserved for a documented Sol/high coherence
+another simultaneous slot. The maintained Codex Reviewer route starts at GPT-6.2
+Sol/high for routine and consequential review, with Astra reserved for a documented Sol/high coherence
 shortfall; ordinary defects, missing evidence, profile mismatch, or `BLOCK`
 return to repair first. The four-role policy maximum is reduced to the actual
 host worker limit when known; queue dependencies and reserve feasible review

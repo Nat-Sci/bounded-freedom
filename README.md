@@ -2,9 +2,9 @@
 
 > **Boundaries turn capability into reliable action.**
 
-Current package: **v0.8.1 — Astra Edition**.
+Current package: **v0.9.0 — Astra Edition**.
 
-Version 0.8.1 adds a compact deterministic deployment check and explicit apply command, with isolated regression coverage and targeted routine-deployment evidence. File consistency remains separate from live routing; these changes do not establish token or cost savings.
+Version 0.9.0 resolves Codex worker plans against exact model and effort pairs advertised by the intended launch surface. The same task policy serves desktop workers and CLI launches.
 
 ![BoundedFreedom research cover showing MRI anatomy, cortical networks, evidence verification, and human judgment](docs/assets/bounded-freedom-neuro-research-cover.png)
 
@@ -97,7 +97,7 @@ The Constitution and Skills are portable. Host files stay thin, and project fact
 
 The [orchestration dispatcher](.agents/skills/cost-efficient-orchestration/SKILL.md) separates task method, execution contract, model/effort, and S0–S4 assurance. Chief retains intent and acceptance; Scout supplies facts, Builder coordinates accepted boundaries, Coder owns narrow edit-test-repair, and Reviewer supplies independent evidence.
 
-For a new task, the Chief preference is Sol/max, selected by the human in the [desktop composer model controls](https://learn.chatgpt.com/docs/models?surface=app); preserve any existing or explicitly selected model and effort. Worker routes remain independent; use the [capability decision gate](.agents/skills/cost-efficient-orchestration/host-model-routing.md#capability-gates). Batch independent checks. Keep prior decisions, evidence and constraints that still apply. Start a fresh task only on explicit request and model authorization. Use [the phase rules](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md#phase-control) to address repeated work and avoidable Chief interruptions.
+For a new task, the Chief preference is GPT-6.2 Sol/max, selected by the human in the [desktop composer model controls](https://learn.chatgpt.com/docs/models?surface=app); preserve any existing or explicitly selected model and effort. Worker routes remain independent; use the [capability decision gate](.agents/skills/cost-efficient-orchestration/host-model-routing.md#capability-gates). Batch independent checks. Keep prior decisions, evidence and constraints that still apply. Start a fresh task only on explicit request and model authorization. Use [the phase rules](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md#phase-control) to address repeated work and avoidable Chief interruptions.
 
 例如：“按刚才定好的范围继续。”范围清楚时，直接沿用本对话，无需手写交接或再次确认。若明确要求 Sol/max 但当前实际配置不匹配或未知，先暂停依赖该配置的工作，在当前窗口选择模型和推理强度，下一轮再核实。另例：“请在这个项目新建 Sol/max 任务并继续。”只有明确要求新任务并授权模型时才创建；Chief 直接整理最少必要上下文。规划咨询不是第二个 Chief。[Single-Chief protocol](.agents/skills/cost-efficient-orchestration/host-model-routing.md#single-chief-cross-entry) 保留科学与人工确认边界。
 
@@ -114,14 +114,14 @@ Optional `--handoff FILE` remains available for an existing brief; ordinary cont
 The [per-turn resource receipt contract](.agents/skills/cost-efficient-orchestration/resource-receipt.md) also applies to tool-using and worker turns without orchestration. Installed Codex and Claude global instructions apply across projects; Gemini imports project `AGENTS.md`. Other apps and portable-only hosts must bind the contract into an always-loaded instruction layer for turns without a selected skill. Existing sessions and apps cannot be forced to reload it.
 
 It owns the visible START/CHANGE/END and pre-final resource receipts, with conditional references for:
-- [Canonical task kinds, subtypes, pairs, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).
+- [Task kinds, offline pair resolution, effort, launch permissions and quota](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix).
 - [Roster, single-writer budgets, recovery, policy freshness and usage cohorts](.agents/skills/cost-efficient-orchestration/operations-and-lifecycle.md).
 - [Implementation ownership, direct exceptions, targeted production verification and artifact-state review](.agents/skills/cost-efficient-orchestration/hierarchical-routing.md#balanced-gate-and-direct-work).
 - [Scientific assurance](.agents/skills/cost-efficient-orchestration/scientific-risk.md).
 
 ## Astra Edition: a thin frontier and a strong middle
 
-Route phases by their bounded output and least adequate capability, then return stable work down. The [host matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md) owns current model policies and the [frontier boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#gpt-6-astra-boundary); these starting policies make no measured savings or quality claim. Host controls cannot be replaced by routing prose.
+Route phases by their bounded output and least adequate capability, then return stable work down. The [host routing policy](.agents/skills/cost-efficient-orchestration/host-model-routing.md) owns current model policies and the [frontier boundary](.agents/skills/cost-efficient-orchestration/host-model-routing.md#frontier-boundary); these starting policies make no measured savings or quality claim. Host controls cannot be replaced by routing prose.
 
 ## Seal milestones: turn history into reusable assets
 
@@ -286,7 +286,7 @@ deletions on pull, so back up any records needed there before updating.
 
 The portable core follows the open [Agent Skills specification](https://agentskills.io/specification). Compatible hosts can use `.agents/skills` directly; Claude Code receives links in its native Skill location; other systems may need a thin adapter. Codex remains the reference implementation because the execution-role profiles under `.codex/` are already configured. See the [harness landscape](docs/harness-landscape.md) for the exact boundary.
 
-Current routing policies live in the [canonical host matrix](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix). Earlier releases introduced the four unpinned roles, task-kind/subtype selection, explicit launch controls, freshness/cohort receipts, quota distinctions, secure-readable role copies, optional proxy adapter, and conditional method/hierarchical routing. Historical fixtures and usage retain their recorded models.
+Current routing policies live in the [canonical routing policy](.agents/skills/cost-efficient-orchestration/host-model-routing.md#canonical-task-kind-matrix). Earlier releases introduced the four unpinned roles, task-kind/subtype selection, explicit launch controls, freshness/cohort receipts, quota distinctions, secure-readable role copies, optional proxy adapter, and conditional method/hierarchical routing. Historical fixtures and usage retain their recorded models.
 
 Installation, successful child launch, and configured/runtime pair verification remain distinct. Use a newly loaded task and suitable real unit outside this source repository after updates; linked Skills without refreshed profiles are partial deployment. See [launch adapter verification](.agents/skills/cost-efficient-orchestration/host-model-routing.md#a-named-role-is-visible-but-cannot-start).
 

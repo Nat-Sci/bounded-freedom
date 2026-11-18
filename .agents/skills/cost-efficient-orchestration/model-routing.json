@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "chief": ["gpt-6.2-sol", "max"],
+  "untyped": ["gpt-6.1-terra", "low"],
+  "lanes": {
+    "mechanical": ["gpt-6-luna", "gpt-6.1-terra", "gpt-6.2-sol", "gpt-6.1-sol"],
+    "grounded": ["gpt-6.1-terra", "gpt-6.2-sol", "gpt-6.1-sol"],
+    "balanced": ["gpt-6.2-sol", "gpt-6.1-sol"],
+    "strong": ["gpt-6.2-sol", "gpt-6.1-sol"],
+    "review": ["gpt-6.2-sol", "gpt-6.1-sol"],
+    "frontier": ["gpt-6.2-astra", "gpt-6-astra"],
+    "review-depth": ["gpt-6.2-sol"]
+  },
+  "depth_lanes": {
+    "mechanical": "grounded",
+    "grounded": "grounded",
+    "balanced": "balanced",
+    "strong": "strong",
+    "review": "review-depth"
+  },
+  "frontier": {
+    "lane": "frontier",
+    "effort": "medium"
+  },
+  "tasks": {
+    "inventory": {
+      "role": "Scout",
+      "default": ["mechanical", "low"]
+    },
+    "evidence-map": {
+      "role": "Scout",
+      "default": ["mechanical", "medium"]
+    },
+    "code-map": {
+      "role": "Scout",
+      "default": ["mechanical", "medium"],
+      "interacting": ["balanced", "medium"]
+    },
+    "system-map": {
+      "role": "Scout",
+      "default": ["balanced", "medium"]
+    },
+    "bounded-synthesis": {
+      "role": "Scout",
+      "default": ["grounded", "medium"],
+      "visual": ["grounded", "medium"],
+      "interdependent": ["balanced", "medium"]
+    },
+    "code-edit": {
+      "role": "Coder",
+      "default": ["grounded", "medium"],
+      "fixed-transform": ["mechanical", "low"],
+      "straightforward": ["mechanical", "medium"],
+      "interdependent": ["balanced", "medium"],
+      "invariant-sensitive": ["balanced", "medium"],
+      "interacting-invariants": ["strong", "high"]
+    },
+    "coordinated-build": {
+      "role": "Builder",
+      "default": ["balanced", "medium"],
+      "frozen-template": ["mechanical", "medium"],
+      "stateful-recovery": ["strong", "high"]
+    },
+    "routine-review": {
+      "role": "Reviewer",
+      "default": ["review", "high"]
+    },
+    "consequential-review": {
+      "role": "Reviewer",
+      "default": ["review", "high"]
+    }
+  }
+}

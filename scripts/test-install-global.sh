@@ -206,8 +206,8 @@ assert_contains "POLICY RELOAD REQUIRED: existing/open tasks do not adopt this d
 assert_contains "start or fork a new task before claiming current-policy routing or usage" "$test_root/all-install.out" "installation gives an actionable current-policy boundary"
 assert_contains "package_version=$package_version" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy version"
 assert_contains "policy_fingerprint=" "$all_root/.codex/bounded-freedom-policy.state" "installation records the managed policy fingerprint"
-# Frozen pre-extraction reference: verifies dependency/order/hash compatibility.
-legacy_policy_fingerprint() {
+# Reference checksum stream includes the routing registry and preserves order/hash semantics.
+reference_policy_fingerprint() {
   (
     CDPATH= cd -- "$repo_root"
     {
@@ -216,7 +216,8 @@ legacy_policy_fingerprint() {
         printf '%s|%s\n' "$policy_source" "$policy_checksum"
       done
       find .agents/skills .codex/agents -type f \
-        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \) \
+        \( -name 'SKILL.md' -o -name '*.md' -o -name '*.sh' -o -name '*.py' -o -name '*.toml' \
+          -o -path '.agents/skills/cost-efficient-orchestration/model-routing.json' \) \
         ! -path '*/__pycache__/*' ! -name '*.pyc' -print | LC_ALL=C sort | while IFS= read -r policy_source; do
           policy_checksum=$(cksum < "$policy_source")
           printf '%s|%s\n' "$policy_source" "$policy_checksum"
@@ -225,10 +226,10 @@ legacy_policy_fingerprint() {
   )
 }
 . "$repo_root/.agents/skills/cost-efficient-orchestration/scripts/policy-fingerprint.sh"
-legacy_fingerprint=$(legacy_policy_fingerprint)
+reference_fingerprint=$(reference_policy_fingerprint)
 shared_fingerprint=$(compute_policy_fingerprint "$repo_root")
-[ "$legacy_fingerprint" = "$shared_fingerprint" ] || fail "shared fingerprint changed legacy dependency/order/hash semantics"
-pass "shared fingerprint preserves legacy dependency/order/hash semantics"
+[ "$reference_fingerprint" = "$shared_fingerprint" ] || fail "shared fingerprint does not match the reference inputs/order/hash"
+pass "shared fingerprint matches the reference inputs/order/hash"
 assert_contains "policy_fingerprint=$shared_fingerprint" "$all_root/.codex/bounded-freedom-policy.state" "production installer uses the shared fingerprint"
 if [ "$(file_mode "$all_root/.codex/bounded-freedom-policy.state")" != "600" ]; then
   fail "managed policy state is not private to its owner"
@@ -347,13 +348,15 @@ $expected_name_text"
 else
   skip "python3 with tomllib is unavailable for role TOML semantic checks"
 fi
-assert_contains 'default_subagent_model = "gpt-6-luna"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Luna fallback"
+assert_contains 'default_subagent_model = "gpt-6.1-terra"' "$repo_root/.codex/config.toml" "untyped bounded work keeps the economical Terra fallback"
 assert_contains 'max_concurrent_threads_per_session = 4' "$repo_root/.codex/config.toml" "Codex permits the four-role concurrency ceiling"
 orchestration_skill="$repo_root/.agents/skills/cost-efficient-orchestration/SKILL.md"
 host_routing="$repo_root/.agents/skills/cost-efficient-orchestration/host-model-routing.md"
 route_evals="$repo_root/.agents/skills/cost-efficient-orchestration/routing-evals.md"
 if command -v python3 >/dev/null 2>&1 && python3 -c 'import tomllib' >/dev/null 2>&1; then
-  python3 "$repo_root/scripts/test-model-routing.py" > "$test_root/model-routing.out" 2>&1 || {
+  installed_route_helper="$all_root/.agents/skills/cost-efficient-orchestration/scripts/resolve-model-route.py"
+  [ -x "$installed_route_helper" ] || fail "installed model route resolver is executable"
+  MODEL_ROUTE_HELPER="$installed_route_helper" python3 "$repo_root/scripts/test-model-routing.py" > "$test_root/model-routing.out" 2>&1 || {
     cat "$test_root/model-routing.out" >&2
     fail "canonical route and managed configuration checks"
   }
@@ -380,7 +383,6 @@ else
 fi
 assert_contains 'telemetry is `unknown`, not blocked' "$host_routing" "production routing keeps missing quota unknown"
 assert_contains 'Do not preflight a nonexistent' "$host_routing" "production routing skips retired-candidate preflight"
-assert_contains 'The maintained Codex Reviewer route starts at Reviewer / Sol / high' "$host_routing" "Reviewer policy starts independent review at Sol/high"
 assert_contains 'do not rewrite the planned model/effort to fit it' "$host_routing" "runtime mismatch cannot rewrite the route ticket"
 assert_contains 'Reviewer is planned Sol/high, but authoritative runtime metadata reports Luna/high' "$route_evals" "routing evaluations cover Reviewer runtime mismatch"
 assert_contains 'Builder and Coder do not execute overlapping write turns' "$orchestration_skill" "orchestration serializes write ownership"
